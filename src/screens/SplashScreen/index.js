@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Image, Text } from "native-base";
 import Logo from "../../assets/icon/logo.png";
 
-const SplashScreen = () => {
+const SplashScreen = ({ navigation }) => {
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.replace("Home");
+    }, 5000);
+  }, []);
+
   return (
     <Box flex="1" bg="#282C34" justifyContent="center" alignItems="center">
       <Box py="3">

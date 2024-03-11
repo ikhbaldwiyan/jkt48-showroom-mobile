@@ -1,11 +1,28 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeBaseProvider } from "native-base";
-import { SplashScreen } from "./screens";
+import { Home, SplashScreen } from "./screens";
 
 const App = () => {
+  const Stack = createNativeStackNavigator();
+
   return (
-    <NativeBaseProvider>
-      <SplashScreen />
-    </NativeBaseProvider>
+    <NavigationContainer>
+      <NativeBaseProvider>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="SplashScreen"
+            component={SplashScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NativeBaseProvider>
+    </NavigationContainer>
   );
 };
 
