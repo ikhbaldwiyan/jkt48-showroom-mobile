@@ -49,7 +49,7 @@ const Login = ({ navigation }) => {
           <Button
             my="4"
             background="primary"
-            onPress={() => navigation.replace("Home")}
+            onPress={() => navigation.replace("Main")}
           >
             <Text fontSize="16" color="white" fontWeight="medium">
               Login
