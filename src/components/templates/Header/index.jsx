@@ -8,7 +8,7 @@ const Header = () => {
     <Box p="4" bg="black" flexDirection="row" justifyContent="space-between" alignItems="center">
       <Logo isHeader />
       <Box flexDirection="row" alignItems="center">
-        <Text color="white" fontWeight="semibold" mr="2">Username</Text>
+        <Text color="white" fontWeight="semibold" mr="2">Inzoid</Text>
         <Image style={{ width: 40, height: 40 }} source={UserIcon} alt="avatar" />
       </Box>
     </Box>
