@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "emulator": "C:/Users/User/AppData/Local/Android/Sdk/emulator/emulator -avd Pixel_2_XL_API_30"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.15",

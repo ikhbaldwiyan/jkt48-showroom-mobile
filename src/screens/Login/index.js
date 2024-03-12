@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button, FormControl, Input, Text } from "native-base";
 import Logo from "../../components/atoms/Logo";
 
-const Login = () => {
+const Login = ({ navigation }) => {
   return (
     <Box
       flex="1"
@@ -46,7 +46,11 @@ const Login = () => {
           <Text color="white" my="4">
             Belum Punya Akun? <Text color="silver">Daftar Disini</Text>
           </Text>
-          <Button background="primary" my="4">
+          <Button
+            my="4"
+            background="primary"
+            onPress={() => navigation.replace("Home")}
+          >
             <Text fontSize="16" color="white" fontWeight="medium">
               Login
             </Text>
