@@ -47,7 +47,9 @@ const RoomList = () => {
 
   return (
     <Box>
-      <Text color="white" fontSize="2xl" py="4" pt="1" fontWeight="semibold">Room List</Text>
+      <Text color="white" fontSize="2xl" py="4" pt="1" fontWeight="semibold">
+        Room List
+      </Text>
       <HStack>
         {renderColumns()}
       </HStack>

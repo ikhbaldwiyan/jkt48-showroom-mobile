@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, ScrollView, Text } from "native-base";
 import Layout from "../../components/templates/Layout";
-import RoomLive from "../../components/molecules/RoomLive";
-import RoomList from "../../components/molecules/RoomList";
+import RoomLive from "../../components/organisms/RoomLive";
+import RoomList from "../../components/organisms/RoomList";
 
 const Home = () => {
   return (
