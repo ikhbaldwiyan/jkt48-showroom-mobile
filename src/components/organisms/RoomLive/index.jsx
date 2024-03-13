@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Image, Pressable, Text } from "native-base";
 import { ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { formatName, formatViews } from "../../../utils/helpers";
+import { cleanImage, formatName, formatViews } from "../../../utils/helpers";
 
 const RoomLive = () => {
   const [rooms, setRooms] = useState([]);
@@ -25,12 +25,12 @@ const RoomLive = () => {
       <Text color="white" fontSize="2xl" fontWeight="semibold" >Showroom Live</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {rooms?.map((item, idx) => (
-          <Pressable
-            onPress={() => {
-              navigate("LiveStream", { item })
-            }}
-          >
-            <Box key={idx} mt={4} mr="3">
+          <Box key={idx} mt={4} mr="3">
+            <Pressable
+              onPress={() => {
+                navigate("LiveStream", { item })
+              }}
+            >
               <Image
                 borderRadius={8}
                 source={{
@@ -39,14 +39,14 @@ const RoomLive = () => {
               />
               <Box flexDir="row" mt="2">
                 <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
-                  {formatName(room?.room_url_key)}
+                  {formatName(item?.room_url_key)}
                 </Text>
                 <Box bg="primary" p="2" borderRadius={8}>
                   <Text fontSize="14" fontWeight="semibold" color="white">{formatViews(item.view_num)}</Text>
                 </Box>
               </Box>
-            </Box>
-          </Pressable>
+            </Pressable>
+          </Box>
         )
         )}
       </ScrollView>
