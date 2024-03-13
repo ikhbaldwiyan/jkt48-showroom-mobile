@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native"
+import React, { useState, useEffect } from "react";
 import { Box, Image } from "native-base"
-import { cleanImage } from "../../utils/helpers";
+import { useLayoutEffect } from "react";
+import { cleanImage, formatName } from "../../utils/helpers";
 
-const RoomDetail = () => {
+const LiveStream = () => {
   const route = useRoute();
   const { params } = route;
-
   const navigation = useNavigation();
   const [profile, setProfile] = useState();
 
   useEffect(() => {
-    setProfile(params.room)
+    setProfile(params.item)
   }, [])
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: profile?.main_name
+      headerTitle: formatName(profile?.room_url_key)
     })
   }, [profile])
 
@@ -25,7 +25,7 @@ const RoomDetail = () => {
       <Image
         size="md"
         borderRadius="md"
-        source={{ uri: cleanImage(profile?.image, true) }}
+        source={{ uri: cleanImage(profile?.image) }}
         alt="image"
         width="100%"
         height="215"
@@ -34,4 +34,4 @@ const RoomDetail = () => {
   )
 }
 
-export default RoomDetail
+export default LiveStream

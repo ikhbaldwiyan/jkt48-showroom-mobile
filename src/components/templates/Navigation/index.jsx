@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { theme } from "../../../config/theme";
-import { Home, Login, RoomDetail, SplashScreen } from "../../../screens";
+import { Home, LiveStream, Login, RoomDetail, SplashScreen } from "../../../screens";
 
 import { useNavigation } from "@react-navigation/native";
 import { ArrowBackIcon, PlayIcon } from "native-base";
@@ -51,7 +51,14 @@ const Navigation = () => {
           headerLeft: () => (
             <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
           ),
-          title: "Detail Member",
+        }}
+      />
+      <Stack.Screen name="LiveStream" component={LiveStream}
+        options={{
+          headerShown: true,
+          headerLeft: () => (
+            <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
+          ),
         }}
       />
       <Stack.Screen name="Main" component={TabNavigator} />

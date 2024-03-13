@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from 'react'
-import { Box, Image, Text } from "native-base";
+import { Box, Image, Pressable, Text } from "native-base";
 import { ScrollView } from "react-native";
-import formatViews from "../../../utils/formatViews";
+import { useNavigation } from "@react-navigation/native";
+import { formatName, formatViews } from "../../../utils/helpers";
 
 const RoomLive = () => {
   const [rooms, setRooms] = useState([]);
+  const { navigate } = useNavigation();
 
   useEffect(() => {
     async function getRoomLive() {
@@ -23,20 +25,28 @@ const RoomLive = () => {
       <Text color="white" fontSize="2xl" fontWeight="semibold" >Showroom Live</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {rooms?.map((item, idx) => (
-          <Box key={idx} mt={4}  mr="3">
-            <Image
-              borderRadius={8}
-              source={{
-                uri: item.image.replace("s.jpeg", "l.jpeg")
-              }} alt={item.main_name} size="xl" width={200}
-            />
-            <Box flexDir="row" mt="2">
-              <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">{item.room_url_key.replace("JKT48_", " ")} JKT48</Text>
-              <Box bg="primary" p="2" borderRadius={8}>
-                <Text fontSize="14" fontWeight="semibold" color="white">{formatViews(item.view_num)}</Text>
+          <Pressable
+            onPress={() => {
+              navigate("LiveStream", { item })
+            }}
+          >
+            <Box key={idx} mt={4} mr="3">
+              <Image
+                borderRadius={8}
+                source={{
+                  uri: cleanImage(item.image)
+                }} alt={item.main_name} size="xl" width={200}
+              />
+              <Box flexDir="row" mt="2">
+                <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
+                  {formatName(room?.room_url_key)}
+                </Text>
+                <Box bg="primary" p="2" borderRadius={8}>
+                  <Text fontSize="14" fontWeight="semibold" color="white">{formatViews(item.view_num)}</Text>
+                </Box>
               </Box>
             </Box>
-          </Box>
+          </Pressable>
         )
         )}
       </ScrollView>
