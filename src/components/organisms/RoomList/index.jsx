@@ -1,19 +1,20 @@
-import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import { Box, HStack, Image, Pressable, Text, VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { cleanImage, formatName } from "../../../utils/helpers";
+import { ROOMS } from "../../../services";
 
 const RoomList = () => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
 
   useEffect(() => {
-    async function getRoomLive() {
-      const response = await axios.get("https://sorum.vercel.app/api/rooms/academy");
+    async function getRoomList() {
+      const response = await ROOMS.getRoomGen10();
       setRooms(response.data)
     }
-    getRoomLive();
+    getRoomList();
+
   }, []);
 
   const renderRoomItem = (room, idx) => (

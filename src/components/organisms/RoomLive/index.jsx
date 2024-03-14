@@ -1,9 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from 'react'
 import { Box, Image, Pressable, Text } from "native-base";
 import { ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { cleanImage, formatName, formatViews } from "../../../utils/helpers";
+import { ROOMS } from "../../../services";
 
 const RoomLive = () => {
   const [rooms, setRooms] = useState([]);
@@ -11,7 +11,7 @@ const RoomLive = () => {
 
   useEffect(() => {
     async function getRoomLive() {
-      const room = await axios.get("https://sorum.vercel.app/api/rooms/onlives");
+      const room = await ROOMS.getRoomLive();
       const roomLiveFilter = room?.data.data?.filter(
         (room) => room.premium_room_type !== 1
       );
