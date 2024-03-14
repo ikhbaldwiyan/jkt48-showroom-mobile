@@ -7,41 +7,55 @@ import { Home, LiveStream, Login, RoomDetail, SplashScreen } from "../../../scre
 import { useNavigation } from "@react-navigation/native";
 import { ArrowBackIcon, PlayIcon } from "native-base";
 import HomeIcon from "../../../assets/icon/HomeIcon";
+import HomeIconOutline from "../../../assets/icon/HomeIconOutline";
+import UsersIcon from "../../../assets/icon/UsersIcon";
+import UsersIconOutline from "../../../assets/icon/UsersIconOutline";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
   const navigation = useNavigation();
 
+  const navigationIcon = (route, isActive) => {
+    let icon;
+
+    if (route.name === "Home") {
+      icon = isActive ? <HomeIcon /> : <HomeIconOutline />
+    } else if (route.name === "Login") {
+      icon = isActive ? <UsersIcon /> : <UsersIconOutline />
+    }
+
+    return icon;
+  }
+
   const TabNavigator = () => (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
+        headerShown: false,
         tabBarStyle: { backgroundColor: theme.colors.black },
         tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.white
-      }}
+        tabBarInactiveTintColor: theme.colors.white,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          marginBottom: 3,
+          fontWeight: "bold"
+        },
+        tabBarIcon: ({ focused }) => {
+          return navigationIcon(route, focused)
+        }
+      })}
     >
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          headerShown: false,
-          tabBarIcon: () => <HomeIcon />
-        }}
-      />
-      <Tab.Screen
-        name="Login"
-        component={Login}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color }) => <PlayIcon color={color} />
-        }}
-      />
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Login" component={Login} />
     </Tab.Navigator>
   );
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, headerStyle: { backgroundColor: theme.colors.black }, headerTintColor: "white" }}>
+    <Stack.Navigator screenOptions={{
+      headerShown: false,
+      headerTintColor: "white",
+      headerStyle: { backgroundColor: theme.colors.black },
+    }}>
       <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={Login} />

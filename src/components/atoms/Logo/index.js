@@ -1,17 +1,16 @@
 import React from "react";
-import { Box, Image, Text } from "native-base";
-import LogoShowroom from "../../../assets/icon/logo.png";
+import { Box, Text } from "native-base";
+import LogoIcon from "../../../assets/icon/LogoIcon";
 
 const Logo = ({ isHeader }) => {
   return (
     <Box flexDirection="row" alignItems="center">
-      <Image
-        mr="2"
-        width={23}
-        height={36}
-        source={LogoShowroom}
-        alt="Showroom Image"
-      />
+      <Box mr="2">
+        <LogoIcon
+          width={23}
+          height={36}
+        />
+      </Box>
       <Text
         fontSize={isHeader ? "16" : "24"}
         fontWeight="bold"
