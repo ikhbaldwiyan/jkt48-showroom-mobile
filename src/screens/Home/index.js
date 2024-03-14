@@ -3,16 +3,18 @@ import { Box, ScrollView, Text } from "native-base";
 import Layout from "../../components/templates/Layout";
 import RoomLive from "../../components/organisms/RoomLive";
 import RoomList from "../../components/organisms/RoomList";
+import IDNLIve from "../../components/organisms/IDNLive";
 
 const Home = () => {
   return (
     <Layout>
-      <Box flex="1" p={3}>
-        <ScrollView>
+      <ScrollView>
+        <Box flex="1" p={3}>
           <RoomLive />
+          <IDNLIve />
           <RoomList />
-        </ScrollView>
-      </Box>
+        </Box>
+      </ScrollView>
     </Layout>
   );
 };

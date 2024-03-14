@@ -16,7 +16,7 @@ const LiveStream = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: formatName(profile?.room_url_key)
+      headerTitle: profile?.room_url_key ? formatName(profile?.room_url_key) : profile?.user?.name
     })
   }, [profile])
 
@@ -34,4 +34,4 @@ const LiveStream = () => {
   )
 }
 
-export default LiveStream
+export default LiveStream;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SHOWROOM_API, USER_API, AUTH_API } from "@env";
+import { SHOWROOM_API, USER_API, AUTH_API, HISTORY_API } from "@env";
 
 export const apiShowroom = axios.create({
   baseURL: SHOWROOM_API
@@ -13,4 +13,6 @@ export const apiAuth = axios.create({
   baseURL: AUTH_API
 });
 
-console.log(SHOWROOM_API)
+export const apiHistory = axios.create({
+  baseURL: HISTORY_API
+});

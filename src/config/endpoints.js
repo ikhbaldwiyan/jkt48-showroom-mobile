@@ -12,5 +12,8 @@ export default {
     GEN_10: "/rooms/academy",
     ONLIVES: "/rooms/onlives",
     PROFILE: "/profile/room/",
+  },
+  IDN_LIVE: {
+    ROOM_LIVES: "/idn_lives"
   }
 };
