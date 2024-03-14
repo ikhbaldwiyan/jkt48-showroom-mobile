@@ -6,4 +6,11 @@ export const theme = extendTheme({
     secondary: "#282C34",
     black: "#21252B",
   },
+  components: {
+    Text: {
+      baseStyle: {
+        color: "white"
+      }
+    }
+  }
 });

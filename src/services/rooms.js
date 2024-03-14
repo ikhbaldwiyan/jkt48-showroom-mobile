@@ -1,4 +1,4 @@
-import { apiShowroom, ENDPOINTS } from "../config";
+import { ENDPOINTS, apiShowroom, apiAuth  } from "../config";
 
 export const getRoomList = () => {
   return apiShowroom.get(ENDPOINTS.ROOM.LIST);
@@ -10,4 +10,8 @@ export const getRoomLive = () => {
 
 export const getRoomGen10 = () => {
   return apiShowroom.get(ENDPOINTS.ROOM.GEN_10);
+};
+
+export const getRoomProfile = (params) => {
+  return apiAuth.post(ENDPOINTS.ROOM.PROFILE, params);
 };

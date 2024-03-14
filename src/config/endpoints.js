@@ -11,5 +11,6 @@ export default {
     LIST: "/rooms",
     GEN_10: "/rooms/academy",
     ONLIVES: "/rooms/onlives",
+    PROFILE: "/profile/room/",
   }
 };
