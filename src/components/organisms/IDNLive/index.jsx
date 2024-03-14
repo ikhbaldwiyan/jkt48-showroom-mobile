@@ -12,7 +12,6 @@ const IDNLIve = () => {
   useEffect(() => {
     async function getIDNLIve() {
       const response = await ROOMS.getIDNLIveRoom();
-      console.log(response)
       setRooms(response.data)
     }
     getIDNLIve();
@@ -20,7 +19,9 @@ const IDNLIve = () => {
 
   return rooms.length > 0 && (
     <Box mb="4">
-      <Text color="white" fontSize="2xl" fontWeight="semibold" >IDN Live</Text>
+      <Text color="white" fontSize="2xl" fontWeight="semibold">
+        IDN Live
+      </Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {rooms?.map((item, idx) => (
           <Box key={idx} mt={4} mr="3">
@@ -29,14 +30,30 @@ const IDNLIve = () => {
                 navigate("LiveStream", { item })
               }}
             >
-              <Image
-                size="xl"
-                borderRadius={8}
-                source={{ uri: item?.image }}
-                alt={item?.user?.name}
-                height={300}
-                width={200}
-              />
+              <Box>
+                <Image
+                  size="xl"
+                  borderRadius={8}
+                  source={{ uri: item?.image }}
+                  alt={item?.user?.name}
+                  height={300}
+                  width={200}
+                />
+              </Box>
+              <Box
+                bg="teal"
+                top="0" right="0"
+                position="absolute"
+                borderRadius="6"
+                borderRightRadius={0}
+                borderTopLeftRadius="0"
+                borderTopRightRadius={6} p="3"
+                maxWidth={140}
+              >
+                <Text isTruncated>
+                  {item?.title}
+                </Text>
+              </Box>
               <Box flexDir="row" mt="2">
                 <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
                   {item?.user?.name}

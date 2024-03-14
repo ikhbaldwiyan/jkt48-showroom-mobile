@@ -41,7 +41,7 @@ const RoomDetail = () => {
       />
       <Box
         p="3"
-        bg="#008080"
+        bg="teal"
         borderBottomLeftRadius="5"
         borderBottomRightRadius="6" width="100%"
       >
