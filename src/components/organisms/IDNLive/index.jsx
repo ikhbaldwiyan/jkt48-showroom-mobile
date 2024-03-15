@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Image, Pressable, Text } from "native-base";
+import { Box, HStack, Image, Pressable, Text } from "native-base";
 import { ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { formatViews } from "../../../utils/helpers";
@@ -36,8 +36,9 @@ const IDNLIve = () => {
                   borderRadius={8}
                   source={{ uri: item?.image }}
                   alt={item?.user?.name}
-                  height={300}
-                  width={200}
+                  height={200}
+                  width={150}
+                  resizeMode="cover"
                 />
               </Box>
               <Box
@@ -47,21 +48,23 @@ const IDNLIve = () => {
                 borderRadius="6"
                 borderRightRadius={0}
                 borderTopLeftRadius="0"
-                borderTopRightRadius={6} p="3"
-                maxWidth={140}
+                borderTopRightRadius={6} p="2"
+                maxWidth={120}
               >
                 <Text isTruncated>
                   {item?.title}
                 </Text>
               </Box>
-              <Box flexDir="row" mt="2">
+              <HStack mt="2">
                 <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
                   {item?.user?.name}
                 </Text>
                 <Box bg="primary" p="2" borderRadius={8}>
-                  <Text fontSize="14" fontWeight="semibold" color="white">{formatViews(item.view_count)}</Text>
+                  <Text fontSize="14" fontWeight="semibold" color="white">
+                    {formatViews(item.view_count)}
+                  </Text>
                 </Box>
-              </Box>
+              </HStack>
             </Pressable>
           </Box>
         )
