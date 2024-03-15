@@ -4,16 +4,28 @@ import { Box } from "native-base"
 import { useLayoutEffect } from "react";
 import { formatName } from "../../utils/helpers";
 import Video from 'react-native-video';
+import { STREAM } from "../../services";
 
 const LiveStream = () => {
   const route = useRoute();
   const { params } = route;
   const navigation = useNavigation();
   const [profile, setProfile] = useState();
+  const [url, setUrl] = useState();
 
   useEffect(() => {
     setProfile(params.item)
   }, [])
+
+  useEffect(() => {
+    async function getUrl() {
+      const streams = await STREAM.getStreamUrl(params?.item?.room_id);
+      setUrl(streams?.data[0]?.url)
+    }
+    getUrl();
+
+  }, []);
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,17 +36,12 @@ const LiveStream = () => {
   return (
     <Box flex="1" bg="secondary">
       <Video
-        source={{ uri: "https://hls-origin275.showroom-cdn.com/liveedge/ngrp:e6f3037825315549632017c1f23198633f271752d629adc18dbc55440be63272_all/chunklist_b363457.m3u8" }}
+        source={{ uri: url }}
         style={{
           width: "100%",
-          height: 200
+          height: 204
         }}
       />
-      <Box p="3">
-        <Box bg="primary" p="3">
-
-        </Box>
-      </Box>
     </Box>
   )
 }

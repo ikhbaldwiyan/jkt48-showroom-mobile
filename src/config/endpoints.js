@@ -15,5 +15,8 @@ export default {
   },
   IDN_LIVE: {
     ROOM_LIVES: "/idn_lives"
+  },
+  STREAM: {
+    URL: "/lives/stream/"
   }
 };
