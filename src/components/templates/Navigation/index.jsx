@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { theme } from "../../../config/theme";
-import { Home, LiveStream, Login, RoomDetail, SplashScreen } from "../../../screens";
+import { Home, IDNStream, LiveStream, Login, RoomDetail, SplashScreen } from "../../../screens";
 
 import { useNavigation } from "@react-navigation/native";
 import { ArrowBackIcon, Box, HStack, Text } from "native-base";
@@ -58,6 +58,7 @@ const Navigation = () => {
       headerTintColor: "white",
       headerStyle: { backgroundColor: theme.colors.black },
     }}>
+      <Stack.Screen name="Main" component={TabNavigator} />
       <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={Login} />
@@ -85,7 +86,22 @@ const Navigation = () => {
           )
         }}
       />
-      <Stack.Screen name="Main" component={TabNavigator} />
+      <Stack.Screen name="IDNStream" component={IDNStream}
+        options={{
+          headerShown: true,
+          headerLeft: () => (
+            <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
+          ),
+          headerRight: () => (
+            <Box bg="primary" borderRadius="md" width={70} h={27} alignItems="center" justifyContent="center" display="flex">
+              <HStack alignItems="center">
+                <UserIcon />
+                <Text ml="1" fontWeight="semibold">367</Text>
+              </HStack>
+            </Box>
+          )
+        }}
+      />
     </Stack.Navigator>
   );
 };

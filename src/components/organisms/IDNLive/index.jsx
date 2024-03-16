@@ -4,6 +4,7 @@ import { ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { formatViews } from "../../../utils/helpers";
 import { ROOMS } from "../../../services";
+import UserIcon from "../../../assets/icon/UserIcon";
 
 const IDNLIve = () => {
   const [rooms, setRooms] = useState([]);
@@ -27,7 +28,7 @@ const IDNLIve = () => {
           <Box key={idx} mt={4} mr="3">
             <Pressable
               onPress={() => {
-                navigate("LiveStream", { item })
+                navigate("IDNStream", { item })
               }}
             >
               <Box>
@@ -36,8 +37,8 @@ const IDNLIve = () => {
                   borderRadius={8}
                   source={{ uri: item?.image }}
                   alt={item?.user?.name}
-                  height={200}
-                  width={150}
+                  height={230}
+                  width={200}
                   resizeMode="cover"
                 />
               </Box>
@@ -55,15 +56,16 @@ const IDNLIve = () => {
                   {item?.title}
                 </Text>
               </Box>
-              <HStack mt="2">
+              <HStack mt="1" alignItems="center">
                 <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
-                  {item?.user?.name}
+                  {item?.user?.name.replace("JKT48", "")}
                 </Text>
-                <Box bg="primary" p="2" borderRadius={8}>
-                  <Text fontSize="14" fontWeight="semibold" color="white">
-                    {formatViews(item.view_count)}
+                <HStack bg="primary" width={75} h={30} justifyContent="center" alignItems="center" borderRadius={8}>
+                  <UserIcon />
+                  <Text ml="1" fontSize="14" fontWeight="semibold" color="white">
+                    {formatViews(item?.view_count)}
                   </Text>
-                </Box>
+                </HStack>
               </HStack>
             </Pressable>
           </Box>
