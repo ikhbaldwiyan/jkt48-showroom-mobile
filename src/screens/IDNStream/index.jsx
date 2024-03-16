@@ -2,6 +2,7 @@ import { Box } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import VideoPlayer from "react-native-video-controls";
+import Views from "../../components/atoms/Views";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -11,10 +12,12 @@ const IDNStream = () => {
 
   useEffect(() => {
     setProfile(params.item)
-    navigation.setParams({
-      views: profile?.view_num
+    navigation.setOptions({
+      headerRight: () => (
+        <Views number={profile?.view_count ?? 0} />
+      )
     })
-  }, [])
+  }, [profile])
 
   useLayoutEffect(() => {
     navigation.setOptions({

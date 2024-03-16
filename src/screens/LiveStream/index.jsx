@@ -4,6 +4,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { STREAM } from "../../services";
 import { formatName } from "../../utils/helpers";
 import VideoPlayer from "react-native-video-controls";
+import Views from "../../components/atoms/Views";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -14,10 +15,12 @@ const LiveStream = () => {
 
   useEffect(() => {
     setProfile(params.item)
-    navigation.setParams({
-      views: profile?.view_num
+    navigation.setOptions({
+      headerRight: () => (
+        <Views number={profile?.view_num ?? 0} />
+      )
     })
-  }, [])
+  }, [profile])
 
   useEffect(() => {
     async function getUrl() {

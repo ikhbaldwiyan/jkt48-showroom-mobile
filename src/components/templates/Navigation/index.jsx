@@ -7,7 +7,6 @@ import { HomeIcon, HomeIconOutline, UsersIcon, UsersIconOutline } from "../../..
 
 import { useNavigation } from "@react-navigation/native";
 import { ArrowBackIcon } from "native-base";
-import Views from "../../atoms/Views";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -72,9 +71,6 @@ const Navigation = () => {
           headerLeft: () => (
             <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
           ),
-          headerRight: () => (
-            <Views number={24780} />
-          )
         }}
       />
       <Stack.Screen name="IDNStream" component={IDNStream}
@@ -83,9 +79,6 @@ const Navigation = () => {
           headerLeft: () => (
             <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
           ),
-          headerRight: () => (
-            <Views number={13000} />
-          )
         }}
       />
     </Stack.Navigator>
