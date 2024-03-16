@@ -1,10 +1,9 @@
-import { useNavigation, useRoute } from "@react-navigation/native"
-import React, { useState, useEffect } from "react";
-import { Box } from "native-base"
-import { useLayoutEffect } from "react";
-import { formatName } from "../../utils/helpers";
-import Video from 'react-native-video';
+import { Box } from "native-base";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { STREAM } from "../../services";
+import { formatName } from "../../utils/helpers";
+import VideoPlayer from "react-native-video-controls";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -22,7 +21,7 @@ const LiveStream = () => {
 
   useEffect(() => {
     async function getUrl() {
-      const streams = await STREAM.getStreamUrl(params?.item?.room_id, 
+      const streams = await STREAM.getStreamUrl(params?.item?.room_id,
         "sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI"
       );
       setUrl(streams?.data[0]?.url)
@@ -41,12 +40,16 @@ const LiveStream = () => {
 
   return (
     <Box flex="1" bg="secondary">
-      <Video
+      <VideoPlayer
         source={{ uri: url }}
         style={{
+          position: "absolute",
           width: "100%",
-          height: 204
+          height: 200
         }}
+        disableSeekbar
+        disableBack
+        disableTimer
       />
     </Box>
   )
