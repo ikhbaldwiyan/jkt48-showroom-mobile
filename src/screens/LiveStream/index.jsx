@@ -33,8 +33,7 @@ const LiveStream = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: profile?.room_url_key && profile?.room_url_key !== "officialJKT48" ?
-        formatName(profile?.room_url_key) :
-        profile?.user?.name ?? profile?.main_name.replace("SHOWROOM", "")
+        formatName(profile?.room_url_key) : profile?.main_name?.replace("SHOWROOM", "")
     })
   }, [profile])
 

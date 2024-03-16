@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Box, Divider, HStack, Image, Pressable, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { cleanImage, formatViews } from "../../../utils/helpers";
 import { ROOMS, STREAM } from "../../../services";
-import UserIcon from "../../../assets/icon/UserIcon";
+import { cleanImage } from "../../../utils/helpers";
+import Views from "../../atoms/Views";
 
 const PremiumLive = () => {
   const [rooms, setRooms] = useState([]);
@@ -29,7 +29,7 @@ const PremiumLive = () => {
     getTodayTheater();
   }, []);
 
-  return rooms.length > 0 && (
+  return rooms?.length > 0 && (
     <Box mb="4">
       <Text color="white" fontSize="2xl" fontWeight="semibold" >Premium Live</Text>
       {rooms?.map((item, idx) => (
@@ -54,12 +54,7 @@ const PremiumLive = () => {
                   ? theater?.setlist?.name
                   : item?.main_name}
               </Text>
-              <HStack bg="primary" width={65} h={30} justifyContent="center" alignItems="center" borderRadius={8}>
-                <UserIcon />
-                <Text ml="1" fontSize="14" fontWeight="semibold" color="white">
-                  {formatViews(item?.view_num)}
-                </Text>
-              </HStack>
+              <Views number={item?.view_num} />
             </HStack>
           </Pressable>
         </Box>

@@ -3,15 +3,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { theme } from "../../../config/theme";
 import { Home, IDNStream, LiveStream, Login, RoomDetail, SplashScreen } from "../../../screens";
+import { HomeIcon, HomeIconOutline, UsersIcon, UsersIconOutline } from "../../../assets/icon";
 
 import { useNavigation } from "@react-navigation/native";
-import { ArrowBackIcon, Box, HStack, Text } from "native-base";
-
-import HomeIcon from "../../../assets/icon/HomeIcon";
-import HomeIconOutline from "../../../assets/icon/HomeIconOutline";
-import UserIcon from "../../../assets/icon/UserIcon";
-import UsersIcon from "../../../assets/icon/UsersIcon";
-import UsersIconOutline from "../../../assets/icon/UsersIconOutline";
+import { ArrowBackIcon } from "native-base";
+import Views from "../../atoms/Views";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -77,12 +73,7 @@ const Navigation = () => {
             <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
           ),
           headerRight: () => (
-            <Box bg="primary" borderRadius="md" width={70} h={27} alignItems="center" justifyContent="center" display="flex">
-              <HStack alignItems="center">
-                <UserIcon />
-                <Text ml="1" fontWeight="semibold">367</Text>
-              </HStack>
-            </Box>
+            <Views number={24780} />
           )
         }}
       />
@@ -93,12 +84,7 @@ const Navigation = () => {
             <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
           ),
           headerRight: () => (
-            <Box bg="primary" borderRadius="md" width={70} h={27} alignItems="center" justifyContent="center" display="flex">
-              <HStack alignItems="center">
-                <UserIcon />
-                <Text ml="1" fontWeight="semibold">367</Text>
-              </HStack>
-            </Box>
+            <Views number={13000} />
           )
         }}
       />

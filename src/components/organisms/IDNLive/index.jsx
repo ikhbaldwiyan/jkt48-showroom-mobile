@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Box, HStack, Image, Pressable, Text } from "native-base";
-import { ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { formatViews } from "../../../utils/helpers";
+import { ScrollView } from "react-native";
 import { ROOMS } from "../../../services";
-import UserIcon from "../../../assets/icon/UserIcon";
+import Views from "../../atoms/Views";
 
 const IDNLIve = () => {
   const [rooms, setRooms] = useState([]);
@@ -60,12 +59,7 @@ const IDNLIve = () => {
                 <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
                   {item?.user?.name.replace("JKT48", "")}
                 </Text>
-                <HStack bg="primary" width={75} h={30} justifyContent="center" alignItems="center" borderRadius={8}>
-                  <UserIcon />
-                  <Text ml="1" fontSize="14" fontWeight="semibold" color="white">
-                    {formatViews(item?.view_count)}
-                  </Text>
-                </HStack>
+                <Views number={item?.view_count} />
               </HStack>
             </Pressable>
           </Box>

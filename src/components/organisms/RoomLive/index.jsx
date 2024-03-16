@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Image, Pressable, Text } from "native-base";
-import { ScrollView } from "react-native";
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { cleanImage, formatName, formatViews } from "../../../utils/helpers";
+import { Box, HStack, Image, Pressable, Text } from "native-base";
+import { ScrollView } from "react-native";
 import { ROOMS } from "../../../services";
+import { cleanImage, formatName } from "../../../utils/helpers";
+import Views from "../../atoms/Views";
 
 const RoomLive = () => {
   const [rooms, setRooms] = useState([]);
@@ -20,7 +21,7 @@ const RoomLive = () => {
     getRoomLive();
   }, []);
 
-  return rooms.length > 0 && (
+  return rooms?.length > 0 && (
     <Box mb="4">
       <Text color="white" fontSize="2xl" fontWeight="semibold" >Showroom Live</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -37,18 +38,15 @@ const RoomLive = () => {
                   uri: cleanImage(item.image)
                 }} alt={item.main_name} size="xl" width={200}
               />
-              <Box flexDir="row" mt="2">
+              <HStack alignItems="center" mt="1">
                 <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
                   {formatName(item?.room_url_key)}
                 </Text>
-                <Box bg="primary" p="2" borderRadius={8}>
-                  <Text fontSize="14" fontWeight="semibold" color="white">{formatViews(item.view_num)}</Text>
-                </Box>
-              </Box>
+                <Views number={item?.view_num} />
+              </HStack>
             </Pressable>
           </Box>
-        )
-        )}
+        ))}
       </ScrollView>
     </Box>
   )
