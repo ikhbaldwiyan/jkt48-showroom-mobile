@@ -18,5 +18,8 @@ export default {
   },
   STREAM: {
     URL: "/lives/stream/"
+  },
+  SCHEDULE: {
+   TODAY: "/schedules/today"
   }
 };

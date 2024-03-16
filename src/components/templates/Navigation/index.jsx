@@ -1,13 +1,15 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
 import { theme } from "../../../config/theme";
 import { Home, LiveStream, Login, RoomDetail, SplashScreen } from "../../../screens";
 
 import { useNavigation } from "@react-navigation/native";
-import { ArrowBackIcon, PlayIcon } from "native-base";
+import { ArrowBackIcon, Box, HStack, Text } from "native-base";
+
 import HomeIcon from "../../../assets/icon/HomeIcon";
 import HomeIconOutline from "../../../assets/icon/HomeIconOutline";
+import UserIcon from "../../../assets/icon/UserIcon";
 import UsersIcon from "../../../assets/icon/UsersIcon";
 import UsersIconOutline from "../../../assets/icon/UsersIconOutline";
 
@@ -73,6 +75,14 @@ const Navigation = () => {
           headerLeft: () => (
             <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
           ),
+          headerRight: () => (
+            <Box bg="primary" borderRadius="md" width={70} h={27} alignItems="center" justifyContent="center" display="flex">
+              <HStack alignItems="center">
+                <UserIcon />
+                <Text ml="1" fontWeight="semibold">367</Text>
+              </HStack>
+            </Box>
+          )
         }}
       />
       <Stack.Screen name="Main" component={TabNavigator} />

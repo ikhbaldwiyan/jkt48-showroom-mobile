@@ -15,21 +15,27 @@ const LiveStream = () => {
 
   useEffect(() => {
     setProfile(params.item)
+    navigation.setParams({
+      views: profile?.view_num
+    })
   }, [])
 
   useEffect(() => {
     async function getUrl() {
-      const streams = await STREAM.getStreamUrl(params?.item?.room_id);
+      const streams = await STREAM.getStreamUrl(params?.item?.room_id, 
+        "sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI"
+      );
       setUrl(streams?.data[0]?.url)
     }
+
     getUrl();
-
   }, []);
-
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: profile?.room_url_key ? formatName(profile?.room_url_key) : profile?.user?.name
+      headerTitle: profile?.room_url_key && profile?.room_url_key !== "officialJKT48" ?
+        formatName(profile?.room_url_key) :
+        profile?.user?.name ?? profile?.main_name.replace("SHOWROOM", "")
     })
   }, [profile])
 

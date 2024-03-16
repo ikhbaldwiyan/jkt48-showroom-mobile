@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Box, Image, Text } from "native-base"
 import Logo from "../../atoms/Logo"
 import UserIcon from "../../../assets/image/ava.png";
