@@ -3,6 +3,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { Box, HStack, Image, Text } from "native-base"
 import { cleanImage, formatName, formatViews } from "../../utils/helpers";
 import { ROOMS } from "../../services";
+import Tabs from "../../components/molecules/Tabs";
 
 const RoomDetail = () => {
   const route = useRoute();
@@ -28,7 +29,7 @@ const RoomDetail = () => {
   }, [profile])
 
   return (
-    <Box flex="1" bg="secondary" p="3" >
+    <Box flex="1" bg="secondary" p="3">
       <Image
         size="md"
         borderRadius="md"
@@ -57,6 +58,7 @@ const RoomDetail = () => {
           </Text>
         </HStack>
       </Box>
+      <Tabs />
     </Box>
   )
 }

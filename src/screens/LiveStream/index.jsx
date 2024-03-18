@@ -5,7 +5,7 @@ import { STREAM } from "../../services";
 import { formatName } from "../../utils/helpers";
 import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
-import Tabs from "../../components/molecules/Tabs";
+import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -57,7 +57,7 @@ const LiveStream = () => {
         />
       </Box>
       <Box flex={1} p="2">
-        <Tabs />
+        <LiveStreamTabs />
       </Box>
     </Box>
   )
