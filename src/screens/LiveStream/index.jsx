@@ -5,6 +5,7 @@ import { STREAM } from "../../services";
 import { formatName } from "../../utils/helpers";
 import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
+import Tabs from "../../components/molecules/Tabs";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -42,17 +43,22 @@ const LiveStream = () => {
 
   return (
     <Box flex="1" bg="secondary">
-      <VideoPlayer
-        source={{ uri: url }}
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: 200
-        }}
-        disableSeekbar
-        disableBack
-        disableTimer
-      />
+      <Box height={200}>
+        <VideoPlayer
+          source={{ uri: url }}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: 200
+          }}
+          disableSeekbar
+          disableBack
+          disableTimer
+        />
+      </Box>
+      <Box flex={1} p="2">
+        <Tabs />
+      </Box>
     </Box>
   )
 }
