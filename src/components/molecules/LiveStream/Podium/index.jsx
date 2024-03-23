@@ -1,7 +1,22 @@
-import { Box } from "native-base";
+import { Box, Text } from "native-base";
+import { StyleSheet } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
 
 export const Podium = () => (
-  <Box flex={1} borderBottomRadius={6} bg="primary" p="3">
-    Podium
-  </Box>
+  <LinearGradient colors={['#24A2B7', '#3B82F6']} style={styles.linearGradient}>
+    <Box>
+      <Text>
+        Podium List
+      </Text>
+    </Box>
+  </LinearGradient>
 );
+
+var styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1,
+    padding: 12,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6
+  },
+})
