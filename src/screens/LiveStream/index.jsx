@@ -56,7 +56,7 @@ const LiveStream = () => {
           disableTimer
         />
       </Box>
-      <Box flex={1} p="2">
+      <Box flex={1} p="3">
         <LiveStreamTabs />
       </Box>
     </Box>
