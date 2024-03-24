@@ -15,7 +15,7 @@ const renderScene = SceneMap({
 });
 
 export default function LiveStreamTabs() {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(1);
   const [routes] = useState([{
     key: 'room',
     title: 'Room'
@@ -34,9 +34,8 @@ export default function LiveStreamTabs() {
           const color = index === i ? useColorModeValue('white', '#e5e5e5') : useColorModeValue('#e5e5e5', 'red');
           const borderColor = index === i ? '#ECFAFC' : useColorModeValue('gray.500', 'gray.400');
           return (
-            <Box kye={i} borderBottomWidth="3" borderColor={borderColor} flex={1} alignItems="center" p="3" cursor="pointer">
+            <Box key={i} borderBottomWidth="3" borderColor={borderColor} flex={1} alignItems="center" p="3" cursor="pointer">
               <Pressable onPress={() => {
-                console.log(i);
                 setIndex(i);
               }}>
                 <Animated.Text style={{

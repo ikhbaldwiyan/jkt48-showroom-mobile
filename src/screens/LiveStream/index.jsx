@@ -49,7 +49,7 @@ const LiveStream = () => {
           style={{
             position: "absolute",
             width: "100%",
-            height: 200
+            height: "100%"
           }}
           disableSeekbar
           disableBack

@@ -3,7 +3,6 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { Box, HStack, Image, Text } from "native-base"
 import { cleanImage, formatName, formatViews } from "../../utils/helpers";
 import { ROOMS } from "../../services";
-import Tabs from "../../components/molecules/Tabs";
 
 const RoomDetail = () => {
   const route = useRoute();
@@ -58,7 +57,6 @@ const RoomDetail = () => {
           </Text>
         </HStack>
       </Box>
-      <Tabs />
     </Box>
   )
 }

@@ -17,7 +17,9 @@ export default {
     ROOM_LIVES: "/idn_lives"
   },
   STREAM: {
-    URL: "/lives/stream/"
+    URL: "/lives/stream/",
+    INFO: "/lives/info/",
+    COMMENTS: "/lives/comments/",
   },
   SCHEDULE: {
    TODAY: "/schedules/today"
