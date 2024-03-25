@@ -53,8 +53,8 @@ const Navigation = () => {
       headerTintColor: "white",
       headerStyle: { backgroundColor: theme.colors.black },
     }}>
-      <Stack.Screen name="Main" component={TabNavigator} />
       <Stack.Screen name="SplashScreen" component={SplashScreen} />
+      <Stack.Screen name="Main" component={TabNavigator} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="RoomDetail" component={RoomDetail}

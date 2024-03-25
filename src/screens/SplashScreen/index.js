@@ -5,7 +5,7 @@ import LogoIcon from "../../assets/icon/LogoIcon";
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace("Main");
+      navigation.replace("Login");
     }, 3000);
   }, []);
 
