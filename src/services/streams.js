@@ -16,3 +16,7 @@ export const getTodaySchedule = () => {
   return apiUser.get(ENDPOINTS.SCHEDULE.TODAY);
 };
 
+export const getLivePodium = (roomId) => {
+  return apiUser.get(ENDPOINTS.STREAM.PODIUM + roomId);
+};
+

@@ -20,6 +20,7 @@ export default {
     URL: "/lives/stream/",
     INFO: "/lives/info/",
     COMMENTS: "/lives/comments/",
+    PODIUM: "/history-live/",
   },
   SCHEDULE: {
    TODAY: "/schedules/today"
