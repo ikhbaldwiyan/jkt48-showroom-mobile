@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
 
-export const Podium = () => {
+export const Podium = ({ isIDNLive }) => {
   const route = useRoute();
   const { params } = route;
   const [podium, setPodium] = useState([]);
@@ -18,8 +18,15 @@ export const Podium = () => {
         );
         setPodium(response?.data)
       }
-      getPodiumList()
-      console.log(params?.item)
+      
+      async function getIDNPodiumList() {
+        const response = await STREAM.getIDNLivePodium(
+          params?.item?.slug,
+        );
+        setPodium(response?.data)
+      }
+      
+      isIDNLive ? getIDNPodiumList() : getPodiumList()
     } catch (error) {
       console.log(error)
     }

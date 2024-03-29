@@ -14,7 +14,8 @@ export default {
     PROFILE: "/profile/room/",
   },
   IDN_LIVE: {
-    ROOM_LIVES: "/idn_lives"
+    ROOM_LIVES: "/idn_lives",
+    PODIUM: "/idn-live-history/",
   },
   STREAM: {
     URL: "/lives/stream/",

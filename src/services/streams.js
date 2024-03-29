@@ -20,3 +20,7 @@ export const getLivePodium = (roomId) => {
   return apiUser.get(ENDPOINTS.STREAM.PODIUM + roomId);
 };
 
+export const getIDNLivePodium = (roomId) => {
+  return apiUser.get(ENDPOINTS.IDN_LIVE.PODIUM + roomId);
+};
+
