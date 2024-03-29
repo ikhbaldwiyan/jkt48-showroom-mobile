@@ -1,4 +1,4 @@
-package com.jkt48showroom;
+package com.inzoid.jkt48showroom;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;

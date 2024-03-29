@@ -26,8 +26,8 @@ export const Room = () => {
   return (
     <LinearGradient colors={['#24A2B7', '#3B82F6']} style={styles.linearGradient}>
       {roomLives?.map((item, idx) => (
-        <Box>
-          <HStack py="2" key={idx} alignItems="center" justifyItems="center" justifyContent="space-around">
+        <Box key={idx}>
+          <HStack py="2"alignItems="center" justifyItems="center" justifyContent="space-around">
             <Image
               mr="3"
               alt={item.room_url_key}

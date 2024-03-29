@@ -1,4 +1,4 @@
-package com.jkt48showroom.newarchitecture.components;
+package com.inzoid.jkt48showroom.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

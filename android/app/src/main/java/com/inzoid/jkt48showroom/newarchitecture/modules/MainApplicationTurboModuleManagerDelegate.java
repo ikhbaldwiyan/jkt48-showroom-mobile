@@ -1,4 +1,4 @@
-package com.jkt48showroom.newarchitecture.modules;
+package com.inzoid.jkt48showroom.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
