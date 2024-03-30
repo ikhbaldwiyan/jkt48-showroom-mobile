@@ -4,6 +4,7 @@ import HomeIconOutline from "./HomeIconOutline";
 import UsersIcon from "./UsersIcon";
 import UserIcon from "./UserIcon";
 import UsersIconOutline from "./UsersIconOutline";
+import TimesIcon from "./TimesIcon"
 
 export {
   LogoIcon,
@@ -11,5 +12,6 @@ export {
   HomeIconOutline,
   UsersIcon,
   UserIcon,
-  UsersIconOutline
+  UsersIconOutline,
+  TimesIcon,
 }

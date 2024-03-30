@@ -37,7 +37,7 @@ export const Podium = ({ isIDNLive }) => {
     <LinearGradient colors={['#24A2B7', '#3B82F6']} style={styles.linearGradient}>
       <ScrollView>
         <Center>
-          <Text fontWeight="bold">Podium - {podium?.liveData?.users} People are watching</Text>
+          <Text fontWeight="bold">{podium?.liveData?.users} People are watching</Text>
         </Center>
         <Divider mt="3" />
         {podium?.activityLog?.watch?.map((item, idx) => (

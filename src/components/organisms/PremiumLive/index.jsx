@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ROOMS, STREAM } from "../../../services";
 import { cleanImage } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
+import Times from "../../atoms/Times";
 
 const PremiumLive = () => {
   const [rooms, setRooms] = useState([]);
@@ -16,7 +17,7 @@ const PremiumLive = () => {
       const premiumLive = room?.data.data?.filter(
         (room) => room.premium_room_type === 1
       );
-      setRooms(premiumLive)
+      setRooms(premiumLive);
     }
     getPremiumLive();
   }, []);
@@ -55,6 +56,7 @@ const PremiumLive = () => {
                   : item?.main_name}
               </Text>
               <Views number={item?.view_num} />
+              <Times start_time={item.started_at} />
             </HStack>
           </Pressable>
         </Box>
