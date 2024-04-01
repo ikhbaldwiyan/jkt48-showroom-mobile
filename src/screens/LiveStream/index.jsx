@@ -21,7 +21,7 @@ const LiveStream = () => {
         <Views number={profile?.view_num ?? 0} />
       )
     })
-  }, [profile])
+  }, [profile, params.item])
 
   useEffect(() => {
     async function getUrl() {
@@ -32,7 +32,7 @@ const LiveStream = () => {
     }
 
     getUrl();
-  }, []);
+  }, [params.item]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

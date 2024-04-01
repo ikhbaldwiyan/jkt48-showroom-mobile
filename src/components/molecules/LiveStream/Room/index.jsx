@@ -1,15 +1,14 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Box, Button, Divider, HStack, Icon, Image, PlayIcon, Text, View } from "native-base";
+import { Box, Button, Divider, HStack, Image, PlayIcon, Text, View, Pressable } from "native-base";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import { ROOMS } from "../../../../services";
 
 export const Room = () => {
   const route = useRoute();
   const { params } = route;
-  const { navigate } = useNavigation();
+  const {navigate} = useNavigation();
   const [roomLives, setRoomLives] = useState([]);
 
   useEffect(() => {
@@ -45,19 +44,19 @@ export const Room = () => {
                 </Text>
               </Box>
             </View>
-            <Pressable
-              onPress={() => {
-                navigate("LiveStream", { item })
-              }}
+            <Button
+              mt="8"
+              colorScheme="success"
+              bg={item.room_id === params.item.room_id ? "success.800" : "secondary"}
             >
-              <Button
-                mt="8"
-                colorScheme="success"
-                bg={item.room_id === params.item.room_id ? "success.800" : "secondary"}
+              <Pressable
+                onPress={() => {
+                  navigate("LiveStream", { item })
+                }}
               >
                 <PlayIcon size={14} color="white" />
-              </Button>
-            </Pressable>
+              </Pressable>
+            </Button>
           </HStack>
           {roomLives.length > 1 && (
             <Divider mt="2" />

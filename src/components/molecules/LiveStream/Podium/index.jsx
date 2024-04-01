@@ -30,7 +30,7 @@ export const Podium = ({ isIDNLive }) => {
     } catch (error) {
       console.log(error)
     }
-  }, [])
+  }, [params.item])
 
 
   return (

@@ -23,7 +23,7 @@ export const Comment = () => {
     }
 
     getComments();
-  }, []);
+  }, [params.item]);
 
   const formatCommentWebsocket = (msg) => {
     const comments = {
