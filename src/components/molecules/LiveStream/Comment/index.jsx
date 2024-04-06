@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Box, Divider, HStack, Image, ScrollView, Text, View } from "native-base";
+import { Box, Divider, HStack, Image, ScrollView, Text, View, useToast } from "native-base";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
@@ -11,7 +11,8 @@ export const Comment = () => {
   const [comments, setComments] = useState()
   const [cookies, setCookies] = useState("sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI")
   const [socketKey, setSocketKey] = useState("");
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
+  const toast = useToast();
 
   useEffect(() => {
     async function getComments() {
@@ -64,7 +65,10 @@ export const Comment = () => {
         const newComments = formatCommentWebsocket(msg)
         setComments((prevMessages) => [newComments, ...prevMessages]);
       } else if (code === 101) {
-        navigate.replace("Main");
+        navigation.navigate("Main");
+        toast.show({
+          description: "Room Offline"
+        })
       }
     });
 
@@ -77,12 +81,12 @@ export const Comment = () => {
       newSocket.close();
     };
 
-  }, [socketKey]);
+  }, [socketKey, params.item]);
 
   return (
     <LinearGradient colors={['#24A2B7', '#3B82F6']} style={styles.linearGradient}>
       <ScrollView>
-        {comments?.map((item, idx) => (
+        {comments?.slice(0, 40)?.map((item, idx) => (
           <Box key={idx}>
             <HStack alignItems="center" p="2">
               <Image

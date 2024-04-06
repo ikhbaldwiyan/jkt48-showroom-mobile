@@ -54,6 +54,9 @@ const LiveStream = () => {
           disableSeekbar
           disableBack
           disableTimer
+          onEnd={() => {
+            navigation.navigate('Main');
+          }}
         />
       </Box>
       <Box flex={1} p="3">
