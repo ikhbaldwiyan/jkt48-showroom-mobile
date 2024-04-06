@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { Box, HStack, Image, Pressable, Text } from "native-base";
+import { Box, Divider, HStack, Image, Pressable, Text } from "native-base";
 import { ScrollView } from "react-native";
 import { ROOMS } from "../../../services";
 import { cleanImage, formatName } from "../../../utils/helpers";
@@ -48,6 +48,7 @@ const RoomLive = ({ refreshing }) => {
           </Box>
         ))}
       </ScrollView>
+      <Divider mt="4" />
     </Box>
   )
 }
