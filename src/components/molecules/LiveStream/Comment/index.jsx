@@ -39,6 +39,19 @@ export const Comment = () => {
     return comments
   }
 
+  const handleEndLive = () => {
+    navigation.navigate("Main");
+    toast.show({
+      render: () => {
+        return (
+          <Box bg="error.500" px="2" py="1" rounded="sm" mb={5}>
+            <Text>Room Offline</Text>
+          </Box>
+        );
+      }
+    });
+  }
+
   useEffect(() => {
     async function getWebsocketInfo() {
       const response = await STREAM.getStreamInfo(
@@ -65,10 +78,7 @@ export const Comment = () => {
         const newComments = formatCommentWebsocket(msg)
         setComments((prevMessages) => [newComments, ...prevMessages]);
       } else if (code === 101) {
-        navigation.navigate("Main");
-        toast.show({
-          description: "Room Offline"
-        })
+        handleEndLive()
       }
     });
 
