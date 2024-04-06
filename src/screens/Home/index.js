@@ -1,19 +1,17 @@
 import React from "react";
 import Layout from "../../components/templates/Layout";
-import { Box, ScrollView } from "native-base";
+import { Box } from "native-base";
 import { IDNLIve, PremiumLive, RoomList, RoomLive } from "../../components/organisms";
 
 const Home = () => {
   return (
-    <Layout>
-      <ScrollView>
-        <Box flex="1" p={3}>
-          <PremiumLive />
-          <RoomLive />
-          <IDNLIve />
-          <RoomList />
-        </Box>
-      </ScrollView>
+    <Layout isHeader>
+      <Box flex="1" mb="6">
+        <PremiumLive />
+        <RoomLive />
+        <RoomList />
+        <IDNLIve />
+      </Box>
     </Layout>
   );
 };

@@ -1,9 +1,9 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { theme } from "../../../config/theme";
-import { Home, IDNStream, LiveStream, Login, RoomDetail, SplashScreen } from "../../../screens";
-import { HomeIcon, HomeIconOutline, UsersIcon, UsersIconOutline } from "../../../assets/icon";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Home, IDNStream, LiveStream, Login, RoomDetail, SplashScreen, TheaterList } from "../../../screens";
+import { HomeIcon, HomeIconOutline, UsersIcon, UsersIconOutline, TheaterIcon, TheaterIconOutline } from "../../../assets/icon";
 
 import { useNavigation } from "@react-navigation/native";
 import { ArrowBackIcon } from "native-base";
@@ -20,6 +20,8 @@ const Navigation = () => {
       icon = isActive ? <HomeIcon /> : <HomeIconOutline />
     } else if (route.name === "Login") {
       icon = isActive ? <UsersIcon /> : <UsersIconOutline />
+    } else if (route.name === "Theater") {
+      icon = isActive ? <TheaterIcon /> : <TheaterIconOutline />
     }
 
     return icon;
@@ -43,6 +45,7 @@ const Navigation = () => {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Theater" component={TheaterList} />
       <Tab.Screen name="Login" component={Login} />
     </Tab.Navigator>
   );

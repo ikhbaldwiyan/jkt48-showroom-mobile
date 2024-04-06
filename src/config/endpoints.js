@@ -24,6 +24,8 @@ export default {
     PODIUM: "/history-live/",
   },
   SCHEDULE: {
-   TODAY: "/schedules/today"
+    LIST: "/schedules",
+    WEEK: "/schedules?isOnWeekSchedule=true",
+    TODAY: "/schedules/today",
   }
 };

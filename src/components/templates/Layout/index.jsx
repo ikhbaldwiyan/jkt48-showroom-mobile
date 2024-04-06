@@ -1,14 +1,24 @@
-import React from 'react'
-import { Box } from "native-base"
-import Header from "../Header"
+import React from "react";
+import { Box, ScrollView } from "native-base";
+import { RefreshControl } from "react-native";
+import Header from "../Header";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
   return (
-    <Box flex="1" bg="secondary">
-      <Header />
-      {children}
-    </Box>
-  )
-}
+    <>
+      {isHeader && <Header />}
+      <ScrollView
+        flex="1"
+        p="3"
+        bg="secondary"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Box>{children}</Box>
+      </ScrollView>
+    </>
+  );
+};
 
-export default Layout
+export default Layout;
