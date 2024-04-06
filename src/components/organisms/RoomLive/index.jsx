@@ -48,7 +48,7 @@ const RoomLive = ({ refreshing }) => {
           </Box>
         ))}
       </ScrollView>
-      <Divider mt="4" />
+      <Divider mt="3" />
     </Box>
   )
 }
