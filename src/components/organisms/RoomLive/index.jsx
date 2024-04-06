@@ -6,7 +6,7 @@ import { ROOMS } from "../../../services";
 import { cleanImage, formatName } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
 
-const RoomLive = () => {
+const RoomLive = ({ refreshing }) => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
 
@@ -19,7 +19,7 @@ const RoomLive = () => {
       setRooms(roomLiveFilter)
     }
     getRoomLive();
-  }, []);
+  }, [refreshing]);
 
   return rooms?.length > 0 && (
     <Box mb="4">

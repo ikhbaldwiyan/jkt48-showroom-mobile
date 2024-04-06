@@ -5,17 +5,11 @@ import { SCHEDULES } from "../../services";
 import moment from "moment";
 import "moment/locale/id";
 import SkeletonSchedule from "../../components/atoms/Skeleteon";
+import { useRefresh } from "../../utils/hooks/useRefresh";
 
 const ThetaerList = () => {
   const [schedules, setSchedules] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
-  }, []);
+  const { refreshing, onRefresh } = useRefresh();
 
   useEffect(() => {
     async function getTheaterList() {

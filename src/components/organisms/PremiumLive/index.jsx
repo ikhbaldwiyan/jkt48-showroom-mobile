@@ -6,7 +6,7 @@ import { cleanImage } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
 import Times from "../../atoms/Times";
 
-const PremiumLive = () => {
+const PremiumLive = ({ refreshing }) => {
   const [rooms, setRooms] = useState([]);
   const [theater, setTheater] = useState({});
   const { navigate } = useNavigation();
@@ -20,7 +20,7 @@ const PremiumLive = () => {
       setRooms(premiumLive);
     }
     getPremiumLive();
-  }, []);
+  }, [refreshing]);
 
   useEffect(() => {
     async function getTodayTheater() {

@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { cleanImage, formatName } from "../../../utils/helpers";
 import { ROOMS } from "../../../services";
 
-const RoomList = () => {
+const RoomList = ({ refreshing }) => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
 
@@ -15,7 +15,7 @@ const RoomList = () => {
     }
     getRoomList();
 
-  }, []);
+  }, [refreshing]);
 
   const renderRoomItem = (room, idx) => (
     <Box key={idx} mr={3}>

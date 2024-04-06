@@ -5,7 +5,7 @@ import { ScrollView } from "react-native";
 import { ROOMS } from "../../../services";
 import Views from "../../atoms/Views";
 
-const IDNLIve = () => {
+const IDNLIve = ({ refreshing }) => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
 
@@ -15,7 +15,7 @@ const IDNLIve = () => {
       setRooms(response.data)
     }
     getIDNLIve();
-  }, []);
+  }, [refreshing]);
 
   return rooms.length > 0 && (
     <Box mb="4">
