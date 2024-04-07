@@ -4,6 +4,7 @@ import { Box, HStack, Image, Text } from "native-base";
 import { cleanImage, formatName, formatViews } from "../../utils/helpers";
 import useProfileStore from "../../store/profileStore";
 import Loading from "../../components/atoms/Loading";
+import ProfileTabs from "../../components/molecules/ProfileTabs";
 
 const RoomDetail = () => {
   const route = useRoute();
@@ -63,6 +64,7 @@ const RoomDetail = () => {
               </Text>
             </HStack>
           </Box>
+          <ProfileTabs />
         </>
       ) : (
         <Loading />
