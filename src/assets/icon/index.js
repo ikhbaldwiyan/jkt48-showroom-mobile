@@ -7,6 +7,7 @@ import UsersIconOutline from "./UsersIconOutline";
 import TimesIcon from "./TimesIcon"
 import TheaterIcon from "./TheaterIcon"
 import TheaterIconOutline from "./TheaterIconOutline"
+import SendIcon from "./SendIcon";
 
 export {
   LogoIcon,
@@ -17,5 +18,6 @@ export {
   UsersIconOutline,
   TimesIcon,
   TheaterIcon,
-  TheaterIconOutline
+  TheaterIconOutline,
+  SendIcon,
 }

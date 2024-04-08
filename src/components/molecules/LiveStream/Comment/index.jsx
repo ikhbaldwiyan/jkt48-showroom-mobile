@@ -1,18 +1,34 @@
 import { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Box, Divider, HStack, Image, ScrollView, Text, View, useToast } from "native-base";
+import {
+  Box,
+  Divider,
+  HStack,
+  Image,
+  ScrollView,
+  Text,
+  View,
+  useToast,
+  Input,
+  Button
+} from "native-base";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
+import { SendIcon } from "../../../../assets/icon";
+import useUser from "../../../../utils/hooks/useUser";
 
 export const Comment = () => {
   const route = useRoute();
   const { params } = route;
-  const [comments, setComments] = useState([])
-  const [cookies, setCookies] = useState("sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI")
+  const [comments, setComments] = useState([]);
+  const [cookies, setCookies] = useState(
+    "sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI"
+  );
   const [socketKey, setSocketKey] = useState("");
   const navigation = useNavigation();
   const toast = useToast();
+  const { session } = useUser();
 
   useEffect(() => {
     async function getComments() {
@@ -20,7 +36,7 @@ export const Comment = () => {
         params?.item?.room_id,
         cookies
       );
-      setComments(response?.data)
+      setComments(response?.data);
     }
 
     getComments();
@@ -33,11 +49,11 @@ export const Comment = () => {
       name: msg.ac,
       avatar_id: msg.av,
       comment: msg.cm,
-      created_at: msg.created_at,
+      created_at: msg.created_at
     };
 
-    return comments
-  }
+    return comments;
+  };
 
   const handleEndLive = () => {
     navigation.navigate("Main");
@@ -49,9 +65,9 @@ export const Comment = () => {
           </Box>
         );
       },
-      placement: "top-right",
+      placement: "top-right"
     });
-  }
+  };
 
   useEffect(() => {
     async function getWebsocketInfo() {
@@ -76,52 +92,82 @@ export const Comment = () => {
 
       if (code === 1) {
         if (!Number.isNaN(msg.cm) && parseInt(msg.cm) <= 50) return;
-        const newComments = formatCommentWebsocket(msg)
+        const newComments = formatCommentWebsocket(msg);
         setComments((prevMessages) => [newComments, ...prevMessages]);
       } else if (code === 101) {
-        handleEndLive()
+        handleEndLive();
       }
     });
 
     newSocket.addEventListener("close", () => {
-      console.log('WebSocket closed');
+      console.log("WebSocket closed");
     });
 
     // Cleanup function
     return () => {
       newSocket.close();
     };
-
   }, [socketKey, params.item]);
 
   return (
-    <LinearGradient colors={['#24A2B7', '#3B82F6']} style={styles.linearGradient}>
+    <LinearGradient
+      colors={["#24A2B7", "#3B82F6"]}
+      style={styles.linearGradient}
+    >
       <ScrollView>
-        {comments?.length > 0 && comments?.slice(0, 40)?.map((item, idx) => (
-          <Box key={idx}>
-            <HStack alignItems="center" p="2">
-              <Image
-                mr="3"
-                alt={item.name}
-                style={{ width: 40, height: 40 }}
-                source={{ uri: item?.avatar_url ?? `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95` }}
-              />
-              <View flexShrink="1">
-                <Text fontSize="md" fontWeight="bold">
-                  {item.name}
-                </Text>
-                <Text mt="1">
-                  {item.comment}
-                </Text>
-              </View>
-            </HStack>
-            <Divider mb="1" />
-          </Box>
-        ))}
+        {comments?.length > 0 &&
+          comments?.slice(0, 40)?.map((item, idx) => (
+            <Box key={idx}>
+              <HStack alignItems="center" p="2">
+                <Image
+                  mr="3"
+                  alt={item.name}
+                  style={{ width: 40, height: 40 }}
+                  source={{
+                    uri:
+                      item?.avatar_url ??
+                      `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`
+                  }}
+                />
+                <View flexShrink="1">
+                  <Text fontSize="md" fontWeight="bold">
+                    {item.name}
+                  </Text>
+                  <Text mt="1">{item.comment}</Text>
+                </View>
+              </HStack>
+              <Divider mb="1" />
+            </Box>
+          ))}
       </ScrollView>
+      {session && (
+        <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
+          <Input
+            bgColor="white"
+            variant="filled"
+            w="90%"
+            fontSize="md"
+            name="id"
+            borderTopRightRadius="0"
+            borderBottomRightRadius="0"
+            placeholder="Write Comment.."
+            _input={{
+              textAlign: "left",
+            }}
+          />
+          <Button
+            height="10"
+            borderTopLeftRadius="0"
+            borderBottomLeftRadius="0"
+            background="secondary"
+          >
+            <SendIcon />
+          </Button>
+        </HStack>
+      )}
     </LinearGradient>
   );
-}
+};
 
 const styles = StyleSheet.create({
   linearGradient: {
@@ -129,5 +175,5 @@ const styles = StyleSheet.create({
     padding: 12,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6
-  },
-})
+  }
+});

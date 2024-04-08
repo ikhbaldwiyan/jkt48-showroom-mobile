@@ -54,6 +54,7 @@ const LiveStream = () => {
           disableSeekbar
           disableBack
           disableTimer
+          disableFullscreen
           onEnd={() => {
             navigation.navigate('Main');
           }}
