@@ -55,7 +55,7 @@ export const RoomListIDN = () => {
               >
                 <Pressable
                   onPress={() => {
-                    navigate("LiveStream", { item })
+                    navigate("IDNStream", { item })
                   }}
                 >
                   <PlayIcon size={14} color="white" />
