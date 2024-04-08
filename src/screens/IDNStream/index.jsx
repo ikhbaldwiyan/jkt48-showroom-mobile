@@ -18,13 +18,13 @@ const IDNStream = () => {
         <Views number={profile?.view_count ?? 0} />
       )
     })
-  }, [profile])
+  }, [profile, params.item])
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: profile?.user?.name
     })
-  }, [profile])
+  }, [profile, params.item])
 
   return (
     <Box flex="1" bg="secondary">
@@ -39,6 +39,7 @@ const IDNStream = () => {
           disableSeekbar
           disableBack
           disableTimer
+          onEnd={() =>  navigation.navigate("Main")}
         />
       </Box>
       <IDNLiveTabs />

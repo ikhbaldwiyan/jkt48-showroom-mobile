@@ -44,7 +44,7 @@ export const Comment = () => {
     toast.show({
       render: () => {
         return (
-          <Box bg="error.500" px="2" m="3" py="1" rounded="sm" mb={5}>
+          <Box bg="primary" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
             <Text>Room Offline</Text>
           </Box>
         );

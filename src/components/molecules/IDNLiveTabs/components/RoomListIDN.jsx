@@ -51,7 +51,7 @@ export const RoomListIDN = () => {
               <Button
                 mt="8"
                 colorScheme="success"
-                bg={item.jkt48_levi === params.item.jkt48_levi ? "success.800" : "secondary"}
+                bg={item.user.username === params.item.user.username ? "success.800" : "secondary"}
               >
                 <Pressable
                   onPress={() => {
