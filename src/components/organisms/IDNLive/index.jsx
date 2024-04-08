@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, HStack, Image, Pressable, Text } from "native-base";
+import { Box, Divider, HStack, Image, Pressable, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import { ROOMS } from "../../../services";
@@ -57,7 +57,7 @@ const IDNLIve = ({ refreshing }) => {
               </Box>
               <HStack mt="1" alignItems="center">
                 <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
-                  {item?.user?.name.replace("JKT48", "")}
+                  {item?.user?.name}
                 </Text>
                 <Views number={item?.view_count} />
               </HStack>
@@ -66,6 +66,7 @@ const IDNLIve = ({ refreshing }) => {
         )
         )}
       </ScrollView>
+      <Divider mt="3" />
     </Box>
   )
 }

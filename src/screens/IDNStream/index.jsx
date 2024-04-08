@@ -1,9 +1,9 @@
-import { Box, View } from "native-base";
+import { Box } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
-import { Podium } from "../../components/molecules/LiveStream";
+import IDNLiveTabs from "../../components/molecules/IDNLiveTabs";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -41,9 +41,7 @@ const IDNStream = () => {
           disableTimer
         />
       </Box>
-      <Box p="3" mt="2" height={500}>
-        <Podium isIDNLive={true} />
-      </Box>
+      <IDNLiveTabs />
     </Box>
   )
 }
