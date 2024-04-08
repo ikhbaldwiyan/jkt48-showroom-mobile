@@ -31,12 +31,15 @@ const Navigation = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarStyle: { backgroundColor: theme.colors.black },
+        tabBarStyle: { backgroundColor: theme.colors.black, height: 60 },
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.white,
+        tabBarIconStyle: {
+          marginTop: 5,
+        },
         tabBarLabelStyle: {
           fontSize: 12,
-          marginBottom: 3,
+          marginBottom: 10,
           fontWeight: "bold"
         },
         tabBarIcon: ({ focused }) => {
