@@ -17,16 +17,19 @@ export const Podium = ({ isIDNLive }) => {
   const route = useRoute();
   const { params } = route;
   const [podium, setPodium] = useState([]);
+  const [views, setViews] = useState(0);
   const { refreshing, onRefresh } = useRefresh();
 
   async function getPodiumList() {
     const response = await STREAM.getLivePodium(params?.item?.live_id);
-    setPodium(response?.data);
+    setPodium(response?.data?.activityLog?.watch?.reverse());
+    setViews(response?.data?.liveData?.users)
   }
 
   async function getIDNPodiumList() {
     const response = await STREAM.getIDNLivePodium(params?.item?.slug);
-    setPodium(response?.data);
+    setPodium(response?.data?.activityLog?.watch?.reverse());
+    setViews(response?.data?.liveData?.users)
   }
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export const Podium = ({ isIDNLive }) => {
       >
         <Center>
           <Text fontWeight="bold">
-            {podium?.liveData?.users} People are watching
+            {views} People are watching
           </Text>
         </Center>
         <HStack
@@ -71,7 +74,7 @@ export const Podium = ({ isIDNLive }) => {
           alignItems="center"
           justifyContent="center"
         >
-          {podium?.activityLog?.watch?.map((item, idx) => (
+          {podium?.map((item, idx) => (
             <VStack my="4" key={idx} alignItems="center" width="20%">
               <Image
                 alt={item.user.name}
