@@ -59,7 +59,7 @@ const LiveStream = () => {
           }}
         />
       </Box>
-      <Box flex={1} p="3">
+      <Box flex={1} p="2">
         <LiveStreamTabs />
       </Box>
     </Box>

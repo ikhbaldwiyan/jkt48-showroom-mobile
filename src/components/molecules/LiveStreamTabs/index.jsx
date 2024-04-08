@@ -25,7 +25,7 @@ const LiveStreamTabs = () => {
   const [isPremiumLive, setIsPremiumLive] = useState(false);
 
   const routes = [
-    isPremiumLive ?  { key: 'member', title: 'Member' } :  { key: 'room', title: 'Room' },
+    isPremiumLive ?  { key: 'member', title: 'Member' } :  { key: 'room', title: 'Room Live' },
     { key: 'comment', title: 'Comment' },
     { key: 'podium', title: 'Podium' },
   ];
@@ -56,7 +56,6 @@ const LiveStreamTabs = () => {
       renderTabBar={renderTabBar}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
-      style={{ marginTop: 6 }}
     />
   );
 };

@@ -8,7 +8,7 @@ import { STREAM } from "../../../../services";
 export const Comment = () => {
   const route = useRoute();
   const { params } = route;
-  const [comments, setComments] = useState()
+  const [comments, setComments] = useState([])
   const [cookies, setCookies] = useState("sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI")
   const [socketKey, setSocketKey] = useState("");
   const navigation = useNavigation();
@@ -44,11 +44,12 @@ export const Comment = () => {
     toast.show({
       render: () => {
         return (
-          <Box bg="error.500" px="2" py="1" rounded="sm" mb={5}>
+          <Box bg="error.500" px="2" m="3" py="1" rounded="sm" mb={5}>
             <Text>Room Offline</Text>
           </Box>
         );
-      }
+      },
+      placement: "top-right",
     });
   }
 
@@ -96,7 +97,7 @@ export const Comment = () => {
   return (
     <LinearGradient colors={['#24A2B7', '#3B82F6']} style={styles.linearGradient}>
       <ScrollView>
-        {comments?.slice(0, 40)?.map((item, idx) => (
+        {comments?.length > 0 && comments?.slice(0, 40)?.map((item, idx) => (
           <Box key={idx}>
             <HStack alignItems="center" p="2">
               <Image
