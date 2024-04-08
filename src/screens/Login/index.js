@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Box, Button, Center, FormControl, Image, Input, Text } from "native-base";
+import { Box, Button, Center, FormControl, Image, Input, Text, useToast } from "native-base";
 import { loginApi } from "../../services/auth";
 import Logo from "../../components/atoms/Logo";
+import { storeStorage } from "../../utils/storage";
+import { AUTH } from "../../services";
+
 
 const Login = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +16,8 @@ const Login = ({ navigation }) => {
     cookies_sr_id: "",
     error_message: "",
   });
+
+  const toast = useToast();
 
   const handleChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
@@ -39,12 +44,38 @@ const Login = ({ navigation }) => {
       }
       
       if (response.data.user.ok) {
+        const data = response.data;
+        storeStorage("user", data.user);
+        storeStorage("session", data.session);
+        storeStorage("profile", data.profile);
+        getSessionUser(data);
         navigation.replace("Main");
+
+        toast.show({
+          render: () => {
+            return (
+              <Box bg="green.400" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
+                <Text>Login Success</Text>
+              </Box>
+            );
+          },
+          placement: "top-right",
+        });
       }
 
     } catch (error) {
       console.log(error)
     }
+  };
+
+  const getSessionUser = async (data) => {
+    console.log("getSessionUser", data)
+    await AUTH.detailUserApi(data.user.account_id).then((res) => {
+      console.log(res.data)
+      storeStorage("userProfile", res.data);
+    }).catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
@@ -121,9 +152,9 @@ const Login = ({ navigation }) => {
               />
             </Box>
           )}
-          <Text color="white" my="3">
+          {/* <Text color="white" my="3">
             Belum Punya Akun? <Text color="silver">Daftar Disini</Text>
-          </Text>
+          </Text> */}
           
           <Button
             my="3"
