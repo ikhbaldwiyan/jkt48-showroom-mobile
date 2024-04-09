@@ -23,6 +23,7 @@ export default {
     INFO: "/lives/info/",
     COMMENTS: "/lives/comments/",
     PODIUM: "/history-live/",
+    SEND_COMMENT: "/live/comment/", //required room id
   },
   SCHEDULE: {
     LIST: "/schedules",

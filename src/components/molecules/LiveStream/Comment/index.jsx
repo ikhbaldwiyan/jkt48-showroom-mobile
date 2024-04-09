@@ -10,7 +10,8 @@ import {
   View,
   useToast,
   Input,
-  Button
+  Button,
+  Spinner,
 } from "native-base";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -20,21 +21,21 @@ import useUser from "../../../../utils/hooks/useUser";
 
 export const Comment = () => {
   const route = useRoute();
-  const { params } = route;
-  const [comments, setComments] = useState([]);
-  const [cookies, setCookies] = useState(
-    "sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI"
-  );
-  const [socketKey, setSocketKey] = useState("");
-  const navigation = useNavigation();
   const toast = useToast();
+  const { params } = route;
+  const navigation = useNavigation();
   const { session } = useUser();
+
+  const [comments, setComments] = useState([]);
+  const [socketKey, setSocketKey] = useState("");
+  const [textComment, setTextComment] = useState("");
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   useEffect(() => {
     async function getComments() {
       const response = await STREAM.getStreamComments(
         params?.item?.room_id,
-        cookies
+        session?.cookie_login_id ?? "cookies"
       );
       setComments(response?.data);
     }
@@ -73,7 +74,7 @@ export const Comment = () => {
     async function getWebsocketInfo() {
       const response = await STREAM.getStreamInfo(
         params?.item?.room_id,
-        cookies
+        session?.cookie_login_id ?? "cookies"
       );
       setSocketKey(response?.data?.websocket?.key);
     }
@@ -108,6 +109,39 @@ export const Comment = () => {
       newSocket.close();
     };
   }, [socketKey, params.item]);
+
+  const sendComment = async (e) => {
+    e.preventDefault();
+    console.log("clicked");
+    setButtonLoading(true);
+    
+    try {
+      const response = await STREAM.sendCommentStream({
+        room_id: params?.item?.room_id?.toString(),
+        comment: textComment,
+        csrf: session?.csrf_token,
+        cookies_id: session?.cookie_login_id,
+      });
+      console.log(response.data);
+      setTextComment("");
+    } catch (error) {
+      console.log("error", error);
+      toast.show({
+        render: () => (
+          <Box bg="red" px="2" m="3" py="1" rounded="sm" mb={5}>
+            <Text>Failed to send comment</Text>
+          </Box>
+        ),
+        placement: "bottom",
+      });
+    } finally {
+      setButtonLoading(false);
+    }
+  };
+  
+  const handleComment = (text) => {
+    setTextComment(text);
+  };
 
   return (
     <LinearGradient
@@ -154,14 +188,17 @@ export const Comment = () => {
             _input={{
               textAlign: "left",
             }}
+            onChangeText={handleComment}
+            value={textComment}
           />
           <Button
             height="10"
             borderTopLeftRadius="0"
             borderBottomLeftRadius="0"
             background="secondary"
+            onPress={sendComment}
           >
-            <SendIcon />
+            {buttonLoading ? <Spinner color="white" /> : <SendIcon />}
           </Button>
         </HStack>
       )}
