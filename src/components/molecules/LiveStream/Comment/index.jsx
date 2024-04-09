@@ -18,6 +18,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
 import { SendIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
+import { formatName } from "../../../../utils/helpers";
 
 export const Comment = () => {
   const route = useRoute();
@@ -58,11 +59,12 @@ export const Comment = () => {
 
   const handleEndLive = () => {
     navigation.navigate("Main");
+    const roomName = formatName(params.item.room_url_key);
     toast.show({
       render: () => {
         return (
           <Box bg="primary" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
-            <Text>Room Offline</Text>
+            <Text>Room {roomName} Offline</Text>
           </Box>
         );
       },
