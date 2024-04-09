@@ -27,3 +27,7 @@ export const getIDNLivePodium = (roomId) => {
 export const sendCommentStream = (params) => {
   return apiAuth.post(ENDPOINTS.STREAM.SEND_COMMENT, params)
 }
+
+export const visitRoom = (params) => {
+  return apiAuth.post(ENDPOINTS.STREAM.VISIT, params)
+}

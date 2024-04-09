@@ -24,6 +24,7 @@ export default {
     COMMENTS: "/lives/comments/",
     PODIUM: "/history-live/",
     SEND_COMMENT: "/live/comment/", //required room id
+    VISIT: "/farm/start", //required room id
   },
   SCHEDULE: {
     LIST: "/schedules",

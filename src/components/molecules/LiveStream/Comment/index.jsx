@@ -114,15 +114,14 @@ export const Comment = () => {
     e.preventDefault();
     console.log("clicked");
     setButtonLoading(true);
-    
+
     try {
-      const response = await STREAM.sendCommentStream({
+      await STREAM.sendCommentStream({
         room_id: params?.item?.room_id?.toString(),
         comment: textComment,
         csrf: session?.csrf_token,
         cookies_id: session?.cookie_login_id,
       });
-      console.log(response.data);
       setTextComment("");
     } catch (error) {
       console.log("error", error);
@@ -138,7 +137,7 @@ export const Comment = () => {
       setButtonLoading(false);
     }
   };
-  
+
   const handleComment = (text) => {
     setTextComment(text);
   };
@@ -182,6 +181,7 @@ export const Comment = () => {
             w="90%"
             fontSize="md"
             name="id"
+            borderRadius="md"
             borderTopRightRadius="0"
             borderBottomRightRadius="0"
             placeholder="Write Comment.."
@@ -197,6 +197,7 @@ export const Comment = () => {
             borderBottomLeftRadius="0"
             background="secondary"
             onPress={sendComment}
+            disabled={textComment.length === 0 || buttonLoading}
           >
             {buttonLoading ? <Spinner color="white" /> : <SendIcon />}
           </Button>

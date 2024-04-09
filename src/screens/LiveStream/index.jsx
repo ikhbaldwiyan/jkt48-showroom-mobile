@@ -6,6 +6,7 @@ import { formatName } from "../../utils/helpers";
 import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
 import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
+import useUser from "../../utils/hooks/useUser";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -13,6 +14,7 @@ const LiveStream = () => {
   const navigation = useNavigation();
   const [profile, setProfile] = useState();
   const [url, setUrl] = useState();
+  const { session } = useUser();
 
   useEffect(() => {
     setProfile(params.item)
@@ -40,6 +42,21 @@ const LiveStream = () => {
         formatName(profile?.room_url_key) : profile?.main_name?.replace("SHOWROOM", "")
     })
   }, [profile])
+
+  useEffect(() => {
+    async function registerUserRoom() {
+      try {
+        await STREAM.visitRoom({
+          cookies_login_id: session?.cookie_login_id,
+          room_id: params.item.room_id
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    registerUserRoom();
+  }, [params.item]);
 
   return (
     <Box flex="1" bg="secondary">

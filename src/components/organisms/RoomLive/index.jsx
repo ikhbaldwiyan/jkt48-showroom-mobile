@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { Box, Divider, HStack, Image, Pressable, Text } from "native-base";
-import { ScrollView } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { ROOMS } from "../../../services";
 import { cleanImage, formatName } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
@@ -38,12 +38,19 @@ const RoomLive = ({ refreshing }) => {
                   uri: cleanImage(item.image)
                 }} alt={item.main_name} size="xl" width={200}
               />
-              <HStack alignItems="center" mt="1">
-                <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
-                  {formatName(item?.room_url_key)}
-                </Text>
-                <Views number={item?.view_num} />
-              </HStack>
+              <TouchableOpacity
+                activeOpacity={.6}
+                onPress={() => {
+                  navigate("LiveStream", { item })
+                }}
+              >
+                <HStack alignItems="center" mt="1">
+                  <Text fontSize="md" mr="2" fontWeight="semibold" color="white" py="2">
+                    {formatName(item?.room_url_key)}
+                  </Text>
+                  <Views number={item?.view_num} />
+                </HStack>
+              </TouchableOpacity>
             </Pressable>
           </Box>
         ))}
