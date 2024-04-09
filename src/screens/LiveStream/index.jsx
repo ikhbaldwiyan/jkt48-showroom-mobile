@@ -13,6 +13,7 @@ const LiveStream = () => {
   const { params } = route;
   const navigation = useNavigation();
   const [profile, setProfile] = useState();
+  const [liveInfo, setLiveInfo] = useState({});
   const [url, setUrl] = useState();
   const { session } = useUser();
 
@@ -20,10 +21,38 @@ const LiveStream = () => {
     setProfile(params.item)
     navigation.setOptions({
       headerRight: () => (
-        <Views number={profile?.view_num ?? 0} />
+        <Views number={liveInfo?.views ?? profile?.view_num ?? 0} />
       )
     })
-  }, [profile, params.item])
+  }, [profile, params.item, liveInfo])
+
+  async function getLiveInfo() {
+    try {
+      const response = await STREAM.getStreamInfo(
+        params?.item?.room_id,
+        session?.cookie_login_id ?? "cookies"
+      );
+      setLiveInfo(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getLiveInfo();
+  }, [params?.item])
+
+  useEffect(() => {
+    setTimeout(() => {
+      getLiveInfo();
+    }, 1000);
+
+    const interval = setInterval(() => {
+      getLiveInfo();
+    }, 2 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [params?.item]);
 
   useEffect(() => {
     async function getUrl() {
@@ -46,17 +75,18 @@ const LiveStream = () => {
   useEffect(() => {
     async function registerUserRoom() {
       try {
-        await STREAM.visitRoom({
+        const response = await STREAM.visitRoom({
           cookies_login_id: session?.cookie_login_id,
           room_id: params.item.room_id
         });
+        console.log(response.data)
       } catch (error) {
         console.log(error)
       }
     }
 
     registerUserRoom();
-  }, [params.item]);
+  }, [params.item, session]);
 
   return (
     <Box flex="1" bg="secondary">
