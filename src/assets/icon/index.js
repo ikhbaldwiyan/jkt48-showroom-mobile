@@ -8,6 +8,8 @@ import TimesIcon from "./TimesIcon"
 import TheaterIcon from "./TheaterIcon"
 import TheaterIconOutline from "./TheaterIconOutline"
 import SendIcon from "./SendIcon";
+import EyeIcon from "./EyeIcon";
+import EyeSlashIcon from "./EyeSlashIcon";
 
 export {
   LogoIcon,
@@ -20,4 +22,6 @@ export {
   TheaterIcon,
   TheaterIconOutline,
   SendIcon,
+  EyeIcon,
+  EyeSlashIcon,
 }

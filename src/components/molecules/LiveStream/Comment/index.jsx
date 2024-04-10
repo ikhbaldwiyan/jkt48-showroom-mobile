@@ -63,8 +63,8 @@ export const Comment = () => {
     toast.show({
       render: () => {
         return (
-          <Box bg="primary" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
-            <Text>Room {roomName} Offline</Text>
+          <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
+            <Text>{roomName} Offline</Text>
           </Box>
         );
       },
