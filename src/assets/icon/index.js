@@ -10,6 +10,11 @@ import TheaterIconOutline from "./TheaterIconOutline"
 import SendIcon from "./SendIcon";
 import EyeIcon from "./EyeIcon";
 import EyeSlashIcon from "./EyeSlashIcon";
+import Calendar from "./Calendar";
+import UsersFill from "./UsersFill";
+import TimesFill from "./TimesFill";
+import GiftFill from "./GiftFill";
+import History from "./History";
 
 export {
   LogoIcon,
@@ -24,4 +29,9 @@ export {
   SendIcon,
   EyeIcon,
   EyeSlashIcon,
+  Calendar,
+  GiftFill,
+  TimesFill,
+  UsersFill,
+  History,
 }

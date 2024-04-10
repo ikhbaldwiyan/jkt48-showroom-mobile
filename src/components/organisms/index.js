@@ -3,6 +3,7 @@ import RoomLive from "./RoomLive";
 import IDNLIve from "./IDNLive";
 import PremiumLive from "./PremiumLive";
 import Schedule from "./Schedule";
+import RecentLives from "./RecentLives";
 
 export {
   RoomList,
@@ -10,4 +11,5 @@ export {
   IDNLIve,
   PremiumLive,
   Schedule,
+  RecentLives,
 }

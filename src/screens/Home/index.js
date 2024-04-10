@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../../components/templates/Layout";
 import { Box } from "native-base";
-import { IDNLIve, PremiumLive, RoomList, RoomLive, Schedule } from "../../components/organisms";
+import { IDNLIve, PremiumLive, RecentLives, RoomList, RoomLive, Schedule } from "../../components/organisms";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 
 const Home = ({ navigation }) => {
@@ -13,6 +13,7 @@ const Home = ({ navigation }) => {
         <PremiumLive refreshing={refreshing} />
         <RoomLive refreshing={refreshing} />
         <IDNLIve refreshing={refreshing} />
+        <RecentLives refreshing={refreshing} />
         <Schedule refreshing={refreshing} navigation={navigation} isWeek />
         <RoomList refreshing={refreshing} />
       </Box>
