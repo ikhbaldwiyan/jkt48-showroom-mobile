@@ -19,3 +19,7 @@ export const getRoomProfile = (params) => {
 export const getIDNLIveRoom = () => {
   return apiHistory.get(ENDPOINTS.IDN_LIVE.ROOM_LIVES);
 };
+
+export const getRecentLives = () => {
+  return apiHistory.get(ENDPOINTS.ROOM.RECENT_LIVE);
+};

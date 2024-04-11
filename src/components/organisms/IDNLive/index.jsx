@@ -11,8 +11,12 @@ const IDNLIve = ({ refreshing }) => {
 
   useEffect(() => {
     async function getIDNLIve() {
-      const response = await ROOMS.getIDNLIveRoom();
-      setRooms(response.data)
+      try {
+        const response = await ROOMS.getIDNLIveRoom();
+        setRooms(response.data)
+      } catch (error) {
+        console.log(error)
+      }
     }
     getIDNLIve();
   }, [refreshing]);
