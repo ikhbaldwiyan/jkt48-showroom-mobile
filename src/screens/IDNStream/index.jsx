@@ -1,4 +1,4 @@
-import { Box, useToast } from "native-base";
+import { Box, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import VideoPlayer from "react-native-video-controls";
