@@ -19,13 +19,14 @@ import { STREAM } from "../../../../services";
 import { SendIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
 import { formatName } from "../../../../utils/helpers";
+import { activityLog } from "../../../../utils/activityLog";
 
 export const Comment = () => {
   const route = useRoute();
   const toast = useToast();
   const { params } = route;
   const navigation = useNavigation();
-  const { session } = useUser();
+  const { session, userProfile } = useUser();
 
   const [comments, setComments] = useState([]);
   const [socketKey, setSocketKey] = useState("");
@@ -103,7 +104,7 @@ export const Comment = () => {
     });
 
     newSocket.addEventListener("close", () => {
-      console.log("WebSocket closed");
+      // console.log("WebSocket closed");
     });
 
     // Cleanup function
@@ -114,7 +115,6 @@ export const Comment = () => {
 
   const sendComment = async (e) => {
     e.preventDefault();
-    console.log("clicked");
     setButtonLoading(true);
 
     try {
@@ -123,6 +123,12 @@ export const Comment = () => {
         comment: textComment,
         csrf: session?.csrf_token,
         cookies_id: session?.cookie_login_id,
+      });
+      activityLog({
+        logName: "Watch",
+        userId: userProfile?._id,
+        description: `Send Comment to ${formatName(params.item.room_url_key)}`,
+        liveId: params?.item?.live_id
       });
       setTextComment("");
     } catch (error) {

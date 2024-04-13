@@ -7,6 +7,8 @@ export default {
   USER: {
     PROFILE: "/profile/room",
     USER_PROFILE: "/profile/user",
+    ACTIVIY_LOG: "/activity/", //required user id
+    CREATE_USER: "/users/",
   },
   ROOM: {
     LIST: "/rooms",

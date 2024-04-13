@@ -4,12 +4,15 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
 import IDNLiveTabs from "../../components/molecules/IDNLiveTabs";
+import useUser from "../../utils/hooks/useUser";
+import { activityLog } from "../../utils/activityLog";
 
 const IDNStream = () => {
   const route = useRoute();
   const { params } = route;
   const navigation = useNavigation();
   const [profile, setProfile] = useState();
+  const { userProfile } = useUser();
 
   useEffect(() => {
     setProfile(params.item)
@@ -25,6 +28,18 @@ const IDNStream = () => {
       headerTitle: profile?.user?.name
     })
   }, [profile, params.item])
+
+  useEffect(() => {
+    const live = params.item;
+    if (userProfile) {
+      activityLog({
+        logName: "Watch",
+        userId: userProfile?._id,
+        description: `Watch IDN Live ${live?.user?.name}`,
+        liveId: live?.slug,
+      });
+    }
+  }, [params.item, profile, userProfile]);
 
   return (
     <Box flex="1" bg="secondary">

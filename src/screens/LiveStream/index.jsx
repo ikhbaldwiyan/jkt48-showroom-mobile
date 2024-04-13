@@ -7,6 +7,7 @@ import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
 import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import useUser from "../../utils/hooks/useUser";
+import { activityLog } from "../../utils/activityLog";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -15,7 +16,7 @@ const LiveStream = () => {
   const [profile, setProfile] = useState();
   const [liveInfo, setLiveInfo] = useState({});
   const [url, setUrl] = useState();
-  const { session } = useUser();
+  const { session, userProfile } = useUser();
 
   useEffect(() => {
     setProfile(params.item)
@@ -75,11 +76,10 @@ const LiveStream = () => {
   useEffect(() => {
     async function registerUserRoom() {
       try {
-        const response = await STREAM.visitRoom({
+        await STREAM.visitRoom({
           cookies_login_id: session?.cookie_login_id,
           room_id: params.item.room_id
         });
-        console.log(response.data)
       } catch (error) {
         console.log(error)
       }
@@ -87,6 +87,20 @@ const LiveStream = () => {
 
     registerUserRoom();
   }, [params.item, session]);
+
+  useEffect(() => {    
+    const room_name = formatName(profile?.room_url_key);
+
+    if (session && userProfile) {
+      activityLog({
+        logName: "Comment",
+        userId: userProfile?._id,
+        description: `Watch Live ${room_name}`,
+        liveId: profile?.live_id
+      });
+    }
+
+  }, [profile, url, userProfile]);
 
   return (
     <Box flex="1" bg="secondary">

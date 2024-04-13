@@ -15,6 +15,7 @@ import Logo from "../../components/atoms/Logo";
 import { storeStorage } from "../../utils/storage";
 import { AUTH } from "../../services";
 import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
+import { activityLog } from "../../utils/activityLog";
 
 const Login = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -93,8 +94,12 @@ const Login = ({ navigation }) => {
   const getSessionUser = async (data) => {
     await AUTH.detailUserApi(data.user.account_id)
       .then((res) => {
-        console.log(res.data);
         storeStorage("userProfile", res.data);
+        activityLog({
+          userId: res?.data?._id,
+          logName: "Login",
+          description: "Login user to Android",
+        });
       })
       .catch((err) => {
         console.log(err);
