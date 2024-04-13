@@ -50,7 +50,7 @@ const IDNStream = () => {
       render: () => {
         return (
           <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
-            <Text>{profile?.user?.name} Offline</Text>
+            <Text>{params.item?.user?.name ?? "Room"} Offline</Text>
           </Box>
         );
       },
