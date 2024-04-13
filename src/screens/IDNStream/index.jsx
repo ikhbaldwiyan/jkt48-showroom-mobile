@@ -6,6 +6,7 @@ import Views from "../../components/atoms/Views";
 import IDNLiveTabs from "../../components/molecules/IDNLiveTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
+import { LogBox } from "react-native";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -39,7 +40,22 @@ const IDNStream = () => {
         liveId: live?.slug,
       });
     }
+    LogBox.ignoreAllLogs(true)
   }, [params.item, profile, userProfile]);
+
+  const handleEndLive = () => {
+    navigation.navigate("Main");
+    toast.show({
+      render: () => {
+        return (
+          <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
+            <Text>{profile?.user?.name} Offline</Text>
+          </Box>
+        );
+      },
+      placement: "top-right",
+    });
+  };
 
   return (
     <Box flex="1" bg="secondary">
@@ -54,7 +70,7 @@ const IDNStream = () => {
           disableSeekbar
           disableBack
           disableTimer
-          onEnd={() =>  navigation.navigate("Main")}
+          onEnd={() => handleEndLive()}
         />
       </Box>
       <IDNLiveTabs />

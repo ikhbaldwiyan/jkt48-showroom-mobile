@@ -29,7 +29,7 @@ const RecentLives = ({ refreshing }) => {
     getRecentLive();
   }, [refreshing]);
 
-  return (
+  return recentLives.length > 0 && (
     <View>
       <Text fontSize="2xl" mb="3" fontWeight="semibold">
         Recent Lives
