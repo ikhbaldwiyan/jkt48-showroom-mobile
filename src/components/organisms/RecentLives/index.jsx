@@ -96,7 +96,7 @@ const RecentLives = ({ refreshing }) => {
                   w="45%"
                   background="teal"
                 >
-                  <Text fontWeight="bold">{member?.nickname}</Text>
+                  <Text fontWeight="bold">{member?.nickname} JKT48</Text>
                 </Box>
                 <Box
                   mt="3"
@@ -106,10 +106,10 @@ const RecentLives = ({ refreshing }) => {
                   w="50%"
                   background="red"
                 >
-                  <HStack>
+                  <HStack alignItems="center">
                     <History />
-                    <Text ml="0.5" fontSize="14" fontWeight="bold">
-                      <TimeAgo time={live_info?.date?.start} />
+                    <Text ml="0.5" fontSize="13" fontWeight="semibold">
+                      <TimeAgo time={live_info?.date?.end} interval={20000} />
                     </Text>
                   </HStack>
                 </Box>
