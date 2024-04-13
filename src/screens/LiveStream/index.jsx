@@ -8,6 +8,7 @@ import Views from "../../components/atoms/Views";
 import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
+import { LogBox } from "react-native";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -91,15 +92,15 @@ const LiveStream = () => {
   useEffect(() => {    
     const room_name = formatName(profile?.room_url_key);
 
-    if (session && userProfile) {
+    if (userProfile) {
       activityLog({
-        logName: "Comment",
+        logName: "Watch",
         userId: userProfile?._id,
-        description: `Watch Live ${room_name}`,
+        description: `Watch Live ${room_name} Room`,
         liveId: profile?.live_id
       });
     }
-
+    LogBox.ignoreAllLogs(true)
   }, [profile, url, userProfile]);
 
   return (

@@ -5,7 +5,7 @@ export const cleanImage = (image, isDetail) => {
 };
 
 export const formatName = (name) => {
-  return name?.replace("JKT48_", " ") + " JKT48";
+  return name?.replace("JKT48_", "") + " JKT48";
 };
 
 export const formatViews = (str) => {

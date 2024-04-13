@@ -125,7 +125,7 @@ export const Comment = () => {
         cookies_id: session?.cookie_login_id,
       });
       activityLog({
-        logName: "Watch",
+        logName: "Comment",
         userId: userProfile?._id,
         description: `Send Comment to ${formatName(params.item.room_url_key)}`,
         liveId: params?.item?.live_id
