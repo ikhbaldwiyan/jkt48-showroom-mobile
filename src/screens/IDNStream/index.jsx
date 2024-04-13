@@ -1,4 +1,4 @@
-import { Box } from "native-base";
+import { Box, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import VideoPlayer from "react-native-video-controls";
@@ -14,6 +14,7 @@ const IDNStream = () => {
   const navigation = useNavigation();
   const [profile, setProfile] = useState();
   const { userProfile } = useUser();
+  const toast = useToast();
 
   useEffect(() => {
     setProfile(params.item)
