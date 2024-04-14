@@ -1,19 +1,10 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
-import {
-  HStack,
-  Image, ScrollView, Text,
-  View,
-  VStack
-} from "native-base";
+import { HStack, Image, ScrollView, Text, View, VStack } from "native-base";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
 
 export const Members = () => {
-  const route = useRoute();
-  const { params } = route;
-  const { navigate } = useNavigation();
   const [members, setMembers] = useState([]);
 
   useEffect(() => {

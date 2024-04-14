@@ -2,11 +2,28 @@ import React from "react";
 import { theme } from "../../../config/theme";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Home, IDNStream, LiveStream, Login, RoomDetail, SplashScreen, TheaterList } from "../../../screens";
-import { HomeIcon, HomeIconOutline, UsersIcon, UsersIconOutline, TheaterIcon, TheaterIconOutline } from "../../../assets/icon";
+import {
+  Home,
+  IDNStream,
+  LiveStream,
+  Login,
+  RoomDetail,
+  ScheduleDetail,
+  SplashScreen,
+  ScheduleList
+} from "../../../screens";
+import {
+  HomeIcon,
+  HomeIconOutline,
+  UsersIcon,
+  UsersIconOutline,
+  TheaterIcon,
+  TheaterIconOutline
+} from "../../../assets/icon";
 
 import { useNavigation } from "@react-navigation/native";
 import { ArrowBackIcon } from "native-base";
+import { TouchableOpacity } from "react-native";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -17,15 +34,15 @@ const Navigation = () => {
     let icon;
 
     if (route.name === "Home") {
-      icon = isActive ? <HomeIcon /> : <HomeIconOutline />
+      icon = isActive ? <HomeIcon /> : <HomeIconOutline />;
     } else if (route.name === "Login") {
-      icon = isActive ? <UsersIcon /> : <UsersIconOutline />
+      icon = isActive ? <UsersIcon /> : <UsersIconOutline />;
     } else if (route.name === "Theater") {
-      icon = isActive ? <TheaterIcon /> : <TheaterIconOutline />
+      icon = isActive ? <TheaterIcon /> : <TheaterIconOutline />;
     }
 
     return icon;
-  }
+  };
 
   const TabNavigator = () => (
     <Tab.Navigator
@@ -35,7 +52,7 @@ const Navigation = () => {
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.white,
         tabBarIconStyle: {
-          marginTop: 5,
+          marginTop: 5
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -43,49 +60,65 @@ const Navigation = () => {
           fontWeight: "bold"
         },
         tabBarIcon: ({ focused }) => {
-          return navigationIcon(route, focused)
-        }
+          return navigationIcon(route, focused);
+        },
+        tabBarButton: (props) => (
+          <TouchableOpacity
+            {...props}
+            activeOpacity={0.6}
+            onPress={() => {
+              props.onPress();
+            }}
+          />
+        )
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Theater" component={TheaterList} />
+      <Tab.Screen name="Theater" component={ScheduleList} />
       <Tab.Screen name="Login" component={Login} />
     </Tab.Navigator>
   );
 
+  const showHeader = {
+    headerShown: true,
+    headerLeft: () => (
+      <TouchableOpacity onPress={() => navigation.navigate("Main")}>
+        <ArrowBackIcon color="white" mr="2" />
+      </TouchableOpacity>
+    )
+  };
+
   return (
-    <Stack.Navigator screenOptions={{
-      headerShown: false,
-      headerTintColor: "white",
-      headerStyle: { backgroundColor: theme.colors.black },
-    }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        headerTintColor: "white",
+        headerStyle: { backgroundColor: theme.colors.black }
+      }}
+    >
       <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="Main" component={TabNavigator} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="RoomDetail" component={RoomDetail}
-        options={{
-          headerShown: true,
-          headerLeft: () => (
-            <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
-          ),
-        }}
+      <Stack.Screen
+        name="RoomDetail"
+        component={RoomDetail}
+        options={showHeader}
       />
-      <Stack.Screen name="LiveStream" component={LiveStream}
-        options={{
-          headerShown: true,
-          headerLeft: () => (
-            <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
-          ),
-        }}
+      <Stack.Screen
+        name="ScheduleDetail"
+        component={ScheduleDetail}
+        options={showHeader}
       />
-      <Stack.Screen name="IDNStream" component={IDNStream}
-        options={{
-          headerShown: true,
-          headerLeft: () => (
-            <ArrowBackIcon onPress={() => navigation.navigate("Main")} color="white" mr="2" />
-          ),
-        }}
+      <Stack.Screen
+        name="LiveStream"
+        component={LiveStream}
+        options={showHeader}
+      />
+      <Stack.Screen
+        name="IDNStream"
+        component={IDNStream}
+        options={showHeader}
       />
     </Stack.Navigator>
   );
