@@ -16,6 +16,7 @@ import TimesFill from "./TimesFill";
 import GiftFill from "./GiftFill";
 import History from "./History";
 import RightArrow from "./RightArrow";
+import RefreshIcon from "./RefreshIcon";
 
 export {
   LogoIcon,
@@ -36,4 +37,5 @@ export {
   UsersFill,
   History,
   RightArrow,
+  RefreshIcon,
 }

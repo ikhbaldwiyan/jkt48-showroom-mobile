@@ -1,4 +1,4 @@
-import { Box } from "native-base";
+import { Box, Button, HStack } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { STREAM } from "../../services";
@@ -9,6 +9,8 @@ import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
 import { LogBox } from "react-native";
+import { RefreshIcon } from "../../assets/icon";
+import { useRefresh } from "../../utils/hooks/useRefresh";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -18,15 +20,28 @@ const LiveStream = () => {
   const [liveInfo, setLiveInfo] = useState({});
   const [url, setUrl] = useState();
   const { session, userProfile } = useUser();
+  const { refreshing, onRefresh } = useRefresh();
 
   useEffect(() => {
-    setProfile(params.item)
+    setProfile(params.item);
     navigation.setOptions({
       headerRight: () => (
-        <Views number={liveInfo?.views ?? profile?.view_num ?? 0} />
+        <HStack space={2} alignItems="center">
+          <Button
+            onPress={onRefresh}
+            isLoading={refreshing}
+            borderRadius="md"
+            py="1"
+            background="teal"
+            size="xs"
+          >
+            <RefreshIcon />
+          </Button>
+          <Views number={liveInfo?.views ?? profile?.view_num ?? 0} />
+        </HStack>
       )
-    })
-  }, [profile, params.item, liveInfo])
+    });
+  }, [profile, params.item, liveInfo, refreshing]);
 
   async function getLiveInfo() {
     try {
@@ -34,15 +49,15 @@ const LiveStream = () => {
         params?.item?.room_id,
         session?.cookie_login_id ?? "cookies"
       );
-      setLiveInfo(response.data)
+      setLiveInfo(response.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   useEffect(() => {
     getLiveInfo();
-  }, [params?.item])
+  }, [params?.item]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -54,25 +69,28 @@ const LiveStream = () => {
     }, 2 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [params?.item]);
+  }, [params?.item, refreshing]);
 
   useEffect(() => {
     async function getUrl() {
-      const streams = await STREAM.getStreamUrl(params?.item?.room_id,
-        "sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI"
+      const streams = await STREAM.getStreamUrl(
+        params?.item?.room_id,
+        session?.cookie_login_id
       );
-      setUrl(streams?.data[0]?.url)
+      setUrl(streams?.data[0]?.url);
     }
 
     getUrl();
-  }, [params.item]);
+  }, [params.item, refreshing]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: profile?.room_url_key && profile?.room_url_key !== "officialJKT48" ?
-        formatName(profile?.room_url_key) : profile?.main_name?.replace("SHOWROOM", "")
-    })
-  }, [profile])
+      headerTitle:
+        profile?.room_url_key && profile?.room_url_key !== "officialJKT48"
+          ? formatName(profile?.room_url_key)
+          : profile?.main_name?.replace("SHOWROOM", "")
+    });
+  }, [profile]);
 
   useEffect(() => {
     async function registerUserRoom() {
@@ -82,14 +100,14 @@ const LiveStream = () => {
           room_id: params.item.room_id
         });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
 
     registerUserRoom();
   }, [params.item, session]);
 
-  useEffect(() => {    
+  useEffect(() => {
     const room_name = formatName(profile?.room_url_key);
 
     if (userProfile) {
@@ -100,7 +118,7 @@ const LiveStream = () => {
         liveId: profile?.live_id
       });
     }
-    LogBox.ignoreAllLogs(true)
+    LogBox.ignoreAllLogs(true);
   }, [profile, url, userProfile]);
 
   return (
@@ -118,7 +136,7 @@ const LiveStream = () => {
           disableTimer
           disableFullscreen
           onEnd={() => {
-            navigation.navigate('Main');
+            navigation.navigate("Main");
           }}
         />
       </Box>
@@ -126,7 +144,7 @@ const LiveStream = () => {
         <LiveStreamTabs />
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 export default LiveStream;
