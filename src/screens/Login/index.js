@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -10,12 +9,13 @@ import {
   Text,
   useToast
 } from "native-base";
-import { loginApi } from "../../services/auth";
-import Logo from "../../components/atoms/Logo";
-import { storeStorage } from "../../utils/storage";
-import { AUTH } from "../../services";
+import React, { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
+import Logo from "../../components/atoms/Logo";
+import { AUTH } from "../../services";
+import { loginApi } from "../../services/auth";
 import { activityLog } from "../../utils/activityLog";
+import { storeStorage } from "../../utils/storage";
 
 const Login = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -204,10 +204,10 @@ const Login = ({ navigation }) => {
             my="3"
             background="primary"
             onPress={handleLogin}
-            disabled={loading}
+            isLoading={loading}
           >
             <Text fontSize="16" color="white" fontWeight="medium">
-              {loading ? <Spinner color="white" /> : "Login"}
+              Login
             </Text>
           </Button>
           <Center>
