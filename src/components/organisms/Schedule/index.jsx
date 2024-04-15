@@ -40,10 +40,11 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
       {schedules.length > 0
         ? schedules?.map((item, idx) => (
             <TouchableOpacity
+              key={idx}
               activeOpacity={0.7}
-              onPress={() => navigation.replace("ScheduleDetail")}
+              onPress={() => navigation.navigate("ScheduleDetail")}
             >
-              <HStack py="3" key={idx}>
+              <HStack py="3">
                 <Box>
                   <Box bg="primary" py="0.8" borderRadius="md" mb="2">
                     <HStack
