@@ -8,9 +8,10 @@ import {
   LiveStream,
   Login,
   RoomDetail,
+  RoomLives,
   ScheduleDetail,
   SplashScreen,
-  ScheduleList
+  ScheduleList,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -100,6 +101,11 @@ const Navigation = () => {
       <Stack.Screen name="Main" component={TabNavigator} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="RoomLives"
+        component={RoomLives}
+        options={showHeader}
+      />
       <Stack.Screen
         name="RoomDetail"
         component={RoomDetail}

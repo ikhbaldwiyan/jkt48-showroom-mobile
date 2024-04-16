@@ -1,7 +1,14 @@
 import React from "react";
 import Layout from "../../components/templates/Layout";
 import { Box } from "native-base";
-import { IDNLIve, PremiumLive, RecentLives, RoomList, RoomLive, Schedule } from "../../components/organisms";
+import {
+  IDNLIve,
+  ShowroomLive,
+  PremiumLive,
+  RecentLives,
+  RoomList,
+  Schedule,
+} from "../../components/organisms";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 
 const Home = ({ navigation }) => {
@@ -11,7 +18,7 @@ const Home = ({ navigation }) => {
     <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
         <PremiumLive refreshing={refreshing} />
-        <RoomLive refreshing={refreshing} />
+        <ShowroomLive refreshing={refreshing} />
         <IDNLIve refreshing={refreshing} />
         <RecentLives refreshing={refreshing} />
         <Schedule refreshing={refreshing} navigation={navigation} isWeek />

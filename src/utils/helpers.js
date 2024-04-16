@@ -4,8 +4,12 @@ export const cleanImage = (image, isDetail) => {
     : image?.replace("s.jpeg", "l.jpeg");
 };
 
-export const formatName = (name) => {
-  return name?.replace("JKT48_", "") + " JKT48";
+export const formatName = (name, hideGroup) => {
+  let memberName;
+  !hideGroup
+    ? memberName = name?.replace("JKT48_", "") + " JKT48"
+    : memberName = name?.replace("JKT48_", "");
+  return memberName;
 };
 
 export const formatViews = (str) => {
@@ -18,22 +22,24 @@ export const formatViews = (str) => {
 
 export const getTimes = (times) => {
   function formatTime(n) {
-    return n < 10 ? '0' + n : n;
+    return n < 10 ? "0" + n : n;
   }
 
   function getTimes(dateInput) {
     var date = new Date(dateInput);
-    var time = `${formatTime(date.getHours())}:${formatTime(date.getMinutes())}`;
+    var time = `${formatTime(date.getHours())}:${formatTime(
+      date.getMinutes()
+    )}`;
     return time;
   }
 
   var date = new Date();
 
-  const hours = date.getHours() + ':' + date.getMinutes();
-  const streamStarted = new Date(Date.now() - 1000 * (60 * 5) ) 
+  const hours = date.getHours() + ":" + date.getMinutes();
+  const streamStarted = new Date(Date.now() - 1000 * (60 * 5));
 
-  return times ? getTimes(times * 1000) : 'TBD';
-}
+  return times ? getTimes(times * 1000) : "TBD";
+};
 
 export const getLiveDuration = (start, end) => {
   // Given start and end dates
@@ -53,8 +59,8 @@ export const getLiveDuration = (start, end) => {
     durationString += `${hours} hours, `;
   }
   durationString += `${minutes} minutes, ${seconds} seconds.`;
-  
-  return durationString
+
+  return durationString;
 };
 
 export const getLiveDurationMinutes = (duration) => {
