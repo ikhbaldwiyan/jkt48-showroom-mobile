@@ -7,3 +7,7 @@ export const getScheduleList = () => {
 export const getScheduleWeek = () => {
   return apiUser.get(ENDPOINTS.SCHEDULE.WEEK);
 };
+
+export const getScheduleDetail = (id) => {
+  return apiUser.get(ENDPOINTS.SCHEDULE.DETAIL + id);
+};

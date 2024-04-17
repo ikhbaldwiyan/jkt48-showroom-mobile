@@ -42,7 +42,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
             <TouchableOpacity
               key={idx}
               activeOpacity={0.7}
-              onPress={() => navigation.navigate("ScheduleDetail")}
+              onPress={() => navigation.navigate("ScheduleDetail", { item })}
             >
               <HStack py="3">
                 <Box>

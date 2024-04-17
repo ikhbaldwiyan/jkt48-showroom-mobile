@@ -31,6 +31,7 @@ export default {
   },
   SCHEDULE: {
     LIST: "/schedules",
+    DETAIL: "/schedules/", //required schedule id
     WEEK: "/schedules?isOnWeekSchedule=true",
     TODAY: "/schedules/today",
   }

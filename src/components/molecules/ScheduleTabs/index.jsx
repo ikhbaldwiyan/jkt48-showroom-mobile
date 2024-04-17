@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Pressable, Text, useColorModeValue } from "native-base";
 import { Dimensions } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
-import { Members } from "../LiveStream";
+import { Members } from "./components/Members";
 
 const initialLayout = {
   width: Dimensions.get("window").width

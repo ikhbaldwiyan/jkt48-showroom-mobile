@@ -17,6 +17,7 @@ import GiftFill from "./GiftFill";
 import History from "./History";
 import RightArrow from "./RightArrow";
 import RefreshIcon from "./RefreshIcon";
+import BirthdayIcon from "./BirthdayIcon";
 
 export {
   LogoIcon,
@@ -38,4 +39,5 @@ export {
   History,
   RightArrow,
   RefreshIcon,
+  BirthdayIcon,
 }
