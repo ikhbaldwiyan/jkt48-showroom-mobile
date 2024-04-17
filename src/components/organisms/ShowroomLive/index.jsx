@@ -3,9 +3,9 @@ import { useNavigation } from "@react-navigation/native";
 import { Box, Divider, HStack, Image, Pressable, Text } from "native-base";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { ROOMS } from "../../../services";
-import { cleanImage, formatName } from "../../../utils/helpers";
+import { cleanImage, formatName, getTimes } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
-import { RightArrow } from "../../../assets/icon";
+import { RightArrow, TimesFill } from "../../../assets/icon";
 
 const ShowroomLive = ({ refreshing }) => {
   const [rooms, setRooms] = useState([]);
@@ -58,6 +58,19 @@ const ShowroomLive = ({ refreshing }) => {
                   size="xl"
                   width={200}
                 />
+                <Box
+                  borderTopLeftRadius="8"
+                  borderBottomRightRadius="8"
+                  position="absolute"
+                  background="primary"
+                  py="1"
+                  px="2"
+                >
+                  <HStack space={1} alignItems="center">
+                    <TimesFill />
+                    <Text>{getTimes(item?.started_at)}</Text>
+                  </HStack>
+                </Box>
                 <TouchableOpacity
                   activeOpacity={0.6}
                   onPress={() => {

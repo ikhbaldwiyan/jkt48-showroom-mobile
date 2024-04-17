@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Box, HStack, Image, Pressable, Text, VStack } from "native-base";
+import { Box, HStack, Image, Text, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { cleanImage, formatName } from "../../utils/helpers";
 import Views from "../../components/atoms/Views";

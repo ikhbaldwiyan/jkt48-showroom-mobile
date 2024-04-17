@@ -27,7 +27,7 @@ const LiveStream = () => {
     navigation.setOptions({
       headerRight: () => (
         <HStack space={2} alignItems="center">
-          <Button
+          {/* <Button
             onPress={onRefresh}
             isLoading={refreshing}
             borderRadius="md"
@@ -36,7 +36,7 @@ const LiveStream = () => {
             size="xs"
           >
             <RefreshIcon />
-          </Button>
+          </Button> */}
           <Views number={liveInfo?.views ?? profile?.view_num ?? 0} />
         </HStack>
       )
