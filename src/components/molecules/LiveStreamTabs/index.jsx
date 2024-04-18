@@ -3,6 +3,7 @@ import { Box, Pressable, Text, useColorModeValue } from 'native-base';
 import { Dimensions } from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { Comment, Podium, Room, Members } from '../LiveStream';
+import { Songs } from "../LiveStream/Songs";
 
 const initialLayout = {
   width: Dimensions.get('window').width,
@@ -17,17 +18,16 @@ const renderScene = SceneMap({
 const renderPremiumLive = SceneMap({
   member: Members,
   comment: Comment,
-  podium: Podium,
+  songs: Songs,
 });
 
-const LiveStreamTabs = () => {
+const LiveStreamTabs = ({ isPremiumLive }) => {
   const [index, setIndex] = useState(1);
-  const [isPremiumLive, setIsPremiumLive] = useState(false);
 
   const routes = [
     isPremiumLive ?  { key: 'member', title: 'Member' } :  { key: 'room', title: 'Room Live' },
     { key: 'comment', title: 'Comment' },
-    { key: 'podium', title: 'Podium' },
+    isPremiumLive ?  { key: 'songs', title: 'Songs' } :  { key: 'podium', title: 'Podium' }
   ];
 
   const renderTabBar = ({ navigationState }) => (

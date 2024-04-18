@@ -141,7 +141,7 @@ const LiveStream = () => {
         />
       </Box>
       <Box flex={1} p="2">
-        <LiveStreamTabs />
+        <LiveStreamTabs isPremiumLive={liveInfo.isPremiumLive} />
       </Box>
     </Box>
   );
