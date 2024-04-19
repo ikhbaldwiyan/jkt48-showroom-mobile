@@ -12,6 +12,7 @@ import {
   ScheduleDetail,
   SplashScreen,
   ScheduleList,
+  PremiumLive,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -124,6 +125,11 @@ const Navigation = () => {
       <Stack.Screen
         name="IDNStream"
         component={IDNStream}
+        options={showHeader}
+      />
+      <Stack.Screen
+        name="PremiumLive"
+        component={PremiumLive}
         options={showHeader}
       />
     </Stack.Navigator>

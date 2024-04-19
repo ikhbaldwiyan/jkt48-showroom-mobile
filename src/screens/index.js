@@ -5,6 +5,7 @@ import RoomDetail from "./RoomDetail";
 import LiveStream from "./LiveStream";
 import IDNStream from "./IDNStream";
 import RoomLives from "./RoomLives";
+import PremiumLive from "./PremiumLive";
 import { ScheduleList, ScheduleDetail } from "./Schedule";
 
 export {
@@ -16,5 +17,6 @@ export {
   IDNStream,
   ScheduleList,
   ScheduleDetail,
-  RoomLives
+  RoomLives,
+  PremiumLive,
 };
