@@ -67,7 +67,7 @@ const RecentLives = ({ refreshing }) => {
                         <HStack alignItems="center" space={2}>
                           <UsersFill />
                           <Text fontWeight="semibold">
-                            {formatViews(live_info?.viewers?.num)}
+                            {formatViews(live_info?.viewers?.num)} Views
                           </Text>
                         </HStack>
                         <HStack alignItems="center" space={2}>
@@ -96,7 +96,13 @@ const RecentLives = ({ refreshing }) => {
                   w="45%"
                   background="teal"
                 >
-                  <Text fontWeight="bold">{member?.nickname} JKT48</Text>
+                  <Text fontWeight="bold">
+                    {member.url === "jkt48" ? (
+                      "JKT48 Ofiicial"
+                    ) : (
+                      member?.nickname + " JKT48"
+                    )}
+                  </Text>
                 </Box>
                 <Box
                   mt="3"
