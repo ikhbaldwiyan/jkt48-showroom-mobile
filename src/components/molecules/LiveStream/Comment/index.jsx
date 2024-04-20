@@ -33,7 +33,7 @@ export const Comment = () => {
   const [textComment, setTextComment] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
   const roomId =
-    params.item.profile.premium_room_type === 1
+    params?.item?.profile?.premium_room_type === 1
       ? params?.item?.profile.room_id
       : params?.item?.room_id;
 
