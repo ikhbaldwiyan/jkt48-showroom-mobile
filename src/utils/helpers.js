@@ -69,8 +69,8 @@ export const getLiveDurationMinutes = (duration) => {
   const remainingMinutes = minutes % 60;
 
   if (hours === 0) {
-    return `${remainingMinutes} minutes`;
+    return `${remainingMinutes} menit`;
   } else {
-    return `${hours} hours ${remainingMinutes} minutes`;
+    return `${hours} jam ${remainingMinutes} menit`;
   }
 };

@@ -24,7 +24,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
     <Box>
       <HStack alignItems="center" justifyContent="space-between">
         <Text color="white" fontSize="2xl" mb="1" fontWeight="semibold">
-          Theater Schedule
+          Jadwal Theater
         </Text>
         {isWeek && (
           <TouchableOpacity

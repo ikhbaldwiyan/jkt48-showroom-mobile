@@ -65,7 +65,7 @@ export const Podium = ({ isIDNLive }) => {
       >
         <Center>
           <Text fontWeight="bold">
-            {views} People are watching
+            {views} Orang sedang menonton
           </Text>
         </Center>
         <HStack
