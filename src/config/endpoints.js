@@ -15,7 +15,7 @@ export default {
     GEN_10: "/rooms/academy",
     ONLIVES: "/rooms/onlives",
     PROFILE: "/profile/room/",
-    RECENT_LIVE: "/recent?sort=date&page=1&filter=active&order=-1&perpage=6&search=&room_id=&group=jkt48",
+    RECENT_LIVE: "/recent?sort=date&page=1&filter=active&order=-1&perpage=8&search=&room_id=&group=jkt48",
   },
   IDN_LIVE: {
     ROOM_LIVES: "/idn_lives",
