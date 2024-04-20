@@ -32,6 +32,26 @@ const ScheduleDetail = ({ navigation }) => {
 
   return (
     <Layout>
+      {theater?.isBirthdayShow && (
+        <Box mb="3" background="teal" p="2" borderRadius="lg">
+          <HStack alignItems="center" space={2}>
+            <BirthdayIcon />
+            <Text fontWeight="bold">
+              Birthday {theater?.birthdayMember?.name}
+            </Text>
+          </HStack>
+        </Box>
+      )}
+      {theater?.isGraduationShow && (
+        <Box mb="3" background="teal" p="2" borderRadius="lg">
+          <HStack alignItems="center" space={2}>
+            <BirthdayIcon />
+            <Text fontWeight="bold">
+              Birthday {theater?.graduateMember?.name}
+            </Text>
+          </HStack>
+        </Box>
+      )}
       <Box mb="3" background="purple.600" p="2" borderRadius="lg">
         <HStack alignItems="center" space={2}>
           <Calendar size={20} />
@@ -39,19 +59,11 @@ const ScheduleDetail = ({ navigation }) => {
             {moment(theater?.showDate).format("DD MMM YYYY")}
           </Text>
           <TimesIcon />
-          <Text fontWeight="bold">{theater?.showTime + " WIB"}</Text>
+          <Text fontWeight="bold">
+            {theater?.showTime ? theater?.showTime + " WIB" : "00:00"}
+          </Text>
         </HStack>
       </Box>
-      {theater?.isBirthdayShow && (
-        <Box mb="3" background="teal" p="2" borderRadius="lg">
-          <HStack alignItems="center" space={2}>
-            <BirthdayIcon />
-            <Text fontWeight="bold">
-              Birthday {theater?.birthdayMember?.stage_name}
-            </Text>
-          </HStack>
-        </Box>
-      )}
       <Image
         width="100%"
         height="215"
