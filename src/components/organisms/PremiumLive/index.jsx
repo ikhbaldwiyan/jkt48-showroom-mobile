@@ -6,6 +6,7 @@ import { ROOMS, STREAM } from "../../../services";
 import { cleanImage } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
 import Times from "../../atoms/Times";
+import { BirthdayIcon } from "../../../assets/icon";
 
 const PremiumLive = ({ refreshing }) => {
   const [rooms, setRooms] = useState([]);
@@ -61,6 +62,22 @@ const PremiumLive = ({ refreshing }) => {
                 width="330"
                 height="200"
               />
+              {theater?.isBirthdayShow && (
+                <Box
+                  borderTopRightRadius="8"
+                  borderBottomLeftRadius="8"
+                  position="absolute"
+                  background="red"
+                  right={0}
+                  py="1"
+                  px="2"
+                >
+                  <HStack space={2} alignItems="center">
+                    <BirthdayIcon size={16} />
+                    <Text>{theater.birthdayMember.stage_name}</Text>
+                  </HStack>
+                </Box>
+              )}
               <HStack alignItems="center" mt="2">
                 <Text
                   fontSize="xl"
@@ -69,7 +86,9 @@ const PremiumLive = ({ refreshing }) => {
                   color="white"
                   py="2"
                 >
-                  {theater ? theater?.setlist?.name : item?.main_name}
+                  {theater && theater?.setlist?.name !== "Cara Meminum Ramune"
+                    ? theater?.setlist?.name
+                    : "JKT48 Official"}
                 </Text>
                 <Views number={item?.view_num} />
                 <Times start_time={item.started_at} />

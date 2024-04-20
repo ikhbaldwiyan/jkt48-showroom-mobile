@@ -11,7 +11,7 @@ import {
   useToast,
   Input,
   Button,
-  Spinner,
+  Spinner
 } from "native-base";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -32,11 +32,15 @@ export const Comment = () => {
   const [socketKey, setSocketKey] = useState("");
   const [textComment, setTextComment] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
+  const roomId =
+    params.item.profile.premium_room_type === 1
+      ? params?.item?.profile.room_id
+      : params?.item?.room_id;
 
   useEffect(() => {
     async function getComments() {
       const response = await STREAM.getStreamComments(
-        params?.item?.room_id,
+        roomId,
         session?.cookie_login_id ?? "cookies"
       );
       setComments(response?.data);
@@ -76,7 +80,7 @@ export const Comment = () => {
   useEffect(() => {
     async function getWebsocketInfo() {
       const response = await STREAM.getStreamInfo(
-        params?.item?.room_id,
+        roomId,
         session?.cookie_login_id ?? "cookies"
       );
       setSocketKey(response?.data?.websocket?.key);
@@ -119,10 +123,10 @@ export const Comment = () => {
 
     try {
       await STREAM.sendCommentStream({
-        room_id: params?.item?.room_id?.toString(),
+        room_id: roomId?.toString(),
         comment: textComment,
         csrf: session?.csrf_token,
-        cookies_id: session?.cookie_login_id,
+        cookies_id: session?.cookie_login_id
       });
       activityLog({
         logName: "Comment",
@@ -139,7 +143,7 @@ export const Comment = () => {
             <Text>Failed to send comment</Text>
           </Box>
         ),
-        placement: "bottom",
+        placement: "bottom"
       });
     } finally {
       setButtonLoading(false);
@@ -194,7 +198,7 @@ export const Comment = () => {
             borderBottomRightRadius="0"
             placeholder="Write Comment.."
             _input={{
-              textAlign: "left",
+              textAlign: "left"
             }}
             onChangeText={handleComment}
             value={textComment}

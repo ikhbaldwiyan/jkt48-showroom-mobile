@@ -98,7 +98,9 @@ const PremiumLive = () => {
       }
     }
 
-    registerUserRoom();
+    if (isPaid) {
+      registerUserRoom();
+    }
   }, [params.item.profile, session]);
 
   useEffect(() => {
@@ -120,7 +122,7 @@ const PremiumLive = () => {
   useEffect(() => {
     const room_name = formatName(profile?.room_url_key);
 
-    if (userProfile) {
+    if (userProfile && isPaid) {
       activityLog({
         logName: "Watch",
         userId: userProfile?._id,
