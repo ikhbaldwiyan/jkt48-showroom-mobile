@@ -1,4 +1,3 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Box,
   Button,
@@ -21,10 +20,6 @@ import { ROOMS } from "../../../../services";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 
 export const RoomListIDN = ({ profile,  setProfile }) => {
-  console.log(setProfile)
-  const route = useRoute();
-  const { params } = route;
-  const { navigate } = useNavigation();
   const [roomLives, setRoomLives] = useState([]);
   const { refreshing, onRefresh } = useRefresh();
 

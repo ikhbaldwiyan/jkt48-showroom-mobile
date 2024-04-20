@@ -35,13 +35,12 @@ const IDNStream = () => {
   }, [profile])
 
   useEffect(() => {
-    const live = params.item;
     if (userProfile) {
       activityLog({
         logName: "Watch",
         userId: userProfile?._id,
-        description: `Watch IDN Live ${live?.user?.name}`,
-        liveId: live?.slug,
+        description: `Watch IDN Live ${profile?.user?.name}`,
+        liveId: profile?.slug,
       });
     }
     LogBox.ignoreAllLogs(true)
@@ -53,7 +52,7 @@ const IDNStream = () => {
       render: () => {
         return (
           <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
-            <Text>{params.item?.user?.name ?? "Room"} Offline</Text>
+            <Text>{profile?.user?.name ?? "Room"} Offline</Text>
           </Box>
         );
       },
