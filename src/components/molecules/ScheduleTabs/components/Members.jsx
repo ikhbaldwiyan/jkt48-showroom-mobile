@@ -1,27 +1,8 @@
-import { useRoute } from "@react-navigation/native";
 import { HStack, Image, ScrollView, Text, View, VStack } from "native-base";
-import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import { SCHEDULES } from "../../../../services";
 
-export const Members = () => {
-  const route = useRoute();
-  const { params } = route;
-  const [members, setMembers] = useState([]);
-
-  useEffect(() => {
-    async function getTheaterDetail() {
-      try {
-        const response = await SCHEDULES.getScheduleDetail(params.item._id);
-        setMembers(response.data.memberList);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getTheaterDetail();
-  }, [params]);
-
+export const Members = ({ members }) => {
   return (
     <LinearGradient
       colors={["#24A2B7", "#3B82F6"]}

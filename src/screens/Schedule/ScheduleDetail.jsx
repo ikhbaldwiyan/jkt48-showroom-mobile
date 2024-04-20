@@ -1,16 +1,18 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Box, HStack, Image, Text } from "native-base";
-import moment from "moment";
 import { useRoute } from "@react-navigation/native";
-import { SCHEDULES } from "../../services";
-import { BirthdayIcon, Calendar, TimesIcon } from "../../assets/icon";
-import Layout from "../../components/templates/Layout";
+import moment from "moment";
+import { Box, HStack, Image, Text } from "native-base";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { BirthdayIcon, Calendar, GraduateIcon, TimesIcon } from "../../assets/icon";
 import ScheduleTabs from "../../components/molecules/ScheduleTabs";
+import Layout from "../../components/templates/Layout";
+import { SCHEDULES } from "../../services";
+import { useRefresh } from "../../utils/hooks/useRefresh";
 
 const ScheduleDetail = ({ navigation }) => {
   const route = useRoute();
   const { params } = route;
   const [theater, setTheater] = useState();
+  const { refreshing, onRefresh } = useRefresh();
 
   useEffect(() => {
     async function getTheaterDetail() {
@@ -22,7 +24,7 @@ const ScheduleDetail = ({ navigation }) => {
       }
     }
     getTheaterDetail();
-  }, [params]);
+  }, [params, refreshing]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -31,7 +33,7 @@ const ScheduleDetail = ({ navigation }) => {
   }, []);
 
   return (
-    <Layout>
+    <Layout refreshing={refreshing} onRefresh={onRefresh}>
       {theater?.isBirthdayShow && (
         <Box mb="3" background="teal" p="2" borderRadius="lg">
           <HStack alignItems="center" space={2}>
@@ -45,9 +47,9 @@ const ScheduleDetail = ({ navigation }) => {
       {theater?.isGraduationShow && (
         <Box mb="3" background="teal" p="2" borderRadius="lg">
           <HStack alignItems="center" space={2}>
-            <BirthdayIcon />
+            <GraduateIcon />
             <Text fontWeight="bold">
-              Birthday {theater?.graduateMember?.name}
+              Graduation {theater?.graduateMember?.name}
             </Text>
           </HStack>
         </Box>
@@ -84,7 +86,7 @@ const ScheduleDetail = ({ navigation }) => {
         <Text fontWeight="semibold">{theater?.setlist?.description}</Text>
       </Box>
       <Box flex={1} height="610" mt="3" mb="10">
-        <ScheduleTabs />
+        <ScheduleTabs refreshing={refreshing} />
       </Box>
     </Layout>
   );

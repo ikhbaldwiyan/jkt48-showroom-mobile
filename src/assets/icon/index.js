@@ -18,6 +18,7 @@ import History from "./History";
 import RightArrow from "./RightArrow";
 import RefreshIcon from "./RefreshIcon";
 import BirthdayIcon from "./BirthdayIcon";
+import GraduateIcon from "./GraduateIcon";
 
 export {
   LogoIcon,
@@ -40,4 +41,5 @@ export {
   RightArrow,
   RefreshIcon,
   BirthdayIcon,
+  GraduateIcon,
 }
