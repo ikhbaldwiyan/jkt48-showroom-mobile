@@ -17,19 +17,22 @@ const IDNStream = () => {
   const toast = useToast();
 
   useEffect(() => {
-    setProfile(params.item)
+    setProfile(params.item);
+  }, [])
+
+  useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <Views number={profile?.view_count ?? 0} />
       )
     })
-  }, [profile, params.item])
+  }, [profile])
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: profile?.user?.name
     })
-  }, [profile, params.item])
+  }, [profile])
 
   useEffect(() => {
     const live = params.item;
@@ -62,7 +65,7 @@ const IDNStream = () => {
     <Box flex="1" bg="secondary">
       <Box height="480">
         <VideoPlayer
-          source={{ uri: params.item.stream_url }}
+          source={{ uri: profile?.stream_url }}
           style={{
             position: "absolute",
             width: "100%",
@@ -74,7 +77,7 @@ const IDNStream = () => {
           onEnd={() => handleEndLive()}
         />
       </Box>
-      <IDNLiveTabs />
+      <IDNLiveTabs profile={profile} setProfile={setProfile} />
     </Box>
   )
 }

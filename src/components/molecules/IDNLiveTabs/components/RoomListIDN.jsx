@@ -1,12 +1,27 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Box, Button, Divider, HStack, Image, PlayIcon, Text, View, Pressable } from "native-base";
+import {
+  Box,
+  Button,
+  Divider,
+  HStack,
+  Image,
+  PlayIcon,
+  Text,
+  View
+} from "native-base";
 import { useEffect, useState } from "react";
-import { RefreshControl, ScrollView, StyleSheet } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity
+} from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { ROOMS } from "../../../../services";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 
-export const RoomListIDN = () => {
+export const RoomListIDN = ({ profile,  setProfile }) => {
+  console.log(setProfile)
   const route = useRoute();
   const { params } = route;
   const { navigate } = useNavigation();
@@ -16,13 +31,16 @@ export const RoomListIDN = () => {
   useEffect(() => {
     async function getIDNLIve() {
       const response = await ROOMS.getIDNLIveRoom();
-      setRoomLives(response.data)
+      setRoomLives(response.data);
     }
     getIDNLIve();
   }, [refreshing]);
 
   return (
-    <LinearGradient colors={['#24A2B7', '#3B82F6']} style={styles.linearGradient}>
+    <LinearGradient
+      colors={["#24A2B7", "#3B82F6"]}
+      style={styles.linearGradient}
+    >
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -30,7 +48,12 @@ export const RoomListIDN = () => {
       >
         {roomLives?.map((item, idx) => (
           <Box key={idx}>
-            <HStack py="2" alignItems="center" justifyItems="center" justifyContent="space-around">
+            <HStack
+              py="2"
+              alignItems="center"
+              justifyItems="center"
+              justifyContent="space-around"
+            >
               <Image
                 mr="3"
                 alt={item.title}
@@ -43,33 +66,34 @@ export const RoomListIDN = () => {
                   {item?.user?.name.replace("JKT48", "")}
                 </Text>
                 <Box bg="red" mt="2" rounded="lg" p="1" px="4">
-                  <Text fontWeight="semibold">
-                    Live
-                  </Text>
+                  <Text fontWeight="semibold">Live</Text>
                 </Box>
               </View>
               <Button
                 mt="8"
-                colorScheme="success"
-                bg={item.user.username === params.item.user.username ? "success.800" : "secondary"}
+                colorScheme="black"
+                bg={
+                  item.user.username === profile?.user?.username
+                    ? "secondary"
+                    : "disabled"
+                }
               >
-                <Pressable
+                <TouchableOpacity
+                  activeOpacity={0.6}
                   onPress={() => {
-                    navigate("IDNStream", { item })
+                    setProfile(item);
                   }}
                 >
                   <PlayIcon size={14} color="white" />
-                </Pressable>
+                </TouchableOpacity>
               </Button>
             </HStack>
-            {roomLives.length > 1 && (
-              <Divider mt="2" />
-            )}
+            {roomLives.length > 1 && <Divider mt="2" />}
           </Box>
         ))}
       </ScrollView>
     </LinearGradient>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
@@ -78,5 +102,5 @@ const styles = StyleSheet.create({
     padding: 12,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6
-  },
-})
+  }
+});
