@@ -15,7 +15,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { ROOMS } from "../../../../services";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 
-export const Room = () => {
+export const Room = ({ setProfile }) => {
   const route = useRoute();
   const { params } = route;
   const { navigate } = useNavigation();
@@ -78,7 +78,7 @@ export const Room = () => {
                 <TouchableOpacity
                   activeOpacity={0.6}
                   onPress={() => {
-                    navigate("LiveStream", { item });
+                    setProfile(item);
                   }}
                 >
                   <PlayIcon size={14} color="white" />

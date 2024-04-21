@@ -21,7 +21,7 @@ const RoomList = ({ refreshing }) => {
     <Box key={idx} mr={3}>
       <Pressable
         onPress={() => {
-          navigate("RoomDetail", { room })
+          navigate("LiveStream", { item: room })
         }}
       >
         <Image

@@ -21,7 +21,7 @@ import useUser from "../../../../utils/hooks/useUser";
 import { formatName } from "../../../../utils/helpers";
 import { activityLog } from "../../../../utils/activityLog";
 
-export const Comment = () => {
+export const Comment = ({ profile }) => {
   const route = useRoute();
   const toast = useToast();
   const { params } = route;
@@ -34,7 +34,7 @@ export const Comment = () => {
   const [buttonLoading, setButtonLoading] = useState(false);
   const roomId =
     params?.item?.profile?.premium_room_type === 1
-      ? params?.item?.profile.room_id
+      ? profile?.room_id
       : params?.item?.room_id;
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const Comment = () => {
     }
 
     getComments();
-  }, [params.item]);
+  }, [profile]);
 
   const formatCommentWebsocket = (msg) => {
     const comments = {
@@ -64,7 +64,7 @@ export const Comment = () => {
 
   const handleEndLive = () => {
     navigation.navigate("Main");
-    const roomName = formatName(params.item.room_url_key);
+    const roomName = formatName(profile?.room_url_key);
     toast.show({
       render: () => {
         return (
@@ -115,7 +115,7 @@ export const Comment = () => {
     return () => {
       newSocket.close();
     };
-  }, [socketKey, params.item]);
+  }, [socketKey, profile]);
 
   const sendComment = async (e) => {
     e.preventDefault();
@@ -131,7 +131,7 @@ export const Comment = () => {
       activityLog({
         logName: "Comment",
         userId: userProfile?._id,
-        description: `Send Comment to ${formatName(params.item.room_url_key)}`,
+        description: `Send Comment to ${formatName(profile?.room_url_key)}`,
         liveId: params?.item?.live_id
       });
       setTextComment("");

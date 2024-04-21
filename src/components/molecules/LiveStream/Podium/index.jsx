@@ -1,19 +1,12 @@
 import { useRoute } from "@react-navigation/native";
-import {
-  Center,
-  HStack,
-  Image,
-  ScrollView,
-  Text,
-  VStack
-} from "native-base";
+import { Center, HStack, Image, ScrollView, Text, VStack } from "native-base";
 import { useEffect, useState } from "react";
 import { RefreshControl, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 
-export const Podium = ({ isIDNLive }) => {
+export const Podium = ({ profile }) => {
   const route = useRoute();
   const { params } = route;
   const [podium, setPodium] = useState([]);
@@ -21,20 +14,14 @@ export const Podium = ({ isIDNLive }) => {
   const { refreshing, onRefresh } = useRefresh();
 
   async function getPodiumList() {
-    const response = await STREAM.getLivePodium(params?.item?.live_id);
+    const response = await STREAM.getLivePodium(profile?.live_id);
     setPodium(response?.data?.activityLog?.watch?.reverse());
-    setViews(response?.data?.liveData?.users)
-  }
-
-  async function getIDNPodiumList() {
-    const response = await STREAM.getIDNLivePodium(params?.item?.slug);
-    setPodium(response?.data?.activityLog?.watch?.reverse());
-    setViews(response?.data?.liveData?.users)
+    setViews(response?.data?.liveData?.users);
   }
 
   useEffect(() => {
     try {
-      isIDNLive ? getIDNPodiumList() : getPodiumList();
+      getPodiumList();
     } catch (error) {
       console.log(error);
     }
@@ -42,12 +29,12 @@ export const Podium = ({ isIDNLive }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      isIDNLive ? getIDNPodiumList() : getPodiumList();
+      getPodiumList();
     }, 1000);
 
     // Set interval to fetch data every 2 minutes
     const interval = setInterval(() => {
-      isIDNLive ? getIDNPodiumList() : getPodiumList();
+      getPodiumList();
     }, 2 * 60 * 1000); // 2 minutes in milliseconds
 
     return () => clearInterval(interval);
@@ -64,9 +51,7 @@ export const Podium = ({ isIDNLive }) => {
         }
       >
         <Center>
-          <Text fontWeight="bold">
-            {views} Orang sedang menonton
-          </Text>
+          <Text fontWeight="bold">{views} Orang sedang menonton</Text>
         </Center>
         <HStack
           space={2}

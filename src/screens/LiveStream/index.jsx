@@ -1,4 +1,4 @@
-import { Box, Button, HStack } from "native-base";
+import { Box, Button, HStack, Spinner, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { STREAM } from "../../services";
@@ -8,7 +8,7 @@ import Views from "../../components/atoms/Views";
 import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
-import { LogBox } from "react-native";
+import { Dimensions, LogBox } from "react-native";
 import { RefreshIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 
@@ -21,9 +21,14 @@ const LiveStream = () => {
   const [url, setUrl] = useState();
   const { session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
+  const toast = useToast();
 
   useEffect(() => {
     setProfile(params.item);
+    getLiveInfo();
+  }, []);
+
+  useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <HStack space={2} alignItems="center">
@@ -41,12 +46,12 @@ const LiveStream = () => {
         </HStack>
       )
     });
-  }, [profile, params.item, liveInfo, refreshing]);
+  }, [profile, liveInfo, refreshing]);
 
   async function getLiveInfo() {
     try {
       const response = await STREAM.getStreamInfo(
-        params?.item?.room_id,
+        profile?.room_id,
         session?.cookie_login_id ?? "cookies"
       );
       setLiveInfo(response.data);
@@ -54,10 +59,6 @@ const LiveStream = () => {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    getLiveInfo();
-  }, [params?.item]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -69,19 +70,19 @@ const LiveStream = () => {
     }, 2 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [params?.item, refreshing]);
+  }, [profile, refreshing]);
 
   useEffect(() => {
     async function getUrl() {
       const streams = await STREAM.getStreamUrl(
-        params?.item?.room_id,
+        profile?.room_id,
         session?.cookie_login_id
       );
       setUrl(streams?.data[0]?.url);
     }
 
     getUrl();
-  }, [params.item, refreshing]);
+  }, [profile, refreshing]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -97,7 +98,7 @@ const LiveStream = () => {
       try {
         await STREAM.visitRoom({
           cookies_login_id: session?.cookie_login_id,
-          room_id: params.item.room_id
+          room_id: profile?.room_id
         });
       } catch (error) {
         console.log(error);
@@ -105,7 +106,7 @@ const LiveStream = () => {
     }
 
     registerUserRoom();
-  }, [params.item, session]);
+  }, [profile, session]);
 
   useEffect(() => {
     const room_name = formatName(profile?.room_url_key);
@@ -121,28 +122,62 @@ const LiveStream = () => {
     LogBox.ignoreAllLogs(true);
   }, [profile, url, userProfile]);
 
+  useEffect(() => {
+    if (liveInfo && liveInfo?.views === 0 && !url) {
+      handleEndLive(profile?.room_url_key);
+    }
+  }, [liveInfo]);
+
+  const handleEndLive = (name) => {
+    if (name !== undefined) {
+      toast.show({
+        render: () => {
+          return (
+            <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
+              <Text>{formatName(name)} Offline</Text>
+            </Box>
+          );
+        },
+        placement: "top-right"
+      });
+    }
+    navigation.navigate("Main");
+  };
+
   return (
     <Box flex="1" bg="secondary">
-      <Box height={200}>
-        <VideoPlayer
-          source={{ uri: url }}
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%"
-          }}
-          disableSeekbar
-          disableBack
-          disableTimer
-          disableFullscreen
-          onEnd={() => {
-            navigation.navigate("Main");
-          }}
-        />
-      </Box>
-      <Box flex={1} p="2">
-        <LiveStreamTabs isPremiumLive={liveInfo.isPremiumLive} />
-      </Box>
+      {url ? (
+        <>
+          <Box height={200}>
+            <VideoPlayer
+              source={{ uri: url }}
+              style={{
+                position: "absolute",
+                width: Dimensions.get("window").width,
+                height: "100%"
+              }}
+              disableSeekbar
+              disableBack
+              disableTimer
+              disableFullscreen
+              onEnd={() => {
+                navigation.navigate("Main");
+              }}
+            />
+          </Box>
+          <Box flex={1} p="2">
+            <LiveStreamTabs
+              profile={profile}
+              setProfile={setProfile}
+              isPremiumLive={liveInfo.isPremiumLive}
+            />
+          </Box>
+        </>
+      ) : (
+        <Box flex="1" justifyContent="center" alignItems="center">
+          <Spinner size={50} color="white" />
+        </Box>
+      )}
     </Box>
   );
 };
