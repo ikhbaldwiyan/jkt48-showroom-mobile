@@ -15,13 +15,13 @@ const renderPremiumLive = SceneMap({
   songs: Songs
 });
 
-const LiveStreamTabs = ({ isPremiumLive, profile, setProfile }) => {
+const LiveStreamTabs = ({ isPremiumLive }) => {
   const [index, setIndex] = useState(1);
 
   const renderScene = SceneMap({
-    room: () => <Room profile={profile} setProfile={setProfile} />,
-    comment: () => <Comment profile={profile} />,
-    podium: () => <Podium profile={profile} />
+    room: Room,
+    comment: Comment,
+    podium: Podium
   });
 
   const routes = [];

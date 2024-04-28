@@ -1,4 +1,3 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Box,
   Button,
@@ -13,14 +12,13 @@ import { useEffect, useState } from "react";
 import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { ROOMS } from "../../../../services";
+import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 
-export const Room = ({ setProfile }) => {
-  const route = useRoute();
-  const { params } = route;
-  const { navigate } = useNavigation();
+export const Room = () => {
   const [roomLives, setRoomLives] = useState([]);
   const { refreshing, onRefresh } = useRefresh();
+  const { profile, setProfile } = useLiveStreamStore();
 
   useEffect(() => {
     async function getRoomLive() {
@@ -70,7 +68,7 @@ export const Room = ({ setProfile }) => {
                 mt="8"
                 colorScheme="black"
                 bg={
-                  item.room_id === params.item.room_id
+                  item.room_id === profile.room_id
                     ? "secondary"
                     : "disabled"
                 }

@@ -20,22 +20,21 @@ import { SendIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
 import { formatName } from "../../../../utils/helpers";
 import { activityLog } from "../../../../utils/activityLog";
+import useLiveStreamStore from "../../../../store/liveStreamStore";
 
-export const Comment = ({ profile }) => {
+export const Comment = () => {
   const route = useRoute();
   const toast = useToast();
   const { params } = route;
   const navigation = useNavigation();
   const { session, userProfile } = useUser();
+  const { profile } = useLiveStreamStore();
 
   const [comments, setComments] = useState([]);
   const [socketKey, setSocketKey] = useState("");
   const [textComment, setTextComment] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
-  const roomId =
-    params?.item?.profile?.premium_room_type === 1
-      ? profile?.room_id
-      : params?.item?.room_id;
+  const roomId = profile?.room_id
 
   useEffect(() => {
     async function getComments() {

@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { RefreshControl, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
+import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 
-export const Podium = ({ profile }) => {
+export const Podium = () => {
   const route = useRoute();
   const { params } = route;
+  const { profile } = useLiveStreamStore();
   const [podium, setPodium] = useState([]);
   const [views, setViews] = useState(0);
   const { refreshing, onRefresh } = useRefresh();
@@ -25,7 +27,7 @@ export const Podium = ({ profile }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [params.item]);
+  }, [profile]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -38,7 +40,7 @@ export const Podium = ({ profile }) => {
     }, 2 * 60 * 1000); // 2 minutes in milliseconds
 
     return () => clearInterval(interval);
-  }, [params?.item?.live_id, refreshing]);
+  }, [profile, refreshing]);
 
   return (
     <LinearGradient
