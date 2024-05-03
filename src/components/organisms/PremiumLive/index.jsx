@@ -86,9 +86,7 @@ const PremiumLive = ({ refreshing }) => {
                   color="white"
                   py="2"
                 >
-                  {theater && theater?.setlist?.name !== "Cara Meminum Ramune"
-                    ? theater?.setlist?.name
-                    : "JKT48 Official"}
+                  JKT48 OFFICIAL
                 </Text>
                 <Views number={item?.view_num} />
                 <Times start_time={item.started_at} />

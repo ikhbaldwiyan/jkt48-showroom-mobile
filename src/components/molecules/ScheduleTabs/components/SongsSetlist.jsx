@@ -12,7 +12,7 @@ export const SongsSetlist = ({ songs }) => {
         <Box p="2">
           <VStack space={2}>
             {songs?.map((item, idx) => (
-              <HStack space={3}>
+              <HStack key={idx} space={3}>
                 <Text fontWeight="semibold" fontSize="md">
                   {idx + 1}.
                 </Text>

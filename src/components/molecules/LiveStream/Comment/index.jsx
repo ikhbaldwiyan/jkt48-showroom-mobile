@@ -13,7 +13,7 @@ import {
   Button,
   Spinner
 } from "native-base";
-import { StyleSheet } from "react-native";
+import { RefreshControl, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
 import { SendIcon } from "../../../../assets/icon";
@@ -21,6 +21,7 @@ import useUser from "../../../../utils/hooks/useUser";
 import { formatName } from "../../../../utils/helpers";
 import { activityLog } from "../../../../utils/activityLog";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
+import { useRefresh } from "../../../../utils/hooks/useRefresh";
 
 export const Comment = () => {
   const route = useRoute();
@@ -34,7 +35,8 @@ export const Comment = () => {
   const [socketKey, setSocketKey] = useState("");
   const [textComment, setTextComment] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
-  const roomId = profile?.room_id
+  const { refreshing, onRefresh } = useRefresh();
+  const roomId = profile?.room_id;
 
   useEffect(() => {
     async function getComments() {
@@ -46,7 +48,7 @@ export const Comment = () => {
     }
 
     getComments();
-  }, [profile]);
+  }, [profile, refreshing]);
 
   const formatCommentWebsocket = (msg) => {
     const comments = {
@@ -158,7 +160,11 @@ export const Comment = () => {
       colors={["#24A2B7", "#3B82F6"]}
       style={styles.linearGradient}
     >
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {comments?.length > 0 &&
           comments?.slice(0, 40)?.map((item, idx) => (
             <Box key={idx}>
