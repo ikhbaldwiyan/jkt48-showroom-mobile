@@ -9,21 +9,39 @@ import { STREAM } from "../../services";
 import { activityLog } from "../../utils/activityLog";
 import { formatName } from "../../utils/helpers";
 import useUser from "../../utils/hooks/useUser";
+import useLiveStreamStore from "../../store/liveStreamStore";
 
 const PremiumLive = () => {
   const route = useRoute();
   const toast = useToast();
   const { params } = route;
   const navigation = useNavigation();
-  const [profile, setProfile] = useState();
-  const [liveInfo, setLiveInfo] = useState({});
-  const [url, setUrl] = useState();
   const { session, userProfile } = useUser();
+  const [url, setUrl] = useState();
   const [isPaid, setIsPaid] = useState(false);
   const roomId = params?.item?.profile?.room_id;
 
+  const {
+    profile,
+    liveInfo,
+    setProfile,
+    getLiveInfo,
+    registerUserRoom,
+    clearLiveStream,
+    clearUrl
+  } = useLiveStreamStore();
+
   useEffect(() => {
-    setProfile(params.item.profile);
+    fetchLiveInfo();
+    setProfile(params?.item?.profile);
+    registerUserRoom(session, profile);
+
+    return () => {
+      clearLiveStream();
+    };
+  }, []);
+
+  useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <HStack space={2} alignItems="center">
@@ -42,18 +60,6 @@ const PremiumLive = () => {
     });
   }, [profile]);
 
-  async function getLiveInfo() {
-    try {
-      const response = await STREAM.getStreamInfo(
-        roomId,
-        session?.cookie_login_id ?? "cookies"
-      );
-      setLiveInfo(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   const handleNoTicket = () => {
     toast.show({
       render: () => {
@@ -68,11 +74,15 @@ const PremiumLive = () => {
     navigation.replace("ScheduleDetail", { item: params.item.theater });
   };
 
+  async function fetchLiveInfo() {
+    await getLiveInfo(profile?.room_id, session?.cookie_login_id);
+  }
+
   useEffect(() => {
     async function getUrl() {
       const streams = await STREAM.getStreamUrl(
         roomId,
-        session?.cookie_login_id
+        "sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI"
       );
       if (streams.data.code === 404) {
         setIsPaid(false);
@@ -84,40 +94,24 @@ const PremiumLive = () => {
     }
 
     getUrl();
-  }, [params.item]);
+  }, [profile]);
 
   useEffect(() => {
-    async function registerUserRoom() {
-      try {
-        await STREAM.visitRoom({
-          cookies_login_id: session?.cookie_login_id,
-          room_id: roomId
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    registerUserRoom(session, profile);
+  }, [profile, session]);
 
-    if (isPaid) {
-      registerUserRoom();
-    }
-  }, [params.item.profile, session]);
-
-  useEffect(() => {
-    getLiveInfo();
-  }, [params?.item]);
 
   useEffect(() => {
     setTimeout(() => {
-      getLiveInfo();
+      fetchLiveInfo();
     }, 1000);
 
     const interval = setInterval(() => {
-      getLiveInfo();
+      fetchLiveInfo();
     }, 2 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [params?.item]);
+  }, [profile]);
 
   useEffect(() => {
     const room_name = formatName(profile?.room_url_key);
