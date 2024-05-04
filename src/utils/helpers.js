@@ -74,3 +74,18 @@ export const getLiveDurationMinutes = (duration) => {
     return `${hours} jam ${remainingMinutes} menit`;
   }
 };
+
+export const parseDescription = (description) => {
+  const result = description
+    .split('\r\n')
+    .map((item) => item.replace(/"/g, '').split(':'))
+    .filter((item) => item.length > 1)
+    .map((item) => {
+      if (item[0] === 'Twitter' || item[0] === 'Instagram') {
+        return [item[0], item.pop()];
+      }
+      return item;
+    });
+
+  return Object.fromEntries(result);
+};

@@ -25,6 +25,8 @@ import Horoscope from "./Horoscope";
 import Dna from "./Dna";
 import Followers from "./Followers";
 import IDCard from "./IDCard";
+import UsersIconFill from "./UsersIconFill";
+import LiveIcon from "./LiveIcon";
 
 export {
   LogoIcon,
@@ -54,4 +56,6 @@ export {
   Dna,
   IDCard,
   Followers,
+  UsersIconFill,
+  LiveIcon,
 }

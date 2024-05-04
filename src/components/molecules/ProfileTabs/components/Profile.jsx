@@ -9,11 +9,13 @@ import {
   Dna,
   Homeplace,
   Horoscope,
+  LiveIcon,
   Star
 } from "../../../../assets/icon";
+import moment from "moment";
 
 export const Profile = () => {
-  const { profile } = useProfileStore();
+  const { profile, historyLive } = useProfileStore();
   const [description, setDescription] = useState();
 
   useEffect(() => {
@@ -52,6 +54,13 @@ export const Profile = () => {
             <Star />
             <Text fontWeight="semibold">Hobby:</Text>
             <Text>{description?.Hobby ?? "-"}</Text>
+          </HStack>
+          <HStack space={2}>
+            <LiveIcon />
+            <Text fontWeight="semibold">Last Live:</Text>
+            <Text>
+              {historyLive && moment(historyLive[0].live_info.date.start).format("dddd, D MMMM hh:mm")  + " WIB"}
+            </Text>
           </HStack>
         </VStack>
       </Box>
