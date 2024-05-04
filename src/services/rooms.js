@@ -23,3 +23,7 @@ export const getIDNLIveRoom = () => {
 export const getRecentLives = () => {
   return apiHistory.get(ENDPOINTS.ROOM.RECENT_LIVE);
 };
+
+export const getHistoryLives = (roomId) => {
+  return apiHistory.get(`${ENDPOINTS.ROOM.HISTORY_LIVE}&room_id=${roomId}`);
+};

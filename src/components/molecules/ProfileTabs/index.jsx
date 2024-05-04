@@ -3,6 +3,7 @@ import { Box, Pressable, Text, useColorModeValue } from 'native-base';
 import { Dimensions } from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { Profile} from "./components";
+import HistoryLive from "./components/HistoryLive";
 
 const initialLayout = {
   width: Dimensions.get('window').width,
@@ -10,12 +11,14 @@ const initialLayout = {
 
 const renderScene = SceneMap({
   profile: Profile,
+  history: HistoryLive,
 });
 
 const ProfileTabs = () => {
-  const [index, setIndex] = useState(1);
+  const [index, setIndex] = useState(0);
   const routes = [
     { key: 'profile', title: 'Profile' },
+    { key: 'history', title: 'History Live' },
   ];
 
   const renderTabBar = ({ navigationState }) => (

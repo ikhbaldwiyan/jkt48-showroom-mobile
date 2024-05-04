@@ -16,6 +16,7 @@ export default {
     ONLIVES: "/rooms/onlives",
     PROFILE: "/profile/room/",
     RECENT_LIVE: "/recent?sort=date&page=1&filter=active&order=-1&perpage=8&search=&room_id=&group=jkt48",
+    HISTORY_LIVE: "/recent?sort=date&page=1&filter=all&order=-1&perpage=6&search=&group=jkt48", //require roomId
   },
   IDN_LIVE: {
     ROOM_LIVES: "/idn_lives",
