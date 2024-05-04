@@ -5,6 +5,7 @@ import { cleanImage, formatName, formatViews } from "../../utils/helpers";
 import useProfileStore from "../../store/profileStore";
 import Loading from "../../components/atoms/Loading";
 import ProfileTabs from "../../components/molecules/ProfileTabs";
+import { Followers, IDCard } from "../../assets/icon";
 
 const RoomDetail = () => {
   const route = useRoute();
@@ -55,13 +56,19 @@ const RoomDetail = () => {
             <Text fontSize="20" fontWeight="bold">
               {profile?.main_name}
             </Text>
-            <HStack justifyContent="space-between" py="2">
-              <Text fontWeight="semibold">
-                Room Level: {profile?.room_level}
-              </Text>
-              <Text fontWeight="semibold">
-                Followers: {formatViews(profile?.follower_num ?? 0)}
-              </Text>
+            <HStack justifyContent="space-between" py="3">
+              <HStack space={2} alignItems="center">
+                <IDCard />
+                <Text fontWeight="semibold">
+                  Room Level: {profile?.room_level}
+                </Text>
+              </HStack>
+              <HStack space={2} alignItems="center">
+                <Followers />
+                <Text fontWeight="semibold">
+                  Follower: {formatViews(profile?.follower_num ?? 0)}
+                </Text>
+              </HStack>
             </HStack>
           </Box>
           <ProfileTabs />

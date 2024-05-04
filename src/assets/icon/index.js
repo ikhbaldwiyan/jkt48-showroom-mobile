@@ -19,6 +19,12 @@ import RightArrow from "./RightArrow";
 import RefreshIcon from "./RefreshIcon";
 import BirthdayIcon from "./BirthdayIcon";
 import GraduateIcon from "./GraduateIcon";
+import Star from "./Star";
+import Homeplace from "./Homeplace";
+import Horoscope from "./Horoscope";
+import Dna from "./Dna";
+import Followers from "./Followers";
+import IDCard from "./IDCard";
 
 export {
   LogoIcon,
@@ -42,4 +48,10 @@ export {
   RefreshIcon,
   BirthdayIcon,
   GraduateIcon,
+  Star,
+  Homeplace,
+  Horoscope,
+  Dna,
+  IDCard,
+  Followers,
 }
