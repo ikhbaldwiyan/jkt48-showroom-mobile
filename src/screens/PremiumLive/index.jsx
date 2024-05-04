@@ -120,6 +120,28 @@ const PremiumLive = () => {
     LogBox.ignoreAllLogs(true);
   }, [profile, url, userProfile]);
 
+  useEffect(() => {
+    if (liveInfo && liveInfo?.views === 0 && !url) {
+      handleEndLive(profile?.room_url_key);
+    }
+  }, [liveInfo, profile]);
+
+  const handleEndLive = (name) => {
+    if (name !== undefined) {
+      toast.show({
+        render: () => {
+          return (
+            <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
+              <Text>Premium Live Ended</Text>
+            </Box>
+          );
+        },
+        placement: "top-right"
+      });
+    }
+    navigation.navigate("Main");
+  };
+
   return (
     <Box flex="1" bg="secondary">
       {!isPaid ? (
