@@ -7,19 +7,21 @@ import Views from "../../components/atoms/Views";
 import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import { STREAM } from "../../services";
 import { activityLog } from "../../utils/activityLog";
-import { formatName } from "../../utils/helpers";
 import useUser from "../../utils/hooks/useUser";
 import useLiveStreamStore from "../../store/liveStreamStore";
 
 const PremiumLive = () => {
   const route = useRoute();
   const toast = useToast();
-  const { params } = route;
   const navigation = useNavigation();
-  const { session, userProfile } = useUser();
+  const { params } = route;
+
   const [url, setUrl] = useState();
   const [isPaid, setIsPaid] = useState(false);
+  const { session, userProfile } = useUser();
+
   const roomId = params?.item?.profile?.room_id;
+  const setlist = params.item.theater.setlist.name;
 
   const {
     profile,
@@ -28,7 +30,6 @@ const PremiumLive = () => {
     getLiveInfo,
     registerUserRoom,
     clearLiveStream,
-    clearUrl
   } = useLiveStreamStore();
 
   useEffect(() => {
@@ -53,10 +54,7 @@ const PremiumLive = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle:
-        profile?.room_url_key && profile?.room_url_key !== "officialJKT48"
-          ? formatName(profile?.room_url_key)
-          : profile?.main_name?.replace("SHOWROOM", "")
+      headerTitle: setlist
     });
   }, [profile]);
 
@@ -80,10 +78,8 @@ const PremiumLive = () => {
 
   useEffect(() => {
     async function getUrl() {
-      const streams = await STREAM.getStreamUrl(
-        roomId,
-        "sr_id=TxF6THI72vEMzNyW1PUewa6FO8H1IgQUtMiT6MX6zQHecs0sXTQ63JW33tO_DAbI"
-      );
+      const streams = await STREAM.getStreamUrl(roomId, session?.cookie_login_id);
+
       if (streams.data.code === 404) {
         setIsPaid(false);
         handleNoTicket();
@@ -100,7 +96,6 @@ const PremiumLive = () => {
     registerUserRoom(session, profile);
   }, [profile, session]);
 
-
   useEffect(() => {
     setTimeout(() => {
       fetchLiveInfo();
@@ -114,13 +109,11 @@ const PremiumLive = () => {
   }, [profile]);
 
   useEffect(() => {
-    const room_name = formatName(profile?.room_url_key);
-
     if (userProfile && isPaid) {
       activityLog({
-        logName: "Watch",
+        logName: "Premium Live",
         userId: userProfile?._id,
-        description: `Watch Live ${room_name} Room`,
+        description: `Watch Premium Live ${setlist}`,
         liveId: profile?.live_id
       });
     }
