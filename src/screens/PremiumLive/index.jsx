@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Box, HStack, Spinner, Text, useToast } from "native-base";
+import { Box, Button, HStack, Spinner, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { LogBox } from "react-native";
 import VideoPlayer from "react-native-video-controls";
@@ -9,6 +9,9 @@ import { STREAM } from "../../services";
 import { activityLog } from "../../utils/activityLog";
 import useUser from "../../utils/hooks/useUser";
 import useLiveStreamStore from "../../store/liveStreamStore";
+import { useRefresh } from "../../utils/hooks/useRefresh";
+import { RefreshIcon } from "../../assets/icon";
+import Loading from "../../components/atoms/Loading";
 
 const PremiumLive = () => {
   const route = useRoute();
@@ -18,7 +21,9 @@ const PremiumLive = () => {
 
   const [url, setUrl] = useState();
   const [isPaid, setIsPaid] = useState(false);
+
   const { session, userProfile } = useUser();
+  const { refreshing, onRefresh } = useRefresh();
 
   const roomId = params?.item?.profile?.room_id;
   const setlist = params.item.theater.setlist.name;
@@ -35,7 +40,7 @@ const PremiumLive = () => {
     getPremiumLive,
     premiumLive,
     setHideComment,
-    clearLiveStream,
+    clearLiveStream
   } = useLiveStreamStore();
 
   useEffect(() => {
@@ -52,6 +57,15 @@ const PremiumLive = () => {
     navigation.setOptions({
       headerRight: () => (
         <HStack space={2} alignItems="center">
+          <Button
+            py="1"
+            onPress={handleRefresh}
+            borderRadius="md"
+            background="teal"
+            size="xs"
+          >
+            {refreshing ? <Spinner size={16} color="white" /> : <RefreshIcon />}
+          </Button>
           <Views number={liveInfo?.views ?? profile?.view_num ?? 0} />
         </HStack>
       )
@@ -60,9 +74,15 @@ const PremiumLive = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: setlist
+      headerTitle: "JKT48"
     });
-  }, [profile]);
+  }, []);
+
+  const handleRefresh = async () => {
+    onRefresh();
+    setUrl("");
+    getUrl();
+  };
 
   const handleNoTicket = () => {
     toast.show({
@@ -83,19 +103,19 @@ const PremiumLive = () => {
     await getLiveInfo(profile?.room_id, token);
   }
 
-  useEffect(() => {
-    async function getUrl() {
-      const streams = await STREAM.getStreamUrl(roomId, token);
+  async function getUrl() {
+    const streams = await STREAM.getStreamUrl(roomId, token);
 
-      if (streams.data.code === 404) {
-        setIsPaid(false);
-        handleNoTicket();
-      } else {
-        setIsPaid(true);
-        setUrl(streams?.data[0]?.url);
-      }
+    if (streams.data.code === 404) {
+      setIsPaid(false);
+      !isPaid && handleNoTicket();
+    } else {
+      setIsPaid(true);
+      setUrl(streams?.data[0]?.url);
     }
+  }
 
+  useEffect(() => {
     premiumLive && token && getUrl();
   }, [token]);
 
@@ -155,7 +175,7 @@ const PremiumLive = () => {
       if (item?.user_id?.user_id === userProfile?.user_id) {
         if (item.status === "paid") {
           setIsPaid(true);
-          setHideComment(true)
+          setHideComment(true);
           setToken(premiumLive?.webSocketId);
         }
       }
@@ -171,21 +191,25 @@ const PremiumLive = () => {
       ) : (
         <>
           <Box height={200}>
-            <VideoPlayer
-              source={{ uri: url }}
-              style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%"
-              }}
-              disableSeekbar
-              disableBack
-              disableTimer
-              disableFullscreen
-              onEnd={() => {
-                navigation.navigate("Main");
-              }}
-            />
+            {url ? (
+              <VideoPlayer
+                source={{ uri: url }}
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%"
+                }}
+                disableSeekbar
+                disableBack
+                disableTimer
+                disableFullscreen
+                onEnd={() => {
+                  navigation.navigate("Main");
+                }}
+              />
+            ) : (
+              <Loading />
+            )}
           </Box>
           <Box flex={1} p="2">
             <LiveStreamTabs isPremiumLive />
