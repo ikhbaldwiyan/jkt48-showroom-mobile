@@ -29,7 +29,7 @@ export const Comment = () => {
   const { params } = route;
   const navigation = useNavigation();
   const { session, userProfile } = useUser();
-  const { profile } = useLiveStreamStore();
+  const { profile, token, hideComment } = useLiveStreamStore();
 
   const [comments, setComments] = useState([]);
   const [socketKey, setSocketKey] = useState("");
@@ -42,7 +42,7 @@ export const Comment = () => {
     async function getComments() {
       const response = await STREAM.getStreamComments(
         roomId,
-        session?.cookie_login_id ?? "cookies"
+        token ?? session?.cookie_login_id ?? "cookies"
       );
       setComments(response?.data);
     }
@@ -82,7 +82,7 @@ export const Comment = () => {
     async function getWebsocketInfo() {
       const response = await STREAM.getStreamInfo(
         roomId,
-        session?.cookie_login_id ?? "cookies"
+        token ?? session?.cookie_login_id ?? "cookies"
       );
       setSocketKey(response?.data?.websocket?.key);
     }
@@ -190,7 +190,7 @@ export const Comment = () => {
             </Box>
           ))}
       </ScrollView>
-      {session && (
+      {session && !hideComment && (
         <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
           <Input
             bgColor="white"

@@ -5,7 +5,13 @@ const useLiveStreamStore = create((set) => ({
   profile: {},
   liveInfo: {},
   url: null,
+  premiumLive: {},
+  users: [],
+  token: null,
+  hideComment: false,
   setProfile: (newProfile) => set({ profile: newProfile }),
+  setToken: (newToken) => set({ token: newToken }),
+  setHideComment: (value) => set({ hideComment: value }),
   getLiveInfo: async (roomId, cookieLoginId) => {
     try {
       const response = await STREAM.getStreamInfo(
@@ -35,7 +41,27 @@ const useLiveStreamStore = create((set) => ({
       console.log(error);
     }
   },
-  clearLiveStream: () => set({ profile: {}, liveInfo: {}, url: null }),
+  getPremiumLive: async () => {
+    try {
+      const response = await STREAM.getPremiumLiveToday();
+      set({
+        premiumLive: response.data,
+        users: response?.data?.sharingLiveUsers
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  clearLiveStream: () =>
+    set({
+      profile: {},
+      liveInfo: {},
+      url: null,
+      premiumLive: {},
+      users: [],
+      token: null,
+      hideComment: false
+    }),
   clearUrl: () => set({ url: null })
 }));
 

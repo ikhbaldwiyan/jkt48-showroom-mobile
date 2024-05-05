@@ -31,3 +31,7 @@ export const sendCommentStream = (params) => {
 export const visitRoom = (params) => {
   return apiAuth.post(ENDPOINTS.STREAM.VISIT, params)
 }
+
+export const getPremiumLiveToday = () => {
+  return apiUser.get(ENDPOINTS.STREAM.PREMIUM_LIVE)
+}

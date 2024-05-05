@@ -29,6 +29,12 @@ const PremiumLive = () => {
     setProfile,
     getLiveInfo,
     registerUserRoom,
+    users,
+    token,
+    setToken,
+    getPremiumLive,
+    premiumLive,
+    setHideComment,
     clearLiveStream,
   } = useLiveStreamStore();
 
@@ -73,12 +79,13 @@ const PremiumLive = () => {
   };
 
   async function fetchLiveInfo() {
-    await getLiveInfo(profile?.room_id, session?.cookie_login_id);
+    await getPremiumLive();
+    await getLiveInfo(profile?.room_id, token);
   }
 
   useEffect(() => {
     async function getUrl() {
-      const streams = await STREAM.getStreamUrl(roomId, session?.cookie_login_id);
+      const streams = await STREAM.getStreamUrl(roomId, token);
 
       if (streams.data.code === 404) {
         setIsPaid(false);
@@ -89,8 +96,8 @@ const PremiumLive = () => {
       }
     }
 
-    getUrl();
-  }, [profile]);
+    premiumLive && token && getUrl();
+  }, [token]);
 
   useEffect(() => {
     registerUserRoom(session, profile);
@@ -141,6 +148,19 @@ const PremiumLive = () => {
     }
     navigation.navigate("Main");
   };
+
+  useEffect(() => {
+    setToken(session?.cookie_login_id);
+    users?.map((item) => {
+      if (item?.user_id?.user_id === userProfile?.user_id) {
+        if (item.status === "paid") {
+          setIsPaid(true);
+          setHideComment(true)
+          setToken(premiumLive?.webSocketId);
+        }
+      }
+    });
+  }, [premiumLive, token]);
 
   return (
     <Box flex="1" bg="secondary">

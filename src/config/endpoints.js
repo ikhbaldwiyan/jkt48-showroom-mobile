@@ -29,6 +29,7 @@ export default {
     PODIUM: "/history-live/",
     SEND_COMMENT: "/live/comment/", //required room id
     VISIT: "/farm/start", //required room id
+    PREMIUM_LIVE: "/premium-lives/today"
   },
   SCHEDULE: {
     LIST: "/schedules",

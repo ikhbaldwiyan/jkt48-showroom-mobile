@@ -12,7 +12,6 @@ const useProfileStore = create((set) => ({
       console.log(error);
     }
   },
-  clearProfile: () => set({ profile: null, historyLive: null }),
   getHistoryLive: async (roomId) => {
     try {
       const response = await ROOMS.getHistoryLives(roomId);
@@ -20,7 +19,8 @@ const useProfileStore = create((set) => ({
     } catch (error) {
       console.log(error);
     }
-  }
+  },
+  clearProfile: () => set({ profile: null, historyLive: null }),
 }));
 
 export default useProfileStore;
