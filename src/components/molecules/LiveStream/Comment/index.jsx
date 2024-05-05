@@ -65,7 +65,10 @@ export const Comment = () => {
 
   const handleEndLive = () => {
     navigation.navigate("Main");
-    const roomName = formatName(profile?.room_url_key);
+    const roomName =
+      profile?.room_url_key === "officialJKT48"
+        ? "JKT48"
+        : formatName(profile?.room_url_key);
     toast.show({
       render: () => {
         return (
