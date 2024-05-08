@@ -155,6 +155,7 @@ const LiveStream = () => {
             disableBack
             disableTimer
             disableFullscreen
+            onError={() => handleRefresh()}
             onEnd={() => {
               navigation.navigate("Main");
             }}

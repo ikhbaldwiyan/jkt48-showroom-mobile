@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Divider, HStack, ScrollView, Text, View, VStack } from "native-base";
+import {
+  Divider,
+  HStack,
+  ScrollView,
+  Text,
+  View,
+  VStack
+} from "native-base";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import useProfileStore from "../../../../store/profileStore";
@@ -68,24 +75,26 @@ export const Profile = () => {
             <Text fontWeight="semibold">Hobby:</Text>
             <Text>{description?.Hobby ?? "-"}</Text>
           </HStack>
-          <Divider />
-          <Text>
-            Social Media:
-          </Text>
-          <HStack direction="row" space={4}>
-            <HStack space={1}>
-              <Twitter />
-              <Text>
-                <Text>{description?.Twitter ?? "-"}</Text>
-              </Text>
-            </HStack>
-            <HStack space={1}>
-              <Instagram />
-              <Text>
-                <Text>{description?.Instagram ?? "-"}</Text>
-              </Text>
-            </HStack>
-          </HStack>
+          {!description?.Twitter.includes("www") && (
+            <>
+              <Divider />
+              <Text>Social Media:</Text>
+              <HStack direction="row" space={4}>
+                <HStack space={1}>
+                  <Twitter />
+                  <Text>
+                    <Text>{description?.Twitter ?? "-"}</Text>
+                  </Text>
+                </HStack>
+                <HStack space={1}>
+                  <Instagram />
+                  <Text>
+                    <Text>{description?.Instagram ?? "-"}</Text>
+                  </Text>
+                </HStack>
+              </HStack>
+            </>
+          )}
         </VStack>
       </ScrollView>
     </LinearGradient>
