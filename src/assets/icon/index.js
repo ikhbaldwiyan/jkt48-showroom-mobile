@@ -27,6 +27,8 @@ import Followers from "./Followers";
 import IDCard from "./IDCard";
 import UsersIconFill from "./UsersIconFill";
 import LiveIcon from "./LiveIcon";
+import Instagram from "./Instagram";
+import Twitter from "./Twitter";
 
 export {
   LogoIcon,
@@ -58,4 +60,6 @@ export {
   Followers,
   UsersIconFill,
   LiveIcon,
+  Instagram,
+  Twitter,
 }

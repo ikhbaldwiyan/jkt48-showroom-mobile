@@ -40,11 +40,15 @@ export const Comment = () => {
 
   useEffect(() => {
     async function getComments() {
-      const response = await STREAM.getStreamComments(
-        roomId,
-        token ?? session?.cookie_login_id ?? "cookies"
-      );
-      setComments(response?.data);
+      try {
+        const response = await STREAM.getStreamComments(
+          roomId,
+          token ?? session?.cookie_login_id ?? "cookies"
+        );
+        setComments(response?.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     getComments();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, HStack, Text, VStack } from "native-base";
+import { Box, Divider, HStack, ScrollView, Text, View, VStack } from "native-base";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import useProfileStore from "../../../../store/profileStore";
@@ -9,8 +9,10 @@ import {
   Dna,
   Homeplace,
   Horoscope,
+  Instagram,
   LiveIcon,
-  Star
+  Star,
+  Twitter
 } from "../../../../assets/icon";
 import moment from "moment";
 
@@ -23,13 +25,24 @@ export const Profile = () => {
     setDescription(parseDesc);
   }, []);
 
+  console.log(description);
   return (
     <LinearGradient
       colors={["#24A2B7", "#3B82F6"]}
       style={styles.linearGradient}
     >
-      <Box mt="2">
+      <ScrollView mt="2">
         <VStack space={4}>
+          <HStack space={2}>
+            <LiveIcon />
+            <Text fontWeight="semibold">Last Live:</Text>
+            <Text>
+              {historyLive &&
+                moment(historyLive[0].live_info.date.start).format(
+                  "dddd, D MMMM hh:mm"
+                ) + " WIB"}
+            </Text>
+          </HStack>
           <HStack space={2}>
             <BirthdayIcon />
             <Text fontWeight="semibold">Birthday:</Text>
@@ -55,15 +68,26 @@ export const Profile = () => {
             <Text fontWeight="semibold">Hobby:</Text>
             <Text>{description?.Hobby ?? "-"}</Text>
           </HStack>
-          <HStack space={2}>
-            <LiveIcon />
-            <Text fontWeight="semibold">Last Live:</Text>
-            <Text>
-              {historyLive && moment(historyLive[0].live_info.date.start).format("dddd, D MMMM hh:mm")  + " WIB"}
-            </Text>
+          <Divider />
+          <Text>
+            Social Media:
+          </Text>
+          <HStack direction="row" space={4}>
+            <HStack space={1}>
+              <Twitter />
+              <Text>
+                <Text>{description?.Twitter ?? "-"}</Text>
+              </Text>
+            </HStack>
+            <HStack space={1}>
+              <Instagram />
+              <Text>
+                <Text>{description?.Instagram ?? "-"}</Text>
+              </Text>
+            </HStack>
           </HStack>
         </VStack>
-      </Box>
+      </ScrollView>
     </LinearGradient>
   );
 };
