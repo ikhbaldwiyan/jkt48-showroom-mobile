@@ -74,7 +74,7 @@ const Login = ({ navigation }) => {
                 px="2"
                 mt="10"
                 mb={5}
-                bg="green.400"
+                bg="green.500"
                 rounded="sm"
               >
                 <Text>Login Success</Text>

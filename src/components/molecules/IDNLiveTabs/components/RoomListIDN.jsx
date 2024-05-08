@@ -69,7 +69,7 @@ export const RoomListIDN = ({ profile,  setProfile }) => {
                 colorScheme="black"
                 bg={
                   item.user.username === profile?.user?.username
-                    ? "secondary"
+                    ? "red"
                     : "disabled"
                 }
               >

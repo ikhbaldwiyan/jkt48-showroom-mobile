@@ -6,11 +6,17 @@ import {
   Image,
   PlayIcon,
   Text,
-  View,
+  View
 } from "native-base";
 import { useEffect, useState } from "react";
-import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity
+} from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { LiveIcon } from "../../../../assets/icon";
 import { ROOMS } from "../../../../services";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
@@ -60,18 +66,17 @@ export const Room = () => {
                 <Text fontSize="16" fontWeight="bold">
                   {item.room_url_key.replace("JKT48_", "")}
                 </Text>
-                <Box bg="red" mt="2" rounded="lg" p="1" px="4">
-                  <Text fontWeight="semibold">Live</Text>
+                <Box bg="red" mt="2" rounded="lg" p="1" px="3">
+                  <HStack alignItems="center" space={1}>
+                    <LiveIcon size={16} />
+                    <Text fontWeight="semibold">Live</Text>
+                  </HStack>
                 </Box>
               </View>
               <Button
                 mt="8"
                 colorScheme="black"
-                bg={
-                  item.room_id === profile.room_id
-                    ? "secondary"
-                    : "disabled"
-                }
+                bg={item.room_id === profile.room_id ? "red" : "disabled"}
               >
                 <TouchableOpacity
                   activeOpacity={0.6}
