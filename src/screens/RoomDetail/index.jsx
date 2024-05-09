@@ -51,9 +51,10 @@ const RoomDetail = () => {
 
   useLayoutEffect(() => {
     const isFollow = profile?.is_follow;
+    const title = profile ? formatName(profile?.room_url_key) : "Profile";
 
     navigation.setOptions({
-      headerTitle: profile ? formatName(profile?.room_url_key) : "Profile",
+      headerTitle: profile?.room_url_key !== "officialJKT48" ? title : "JKT48 Ofiicial",
       headerRight: () =>
         session && (
           <Button
@@ -129,7 +130,7 @@ const RoomDetail = () => {
             <HStack space={2}>
               <LiveIcon />
               <Text fontWeight="semibold">Last Live:</Text>
-              <Text>
+              <Text fontWeight="semibold">
                 {historyLive ? (
                   moment(historyLive[0].live_info.date.end).format(
                     "dddd, D MMMM hh:mm"

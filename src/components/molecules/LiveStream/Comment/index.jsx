@@ -68,7 +68,12 @@ export const Comment = () => {
   };
 
   const handleEndLive = () => {
-    navigation.navigate("Main");
+    navigation.replace("RoomDetail", {
+      room: {
+        room_id: profile?.room_id
+      }
+    });
+
     const roomName =
       profile?.room_url_key === "officialJKT48"
         ? "JKT48"

@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Box, HStack, Image, Pressable, Text, VStack } from "native-base";
+import { Box, HStack, Image, Text, VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { cleanImage, formatName, getSquareImage } from "../../../utils/helpers";
+import { cleanImage, formatName } from "../../../utils/helpers";
 import { ROOMS } from "../../../services";
 import { LiveIcon } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
 
-const RoomRegular = ({ refreshing }) => {
+const RoomTrainee = ({ refreshing }) => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
 
   useEffect(() => {
     async function getRoomList() {
-      const gen10 = await ROOMS.getRoomGen10();
-      const response = await ROOMS.getRoomRegular();
-      setRooms([...response.data, ...gen10.data]);
+      const response = await ROOMS.getRoomTrainee();
+      setRooms(response.data);
     }
     getRoomList();
   }, [refreshing]);
@@ -35,11 +34,7 @@ const RoomRegular = ({ refreshing }) => {
         <Box>
           <Image
             borderRadius={8}
-            source={{
-              uri: room.image_square
-                ? cleanImage(room.image_square)
-                : getSquareImage(room.image_url)
-            }}
+            source={{ uri: cleanImage(room.image_square) }}
             alt={room?.main_name ?? room?.name}
             size="md"
             width="160"
@@ -97,4 +92,4 @@ const RoomRegular = ({ refreshing }) => {
   );
 };
 
-export default RoomRegular;
+export default RoomTrainee;

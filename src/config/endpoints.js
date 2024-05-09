@@ -13,6 +13,7 @@ export default {
   ROOM: {
     LIST: "/rooms",
     GEN_10: "/rooms/academy",
+    TRAINEE: "/rooms/trainee",
     ONLIVES: "/rooms/onlives",
     PROFILE: "/profile/room/",
     FOLLOW: "/room/follow",

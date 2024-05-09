@@ -137,12 +137,17 @@ const LiveStream = () => {
         placement: "top-right"
       });
     }
-    navigation.navigate("RoomDetail", {
+    navigation.replace("RoomDetail", {
       room: {
         room_id: profile?.room_id
       }
     });
   };
+
+  const handleStreamError = () => {
+    handleRefresh();
+    console.log("Refreshing Error Stream")
+  }
 
   return (
     <Box flex="1" bg="secondary">
@@ -159,7 +164,7 @@ const LiveStream = () => {
             disableBack
             disableTimer
             disableFullscreen
-            onError={() => handleRefresh()}
+            onError={handleStreamError}
             onEnd={() => {
               navigation.navigate("Main");
             }}

@@ -31,6 +31,7 @@ import Instagram from "./Instagram";
 import Twitter from "./Twitter";
 import UserAdd from "./UserAdd";
 import UserCheck from "./UserCheck";
+import Dashboard from "./Dashboard";
 
 export {
   LogoIcon,
@@ -66,4 +67,5 @@ export {
   Twitter,
   UserAdd,
   UserCheck,
+  Dashboard,
 }
