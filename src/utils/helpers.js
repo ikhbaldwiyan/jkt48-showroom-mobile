@@ -7,8 +7,8 @@ export const cleanImage = (image, isDetail) => {
 export const formatName = (name, hideGroup) => {
   let memberName;
   !hideGroup
-    ? memberName = name?.replace("JKT48_", "") + " JKT48"
-    : memberName = name?.replace("JKT48_", "");
+    ? (memberName = name?.replace("JKT48_", "") + " JKT48")
+    : (memberName = name?.replace("JKT48_", ""));
   return memberName;
 };
 
@@ -77,15 +77,19 @@ export const getLiveDurationMinutes = (duration) => {
 
 export const parseDescription = (description) => {
   const result = description
-    .split('\r\n')
-    .map((item) => item.replace(/"/g, '').split(':'))
+    .split("\r\n")
+    .map((item) => item.replace(/"/g, "").split(":"))
     .filter((item) => item.length > 1)
     .map((item) => {
-      if (item[0] === 'Twitter' || item[0] === 'Instagram') {
+      if (item[0] === "Twitter" || item[0] === "Instagram") {
         return [item[0], item.pop()];
       }
       return item;
     });
 
   return Object.fromEntries(result);
+};
+
+export const getSquareImage = (image) => {
+  return image?.replace("_m.jpeg", "_square_m.jpeg");
 };

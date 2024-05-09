@@ -12,6 +12,10 @@ export const getRoomGen10 = () => {
   return apiShowroom.get(ENDPOINTS.ROOM.GEN_10);
 };
 
+export const getRoomRegular = () => {
+  return apiShowroom.get(ENDPOINTS.ROOM.LIST);
+};
+
 export const getRoomProfile = (params) => {
   return apiAuth.post(ENDPOINTS.ROOM.PROFILE, params);
 };

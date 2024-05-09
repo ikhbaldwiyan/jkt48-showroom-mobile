@@ -12,7 +12,7 @@ import {
   ScheduleDetail,
   SplashScreen,
   ScheduleList,
-  PremiumLive,
+  PremiumLive
 } from "../../../screens";
 import {
   HomeIcon,
@@ -20,17 +20,22 @@ import {
   UsersIcon,
   UsersIconOutline,
   TheaterIcon,
-  TheaterIconOutline
+  TheaterIconOutline,
+  UserIcon
 } from "../../../assets/icon";
 
 import { useNavigation } from "@react-navigation/native";
 import { ArrowBackIcon } from "native-base";
 import { TouchableOpacity } from "react-native";
+import MemberList from "../../../screens/MemberList";
+import useUser from "../../../utils/hooks/useUser";
+import UserIconOutline from "../../../assets/icon/UserIconOutline";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
   const navigation = useNavigation();
+  const { session } = useUser();
 
   const navigationIcon = (route, isActive) => {
     let icon;
@@ -41,6 +46,10 @@ const Navigation = () => {
       icon = isActive ? <UsersIcon /> : <UsersIconOutline />;
     } else if (route.name === "Theater") {
       icon = isActive ? <TheaterIcon /> : <TheaterIconOutline />;
+    } else if (route.name === "Member") {
+      icon = isActive ? <UsersIcon /> : <UsersIconOutline />;
+    } else if (route.name === "Profile") {
+      icon = isActive ? <UserIcon color="#24A2B7" size={22} /> : <UserIconOutline />;
     }
 
     return icon;
@@ -76,8 +85,13 @@ const Navigation = () => {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Member" component={MemberList} />
       <Tab.Screen name="Theater" component={ScheduleList} />
-      <Tab.Screen name="Login" component={Login} />
+      {session ? (
+        <Tab.Screen name="Profile" component={Login} />
+      ) : (
+        <Tab.Screen name="Login" component={Login} />
+      )}
     </Tab.Navigator>
   );
 

@@ -6,7 +6,6 @@ import {
   ShowroomLive,
   PremiumLive,
   RecentLives,
-  RoomList,
   Schedule,
 } from "../../components/organisms";
 import { useRefresh } from "../../utils/hooks/useRefresh";
@@ -22,7 +21,6 @@ const Home = ({ navigation }) => {
         <IDNLIve refreshing={refreshing} />
         <RecentLives refreshing={refreshing} />
         <Schedule refreshing={refreshing} navigation={navigation} isWeek />
-        <RoomList refreshing={refreshing} />
       </Box>
     </Layout>
   );
