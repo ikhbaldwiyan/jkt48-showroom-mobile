@@ -166,7 +166,11 @@ const PremiumLive = () => {
         placement: "top-right"
       });
     }
-    navigation.navigate("Main");
+    navigation.navigate("RoomDetail", {
+      room: {
+        room_id: profile?.room_id
+      }
+    });
   };
 
   useEffect(() => {

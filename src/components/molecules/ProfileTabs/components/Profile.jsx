@@ -17,14 +17,12 @@ import {
   Homeplace,
   Horoscope,
   Instagram,
-  LiveIcon,
   Star,
   Twitter
 } from "../../../../assets/icon";
-import moment from "moment";
 
 export const Profile = () => {
-  const { profile, historyLive } = useProfileStore();
+  const { profile } = useProfileStore();
   const [description, setDescription] = useState();
 
   useEffect(() => {
@@ -32,7 +30,6 @@ export const Profile = () => {
     setDescription(parseDesc);
   }, []);
 
-  console.log(description);
   return (
     <LinearGradient
       colors={["#24A2B7", "#3B82F6"]}
@@ -40,16 +37,6 @@ export const Profile = () => {
     >
       <ScrollView mt="2">
         <VStack space={4}>
-          <HStack space={2}>
-            <LiveIcon />
-            <Text fontWeight="semibold">Last Live:</Text>
-            <Text>
-              {historyLive &&
-                moment(historyLive[0].live_info.date.start).format(
-                  "dddd, D MMMM hh:mm"
-                ) + " WIB"}
-            </Text>
-          </HStack>
           <HStack space={2}>
             <BirthdayIcon />
             <Text fontWeight="semibold">Birthday:</Text>
@@ -75,7 +62,7 @@ export const Profile = () => {
             <Text fontWeight="semibold">Hobby:</Text>
             <Text>{description?.Hobby ?? "-"}</Text>
           </HStack>
-          {!description?.Twitter.includes("www") && (
+          {!description?.Twitter.includes("www") && !description?.Instagram.includes("www") && (
             <>
               <Divider />
               <Text>Social Media:</Text>

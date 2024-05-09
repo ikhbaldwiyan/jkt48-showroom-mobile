@@ -29,6 +29,8 @@ import UsersIconFill from "./UsersIconFill";
 import LiveIcon from "./LiveIcon";
 import Instagram from "./Instagram";
 import Twitter from "./Twitter";
+import UserAdd from "./UserAdd";
+import UserCheck from "./UserCheck";
 
 export {
   LogoIcon,
@@ -62,4 +64,6 @@ export {
   LiveIcon,
   Instagram,
   Twitter,
+  UserAdd,
+  UserCheck,
 }

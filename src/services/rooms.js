@@ -20,6 +20,10 @@ export const getRoomProfile = (params) => {
   return apiAuth.post(ENDPOINTS.ROOM.PROFILE, params);
 };
 
+export const followRoom = (params) => {
+  return apiAuth.post(ENDPOINTS.ROOM.FOLLOW, params);
+};
+
 export const getIDNLIveRoom = () => {
   return apiHistory.get(ENDPOINTS.IDN_LIVE.ROOM_LIVES);
 };

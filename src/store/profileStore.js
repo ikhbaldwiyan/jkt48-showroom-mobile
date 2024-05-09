@@ -4,9 +4,20 @@ import { ROOMS } from "../services";
 const useProfileStore = create((set) => ({
   profile: null,
   historyLive: null,
-  getProfile: async (roomId) => {
+  getProfile: async (roomId, cookie) => {
     try {
-      const response = await ROOMS.getRoomProfile({ room_id: roomId });
+      const response = await ROOMS.getRoomProfile({
+        room_id: roomId,
+        cookie
+      });
+      set({ profile: response.data });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  followRoom: async (params) => {
+    try {
+      const response = await ROOMS.followRoom(params);
       set({ profile: response.data });
     } catch (error) {
       console.log(error);
@@ -20,7 +31,7 @@ const useProfileStore = create((set) => ({
       console.log(error);
     }
   },
-  clearProfile: () => set({ profile: null, historyLive: null }),
+  clearProfile: () => set({ profile: null, historyLive: null })
 }));
 
 export default useProfileStore;

@@ -15,6 +15,7 @@ export default {
     GEN_10: "/rooms/academy",
     ONLIVES: "/rooms/onlives",
     PROFILE: "/profile/room/",
+    FOLLOW: "/room/follow",
     RECENT_LIVE: "/recent?sort=date&page=1&filter=active&order=-1&perpage=8&search=&room_id=&group=jkt48",
     HISTORY_LIVE: "/recent?sort=date&page=1&filter=all&order=-1&perpage=6&search=&group=jkt48", //require roomId
   },

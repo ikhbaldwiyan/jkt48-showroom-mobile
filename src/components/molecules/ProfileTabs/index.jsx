@@ -47,7 +47,7 @@ const ProfileTabs = () => {
       renderTabBar={renderTabBar}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
-      style={{ marginTop: 6 }}
+      style={{ marginTop: 10 }}
     />
   );
 };

@@ -7,7 +7,7 @@ export const cleanImage = (image, isDetail) => {
 export const formatName = (name, hideGroup) => {
   let memberName;
   !hideGroup
-    ? (memberName = name?.replace("JKT48_", "") + " JKT48")
+    ? (memberName = name ? name?.replace("JKT48_", "") + " JKT48" : "Loading")
     : (memberName = name?.replace("JKT48_", ""));
   return memberName;
 };
