@@ -8,11 +8,14 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "emulator": "C:/Users/User/AppData/Local/Android/Sdk/emulator/emulator -avd Pixel_2_XL_API_30"
+    "emulator": "C:/Users/User/AppData/Local/Android/Sdk/emulator/emulator -avd Pixel_2_XL_API_30",
+    "build": "./gradlew assembleRelease"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-community/viewpager": "^5.0.11",
+    "@react-native-firebase/app": "^19.2.2",
+    "@react-native-firebase/messaging": "^19.2.2",
     "@react-navigation/bottom-tabs": "^6.5.18",
     "@react-navigation/native": "^6.1.15",
     "@react-navigation/native-stack": "^6.9.24",

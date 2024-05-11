@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "700024106476",
+    "project_id": "showroom-383917",
+    "storage_bucket": "showroom-383917.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700024106476:android:237ea75d9cf015a07d24c9",
+        "android_client_info": {
+          "package_name": "com.inzoid.jkt48showroom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFlq2_W7r9NpMMtojv-mrQLsR70Kpas0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
