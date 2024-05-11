@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   FormControl,
+  HStack,
   Image,
   Input,
   Spinner,
@@ -10,7 +11,7 @@ import {
   useToast
 } from "native-base";
 import React, { useState } from "react";
-import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
+import { EyeIcon, EyeSlashIcon, LoginIcon } from "../../assets/icon";
 import Logo from "../../components/atoms/Logo";
 import { AUTH } from "../../services";
 import { loginApi } from "../../services/auth";
@@ -98,7 +99,7 @@ const Login = ({ navigation }) => {
         activityLog({
           userId: res?.data?._id,
           logName: "Login",
-          description: "Login user to Android",
+          description: "Login user to Android"
         });
       })
       .catch((err) => {
@@ -137,6 +138,7 @@ const Login = ({ navigation }) => {
             placeholder="ID Showroom"
             value={formData.account_id}
             onChangeText={(value) => handleChange("account_id", value)}
+            isInvalid={formData?.error_message}
           />
           <Box position="relative">
             <Input
@@ -153,6 +155,7 @@ const Login = ({ navigation }) => {
               InputRightElement={() =>
                 loading ? <Spinner color="white" /> : "Login"
               }
+              isInvalid={formData?.error_message}
             />
             <Box
               position="absolute"
@@ -206,9 +209,12 @@ const Login = ({ navigation }) => {
             onPress={handleLogin}
             isLoading={loading}
           >
-            <Text fontSize="16" color="white" fontWeight="medium">
-              Login
-            </Text>
+            <HStack alignItems="center" space="1">
+              <LoginIcon size={24} />
+              <Text fontSize="16" color="white" fontWeight="medium">
+                Login
+              </Text>
+            </HStack>
           </Button>
           <Center>
             <Text
