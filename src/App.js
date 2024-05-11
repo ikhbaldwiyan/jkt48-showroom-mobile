@@ -3,14 +3,14 @@ import { NativeBaseProvider } from "native-base";
 import { theme } from "./config";
 import Navigation from "./components/templates/Navigation";
 
-import messaging from "@react-native-firebase/messaging";
+import messaging, { firebase } from "@react-native-firebase/messaging";
 import { PermissionsAndroid } from "react-native";
 import { useEffect } from "react";
 
 const App = () => {
-  PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
   async function requestUserPermission() {
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -24,6 +24,7 @@ const App = () => {
   const getToken = async () => {
     const token = await messaging().getToken();
     console.log(token);
+    firebase.messaging().subscribeToTopic('showroom');
   };
 
   useEffect(() => {
