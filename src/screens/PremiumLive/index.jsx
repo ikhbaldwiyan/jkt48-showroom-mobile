@@ -26,7 +26,7 @@ const PremiumLive = () => {
   const { refreshing, onRefresh } = useRefresh();
 
   const roomId = params?.item?.profile?.room_id;
-  const setlist = params.item.theater.setlist.name;
+  const setlist = params?.item?.theater?.setlist?.name;
 
   const {
     profile,
@@ -210,6 +210,7 @@ const PremiumLive = () => {
                 onEnd={() => {
                   navigation.navigate("Main");
                 }}
+                onError={handleRefresh}
               />
             ) : (
               <Loading />

@@ -49,7 +49,11 @@ const Navigation = () => {
     } else if (route.name === "Member") {
       icon = isActive ? <UsersIcon /> : <UsersIconOutline />;
     } else if (route.name === "Profile") {
-      icon = isActive ? <UserIcon color="#24A2B7" size={22} /> : <UserIconOutline />;
+      icon = isActive ? (
+        <UserIcon color="#24A2B7" size={22} />
+      ) : (
+        <UserIconOutline />
+      );
     }
 
     return icon;
@@ -87,11 +91,7 @@ const Navigation = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Member" component={MemberList} />
       <Tab.Screen name="Theater" component={ScheduleList} />
-      {session ? (
-        <Tab.Screen name="Profile" component={Login} />
-      ) : (
-        <Tab.Screen name="Login" component={Login} />
-      )}
+      <Tab.Screen name="Profile" component={Login} />
     </Tab.Navigator>
   );
 
