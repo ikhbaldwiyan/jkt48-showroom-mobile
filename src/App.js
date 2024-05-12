@@ -8,9 +8,10 @@ import { PermissionsAndroid } from "react-native";
 import { useEffect } from "react";
 
 const App = () => {
-
   async function requestUserPermission() {
-    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+    );
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -19,17 +20,20 @@ const App = () => {
     if (enabled) {
       console.log("Authorization status:", authStatus);
     }
+
+    // Register background handler
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log("Message handled in the background!", remoteMessage);
+    });
   }
 
-  const getToken = async () => {
-    const token = await messaging().getToken();
-    console.log(token);
-    firebase.messaging().subscribeToTopic('showroom');
+  const subscribeNotif = async () => {
+    firebase.messaging().subscribeToTopic("showroom");
   };
 
   useEffect(() => {
     requestUserPermission();
-    getToken();
+    subscribeNotif();
   }, []);
 
   return (

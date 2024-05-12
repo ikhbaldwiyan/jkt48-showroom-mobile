@@ -8,7 +8,7 @@ import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
 import { Dimensions, LogBox } from "react-native";
-import { RefreshIcon } from "../../assets/icon";
+import { LiveIcon, RefreshIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import useLiveStreamStore from "../../store/liveStreamStore";
 import Loading from "../../components/atoms/Loading";
@@ -107,7 +107,7 @@ const LiveStream = () => {
   useEffect(() => {
     const room_name = formatName(profile?.room_url_key);
 
-    if (userProfile) {
+    if (userProfile && url) {
       activityLog({
         logName: "Watch",
         userId: userProfile?._id,
@@ -136,6 +136,20 @@ const LiveStream = () => {
         },
         placement: "top-right"
       });
+    } else {
+      toast.show({
+        render: () => {
+          return (
+            <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
+               <HStack alignItems="center" space="2">
+                <LiveIcon size={14} />
+                <Text>Live streaming ended</Text>
+              </HStack>
+            </Box>
+          );
+        },
+        placement: "top-right"
+      });
     }
     navigation.replace("RoomDetail", {
       room: {
@@ -146,8 +160,8 @@ const LiveStream = () => {
 
   const handleStreamError = () => {
     handleRefresh();
-    console.log("Refreshing Error Stream")
-  }
+    console.log("Refreshing Error Stream");
+  };
 
   return (
     <Box flex="1" bg="secondary">

@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint .",
     "emulator": "C:/Users/User/AppData/Local/Android/Sdk/emulator/emulator -avd Pixel_2_XL_API_30",
-    "build": "./gradlew assembleRelease"
+    "build": "cd android && gradlew assembleRelease"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",
