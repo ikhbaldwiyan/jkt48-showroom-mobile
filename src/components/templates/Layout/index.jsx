@@ -13,17 +13,22 @@ const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
   const handleNotificationNavigation = (remoteMessage) => {
     const data = remoteMessage.data;
 
-    if (data.type === "Showroom") {
+    if (data.type === "Showroom" || data.type === "IDN") {
       navigate(data.screen, {
-        item: {
-          room_id: data.room_id
-        }
+        item: JSON.parse(data.profile)
       });
     } else if (data.type === "Schedule") {
       navigate(data.screen, {
         item: {
           _id: data.schedule_id,
           setlist: JSON.parse(data.setlist)
+        }
+      });
+    } else if (data.type === "Premium Live") {
+      navigate(data.screen, {
+        item: {
+          profile: JSON.parse(data.profile),
+          theater: JSON.parse(data.theater)
         }
       });
     }
