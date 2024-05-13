@@ -186,7 +186,7 @@ const LiveStream = () => {
             }}
           />
         ) : (
-          <Loading />
+          <Loading color="white" />
         )}
       </Box>
       <Box flex={1} p="2">

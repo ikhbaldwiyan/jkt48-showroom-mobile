@@ -7,7 +7,12 @@ import Layout from "../../components/templates/Layout";
 
 const MemberList = () => {
   const [activeTab, setActiveTab] = useState("regular");
-  
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
   return (
     <Layout isHeader>
       <Box flex="1" mb="6">
@@ -21,6 +26,8 @@ const MemberList = () => {
             height="36px"
             placeholderTextColor="secondary"
             placeholder="Search member"
+            value={searchQuery}
+            onChangeText={handleSearch}
           />
           <Button
             p="2"
@@ -45,7 +52,18 @@ const MemberList = () => {
             </HStack>
           </Button>
         </HStack>
-        {activeTab == "regular" ? <RoomRegular /> : <RoomTrainee />}
+        {searchQuery !== "" ? (
+          <>
+            <RoomRegular searchQuery={searchQuery} />
+            <RoomTrainee searchQuery={searchQuery} />
+          </>
+        ) : activeTab === "regular" ? (
+          <RoomRegular searchQuery={searchQuery} />
+        ) : activeTab === "trainee" ? (
+          <RoomTrainee searchQuery={searchQuery} />
+        ) : (
+          <Text>Members Not found</Text>
+        )}
       </Box>
     </Layout>
   );

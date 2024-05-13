@@ -6,7 +6,7 @@ import { ROOMS } from "../../../services";
 import { LiveIcon } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
 
-const RoomTrainee = ({ refreshing }) => {
+const RoomTrainee = ({ refreshing, searchQuery }) => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
 
@@ -17,6 +17,11 @@ const RoomTrainee = ({ refreshing }) => {
     }
     getRoomList();
   }, [refreshing]);
+
+  const filteredRooms = rooms.filter(room =>
+    room.name?.toLowerCase().includes(searchQuery?.toLowerCase()) || 
+    room.main_name?.toLowerCase().includes(searchQuery?.toLowerCase())
+  );
 
   const renderRoomItem = (room, idx) => (
     <Box key={idx} mr={3}>
@@ -40,7 +45,7 @@ const RoomTrainee = ({ refreshing }) => {
             width="160"
             height="137"
           />
-          {room?.is_live && (
+          {room?.is_onlive && (
             <Box
               borderTopLeftRadius="8"
               borderBottomRightRadius="8"
@@ -74,9 +79,9 @@ const RoomTrainee = ({ refreshing }) => {
   const renderRoomList = () => {
     const columns = [];
     const columnCount = 2; // Limiting to 2 columns
-    const itemsPerColumn = Math.ceil(rooms.length / columnCount);
+    const itemsPerColumn = Math.ceil(filteredRooms.length / columnCount);
     for (let i = 0; i < columnCount; i++) {
-      const columnRooms = rooms.slice(
+      const columnRooms = filteredRooms.slice(
         i * itemsPerColumn,
         (i + 1) * itemsPerColumn
       );

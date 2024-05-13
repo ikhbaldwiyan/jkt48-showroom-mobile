@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, HStack, Image, Pressable, Text, VStack } from "native-base";
+import { Box, HStack, Image, Text, VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { cleanImage, formatName, getSquareImage } from "../../../utils/helpers";
 import { ROOMS } from "../../../services";
 import { LiveIcon } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
 
-const RoomRegular = ({ refreshing }) => {
+const RoomRegular = ({ refreshing, searchQuery }) => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
 
@@ -18,6 +18,11 @@ const RoomRegular = ({ refreshing }) => {
     }
     getRoomList();
   }, [refreshing]);
+
+  const filteredRooms = rooms.filter(room =>
+    room.name?.toLowerCase().includes(searchQuery?.toLowerCase()) || 
+    room.main_name?.toLowerCase().includes(searchQuery?.toLowerCase())
+  );
 
   const renderRoomItem = (room, idx) => (
     <Box key={idx} mr={3}>
@@ -79,9 +84,9 @@ const RoomRegular = ({ refreshing }) => {
   const renderRoomList = () => {
     const columns = [];
     const columnCount = 2; // Limiting to 2 columns
-    const itemsPerColumn = Math.ceil(rooms.length / columnCount);
+    const itemsPerColumn = Math.ceil(filteredRooms.length / columnCount);
     for (let i = 0; i < columnCount; i++) {
-      const columnRooms = rooms.slice(
+      const columnRooms = filteredRooms.slice(
         i * itemsPerColumn,
         (i + 1) * itemsPerColumn
       );
