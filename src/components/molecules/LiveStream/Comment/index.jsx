@@ -178,39 +178,37 @@ export const Comment = () => {
       colors={["#24A2B7", "#3B82F6"]}
       style={styles.linearGradient}
     >
-      <ScrollView
+      <FlatList
+        data={comments?.length > 0 ? comments?.slice(0, 40) : []}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <Box>
+            <HStack alignItems="center" p="2">
+              <Image
+                mr="3"
+                alt={item.name}
+                style={{ width: 40, height: 40 }}
+                source={{
+                  uri:
+                    item?.avatar_url ??
+                    `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`
+                }}
+              />
+              <View flexShrink="1">
+                <Text fontSize="md" fontWeight="bold">
+                  {item.name}
+                </Text>
+                <Text mt="1">{item.comment}</Text>
+              </View>
+            </HStack>
+            <Divider mb="1" />
+          </Box>
+        )}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-      >
-        <FlatList
-          data={comments?.length > 0 ? comments?.slice(0, 40) : []}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <Box>
-              <HStack alignItems="center" p="2">
-                <Image
-                  mr="3"
-                  alt={item.name}
-                  style={{ width: 40, height: 40 }}
-                  source={{
-                    uri:
-                      item?.avatar_url ??
-                      `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`
-                  }}
-                />
-                <View flexShrink="1">
-                  <Text fontSize="md" fontWeight="bold">
-                    {item.name}
-                  </Text>
-                  <Text mt="1">{item.comment}</Text>
-                </View>
-              </HStack>
-              <Divider mb="1" />
-            </Box>
-          )}
-        />
-      </ScrollView>
+      />
+
       {session && !hideComment && (
         <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
           <Input
