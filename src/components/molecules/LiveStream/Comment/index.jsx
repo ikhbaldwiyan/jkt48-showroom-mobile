@@ -13,7 +13,7 @@ import {
   Button,
   Spinner
 } from "native-base";
-import { RefreshControl, StyleSheet } from "react-native";
+import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
 import { SendIcon } from "../../../../assets/icon";
@@ -114,7 +114,13 @@ export const Comment = () => {
       if (code === 1) {
         if (!Number.isNaN(msg.cm) && parseInt(msg.cm) <= 50) return;
         const newComments = formatCommentWebsocket(msg);
-        setComments((prevMessages) => [newComments, ...prevMessages]);
+        setComments((prevMessages) => {
+          if (Array.isArray(prevMessages)) {
+            return [newComments, ...prevMessages];
+          } else {
+            return [newComments];
+          }
+        });
       } else if (code === 101) {
         handleEndLive();
       }
@@ -177,9 +183,11 @@ export const Comment = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {comments?.length > 0 &&
-          comments?.slice(0, 40)?.map((item, idx) => (
-            <Box key={idx}>
+        <FlatList
+          data={comments?.length > 0 ? comments?.slice(0, 40) : []}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <Box>
               <HStack alignItems="center" p="2">
                 <Image
                   mr="3"
@@ -200,7 +208,8 @@ export const Comment = () => {
               </HStack>
               <Divider mb="1" />
             </Box>
-          ))}
+          )}
+        />
       </ScrollView>
       {session && !hideComment && (
         <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">

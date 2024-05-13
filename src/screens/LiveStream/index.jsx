@@ -101,7 +101,9 @@ const LiveStream = () => {
   }, [profile]);
 
   useEffect(() => {
-    registerUserRoom(session, profile);
+    if (session && profile) {
+      registerUserRoom(session, profile);
+    }
   }, [profile, session]);
 
   useEffect(() => {

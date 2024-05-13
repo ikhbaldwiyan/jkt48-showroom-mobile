@@ -20,7 +20,7 @@ const useLiveStreamStore = create((set) => ({
       );
       set({ liveInfo: response.data });
     } catch (error) {
-      console.log(error);
+      console.log("get live Info error", error);
     }
   },
   getStreamUrl: async (roomId, cookieLoginId) => {
@@ -28,7 +28,7 @@ const useLiveStreamStore = create((set) => ({
       const streams = await STREAM.getStreamUrl(roomId, cookieLoginId);
       set({ url: streams?.data[0]?.url });
     } catch (error) {
-      console.log(error);
+      console.log("get stream url error", error);
     }
   },
   registerUserRoom: async (session, profile) => {
