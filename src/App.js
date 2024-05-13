@@ -17,9 +17,6 @@ const App = () => {
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (enabled) {
-      console.log("Authorization status:", authStatus);
-    }
 
     // Register background handler
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {

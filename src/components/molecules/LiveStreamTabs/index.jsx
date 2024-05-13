@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Pressable, Text, useColorModeValue } from "native-base";
 import { Dimensions } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
@@ -15,49 +15,65 @@ const renderPremiumLive = SceneMap({
   songs: Songs
 });
 
+const renderScene = SceneMap({
+  room: Room,
+  comment: Comment,
+  podium: Podium
+});
+
 const LiveStreamTabs = ({ isPremiumLive }) => {
   const [index, setIndex] = useState(1);
 
-  const renderScene = SceneMap({
-    room: Room,
-    comment: Comment,
-    podium: Podium
-  });
+  const routes = useMemo(() => {
+    if (isPremiumLive) {
+      return [
+        { key: "member", title: "Member" },
+        { key: "comment", title: "Comment" },
+        { key: "songs", title: "Songs" }
+      ];
+    } else {
+      return [
+        { key: "room", title: "Room Live" },
+        { key: "comment", title: "Comment" },
+        { key: "podium", title: "Podium" }
+      ];
+    }
+  }, [isPremiumLive]);
 
-  const routes = [];
-
-  if (isPremiumLive) {
-    routes.push({ key: "member", title: "Member" });
-    routes.push({ key: "comment", title: "Comment" });
-    routes.push({ key: "songs", title: "Songs" });
-  } else {
-    routes.push({ key: "room", title: "Room Live" });
-    routes.push({ key: "comment", title: "Comment" });
-    routes.push({ key: "podium", title: "Podium" });
-  }
-
-  const renderTabBar = ({ navigationState }) => (
+  const renderTabBar = ({ jumpTo }) => (
     <Box bg="primary" borderRadius="md" flexDirection="row">
-      {navigationState.routes.map((route, i) => {
-        const color =
-          index === i
-            ? useColorModeValue("white", "#e5e5e5")
-            : useColorModeValue("#e5e5e5", "red");
-        const borderColor =
-          index === i ? "#ECFAFC" : useColorModeValue("gray.500", "gray.400");
+      {routes.map((route, i) => {
+        const color = index === i ? "white" : "#e5e5e5";
+        const borderColor = index === i ? "#ECFAFC" : "gray.500";
 
         return (
           <Box
+            p="3"
+            flex={1}
             key={i}
             borderBottomWidth="3"
             borderColor={borderColor}
-            flex={1}
             alignItems="center"
-            p="3"
-            cursor="pointer"
           >
-            <Pressable onPress={() => setIndex(i)}>
-              <Text color={color} fontWeight={i === index ? "bold" : "normal"}>
+            <Pressable
+              key={i}
+              onPress={() => {
+                setIndex(i);
+                jumpTo(route.key);
+              }}
+              style={({ pressed }) => ({
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 12,
+                borderBottomWidth: 3,
+                borderColor: pressed ? "#ECFAFC" : borderColor
+              })}
+            >
+              <Text
+                color={useColorModeValue(color, "red")}
+                fontWeight={index === i ? "bold" : "normal"}
+              >
                 {route.title}
               </Text>
             </Pressable>
