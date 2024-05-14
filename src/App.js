@@ -40,11 +40,11 @@ const App = () => {
     <NavigationContainer
       ref={navigationRef}
       onReady={() => {
-        routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+        routeNameRef.current = navigationRef.current.getCurrentRoute()?.name;
       }}
       onStateChange={async () => {
         const previousRouteName = routeNameRef.current;
-        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+        const currentRouteName = navigationRef.current.getCurrentRoute()?.name;
 
         if (previousRouteName !== currentRouteName) {
           await analytics().logScreenView({

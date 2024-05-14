@@ -19,6 +19,13 @@ const IDNStream = () => {
   useEffect(() => {
     setProfile(params.item);
   }, [])
+  
+  useEffect(() => {
+    trackAnalytics("watch_idn_live", {
+      username: userProfile?.account_id ?? "Guest",
+      room: profile?.user?.name
+    });
+  }, [userProfile])
 
   useEffect(() => {
     navigation.setOptions({

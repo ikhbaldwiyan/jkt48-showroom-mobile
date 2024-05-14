@@ -12,6 +12,7 @@ import { LiveIcon, RefreshIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import useLiveStreamStore from "../../store/liveStreamStore";
 import Loading from "../../components/atoms/Loading";
+import trackAnalytics from "../../utils/trackAnalytics";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -28,7 +29,7 @@ const LiveStream = () => {
     clearLiveStream,
     clearUrl
   } = useLiveStreamStore();
-  const { session, userProfile } = useUser();
+  const { user, session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
   const toast = useToast();
 
@@ -116,6 +117,11 @@ const LiveStream = () => {
         description: `Watch Live ${room_name} Room`,
         liveId: profile?.live_id
       });
+
+      trackAnalytics("watch_showroom_live", {
+        username: user?.account_id ?? "Guest",
+        room: profile?.room_url_key
+      });
     }
     LogBox.ignoreAllLogs(true);
   }, [profile, url, userProfile]);
@@ -143,7 +149,7 @@ const LiveStream = () => {
         render: () => {
           return (
             <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
-               <HStack alignItems="center" space="2">
+              <HStack alignItems="center" space="2">
                 <LiveIcon size={14} />
                 <Text>Live streaming ended</Text>
               </HStack>

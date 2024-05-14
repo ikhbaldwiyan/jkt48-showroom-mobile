@@ -7,7 +7,7 @@ import {
   Image,
   Skeleton,
   Spinner,
-  Text,
+  Text
 } from "native-base";
 import { cleanImage, formatName, formatViews } from "../../utils/helpers";
 import useProfileStore from "../../store/profileStore";
@@ -23,6 +23,7 @@ import {
 import moment from "moment";
 import useUser from "../../utils/hooks/useUser";
 import { TouchableOpacity } from "react-native";
+import trackAnalytics from "../../utils/trackAnalytics";
 
 const RoomDetail = () => {
   const route = useRoute();
@@ -31,7 +32,7 @@ const RoomDetail = () => {
   const navigation = useNavigation();
   const { profile, getProfile, clearProfile, historyLive, followRoom } =
     useProfileStore();
-  const { session } = useUser();
+  const { userProfile, session } = useUser();
   const [loadingFollow, setLoadingFollow] = useState(false);
 
   const fetchProfile = async () => {
@@ -49,12 +50,20 @@ const RoomDetail = () => {
     };
   }, [session]);
 
+  useEffect(() => {
+    trackAnalytics("visit_showroom_profile", {
+      username: userProfile?.account_id ?? "Guest",
+      room: profile?.room_url_key
+    });
+  }, [userProfile, profile]);
+
   useLayoutEffect(() => {
     const isFollow = profile?.is_follow;
     const title = profile ? formatName(profile?.room_url_key) : "Profile";
 
     navigation.setOptions({
-      headerTitle: profile?.room_url_key !== "officialJKT48" ? title : "JKT48 Ofiicial",
+      headerTitle:
+        profile?.room_url_key !== "officialJKT48" ? title : "JKT48 Ofiicial",
       headerRight: () =>
         session && (
           <Button
@@ -92,6 +101,11 @@ const RoomDetail = () => {
 
   const handleFollowRoom = async (flag) => {
     setLoadingFollow(true);
+    trackAnalytics("follow_member", {
+      username: userProfile?.account_id ?? "Guest",
+      room: profile?.room_url_key
+    });
+    
     try {
       await followRoom({
         flag,

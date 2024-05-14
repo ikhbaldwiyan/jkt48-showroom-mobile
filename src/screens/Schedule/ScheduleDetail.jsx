@@ -7,12 +7,15 @@ import ScheduleTabs from "../../components/molecules/ScheduleTabs";
 import Layout from "../../components/templates/Layout";
 import { SCHEDULES } from "../../services";
 import { useRefresh } from "../../utils/hooks/useRefresh";
+import useUser from "../../utils/hooks/useUser";
+import trackAnalytics from "../../utils/trackAnalytics";
 
 const ScheduleDetail = ({ navigation }) => {
   const route = useRoute();
   const { params } = route;
   const [theater, setTheater] = useState();
   const { refreshing, onRefresh } = useRefresh();
+  const { userProfile } = useUser();
 
   useEffect(() => {
     async function getTheaterDetail() {
@@ -31,6 +34,13 @@ const ScheduleDetail = ({ navigation }) => {
       headerTitle: params?.item?.setlist?.name
     });
   }, []);
+
+  useEffect(() => {
+    trackAnalytics("visit_theater_schedule", {
+      username: userProfile?.account_id,
+      setlist: params?.item?.setlist?.name
+    });
+  }, [userProfile])
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
