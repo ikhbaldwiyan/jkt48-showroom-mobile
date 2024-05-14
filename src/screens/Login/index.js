@@ -17,6 +17,7 @@ import { AUTH } from "../../services";
 import { loginApi } from "../../services/auth";
 import { activityLog } from "../../utils/activityLog";
 import { storeStorage } from "../../utils/storage";
+import analytics from "@react-native-firebase/analytics";
 
 const Login = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -83,6 +84,10 @@ const Login = ({ navigation }) => {
             );
           },
           placement: "top-right"
+        });
+
+        await analytics().logEvent("login", {
+          username: formData.account_id
         });
       }
     } catch (error) {

@@ -7,6 +7,7 @@ import { TouchableOpacity } from "react-native";
 import { removeStorage } from "../../../utils/storage";
 import { useNavigation } from "@react-navigation/native";
 import { LoginIcon } from "../../../assets/icon";
+import analytics from "@react-native-firebase/analytics";
 
 const Header = () => {
   const { profile } = useUser();
@@ -17,13 +18,17 @@ const Header = () => {
     setModalLogout(!modalLogout);
   };
 
-  const handleLogout = () => {
+  const handleLogout =  () => {
     handleModal();
     removeStorage("user");
     removeStorage("session");
     removeStorage("profile");
     removeStorage("userProfile");
     navigation.replace("Login");
+    
+    analytics().logEvent("logout", {
+      username: profile.name
+    });
   };
 
   const handleLogin = () => {

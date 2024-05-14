@@ -3,9 +3,10 @@ import { NativeBaseProvider } from "native-base";
 import { theme } from "./config";
 import Navigation from "./components/templates/Navigation";
 
+import analytics from "@react-native-firebase/analytics";
 import messaging, { firebase } from "@react-native-firebase/messaging";
 import { PermissionsAndroid } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const App = () => {
   async function requestUserPermission() {
@@ -16,7 +17,6 @@ const App = () => {
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
 
     // Register background handler
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
@@ -33,8 +33,28 @@ const App = () => {
     subscribeNotif();
   }, []);
 
+  const routeNameRef = useRef();
+  const navigationRef = useRef();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+        if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName
+          });
+        }
+        routeNameRef.current = currentRouteName;
+      }}
+    >
       <NativeBaseProvider theme={theme}>
         <Navigation />
       </NativeBaseProvider>
