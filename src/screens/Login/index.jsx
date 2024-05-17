@@ -18,6 +18,7 @@ import { loginApi } from "../../services/auth";
 import { activityLog } from "../../utils/activityLog";
 import { storeStorage } from "../../utils/storage";
 import analytics from "@react-native-firebase/analytics";
+import { Linking } from "react-native";
 
 const Login = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -112,6 +113,10 @@ const Login = ({ navigation }) => {
       });
   };
 
+  const handleRegister = () => {
+    Linking.openURL("https://www.jkt48showroom.com/register")
+  };
+
   return (
     <Box
       flex="1"
@@ -204,9 +209,9 @@ const Login = ({ navigation }) => {
               />
             </Box>
           )}
-          {/* <Text color="white" my="3">
+          <Text onPress={handleRegister} color="white" my="3">
             Belum Punya Akun? <Text color="silver">Daftar Disini</Text>
-          </Text> */}
+          </Text>
 
           <Button
             my="3"
