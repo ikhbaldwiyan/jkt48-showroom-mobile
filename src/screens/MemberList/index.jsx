@@ -4,17 +4,19 @@ import { Dashboard, GraduateIcon } from "../../assets/icon";
 import RoomRegular from "../../components/organisms/RoomRegular";
 import RoomTrainee from "../../components/organisms/RoomTrainee";
 import Layout from "../../components/templates/Layout";
+import { useRefresh } from "../../utils/hooks/useRefresh";
 
 const MemberList = () => {
   const [activeTab, setActiveTab] = useState("regular");
   const [searchQuery, setSearchQuery] = useState("");
+  const { refreshing, onRefresh } = useRefresh();
 
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
   return (
-    <Layout isHeader>
+    <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
         <HStack space={1.5} mb="6">
           <Input
@@ -54,13 +56,13 @@ const MemberList = () => {
         </HStack>
         {searchQuery !== "" ? (
           <>
-            <RoomRegular searchQuery={searchQuery} />
-            <RoomTrainee searchQuery={searchQuery} />
+            <RoomRegular searchQuery={searchQuery} refreshing={refreshing} />
+            <RoomTrainee searchQuery={searchQuery} refreshing={refreshing} />
           </>
         ) : activeTab === "regular" ? (
-          <RoomRegular searchQuery={searchQuery} />
+          <RoomRegular searchQuery={searchQuery} refreshing={refreshing} />
         ) : activeTab === "trainee" ? (
-          <RoomTrainee searchQuery={searchQuery} />
+          <RoomTrainee searchQuery={searchQuery} refreshing={refreshing} />
         ) : (
           <Text>Members Not found</Text>
         )}
