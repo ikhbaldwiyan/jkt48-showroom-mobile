@@ -15,7 +15,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
       const theater = isWeek
         ? await SCHEDULES.getScheduleWeek()
         : await SCHEDULES.getScheduleList();
-      setSchedules(theater.data.reverse());
+      setSchedules(theater.data);
     }
     getTheaterList();
   }, [refreshing]);
