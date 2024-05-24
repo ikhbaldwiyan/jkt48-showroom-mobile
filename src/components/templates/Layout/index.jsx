@@ -56,7 +56,7 @@ const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       const data = remoteMessage.data;
 
-      if (data.type === "Showroom") {
+      if (data.type === "Showroom" || data.type === "IDN") {
         toast.show({
           render: () => {
             return (
