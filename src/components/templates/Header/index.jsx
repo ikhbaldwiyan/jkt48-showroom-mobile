@@ -49,7 +49,7 @@ const Header = () => {
           {profile ? (
             <HStack alignItems="center" space={2}>
               <Text color="white" fontWeight="semibold" isTruncated>
-                {profile?.name}
+                {profile.name.length >= 7 ? profile.name.slice(0, 7) + ".." : profile.name}
               </Text>
               <Image
                 style={{ width: 40, height: 40 }}

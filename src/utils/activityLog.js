@@ -1,9 +1,9 @@
 import { postActivityLog, postRegisterUser } from "../services/user";
 import { getStorage, storeStorage } from "./storage";
 
-export const activityLog = ({ userId, logName, description, liveId }) => {
-  const profile = getStorage("profile");
-  const user = getStorage("user");
+export const activityLog = async ({ userId, logName, description, liveId }) => {
+  const profile = await getStorage("profile");
+  const user = await getStorage("user");
 
   if (!userId) {
     postRegisterUser({
@@ -15,7 +15,7 @@ export const activityLog = ({ userId, logName, description, liveId }) => {
         activityLog({
           userId: res?.data?.user?._id,
           logName: "Auto Register",
-          description: `Auto Register user from activity log ${logName.toLowerCase()}`
+          description: `Auto Register user from log ${logName.toLowerCase()}`
         });
         storeStorage("userProfile", JSON.stringify(res.data.user));
 

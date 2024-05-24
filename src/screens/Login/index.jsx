@@ -109,6 +109,11 @@ const Login = ({ navigation }) => {
         });
       })
       .catch((err) => {
+        activityLog({
+          userId: null,
+          logName: "Login",
+          description: "Register user profile"
+        });
         console.log(err);
       });
   };
