@@ -38,5 +38,8 @@ export default {
     DETAIL: "/schedules/", //required schedule id
     WEEK: "/schedules?isOnWeekSchedule=true",
     TODAY: "/schedules/today",
+  },
+  VERSIONS: {
+    CURRENT_VERSION: "/app-version"
   }
 };
