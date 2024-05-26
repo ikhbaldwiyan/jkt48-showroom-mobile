@@ -39,7 +39,7 @@ const Home = ({ navigation }) => {
           {
             text: "Update APK",
             onPress: () => {
-              Linking.openURL("https://www.jkt48showroom.com");
+              Linking.openURL("https://www.jkt48showroom.com/android");
             }
           },
           {

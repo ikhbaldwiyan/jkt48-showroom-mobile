@@ -40,6 +40,6 @@ export default {
     TODAY: "/schedules/today",
   },
   VERSIONS: {
-    CURRENT_VERSION: "/app-version"
+    CURRENT_VERSION: "/mobile/app-version"
   }
 };
