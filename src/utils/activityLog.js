@@ -15,7 +15,7 @@ export const activityLog = async ({ userId, logName, description, liveId }) => {
         activityLog({
           userId: res?.data?.user?._id,
           logName: "Auto Register",
-          description: `Auto Register user from log ${logName.toLowerCase()}`
+          description: `Register profile from log ${logName.toLowerCase()}`
         });
         storeStorage("userProfile", JSON.stringify(res.data.user));
 

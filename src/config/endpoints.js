@@ -2,6 +2,7 @@ export default {
   AUTH: {
     LOGIN: "/login",
     REGISTER: "/register",
+    REGISTER: "/register",
     DETAIL_USER: "/users/" //required user id
   },
   USER: {

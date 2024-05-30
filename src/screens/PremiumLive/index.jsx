@@ -136,12 +136,13 @@ const PremiumLive = () => {
   }, [profile]);
 
   useEffect(() => {
+    const liveIdUser = session?.cookie_login_id;
     if (userProfile && isPaid) {
       activityLog({
         logName: "Premium Live",
         userId: userProfile?._id,
         description: `Watch Premium Live ${setlist}`,
-        liveId: profile?.live_id
+        liveId: liveIdUser
       });
     }
     LogBox.ignoreAllLogs(true);

@@ -7,12 +7,13 @@ import {
   IDNStream,
   LiveStream,
   Login,
+  Register,
   RoomDetail,
   RoomLives,
   ScheduleDetail,
   SplashScreen,
   ScheduleList,
-  PremiumLive
+  PremiumLive,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -116,6 +117,7 @@ const Navigation = () => {
       <Stack.Screen name="Main" component={TabNavigator} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
       <Stack.Screen
         name="RoomLives"
         component={RoomLives}

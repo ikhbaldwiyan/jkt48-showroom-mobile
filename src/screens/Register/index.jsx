@@ -1,36 +1,34 @@
 import {
   Box,
   Button,
-  Center,
   FormControl,
   HStack,
-  Image,
   Input,
   Spinner,
   Text,
   useToast
 } from "native-base";
 import React, { useState } from "react";
-import { EyeIcon, EyeSlashIcon, LoginIcon } from "../../assets/icon";
+import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
 import Logo from "../../components/atoms/Logo";
-import { AUTH } from "../../services";
-import { loginApi } from "../../services/auth";
+import { loginApi, regsiterApi } from "../../services/auth";
 import { activityLog } from "../../utils/activityLog";
 import { storeStorage } from "../../utils/storage";
 import analytics from "@react-native-firebase/analytics";
 
-const Login = ({ navigation }) => {
+const Register = ({ navigation }) => {
   const [formData, setFormData] = useState({
     account_id: "",
+    name: "",
     password: "",
-    captcha_url: "",
-    captcha_word: "",
-    csrf_token: "",
-    cookies_sr_id: "",
-    error_message: ""
+    password_confirm: "",
+    avatar_id: 1
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
+  const [error, setError] = useState("");
 
   const toast = useToast();
 
@@ -38,34 +36,35 @@ const Login = ({ navigation }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleLogin = async () => {
+  const autoLogin = async () => {
+    const response = await loginApi({
+      account_id: formData.account_id,
+      password: formData.password
+    });
+
+    const data = response.data;
+    storeStorage("user", data.user);
+    storeStorage("session", data.session);
+    storeStorage("profile", data.profile);
+
+    activityLog({
+      description: "Register from android",
+      logName: "Register"
+    });
+
+    navigation.replace("Main");
+  };
+
+  const handleRegister = async () => {
     setLoading(true);
     try {
-      const response = await loginApi(formData);
+      const response = await regsiterApi(formData);
 
-      if (response.data.user.captcha_url) {
-        setFormData((prevState) => ({
-          ...prevState,
-          captcha_url: response.data.user.captcha_url,
-          csrf_token: response.data.session.csrf_token,
-          cookies_sr_id: response.data.session["cookies sr_id"]
-        }));
-      }
+      const isError = response.data.error;
+      isError && setError(isError);
 
-      if (response.data.user.error) {
-        setFormData((prevState) => ({
-          ...prevState,
-          error_message: response.data.user.error
-        }));
-      }
-
-      if (response.data.user.ok) {
-        const data = response.data;
-        storeStorage("user", data.user);
-        storeStorage("session", data.session);
-        storeStorage("profile", data.profile);
-        getSessionUser(data);
-        navigation.replace("Main");
+      if (response.data.status.ok) {
+        autoLogin();
 
         toast.show({
           render: () => {
@@ -79,14 +78,14 @@ const Login = ({ navigation }) => {
                 bg="green.500"
                 rounded="sm"
               >
-                <Text>Login Sukses</Text>
+                <Text>Register Sukses</Text>
               </Box>
             );
           },
           placement: "top-right"
         });
 
-        await analytics().logEvent("login", {
+        await analytics().logEvent("Register", {
           username: formData.account_id
         });
       }
@@ -97,28 +96,8 @@ const Login = ({ navigation }) => {
     }
   };
 
-  const getSessionUser = async (data) => {
-    await AUTH.detailUserApi(data.user.account_id)
-      .then((res) => {
-        storeStorage("userProfile", res.data);
-        activityLog({
-          userId: res?.data?._id,
-          logName: "Login",
-          description: "Login user to Android"
-        });
-      })
-      .catch((err) => {
-        activityLog({
-          userId: null,
-          logName: "Login",
-          description: "Register user profile"
-        });
-        console.log(err);
-      });
-  };
-
-  const handleRegister = () => {
-    navigation.navigate("Register")
+  const handleLoginRedirect = () => {
+    navigation.replace("Login");
   };
 
   return (
@@ -130,7 +109,7 @@ const Login = ({ navigation }) => {
     >
       <Logo />
       <Text mt="38" fontSize="2xl" fontWeight="semibold" color="white">
-        Login
+        Register Showroom
       </Text>
       <Text
         py="3"
@@ -139,7 +118,7 @@ const Login = ({ navigation }) => {
         maxWidth="300px"
         textAlign="center"
       >
-        Silakan login untuk menggunakan fitur komen dan podium.
+        Silakan isi semua form dibawah untuk daftar
       </Text>
       <Box py="4" mx="6">
         <FormControl>
@@ -155,6 +134,20 @@ const Login = ({ navigation }) => {
             placeholder="Ex: sorum48"
             value={formData.account_id}
             onChangeText={(value) => handleChange("account_id", value)}
+            isInvalid={error === "This account ID cannot be used."}
+          />
+          <Text py={3}>
+            Nama <Text color="red">*</Text>
+          </Text>
+          <Input
+            bgColor="white"
+            variant="filled"
+            w="100%"
+            fontSize="md"
+            name="id"
+            placeholder="Ex : Jhon Dopperty"
+            value={formData.name}
+            onChangeText={(value) => handleChange("name", value)}
             isInvalid={formData?.error_message}
           />
           <Box position="relative">
@@ -174,7 +167,7 @@ const Login = ({ navigation }) => {
               InputRightElement={() =>
                 loading ? <Spinner color="white" /> : "Login"
               }
-              isInvalid={formData?.error_message}
+              isInvalid={error === "Incorrect authentication password"}
             />
             <Box position="absolute" right="1" top="60%">
               <Button onPress={() => setShowPassword(!showPassword)}>
@@ -182,70 +175,65 @@ const Login = ({ navigation }) => {
               </Button>
             </Box>
           </Box>
+          <Box position="relative">
+            <Text mt="4" mb="3">
+              Konfirmasi Password <Text color="red">*</Text>
+            </Text>
+            <Input
+              bgColor="white"
+              type={showPasswordConfirmation ? "text" : "password"}
+              variant="filled"
+              w="100%"
+              fontSize="md"
+              name="password_confirm"
+              placeholder="Ex: abcabc123"
+              value={formData.password_confirm}
+              onChangeText={(value) => handleChange("password_confirm", value)}
+              InputRightElement={() =>
+                loading ? <Spinner color="white" /> : "Login"
+              }
+              isInvalid={error === "Incorrect authentication password"}
+            />
+            <Box position="absolute" right="1" top="60%">
+              <Button
+                onPress={() =>
+                  setShowPasswordConfirmation(!showPasswordConfirmation)
+                }
+              >
+                {showPasswordConfirmation ? <EyeSlashIcon /> : <EyeIcon />}
+              </Button>
+            </Box>
+          </Box>
 
-          {formData?.error_message && (
+          {error && (
             <Text color="red" mt="3">
-              {formData?.error_message}
+              {error === "Incorrect authentication password"
+                ? "Password does not match. Please check."
+                : error}
             </Text>
           )}
 
-          {formData?.captcha_url && (
-            <Box py="3">
-              <Text mb="3">Tolong verifikasi captcha di bawah ini:</Text>
-              <Image
-                alt="captcha"
-                source={{ uri: formData.captcha_url }}
-                size="md"
-                width="100%"
-                borderRadius="xl"
-                resizeMode="contain"
-              />
-              <Input
-                mt="3"
-                bgColor="white"
-                type="text"
-                variant="filled"
-                w="100%"
-                fontSize="md"
-                name="id"
-                placeholder="Ketik captcha diatas"
-                value={formData.captcha_word}
-                onChangeText={(value) => handleChange("captcha_word", value)}
-              />
-            </Box>
-          )}
-          <Text onPress={handleRegister} color="white" my="1">
-            Belum Punya Akun? <Text color="primary">Daftar Disini</Text>
+          <Text onPress={handleLoginRedirect} color="white" mt="3">
+            Sudah punya akun? <Text color="primary">Login Disini</Text>
           </Text>
 
           <Button
+            mt="4"
             my="3"
             background="primary"
-            onPress={handleLogin}
+            onPress={handleRegister}
             isLoading={loading}
           >
             <HStack alignItems="center" space="1">
-              <LoginIcon size={24} />
               <Text fontSize="16" color="white" fontWeight="medium">
-                Login
+                Register
               </Text>
             </HStack>
           </Button>
-          <Center>
-            <Text
-              fontWeight="medium"
-              mt="6"
-              onPress={() => navigation.replace("Main")}
-              color="gray.400"
-              my="2"
-            >
-              Skip Login
-            </Text>
-          </Center>
         </FormControl>
       </Box>
     </Box>
   );
 };
 
-export default Login;
+export default Register;
