@@ -6,40 +6,41 @@ import Views from "../../components/atoms/Views";
 import IDNLiveTabs from "../../components/molecules/IDNLiveTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
-import { LogBox } from "react-native";
+import { Dimensions, LogBox } from "react-native";
 
 const IDNStream = () => {
   const route = useRoute();
   const { params } = route;
-  const navigation = useNavigation();
-  const [profile, setProfile] = useState();
-  const { userProfile } = useUser();
   const toast = useToast();
+  const navigation = useNavigation();
+  const { userProfile } = useUser();
+  
+  const [profile, setProfile] = useState();
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   useEffect(() => {
     setProfile(params.item);
-  }, [])
-  
+  }, []);
+
   useEffect(() => {
     trackAnalytics("watch_idn_live", {
       username: userProfile?.account_id ?? "Guest",
       room: profile?.user?.name
     });
-  }, [userProfile])
+  }, [userProfile]);
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <Views number={profile?.view_count ?? 0} />
-      )
-    })
-  }, [profile])
+      headerRight: () => <Views number={profile?.view_count ?? 0} />
+    });
+  }, [profile]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: profile?.user?.name
-    })
-  }, [profile])
+      headerTitle: profile?.user?.name,
+      headerShown: isFullScreen ? false : true
+    });
+  }, [profile, isFullScreen]);
 
   useEffect(() => {
     if (userProfile) {
@@ -47,10 +48,10 @@ const IDNStream = () => {
         logName: "Watch",
         userId: userProfile?._id,
         description: `Watch IDN Live ${profile?.user?.name}`,
-        liveId: profile?.slug,
+        liveId: profile?.slug
       });
     }
-    LogBox.ignoreAllLogs(true)
+    LogBox.ignoreAllLogs(true);
   }, [params.item, profile, userProfile]);
 
   const handleEndLive = () => {
@@ -63,29 +64,31 @@ const IDNStream = () => {
           </Box>
         );
       },
-      placement: "top-right",
+      placement: "top-right"
     });
   };
 
   return (
     <Box flex="1" bg="secondary">
-      <Box height="480">
+      <Box height={isFullScreen ? Dimensions.get("window").height : 480}>
         <VideoPlayer
           source={{ uri: profile?.stream_url }}
           style={{
             position: "absolute",
             width: "100%",
-            height: 480
+            height: isFullScreen ? Dimensions.get("window").height : 480
           }}
           disableSeekbar
           disableBack
           disableTimer
+          onEnterFullscreen={() => setIsFullScreen(true)}
+          onExitFullscreen={() => setIsFullScreen(false)}
           onEnd={() => handleEndLive()}
         />
       </Box>
       <IDNLiveTabs profile={profile} setProfile={setProfile} />
     </Box>
-  )
-}
+  );
+};
 
 export default IDNStream;
