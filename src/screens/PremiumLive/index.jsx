@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Box, Button, HStack, Spinner, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { LogBox } from "react-native";
+import { Dimensions, LogBox, StatusBar } from "react-native";
 import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
 import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
@@ -24,6 +24,7 @@ const PremiumLive = () => {
 
   const { session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const roomId = params?.item?.profile?.room_id;
   const setlist = params?.item?.theater?.setlist?.name;
@@ -68,9 +69,10 @@ const PremiumLive = () => {
           </Button>
           <Views number={liveInfo?.views ?? profile?.view_num ?? 0} />
         </HStack>
-      )
+      ),
+      headerShown: isFullScreen ? false : true
     });
-  }, [profile, params.item.profile, liveInfo]);
+  }, [profile, params.item.profile, liveInfo, isFullScreen]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -187,6 +189,17 @@ const PremiumLive = () => {
     });
   }, [premiumLive, token]);
 
+  useEffect(() => {
+    StatusBar.setHidden(isFullScreen);
+  }, [isFullScreen]);
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener("change", () => {
+      setIsFullScreen(!isFullScreen);
+    });
+    return () => subscription?.remove();
+  }, [isFullScreen]);
+
   return (
     <Box flex="1" bg="secondary">
       {!isPaid ? (
@@ -195,7 +208,7 @@ const PremiumLive = () => {
         </Box>
       ) : (
         <>
-          <Box height={200}>
+          <Box height={isFullScreen ? Dimensions.get("window").height : 200}>
             {url ? (
               <VideoPlayer
                 source={{ uri: url }}
@@ -207,7 +220,9 @@ const PremiumLive = () => {
                 disableSeekbar
                 disableBack
                 disableTimer
-                disableFullscreen
+                toggleResizeModeOnFullscreen={false}
+                onEnterFullscreen={() => setIsFullScreen(true)}
+                onExitFullscreen={() => setIsFullScreen(false)}
                 onEnd={() => {
                   navigation.navigate("Main");
                 }}

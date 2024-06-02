@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Box, Button, HStack, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { formatName } from "../../utils/helpers";
@@ -7,7 +7,7 @@ import Views from "../../components/atoms/Views";
 import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
-import { Dimensions, LogBox } from "react-native";
+import { Dimensions, LogBox, StatusBar } from "react-native";
 import { LiveIcon, RefreshIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import useLiveStreamStore from "../../store/liveStreamStore";
@@ -29,9 +29,10 @@ const LiveStream = () => {
     clearLiveStream,
     clearUrl
   } = useLiveStreamStore();
+  const toast = useToast();
   const { user, session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
-  const toast = useToast();
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -49,9 +50,10 @@ const LiveStream = () => {
           </Button>
           <Views number={liveInfo?.views ?? profile?.view_num ?? 0} />
         </HStack>
-      )
+      ),
+      headerShown: isFullScreen ? false : true
     });
-  }, [profile, liveInfo, refreshing]);
+  }, [profile, liveInfo, refreshing, isFullScreen]);
 
   useEffect(() => {
     setProfile(params.item);
@@ -171,32 +173,50 @@ const LiveStream = () => {
     console.log("Refreshing Error Stream");
   };
 
+  useEffect(() => {
+    StatusBar.setHidden(isFullScreen);
+
+    return () => {
+      StatusBar.setHidden(false)
+    }
+  }, [isFullScreen]);
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener("change", () => {
+      setIsFullScreen(!isFullScreen);
+    });
+    return () => subscription?.remove();
+  });
+
   return (
     <Box flex="1" bg="secondary">
-      <Box height={200}>
+      <Box height={isFullScreen ? Dimensions.get("window").height : 200}>
         {url ? (
           <VideoPlayer
             source={{ uri: url }}
             style={{
+              flex: 1,
               position: "absolute",
               width: Dimensions.get("window").width,
               height: "100%"
             }}
-            disableSeekbar
-            disableBack
-            disableTimer
-            disableFullscreen
+            toggleResizeModeOnFullscreen={false}
+            onEnterFullscreen={() => setIsFullScreen(true)}
+            onExitFullscreen={() => setIsFullScreen(false)}
             onError={handleStreamError}
             onEnd={() => {
               navigation.navigate("Main");
             }}
+            disableSeekbar
+            disableBack
+            disableTimer
           />
         ) : (
           <Loading color="white" />
         )}
       </Box>
       <Box flex={1} p="2">
-        <LiveStreamTabs isPremiumLive={liveInfo.isPremiumLive} />
+        {!isFullScreen && <LiveStreamTabs />}
       </Box>
     </Box>
   );

@@ -6,7 +6,7 @@ import Views from "../../components/atoms/Views";
 import IDNLiveTabs from "../../components/molecules/IDNLiveTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
-import { Dimensions, LogBox } from "react-native";
+import { Dimensions, LogBox, StatusBar } from "react-native";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -67,6 +67,14 @@ const IDNStream = () => {
       placement: "top-right"
     });
   };
+
+  useEffect(() => {
+    StatusBar.setHidden(isFullScreen);
+
+    return () => {
+      StatusBar.setHidden(false)
+    }
+  }, [isFullScreen]);
 
   return (
     <Box flex="1" bg="secondary">
