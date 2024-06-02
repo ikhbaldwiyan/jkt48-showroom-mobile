@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { theme } from "../../../config/theme";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -27,7 +27,7 @@ import {
 
 import { useNavigation } from "@react-navigation/native";
 import { ArrowBackIcon } from "native-base";
-import { TouchableOpacity } from "react-native";
+import { StatusBar, TouchableOpacity } from "react-native";
 import MemberList from "../../../screens/MemberList";
 import useUser from "../../../utils/hooks/useUser";
 import UserIconOutline from "../../../assets/icon/UserIconOutline";
@@ -104,6 +104,10 @@ const Navigation = () => {
       </TouchableOpacity>
     )
   };
+
+  useEffect(() => {
+    StatusBar.setBackgroundColor("#21252B")
+  }, []);
 
   return (
     <Stack.Navigator
