@@ -1,11 +1,11 @@
 import { useRoute } from "@react-navigation/native";
 import { Center, HStack, Image, ScrollView, Text, VStack } from "native-base";
 import { useEffect, useState } from "react";
-import { RefreshControl, StyleSheet } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
+import CardGradient from "../../../atoms/CardGradient";
 
 export const Podium = () => {
   const route = useRoute();
@@ -43,10 +43,7 @@ export const Podium = () => {
   }, [profile, refreshing]);
 
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
-    >
+    <CardGradient>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -75,15 +72,6 @@ export const Podium = () => {
           ))}
         </HStack>
       </ScrollView>
-    </LinearGradient>
+    </CardGradient>
   );
 };
-
-var styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});

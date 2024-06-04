@@ -9,17 +9,12 @@ import {
   View
 } from "native-base";
 import { useEffect, useState } from "react";
-import {
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity
-} from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { RefreshControl, ScrollView, TouchableOpacity } from "react-native";
 import { LiveIcon } from "../../../../assets/icon";
 import { ROOMS } from "../../../../services";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
+import CardGradient from "../../../atoms/CardGradient";
 
 export const Room = () => {
   const [roomLives, setRoomLives] = useState([]);
@@ -38,10 +33,7 @@ export const Room = () => {
   }, [refreshing]);
 
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
-    >
+    <CardGradient>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -92,15 +84,6 @@ export const Room = () => {
           </Box>
         ))}
       </ScrollView>
-    </LinearGradient>
+    </CardGradient>
   );
 };
-
-const styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});

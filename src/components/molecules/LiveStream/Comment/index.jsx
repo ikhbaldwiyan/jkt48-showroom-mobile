@@ -5,7 +5,6 @@ import {
   Divider,
   HStack,
   Image,
-  ScrollView,
   Text,
   View,
   useToast,
@@ -13,8 +12,7 @@ import {
   Button,
   Spinner
 } from "native-base";
-import { FlatList, RefreshControl, StyleSheet } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { FlatList, RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
 import { SendIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
@@ -22,6 +20,7 @@ import { formatName } from "../../../../utils/helpers";
 import { activityLog } from "../../../../utils/activityLog";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
+import CardGradient from "../../../atoms/CardGradient";
 
 export const Comment = () => {
   const route = useRoute();
@@ -174,10 +173,7 @@ export const Comment = () => {
   };
 
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
-    >
+    <CardGradient>
       <FlatList
         data={comments?.length > 0 ? comments?.slice(0, 40) : []}
         keyExtractor={(item, index) => index.toString()}
@@ -239,15 +235,6 @@ export const Comment = () => {
           </Button>
         </HStack>
       )}
-    </LinearGradient>
+    </CardGradient>
   );
 };
-
-const styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});
