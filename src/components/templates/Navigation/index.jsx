@@ -14,6 +14,7 @@ import {
   SplashScreen,
   ScheduleList,
   PremiumLive,
+  About,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -22,7 +23,9 @@ import {
   UsersIconOutline,
   TheaterIcon,
   TheaterIconOutline,
-  UserIcon
+  UserIcon,
+  Info,
+  InfoOutline
 } from "../../../assets/icon";
 
 import { useNavigation } from "@react-navigation/native";
@@ -54,6 +57,12 @@ const Navigation = () => {
         <UserIcon color="#24A2B7" size={22} />
       ) : (
         <UserIconOutline />
+      );
+    } else if (route.name === "About") {
+      icon = isActive ? (
+        <Info color="#24A2B7" size={22} />
+      ) : (
+        <InfoOutline />
       );
     }
 
@@ -93,6 +102,7 @@ const Navigation = () => {
       <Tab.Screen name="Member" component={MemberList} />
       <Tab.Screen name="Theater" component={ScheduleList} />
       <Tab.Screen name="Profile" component={Login} />
+      <Tab.Screen name="About" component={About} />
     </Tab.Navigator>
   );
 

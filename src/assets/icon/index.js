@@ -4,9 +4,9 @@ import HomeIconOutline from "./HomeIconOutline";
 import UsersIcon from "./UsersIcon";
 import UserIcon from "./UserIcon";
 import UsersIconOutline from "./UsersIconOutline";
-import TimesIcon from "./TimesIcon"
-import TheaterIcon from "./TheaterIcon"
-import TheaterIconOutline from "./TheaterIconOutline"
+import TimesIcon from "./TimesIcon";
+import TheaterIcon from "./TheaterIcon";
+import TheaterIconOutline from "./TheaterIconOutline";
 import SendIcon from "./SendIcon";
 import EyeIcon from "./EyeIcon";
 import EyeSlashIcon from "./EyeSlashIcon";
@@ -33,6 +33,9 @@ import UserAdd from "./UserAdd";
 import UserCheck from "./UserCheck";
 import Dashboard from "./Dashboard";
 import LoginIcon from "./LoginIcon";
+import Info from "./Info";
+import InfoOutline from "./InfoOutline";
+import Donate from "./Donate";
 
 export {
   LogoIcon,
@@ -70,4 +73,7 @@ export {
   UserCheck,
   Dashboard,
   LoginIcon,
-}
+  Info,
+  InfoOutline,
+  Donate
+};

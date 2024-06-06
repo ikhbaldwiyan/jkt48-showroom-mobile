@@ -7,6 +7,7 @@ import LiveStream from "./LiveStream";
 import IDNStream from "./IDNStream";
 import RoomLives from "./RoomLives";
 import PremiumLive from "./PremiumLive";
+import About from "./About";
 import { ScheduleList, ScheduleDetail } from "./Schedule";
 
 export {
@@ -21,4 +22,5 @@ export {
   ScheduleDetail,
   RoomLives,
   PremiumLive,
+  About,
 };
