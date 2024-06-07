@@ -13,6 +13,8 @@ import { useRefresh } from "../../utils/hooks/useRefresh";
 import useLiveStreamStore from "../../store/liveStreamStore";
 import Loading from "../../components/atoms/Loading";
 import trackAnalytics from "../../utils/trackAnalytics";
+import useThemeStore from "../../store/themeStore";
+import Theme from "../../components/templates/Theme";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -33,27 +35,29 @@ const LiveStream = () => {
   const { user, session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const { mode } = useThemeStore();
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <HStack space={2} alignItems="center">
           <Button
+            py="1"
+            size="xs"
             onPress={handleRefresh}
             isLoading={refreshing}
             borderRadius="md"
-            py="1"
-            background="teal"
-            size="xs"
+            background="black"
           >
             <RefreshIcon />
           </Button>
-          <Views number={liveInfo?.views ?? profile?.view_num ?? 0} />
+          <Theme />
+          <Views color="primary" number={liveInfo?.views ?? profile?.view_num ?? 0} />
         </HStack>
       ),
       headerShown: isFullScreen ? false : true
     });
-  }, [profile, liveInfo, refreshing, isFullScreen]);
+  }, [profile, liveInfo, refreshing, isFullScreen, mode]);
 
   useEffect(() => {
     setProfile(params.item);
@@ -68,6 +72,10 @@ const LiveStream = () => {
     onRefresh();
     clearUrl();
     await getUrl();
+
+    trackAnalytics("refresh_button", {
+      username: user?.account_id ?? "Guest",
+    })
   };
 
   async function fetchLiveInfo() {
@@ -98,7 +106,7 @@ const LiveStream = () => {
     navigation.setOptions({
       headerTitle:
         profile?.room_url_key && profile?.room_url_key !== "officialJKT48"
-          ? formatName(profile?.room_url_key)
+          ? formatName(profile?.room_url_key, true)
           : profile?.main_name?.replace("SHOWROOM", "")
     });
   }, [profile]);
@@ -177,8 +185,8 @@ const LiveStream = () => {
     StatusBar.setHidden(isFullScreen);
 
     return () => {
-      StatusBar.setHidden(false)
-    }
+      StatusBar.setHidden(false);
+    };
   }, [isFullScreen]);
 
   useEffect(() => {

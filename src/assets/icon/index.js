@@ -36,6 +36,8 @@ import LoginIcon from "./LoginIcon";
 import Info from "./Info";
 import InfoOutline from "./InfoOutline";
 import Donate from "./Donate";
+import Sun from "./Sun";
+import Moon from "./Moon";
 
 export {
   LogoIcon,
@@ -75,5 +77,7 @@ export {
   LoginIcon,
   Info,
   InfoOutline,
-  Donate
+  Donate,
+  Sun,
+  Moon,
 };

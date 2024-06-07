@@ -4,6 +4,7 @@ import { Dimensions } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
 import { Comment, Podium, Room, Members } from "../LiveStream";
 import { Songs } from "../LiveStream/Songs";
+import useThemeStore from "../../../store/themeStore";
 
 const initialLayout = {
   width: Dimensions.get("window").width
@@ -23,6 +24,7 @@ const renderScene = SceneMap({
 
 const LiveStreamTabs = ({ isPremiumLive }) => {
   const [index, setIndex] = useState(1);
+  const { header } = useThemeStore();
 
   const routes = useMemo(() => {
     if (isPremiumLive) {
@@ -41,7 +43,7 @@ const LiveStreamTabs = ({ isPremiumLive }) => {
   }, [isPremiumLive]);
 
   const renderTabBar = ({ jumpTo }) => (
-    <Box bg="primary" borderRadius="md" flexDirection="row">
+    <Box bg={header} borderRadius="md" flexDirection="row">
       {routes.map((route, i) => {
         const color = index === i ? "white" : "#e5e5e5";
         const borderColor = index === i ? "#ECFAFC" : "gray.500";

@@ -21,13 +21,14 @@ import { activityLog } from "../../../../utils/activityLog";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
+import useThemeStore from "../../../../store/themeStore";
 
 export const Comment = () => {
   const route = useRoute();
   const toast = useToast();
   const { params } = route;
   const navigation = useNavigation();
-  const { session, userProfile } = useUser();
+  const { user, session, userProfile } = useUser();
   const { profile, token, hideComment } = useLiveStreamStore();
 
   const [comments, setComments] = useState([]);
@@ -36,6 +37,7 @@ export const Comment = () => {
   const [buttonLoading, setButtonLoading] = useState(false);
   const { refreshing, onRefresh } = useRefresh();
   const roomId = profile?.room_id;
+  const { mode } = useThemeStore();
 
   useEffect(() => {
     async function getComments() {
@@ -177,29 +179,41 @@ export const Comment = () => {
       <FlatList
         data={comments?.length > 0 ? comments?.slice(0, 40) : []}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Box>
-            <HStack alignItems="center" p="2">
-              <Image
-                mr="3"
-                alt={item.name}
-                style={{ width: 40, height: 40 }}
-                source={{
-                  uri:
-                    item?.avatar_url ??
-                    `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`
-                }}
-              />
-              <View flexShrink="1">
-                <Text fontSize="md" fontWeight="bold">
-                  {item.name}
-                </Text>
-                <Text mt="1">{item.comment}</Text>
-              </View>
-            </HStack>
-            <Divider mb="1" />
-          </Box>
-        )}
+        renderItem={({ item }) =>
+          item.comment.length > 2 && (
+            <Box>
+              <HStack alignItems="center" p="2">
+                <Image
+                  mr="3"
+                  alt={item.name}
+                  style={{ width: 40, height: 40 }}
+                  source={{
+                    uri:
+                      item?.avatar_url ??
+                      `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`
+                  }}
+                />
+                <View flexShrink="1">
+                  <Text
+                    fontSize="md"
+                    fontWeight="bold"
+                    color={
+                      item.user_id == user?.user_id
+                        ? mode === "dark"
+                          ? "primary"
+                          : "secondary"
+                        : "white"
+                    }
+                  >
+                    {item.name}
+                  </Text>
+                  <Text mt="1">{item.comment}</Text>
+                </View>
+              </HStack>
+              <Divider mb="1" />
+            </Box>
+          )
+        }
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -208,11 +222,14 @@ export const Comment = () => {
       {session && !hideComment && (
         <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
           <Input
-            bgColor="white"
             variant="filled"
             w="90%"
             fontSize="md"
-            name="id"
+            name="comment"
+            bgColor={mode === "light" ? "white" : "#282C34"}
+            color={mode === "light" ? "black" : "white"}
+            borderColor={mode === "light" ? "black" : "primary"}
+            borderRightWidth={0}
             borderRadius="md"
             borderTopRightRadius="0"
             borderBottomRightRadius="0"
@@ -225,9 +242,12 @@ export const Comment = () => {
           />
           <Button
             height="10"
+            borderColor="primary"
             borderTopLeftRadius="0"
+            borderLeftWidth={0}
             borderBottomLeftRadius="0"
-            background="secondary"
+            borderWidth={mode === "light" ? "0" : "1"}
+            background={mode === "light" ? "secondary" : "primary"}
             onPress={sendComment}
             disabled={textComment.length === 0 || buttonLoading}
           >

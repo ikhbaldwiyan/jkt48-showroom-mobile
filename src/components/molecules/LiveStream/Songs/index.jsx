@@ -1,8 +1,7 @@
 import { Box, HStack, ScrollView, Text, VStack } from "native-base";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
+import CardGradient from "../../../atoms/CardGradient";
 
 export const Songs = () => {
   const [songs, setSongs] = useState([]);
@@ -16,9 +15,7 @@ export const Songs = () => {
   }, []);
 
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
+    <CardGradient
     >
       <ScrollView>
         <Box p="2">
@@ -36,15 +33,8 @@ export const Songs = () => {
           </VStack>
         </Box>
       </ScrollView>
-    </LinearGradient>
+    </CardGradient>
   );
 };
 
-const styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});
+

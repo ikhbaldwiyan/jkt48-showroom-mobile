@@ -1,13 +1,13 @@
 import React from "react";
 import LinearGradient from "react-native-linear-gradient";
 import { StyleSheet } from "react-native";
+import useThemeStore from "../../../store/themeStore";
 
 const CardGradient = ({ children }) => {
+  const { theme } = useThemeStore();
+
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
-    >
+    <LinearGradient colors={theme} style={styles.linearGradient}>
       {children}
     </LinearGradient>
   );

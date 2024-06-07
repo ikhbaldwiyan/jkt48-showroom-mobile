@@ -12,6 +12,8 @@ import useLiveStreamStore from "../../store/liveStreamStore";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { RefreshIcon } from "../../assets/icon";
 import Loading from "../../components/atoms/Loading";
+import useThemeStore from "../../store/themeStore";
+import Theme from "../../components/templates/Theme";
 
 const PremiumLive = () => {
   const route = useRoute();
@@ -43,6 +45,7 @@ const PremiumLive = () => {
     setHideComment,
     clearLiveStream
   } = useLiveStreamStore();
+  const { mode } = useThemeStore();
 
   useEffect(() => {
     fetchLiveInfo();
@@ -62,17 +65,21 @@ const PremiumLive = () => {
             py="1"
             onPress={handleRefresh}
             borderRadius="md"
-            background="teal"
+            background="black"
             size="xs"
           >
             {refreshing ? <Spinner size={16} color="white" /> : <RefreshIcon />}
           </Button>
-          <Views number={liveInfo?.views ?? profile?.view_num ?? 0} />
+          <Theme />
+          <Views
+            color="primary"
+            number={liveInfo?.views ?? profile?.view_num ?? 0}
+          />
         </HStack>
       ),
       headerShown: isFullScreen ? false : true
     });
-  }, [profile, params.item.profile, liveInfo, isFullScreen]);
+  }, [profile, params.item.profile, liveInfo, isFullScreen, mode]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

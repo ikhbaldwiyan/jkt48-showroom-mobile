@@ -1,8 +1,7 @@
 import { HStack, Image, ScrollView, Text, View, VStack } from "native-base";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
 import { STREAM } from "../../../../services";
+import CardGradient from "../../../atoms/CardGradient";
 
 export const Members = () => {
   const [members, setMembers] = useState([]);
@@ -16,10 +15,7 @@ export const Members = () => {
   }, []);
 
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
-    >
+    <CardGradient>
       <ScrollView>
         {members?.length ? (
           Array.from(
@@ -56,15 +52,8 @@ export const Members = () => {
           <Text>No members found.</Text>
         )}
       </ScrollView>
-    </LinearGradient>
+    </CardGradient>
   );
 };
 
-const styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});
+

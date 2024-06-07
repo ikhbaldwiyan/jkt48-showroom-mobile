@@ -13,6 +13,7 @@ import { RefreshControl, ScrollView, TouchableOpacity } from "react-native";
 import { LiveIcon } from "../../../../assets/icon";
 import { ROOMS } from "../../../../services";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
+import useThemeStore from "../../../../store/themeStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 
@@ -20,6 +21,7 @@ export const Room = () => {
   const [roomLives, setRoomLives] = useState([]);
   const { refreshing, onRefresh } = useRefresh();
   const { profile, setProfile } = useLiveStreamStore();
+  const { mode } = useThemeStore();
 
   useEffect(() => {
     async function getRoomLive() {
@@ -68,7 +70,7 @@ export const Room = () => {
               <Button
                 mt="8"
                 colorScheme="black"
-                bg={item.room_id === profile.room_id ? "red" : "disabled"}
+                bg={item.room_id === profile.room_id ? "red" : mode === "light" ? "secondary" : "primary"}
               >
                 <TouchableOpacity
                   activeOpacity={0.6}
