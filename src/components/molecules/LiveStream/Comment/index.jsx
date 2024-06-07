@@ -233,7 +233,7 @@ export const Comment = () => {
             borderRadius="md"
             borderTopRightRadius="0"
             borderBottomRightRadius="0"
-            placeholder="Write Comment.."
+            placeholder="Send Comment.."
             _input={{
               textAlign: "left"
             }}

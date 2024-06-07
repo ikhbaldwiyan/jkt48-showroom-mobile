@@ -25,11 +25,12 @@ import {
   TheaterIconOutline,
   UserIcon,
   Info,
-  InfoOutline
+  InfoOutline,
+  ChevronBack
 } from "../../../assets/icon";
 
 import { useNavigation } from "@react-navigation/native";
-import { ArrowBackIcon } from "native-base";
+import { Box } from "native-base";
 import { StatusBar, TouchableOpacity } from "react-native";
 import MemberList from "../../../screens/MemberList";
 import useUser from "../../../utils/hooks/useUser";
@@ -109,9 +110,11 @@ const Navigation = () => {
   const showHeader = {
     headerShown: true,
     headerLeft: () => (
-      <TouchableOpacity onPress={() => navigation.navigate("Main")}>
-        <ArrowBackIcon color="white" mr="2" />
-      </TouchableOpacity>
+      <Box mr="3">
+        <TouchableOpacity onPress={() => navigation.navigate("Main")}>
+          <ChevronBack />
+        </TouchableOpacity>
+      </Box>
     )
   };
 

@@ -38,6 +38,7 @@ import InfoOutline from "./InfoOutline";
 import Donate from "./Donate";
 import Sun from "./Sun";
 import Moon from "./Moon";
+import ChevronBack from "./ChevronBack";
 
 export {
   LogoIcon,
@@ -80,4 +81,5 @@ export {
   Donate,
   Sun,
   Moon,
+  ChevronBack,
 };
