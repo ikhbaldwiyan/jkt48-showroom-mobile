@@ -15,6 +15,7 @@ import {
   ScheduleList,
   PremiumLive,
   About,
+  Profile,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -33,14 +34,12 @@ import { useNavigation } from "@react-navigation/native";
 import { Box } from "native-base";
 import { StatusBar, TouchableOpacity } from "react-native";
 import MemberList from "../../../screens/MemberList";
-import useUser from "../../../utils/hooks/useUser";
 import UserIconOutline from "../../../assets/icon/UserIconOutline";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
   const navigation = useNavigation();
-  const { session } = useUser();
 
   const navigationIcon = (route, isActive) => {
     let icon;
@@ -102,7 +101,7 @@ const Navigation = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Member" component={MemberList} />
       <Tab.Screen name="Theater" component={ScheduleList} />
-      <Tab.Screen name="Profile" component={Login} />
+      <Tab.Screen name="Profile" component={Profile} />
       <Tab.Screen name="About" component={About} />
     </Tab.Navigator>
   );

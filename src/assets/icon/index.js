@@ -39,6 +39,8 @@ import Donate from "./Donate";
 import Sun from "./Sun";
 import Moon from "./Moon";
 import ChevronBack from "./ChevronBack";
+import AndroidIcon from "./AndroidIcon";
+import Cloud from "./Cloud";
 
 export {
   LogoIcon,
@@ -82,4 +84,6 @@ export {
   Sun,
   Moon,
   ChevronBack,
+  AndroidIcon,
+  Cloud,
 };

@@ -177,7 +177,7 @@ export const Comment = () => {
   return (
     <CardGradient>
       <FlatList
-        data={comments?.length > 0 ? comments?.slice(0, 40) : []}
+        data={comments?.length > 0 ? comments?.slice(0, 45) : []}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) =>
           item.comment.length > 2 && (

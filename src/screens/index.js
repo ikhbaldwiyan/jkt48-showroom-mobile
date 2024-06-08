@@ -9,6 +9,7 @@ import RoomLives from "./RoomLives";
 import PremiumLive from "./PremiumLive";
 import About from "./About";
 import { ScheduleList, ScheduleDetail } from "./Schedule";
+import Profile from "./Profile";
 
 export {
   SplashScreen,
@@ -23,4 +24,5 @@ export {
   RoomLives,
   PremiumLive,
   About,
+  Profile,
 };
