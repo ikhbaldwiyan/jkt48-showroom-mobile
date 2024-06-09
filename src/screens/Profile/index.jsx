@@ -6,6 +6,7 @@ import { Image } from "react-native";
 import { LoginIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import { useNavigation } from "@react-navigation/native";
+import Logout from "../../components/molecules/UserTabs/components/Logout";
 
 const Profile = () => {
   const { profile, session } = useUser();
@@ -89,6 +90,7 @@ const Profile = () => {
       </VStack>
       <Box flex={1} p="3">
         <UserTabs />
+        <Logout />
       </Box>
     </Box>
   );

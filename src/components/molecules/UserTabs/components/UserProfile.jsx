@@ -1,48 +1,23 @@
-import { useNavigation } from "@react-navigation/native";
-import { Button, Divider, HStack, ScrollView, Text, VStack } from "native-base";
-import React, { useState } from "react";
-import { TouchableOpacity } from "react-native";
+import React from "react";
+import { Divider, HStack, ScrollView, Text, VStack } from "native-base";
 import {
   AndroidIcon,
   Cloud,
   History,
   IDCard,
   LiveIcon,
-  LoginIcon,
   Star,
   UserIcon
 } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
-import { removeStorage } from "../../../../utils/storage";
-import trackAnalytics from "../../../../utils/trackAnalytics";
 import CardGradient from "../../../atoms/CardGradient";
-import { ModalConfirmation } from "../../../atoms/Modal";
 import Theme from "../../../templates/Theme";
 
 export const UserProfile = () => {
   const { profile, user, userProfile } = useUser();
-  const [modalLogout, setModalLogout] = useState(false);
-  const navigation = useNavigation();
-
-  const handleModal = () => {
-    setModalLogout(!modalLogout);
-  };
-
-  const handleLogout = () => {
-    handleModal();
-    removeStorage("user");
-    removeStorage("session");
-    removeStorage("profile");
-    removeStorage("userProfile");
-    navigation.replace("Login");
-
-    trackAnalytics("logout", {
-      username: profile?.name
-    });
-  };
 
   return (
-    <CardGradient>
+    <CardGradient halfCard>
       <ScrollView mt="2">
         <VStack space={4}>
           <HStack space={2} alignItems="center">
@@ -82,20 +57,6 @@ export const UserProfile = () => {
           my="4"
         />
         <VStack space={3}>
-          <Text fontWeight="bold" fontSize={16}>
-            Settings
-          </Text>
-          <HStack space={2} alignItems="center">
-            <AndroidIcon />
-            <Text fontSize={14} fontWeight="semibold">
-              APK Version 1.2
-            </Text>
-            <Text>|</Text>
-            <HStack space={1} alignItems="center">
-              <History />
-              <Text fontWeight="bold"> Check Change Log</Text>
-            </HStack>
-          </HStack>
           <HStack space={2} alignItems="center">
             <Cloud />
             <Text fontSize={14} fontWeight="semibold">
@@ -103,31 +64,20 @@ export const UserProfile = () => {
             </Text>
           </HStack>
           <Theme isButton />
-          <Button
-            mt="1"
-            bg="gray.500"
-            borderRadius="md"
-            variant="solid"
-            onPress={handleModal}
-          >
-            <TouchableOpacity onPress={handleModal}>
-              <HStack space={2}>
-                <LoginIcon size={24} />
-                <Text fontSize={16} fontWeight="semibold">
-                  Logout
-                </Text>
-              </HStack>
-            </TouchableOpacity>
-          </Button>
+          <HStack mt="1" space={2} alignItems="center">
+            <AndroidIcon />
+            <Text fontSize={14} fontWeight="semibold">
+              APK Version 1.2
+            </Text>
+            <Text>|</Text>
+            <HStack space={1} alignItems="center">
+              <History />
+              <Text fontWeight="bold" color="gray.200">
+                Check Change Log
+              </Text>
+            </HStack>
+          </HStack>
         </VStack>
-        <ModalConfirmation
-          title="Logout"
-          modal={modalLogout}
-          onClose={handleModal}
-          confrimAction={handleLogout}
-        >
-          <Text color="black">Are you sure want logout?</Text>
-        </ModalConfirmation>
       </ScrollView>
     </CardGradient>
   );

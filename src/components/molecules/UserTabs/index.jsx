@@ -3,7 +3,7 @@ import { Dimensions } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
 import { Box, Pressable, Text, useColorModeValue } from "native-base";
 import useThemeStore from "../../../store/themeStore";
-import { UserProfile } from "./components/UserProfile";
+import { UserProfile } from "./components";
 
 const initialLayout = {
   width: Dimensions.get("window").width

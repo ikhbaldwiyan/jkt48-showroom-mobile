@@ -23,6 +23,7 @@ const Theme = ({ isButton }) => {
     <Button
       bg={mode == "light" ? "secondary" : "primary"}
       onPress={handleChangeTheme}
+      borderRadius="lg"
     >
       <TouchableOpacity onPress={handleChangeTheme}>
         <HStack>

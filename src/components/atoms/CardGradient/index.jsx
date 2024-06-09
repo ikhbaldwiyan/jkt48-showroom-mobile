@@ -3,7 +3,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { StyleSheet } from "react-native";
 import useThemeStore from "../../../store/themeStore";
 
-const CardGradient = ({ children, color }) => {
+const CardGradient = ({ children, color, halfCard }) => {
   const { theme } = useThemeStore();
 
   const light = ["#24A2B7", "#3B82F6"];
@@ -17,23 +17,28 @@ const CardGradient = ({ children, color }) => {
     }
   };
 
+  const styles = StyleSheet.create({
+    linearGradient: {
+      flex: halfCard ? 0 : 1,
+      padding: 12,
+      borderBottomLeftRadius: 6,
+      borderBottomRightRadius: 6,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.65,
+      shadowRadius: 7.84,
+      elevation: 5
+    }
+  });
+
   return (
-    <LinearGradient
-      colors={colors()}
-      style={styles.linearGradient}
-    >
+    <LinearGradient colors={colors()} style={styles.linearGradient}>
       {children}
     </LinearGradient>
   );
 };
 
 export default CardGradient;
-
-const styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});
