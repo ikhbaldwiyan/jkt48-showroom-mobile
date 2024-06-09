@@ -60,7 +60,7 @@ export const UserProfile = () => {
           <HStack space={2} alignItems="center">
             <Cloud />
             <Text fontSize={14} fontWeight="semibold">
-              Live Showroom Theme
+              Live Background Theme
             </Text>
           </HStack>
           <Theme isButton />

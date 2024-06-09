@@ -6,22 +6,19 @@ import {
   Image,
   PlayIcon,
   Text,
+  useTheme,
   View
 } from "native-base";
 import { useEffect, useState } from "react";
-import {
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity
-} from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { RefreshControl, ScrollView, TouchableOpacity } from "react-native";
 import { ROOMS } from "../../../../services";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
+import CardGradient from "../../../atoms/CardGradient";
 
-export const RoomListIDN = ({ profile,  setProfile }) => {
+export const RoomListIDN = ({ profile, setProfile }) => {
   const [roomLives, setRoomLives] = useState([]);
   const { refreshing, onRefresh } = useRefresh();
+  const { mode } = useTheme();
 
   useEffect(() => {
     async function getIDNLIve() {
@@ -32,10 +29,7 @@ export const RoomListIDN = ({ profile,  setProfile }) => {
   }, [refreshing]);
 
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
-    >
+    <CardGradient>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -70,7 +64,9 @@ export const RoomListIDN = ({ profile,  setProfile }) => {
                 bg={
                   item.user.username === profile?.user?.username
                     ? "red"
-                    : "disabled"
+                    : mode === "light"
+                    ? "secondary"
+                    : "primary"
                 }
               >
                 <TouchableOpacity
@@ -87,15 +83,6 @@ export const RoomListIDN = ({ profile,  setProfile }) => {
           </Box>
         ))}
       </ScrollView>
-    </LinearGradient>
+    </CardGradient>
   );
 };
-
-const styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});

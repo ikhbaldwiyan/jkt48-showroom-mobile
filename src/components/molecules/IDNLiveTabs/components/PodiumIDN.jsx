@@ -1,17 +1,10 @@
 import { useRoute } from "@react-navigation/native";
-import {
-  Center,
-  HStack,
-  Image,
-  ScrollView,
-  Text,
-  VStack
-} from "native-base";
+import { Center, HStack, Image, ScrollView, Text, VStack } from "native-base";
 import { useEffect, useState } from "react";
-import { RefreshControl, StyleSheet } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
+import CardGradient from "../../../atoms/CardGradient";
 
 export const PodiumIDN = () => {
   const route = useRoute();
@@ -23,12 +16,12 @@ export const PodiumIDN = () => {
   async function getIDNPodiumList() {
     const response = await STREAM.getIDNLivePodium(params?.item?.slug);
     setPodium(response?.data?.activityLog?.watch?.reverse());
-    setViews(response?.data?.liveData?.users)
+    setViews(response?.data?.liveData?.users);
   }
 
   useEffect(() => {
     try {
-      getIDNPodiumList()
+      getIDNPodiumList();
     } catch (error) {
       console.log(error);
     }
@@ -36,31 +29,26 @@ export const PodiumIDN = () => {
 
   useEffect(() => {
     setTimeout(() => {
-     getIDNPodiumList()
+      getIDNPodiumList();
     }, 1000);
 
     // Set interval to fetch data every 2 minutes
     const interval = setInterval(() => {
-      getIDNPodiumList()
+      getIDNPodiumList();
     }, 2 * 60 * 1000); // 2 minutes in milliseconds
 
     return () => clearInterval(interval);
   }, [params?.item?.live_id, refreshing]);
 
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
-    >
+    <CardGradient>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         <Center>
-          <Text fontWeight="bold">
-            {views} Orang sedang menonton
-          </Text>
+          <Text fontWeight="bold">{views} Orang sedang menonton</Text>
         </Center>
         <HStack
           space={2}
@@ -82,15 +70,6 @@ export const PodiumIDN = () => {
           ))}
         </HStack>
       </ScrollView>
-    </LinearGradient>
+    </CardGradient>
   );
 };
-
-var styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});

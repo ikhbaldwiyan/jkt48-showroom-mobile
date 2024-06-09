@@ -4,6 +4,7 @@ import { Dimensions } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
 import { PodiumIDN } from "./components/PodiumIDN";
 import { RoomListIDN } from "./components/RoomListIDN";
+import useThemeStore from "../../../store/themeStore";
 
 const initialLayout = {
   width: Dimensions.get("window").width
@@ -11,6 +12,7 @@ const initialLayout = {
 
 const IDNLiveTabs = ({ profile, setProfile }) => {
   const [index, setIndex] = useState(1);
+  const { header } = useThemeStore();
 
   const renderScene = SceneMap({
     room: () => <RoomListIDN profile={profile} setProfile={setProfile} />,
@@ -23,7 +25,7 @@ const IDNLiveTabs = ({ profile, setProfile }) => {
   ];
 
   const renderTabBar = ({ navigationState }) => (
-    <Box bg="primary" borderRadius="md" flexDirection="row">
+    <Box bg={header} borderRadius="md" flexDirection="row">
       {navigationState.routes.map((route, i) => {
         const color =
           index === i
