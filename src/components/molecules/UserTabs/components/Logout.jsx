@@ -31,7 +31,7 @@ const Logout = () => {
   };
 
   return (
-    <View mb="10">
+    <View mt="2" mb="8">
       <Button
         bg="gray.500"
         borderRadius="lg"

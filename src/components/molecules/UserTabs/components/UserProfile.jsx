@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Divider, HStack, ScrollView, Text, VStack } from "native-base";
 import {
   AndroidIcon,
@@ -12,9 +12,15 @@ import {
 import useUser from "../../../../utils/hooks/useUser";
 import CardGradient from "../../../atoms/CardGradient";
 import Theme from "../../../templates/Theme";
+import ChangeLog from "./ChangeLog";
 
 export const UserProfile = () => {
   const { profile, user, userProfile } = useUser();
+  const [modal, setModal] = useState(false);
+
+  const toggleModal = () => {
+    setModal(!modal);
+  };
 
   return (
     <CardGradient halfCard>
@@ -64,18 +70,13 @@ export const UserProfile = () => {
             </Text>
           </HStack>
           <Theme isButton />
-          <HStack mt="1" space={2} alignItems="center">
+          <HStack space={2} alignItems="center">
             <AndroidIcon />
             <Text fontSize={14} fontWeight="semibold">
               APK Version 1.2
             </Text>
             <Text>|</Text>
-            <HStack space={1} alignItems="center">
-              <History />
-              <Text fontWeight="bold" color="gray.200">
-                Check Change Log
-              </Text>
-            </HStack>
+            <ChangeLog modal={modal} toggleModal={toggleModal} />
           </HStack>
         </VStack>
       </ScrollView>

@@ -41,6 +41,7 @@ import Moon from "./Moon";
 import ChevronBack from "./ChevronBack";
 import AndroidIcon from "./AndroidIcon";
 import Cloud from "./Cloud";
+import DownloadIcon from "./DownloadIcon";
 
 export {
   LogoIcon,
@@ -86,4 +87,5 @@ export {
   ChevronBack,
   AndroidIcon,
   Cloud,
+  DownloadIcon,
 };
