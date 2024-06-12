@@ -16,6 +16,7 @@ import {
   PremiumLive,
   About,
   Profile,
+  IDNLives,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -137,6 +138,11 @@ const Navigation = () => {
       <Stack.Screen
         name="RoomLives"
         component={RoomLives}
+        options={showHeader}
+      />
+      <Stack.Screen
+        name="IDNLives"
+        component={IDNLives}
         options={showHeader}
       />
       <Stack.Screen

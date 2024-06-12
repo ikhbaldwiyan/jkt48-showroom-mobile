@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { ROOMS } from "../../../services";
 import Views from "../../atoms/Views";
+import { RightArrow } from "../../../assets/icon";
 
 const IDNLIve = ({ refreshing }) => {
   const [rooms, setRooms] = useState([]);
@@ -24,9 +25,19 @@ const IDNLIve = ({ refreshing }) => {
   return (
     rooms.length > 0 && (
       <Box mb="4">
-        <Text color="white" fontSize="2xl" fontWeight="semibold">
-          IDN Live
-        </Text>
+        <HStack alignItems="center" justifyContent="space-between">
+          <Text color="white" fontSize="2xl" fontWeight="semibold">
+            IDN Live
+          </Text>
+          <TouchableOpacity onPress={() => navigate("IDNLives")}>
+            <HStack space={2} alignItems="center">
+              <Text color="white" fontSize="md">
+                All Live
+              </Text>
+              <RightArrow />
+            </HStack>
+          </TouchableOpacity>
+        </HStack>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {rooms?.map((item, idx) => (
             <Box key={idx} mt={4} mr="3">

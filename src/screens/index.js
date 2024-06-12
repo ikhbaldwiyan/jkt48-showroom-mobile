@@ -10,6 +10,7 @@ import PremiumLive from "./PremiumLive";
 import About from "./About";
 import { ScheduleList, ScheduleDetail } from "./Schedule";
 import Profile from "./Profile";
+import IDNLives from "./IDNLives";
 
 export {
   SplashScreen,
@@ -25,4 +26,5 @@ export {
   PremiumLive,
   About,
   Profile,
+  IDNLives,
 };
