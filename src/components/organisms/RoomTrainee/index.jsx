@@ -4,11 +4,13 @@ import { useNavigation } from "@react-navigation/native";
 import { cleanImage, formatName } from "../../../utils/helpers";
 import { ROOMS } from "../../../services";
 import { LiveIcon } from "../../../assets/icon";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, useWindowDimensions } from "react-native";
 
 const RoomTrainee = ({ refreshing, searchQuery }) => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
+  const { width } = useWindowDimensions();
+  const columnCount = width > 600 ? 3 : 2; // Adjust column count based on screen width
 
   useEffect(() => {
     async function getRoomList() {
@@ -18,9 +20,10 @@ const RoomTrainee = ({ refreshing, searchQuery }) => {
     getRoomList();
   }, [refreshing]);
 
-  const filteredRooms = rooms.filter(room =>
-    room.name?.toLowerCase().includes(searchQuery?.toLowerCase()) || 
-    room.main_name?.toLowerCase().includes(searchQuery?.toLowerCase())
+  const filteredRooms = rooms.filter(
+    (room) =>
+      room.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+      room.main_name?.toLowerCase().includes(searchQuery?.toLowerCase())
   );
 
   const renderRoomItem = (room, idx) => (
@@ -42,8 +45,8 @@ const RoomTrainee = ({ refreshing, searchQuery }) => {
             source={{ uri: cleanImage(room.image_square) }}
             alt={room?.main_name ?? room?.name}
             size="md"
-            width="160"
-            height="137"
+            width={width / columnCount - 20} // Adjust width based on column count and screen width
+            height={(width / columnCount - 16) * 0.85} // Maintain aspect ratio
           />
           {room?.is_onlive && (
             <Box
@@ -78,7 +81,6 @@ const RoomTrainee = ({ refreshing, searchQuery }) => {
 
   const renderRoomList = () => {
     const columns = [];
-    const columnCount = 2; // Limiting to 2 columns
     const itemsPerColumn = Math.ceil(filteredRooms.length / columnCount);
     for (let i = 0; i < columnCount; i++) {
       const columnRooms = filteredRooms.slice(
