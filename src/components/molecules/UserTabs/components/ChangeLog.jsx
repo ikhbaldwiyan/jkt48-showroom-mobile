@@ -4,7 +4,7 @@ import { DownloadIcon, History } from "../../../../assets/icon";
 import { getCurrentVersion } from "../../../../services/versions";
 import DeviceInfo from "react-native-device-info";
 
-const ChangeLog = ({ modal, toggleModal }) => {
+const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
   const [latestVersion, setLatestVersion] = useState("");
   const [isNewVersion, setIsNewVersion] = useState(false);
 
@@ -28,14 +28,16 @@ const ChangeLog = ({ modal, toggleModal }) => {
 
   return (
     <>
-      <Button onPress={toggleModal}>
-        <HStack space={1} alignItems="center">
-          <History size={20} />
-          <Text fontWeight="bold" color="gray.200">
-            Check Change Log
-          </Text>
-        </HStack>
-      </Button>
+      {!hideButton && (
+        <Button onPress={toggleModal}>
+          <HStack space={1} alignItems="center">
+            <History size={20} />
+            <Text fontWeight="bold" color="gray.200">
+              Check Change Log
+            </Text>
+          </HStack>
+        </Button>
+      )}
       <Modal isOpen={modal} size="xl" onClose={toggleModal}>
         <Modal.Content maxH="500">
           <Modal.Header bg="primary">

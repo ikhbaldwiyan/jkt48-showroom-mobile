@@ -13,10 +13,13 @@ import { useRefresh } from "../../utils/hooks/useRefresh";
 import DeviceInfo from "react-native-device-info";
 import { getCurrentVersion } from "../../services/versions";
 import { firebase } from "@react-native-firebase/messaging";
+import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
+import useChangeLogStore from "../../store/changeLogStore";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
   const [latestVersion, setLatestVersion] = useState("");
+  const { showChangeLog, setCloseModal } = useChangeLogStore();
 
   const getVersionAndroid = async () => {
     try {
@@ -60,6 +63,11 @@ const Home = ({ navigation }) => {
         <RecentLives refreshing={refreshing} />
         <Schedule refreshing={refreshing} navigation={navigation} isWeek />
       </Box>
+      <ChangeLog
+        modal={showChangeLog}
+        toggleModal={() => setCloseModal()}
+        hideButton={true}
+      />
     </Layout>
   );
 };
