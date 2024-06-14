@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storeStorage } from "../utils/storage";
 
 const useAuthStore = create(
   persist(
@@ -19,16 +20,18 @@ const useAuthStore = create(
         set({ profile });
       },
       setSession: (session) => {
-        set({ session });
+        storeStorage("isLogin", true)
+        set({ session, isLogin: true });
       },
       logout: () => {
+        storeStorage("isLogin", false)
         set({
           profile: "",
           userProfile: "",
           user: "",
-          session: "",
-        })
-      }
+          session: ""
+        });
+      },
     }),
     {
       name: "user",

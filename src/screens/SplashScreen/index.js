@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { Box, Text } from "native-base";
 import LogoIcon from "../../assets/icon/LogoIcon";
-import useUser from "../../utils/hooks/useUser";
+import { getStorage } from "../../utils/storage";
 
 const SplashScreen = ({ navigation }) => {
-  const { session } = useUser();
-
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace(session ? "Main" : "Login");
-    }, 3000);
+    getStorage("isLogin").then((isLogin) => {
+      setTimeout(() => {
+        navigation.replace(isLogin ? "Main" : "Login");
+      }, 3000);
+    });
   }, []);
 
   return (
