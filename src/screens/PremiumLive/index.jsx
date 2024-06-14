@@ -153,6 +153,12 @@ const PremiumLive = () => {
         description: `Watch Premium Live ${setlist}`,
         liveId: liveIdUser
       });
+      activityLog({
+        logName: "Watch",
+        userId: userProfile?._id,
+        description: `Watch Live JKT48 Room`,
+        liveId: profile?.live_id
+      });
     }
     LogBox.ignoreAllLogs(true);
   }, [profile, url, userProfile]);

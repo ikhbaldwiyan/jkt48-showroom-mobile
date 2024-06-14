@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Text } from "native-base";
-import { TimesIcon } from "../../../assets/icon";
+import { TimesFill } from "../../../assets/icon";
 import { getTimes } from "../../../utils/helpers";
 
 const Times = ({start_time}) => {
@@ -14,7 +14,7 @@ const Times = ({start_time}) => {
       bg="primary" 
       borderRadius="lg"
     >
-      <TimesIcon />
+      <TimesFill size={20} />
       <Text ml="1">
         {getTimes(start_time)}
       </Text>
