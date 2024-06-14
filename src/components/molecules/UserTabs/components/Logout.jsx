@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { Text, Button, HStack, View } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { LoginIcon } from "../../../../assets/icon";
-import { removeStorage } from "../../../../utils/storage";
 import trackAnalytics from "../../../../utils/trackAnalytics";
 import { ModalConfirmation } from "../../../atoms/Modal";
 import useUser from "../../../../utils/hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
+import useAuthStore from "../../../../store/authStore";
 
 const Logout = () => {
   const { profile } = useUser();
+  const { logout } = useAuthStore();
   const [modalLogout, setModalLogout] = useState(false);
   const navigation = useNavigation();
 
@@ -19,10 +20,7 @@ const Logout = () => {
 
   const handleLogout = () => {
     handleModal();
-    removeStorage("user");
-    removeStorage("session");
-    removeStorage("profile");
-    removeStorage("userProfile");
+    logout();
     navigation.replace("Login");
 
     trackAnalytics("logout", {
@@ -38,7 +36,7 @@ const Logout = () => {
         variant="solid"
         onPress={handleModal}
       >
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleModal}>
           <HStack space={2}>
             <LoginIcon size={24} />
             <Text fontSize={16} fontWeight="semibold">

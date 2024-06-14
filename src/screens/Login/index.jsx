@@ -16,10 +16,11 @@ import Logo from "../../components/atoms/Logo";
 import { AUTH } from "../../services";
 import { loginApi } from "../../services/auth";
 import { activityLog } from "../../utils/activityLog";
-import { storeStorage } from "../../utils/storage";
 import analytics from "@react-native-firebase/analytics";
+import useAuthStore from "../../store/authStore";
 
 const Login = ({ navigation }) => {
+  const { setUser, setSession, setProfile, setUserProfile } = useAuthStore();
   const [formData, setFormData] = useState({
     account_id: "",
     password: "",
@@ -61,9 +62,9 @@ const Login = ({ navigation }) => {
 
       if (response.data.user.ok) {
         const data = response.data;
-        storeStorage("user", data.user);
-        storeStorage("session", data.session);
-        storeStorage("profile", data.profile);
+        setUser(data.user);
+        setSession(data.session);
+        setProfile(data.profile);
         getSessionUser(data);
         navigation.replace("Main");
 
@@ -100,7 +101,7 @@ const Login = ({ navigation }) => {
   const getSessionUser = async (data) => {
     await AUTH.detailUserApi(data.user.account_id)
       .then((res) => {
-        storeStorage("userProfile", res.data);
+        setUserProfile(res.data);
         activityLog({
           userId: res?.data?._id,
           logName: "Login",
@@ -118,7 +119,7 @@ const Login = ({ navigation }) => {
   };
 
   const handleRegister = () => {
-    navigation.navigate("Register")
+    navigation.navigate("Register");
   };
 
   return (

@@ -3,7 +3,6 @@ import { Divider, HStack, ScrollView, Text, VStack } from "native-base";
 import {
   AndroidIcon,
   Cloud,
-  History,
   IDCard,
   LiveIcon,
   Star,
@@ -52,7 +51,11 @@ export const UserProfile = () => {
             <Text fontSize="md" fontWeight="semibold">
               Total Watch Live:
             </Text>
-            <Text fontSize="md">{userProfile?.totalWatchLive}x</Text>
+            <Text fontSize="md">
+              {userProfile?.totalWatchLive
+                ? userProfile?.totalWatchLive + "x"
+                : "0x"}
+            </Text>
           </HStack>
         </VStack>
         <Divider

@@ -13,10 +13,11 @@ import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
 import Logo from "../../components/atoms/Logo";
 import { loginApi, regsiterApi } from "../../services/auth";
 import { activityLog } from "../../utils/activityLog";
-import { storeStorage } from "../../utils/storage";
 import analytics from "@react-native-firebase/analytics";
+import useAuthStore from "../../store/authStore";
 
 const Register = ({ navigation }) => {
+  const { setUser, setSession, setProfile } = useAuthStore();
   const [formData, setFormData] = useState({
     account_id: "",
     name: "",
@@ -43,9 +44,9 @@ const Register = ({ navigation }) => {
     });
 
     const data = response.data;
-    storeStorage("user", data.user);
-    storeStorage("session", data.session);
-    storeStorage("profile", data.profile);
+    setUser(data.user);
+    setSession(data.session);
+    setProfile(data.profile);
 
     activityLog({
       description: "Register from android",

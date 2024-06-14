@@ -1,9 +1,8 @@
+import useAuthStore from "../store/authStore";
 import { postActivityLog, postRegisterUser } from "../services/user";
-import { getStorage, storeStorage } from "./storage";
 
 export const activityLog = async ({ userId, logName, description, liveId }) => {
-  const profile = await getStorage("profile");
-  const user = await getStorage("user");
+  const { profile, user, setUserProfile } = useAuthStore.getState();
 
   if (!userId) {
     postRegisterUser({
@@ -17,7 +16,7 @@ export const activityLog = async ({ userId, logName, description, liveId }) => {
           logName: "Auto Register",
           description: `Register profile from log ${logName.toLowerCase()}`
         });
-        storeStorage("userProfile", JSON.stringify(res.data.user));
+        setUserProfile(JSON.stringify(res.data.user));
 
         return postActivityLog({
           user_id: res.data.user._id,
