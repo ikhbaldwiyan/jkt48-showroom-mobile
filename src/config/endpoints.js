@@ -24,6 +24,7 @@ export default {
   IDN_LIVE: {
     ROOM_LIVES: "/idn_lives",
     PODIUM: "/idn-live-history/",
+    DETAIL: "/watch"
   },
   STREAM: {
     URL: "/lives/stream/",

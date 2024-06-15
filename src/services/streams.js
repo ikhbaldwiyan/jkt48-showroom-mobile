@@ -1,4 +1,4 @@
-import { ENDPOINTS, apiShowroom, apiUser, apiAuth } from "../config";
+import { ENDPOINTS, apiShowroom, apiUser, apiAuth, apiHistory } from "../config";
 
 export const getStreamUrl = (roomId, cookies) => {
   return apiShowroom.get(ENDPOINTS.STREAM.URL + roomId + "/" + cookies );
@@ -22,6 +22,10 @@ export const getLivePodium = (roomId) => {
 
 export const getIDNLivePodium = (roomId) => {
   return apiUser.get(ENDPOINTS.IDN_LIVE.PODIUM + roomId);
+};
+
+export const getIDNLiveDetail = (username) => {
+  return apiHistory.get(`${ENDPOINTS.IDN_LIVE.DETAIL}/${username}/idn`);
 };
 
 export const sendCommentStream = (params) => {

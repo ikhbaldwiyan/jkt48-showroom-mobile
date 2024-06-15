@@ -10,12 +10,12 @@ const initialLayout = {
   width: Dimensions.get("window").width
 };
 
-const IDNLiveTabs = ({ profile, setProfile }) => {
+const IDNLiveTabs = () => {
   const [index, setIndex] = useState(1);
   const { header } = useThemeStore();
 
   const renderScene = SceneMap({
-    room: () => <RoomListIDN profile={profile} setProfile={setProfile} />,
+    room: RoomListIDN,
     podium: PodiumIDN
   });
 

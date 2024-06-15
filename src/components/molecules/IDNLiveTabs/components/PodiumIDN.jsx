@@ -1,20 +1,19 @@
-import { useRoute } from "@react-navigation/native";
 import { Center, HStack, Image, ScrollView, Text, VStack } from "native-base";
 import { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
+import useIDNLiveStore from "../../../../store/idnLiveStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 
 export const PodiumIDN = () => {
-  const route = useRoute();
-  const { params } = route;
   const [podium, setPodium] = useState([]);
   const [views, setViews] = useState(0);
   const { refreshing, onRefresh } = useRefresh();
+  const { profile } = useIDNLiveStore();
 
   async function getIDNPodiumList() {
-    const response = await STREAM.getIDNLivePodium(params?.item?.slug);
+    const response = await STREAM.getIDNLivePodium(profile?.slug);
     setPodium(response?.data?.activityLog?.watch?.reverse());
     setViews(response?.data?.liveData?.users);
   }
@@ -25,7 +24,7 @@ export const PodiumIDN = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [params.item]);
+  }, [profile]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -38,7 +37,7 @@ export const PodiumIDN = () => {
     }, 2 * 60 * 1000); // 2 minutes in milliseconds
 
     return () => clearInterval(interval);
-  }, [params?.item?.live_id, refreshing]);
+  }, [profile, refreshing]);
 
   return (
     <CardGradient>

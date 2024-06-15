@@ -7,6 +7,7 @@ import IDNLiveTabs from "../../components/molecules/IDNLiveTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
 import { Dimensions, LogBox, StatusBar } from "react-native";
+import useIDNLiveStore from "../../store/idnLiveStore";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -14,9 +15,26 @@ const IDNStream = () => {
   const toast = useToast();
   const navigation = useNavigation();
   const { userProfile } = useUser();
-  
-  const [profile, setProfile] = useState();
+  const { profile, setProfile, getLiveProfile, clearLiveStream } =
+    useIDNLiveStore();
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  async function fetchLiveInfo() {
+    await getLiveProfile(profile?.user?.username);
+  }
+
+  useEffect(() => {
+    getLiveProfile(profile?.user?.username);
+  }, [profile?.slug]);
+
+  useEffect(() => {
+    setProfile(params.item);
+    fetchLiveInfo();
+
+    return () => {
+      clearLiveStream();
+    };
+  }, []);
 
   useEffect(() => {
     setProfile(params.item);
@@ -72,8 +90,8 @@ const IDNStream = () => {
     StatusBar.setHidden(isFullScreen);
 
     return () => {
-      StatusBar.setHidden(false)
-    }
+      StatusBar.setHidden(false);
+    };
   }, [isFullScreen]);
 
   return (

@@ -12,10 +12,12 @@ import {
 import { useEffect, useState } from "react";
 import { RefreshControl, ScrollView, TouchableOpacity } from "react-native";
 import { ROOMS } from "../../../../services";
+import useIDNLiveStore from "../../../../store/idnLiveStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 
-export const RoomListIDN = ({ profile, setProfile }) => {
+export const RoomListIDN = () => {
+  const { profile, setProfile } = useIDNLiveStore();
   const [roomLives, setRoomLives] = useState([]);
   const { refreshing, onRefresh } = useRefresh();
   const { mode } = useTheme();
