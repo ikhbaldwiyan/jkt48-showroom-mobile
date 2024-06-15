@@ -6,13 +6,13 @@ import {
   Image,
   PlayIcon,
   Text,
-  useTheme,
   View
 } from "native-base";
 import { useEffect, useState } from "react";
 import { RefreshControl, ScrollView, TouchableOpacity } from "react-native";
 import { ROOMS } from "../../../../services";
 import useIDNLiveStore from "../../../../store/idnLiveStore";
+import useThemeStore from "../../../../store/themeStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 
@@ -20,7 +20,7 @@ export const RoomListIDN = () => {
   const { profile, setProfile } = useIDNLiveStore();
   const [roomLives, setRoomLives] = useState([]);
   const { refreshing, onRefresh } = useRefresh();
-  const { mode } = useTheme();
+  const { mode } = useThemeStore();
 
   useEffect(() => {
     async function getIDNLIve() {
@@ -29,6 +29,14 @@ export const RoomListIDN = () => {
     }
     getIDNLIve();
   }, [refreshing]);
+
+  const getTheme = (isActive) => {
+    if (mode === "dark") {
+      return isActive ? "red" : "primary";
+    } else {
+      return isActive ? "red" : "black";
+    }
+  };
 
   return (
     <CardGradient>
@@ -63,13 +71,7 @@ export const RoomListIDN = () => {
               <Button
                 mt="8"
                 colorScheme="black"
-                bg={
-                  item.user.username === profile?.user?.username
-                    ? "red"
-                    : mode === "light"
-                    ? "secondary"
-                    : "primary"
-                }
+                bg={getTheme(item.user.username === profile?.user?.username)}
               >
                 <TouchableOpacity
                   activeOpacity={0.6}
