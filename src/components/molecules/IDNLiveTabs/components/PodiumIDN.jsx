@@ -37,7 +37,7 @@ export const PodiumIDN = () => {
     }, 2 * 60 * 1000); // 2 minutes in milliseconds
 
     return () => clearInterval(interval);
-  }, [profile, refreshing]);
+  }, [refreshing]);
 
   return (
     <CardGradient>
