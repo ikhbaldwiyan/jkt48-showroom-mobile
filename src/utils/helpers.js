@@ -93,3 +93,15 @@ export const parseDescription = (description) => {
 export const getSquareImage = (image) => {
   return image?.replace("_m.jpeg", "_square_m.jpeg");
 };
+
+export const getIDNLiveTime = (value) => {
+  function format_two_digits(n) {
+    return n < 10 ? "0" + n : n;
+  }
+
+  var dt = new Date(value);
+
+  var time =
+    format_two_digits(dt.getHours()) + ":" + format_two_digits(dt.getMinutes());
+  return time;
+};

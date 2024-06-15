@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { FlatList, Linking, TouchableOpacity } from "react-native";
 import { ROOMS } from "../../services";
 import Layout from "../../components/templates/Layout";
-import { formatViews } from "../../utils/helpers";
+import { formatViews, getIDNLiveTime } from "../../utils/helpers";
 import { LiveIcon, UserIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 
@@ -78,10 +78,16 @@ const IDNLives = ({ navigation }) => {
             <Image
               width="140"
               height="42"
+              alt="IDN Logo"
               source={{
                 uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/IDN_Live.svg/2560px-IDN_Live.svg.png"
               }}
             />
+          </Box>
+          <Box mt="2" left="2" position="absolute" shadow="3">
+            <Text fontWeight="semibold" fontSize="md">
+              {getIDNLiveTime(item.live_at)}
+            </Text>
           </Box>
         </Box>
         <TouchableOpacity
