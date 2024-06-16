@@ -184,6 +184,13 @@ const LiveStream = () => {
   useEffect(() => {
     StatusBar.setHidden(isFullScreen);
 
+    if (isFullScreen) {
+      trackAnalytics("open_full_screen_showroom", {
+        username: userProfile?.account_id ?? "Guest",
+        room: profile?.user?.name
+      });
+    }
+
     return () => {
       StatusBar.setHidden(false);
     };

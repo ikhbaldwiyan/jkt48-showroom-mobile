@@ -11,6 +11,7 @@ import useIDNLiveStore from "../../store/idnLiveStore";
 import { RefreshIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import Loading from "../../components/atoms/Loading";
+import trackAnalytics from "../../utils/trackAnalytics";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -30,6 +31,16 @@ const IDNStream = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { refreshing, onRefresh } = useRefresh();
 
+  useEffect(() => {
+    setProfile(params.item);
+    getStreamUrl(params?.item.user?.username);
+
+    return () => {
+      clearLiveStream();
+      clearUrl();
+    };
+  }, []);
+
   async function fetchLiveInfo() {
     await getLiveProfile(profile?.user?.username);
   }
@@ -46,22 +57,7 @@ const IDNStream = () => {
   };
 
   useEffect(() => {
-    getLiveProfile(profile?.user?.username);
-  }, [profile?.slug]);
-
-  useEffect(() => {
-    setProfile(params.item);
-    fetchLiveInfo();
-    getStreamUrl(params?.item.user?.username);
-
-    return () => {
-      clearLiveStream();
-      clearUrl();
-    };
-  }, []);
-
-  useEffect(() => {
-    getStreamUrl(profile?.user?.username);
+    profile && getStreamUrl(profile?.user?.username);
   }, [profile, refreshing]);
 
   useEffect(() => {
@@ -134,10 +130,29 @@ const IDNStream = () => {
   useEffect(() => {
     StatusBar.setHidden(isFullScreen);
 
+    if (isFullScreen) {
+      trackAnalytics("open_full_screen_idn", {
+        username: userProfile?.account_id ?? "Guest",
+        room: profile?.user?.name
+      });
+    }
+
     return () => {
       StatusBar.setHidden(false);
     };
   }, [isFullScreen]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      fetchLiveInfo();
+    }, 1000);
+
+    const interval = setInterval(() => {
+      fetchLiveInfo();
+    }, 2 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [refreshing]);
 
   return (
     <Box flex="1" bg="secondary">

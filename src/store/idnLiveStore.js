@@ -12,7 +12,7 @@ const useIDNLiveStore = create((set) => ({
         profile: response.data
       });
     } catch (error) {
-      console.log(error);
+      console.log("get profile idn error", error);
     }
   },
   getStreamUrl: async (username) => {
