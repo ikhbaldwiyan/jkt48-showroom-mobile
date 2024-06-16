@@ -53,9 +53,11 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Add New User Profile menu</Text>
               <Text>- Add About project tab menu</Text>
               <Text>- Add Switch Dark Mode background theme</Text>
-              <Text>- Implement Fulll screen Showroom & IDN Live</Text>
+              <Text>- Implement Full screen Showroom & IDN Live</Text>
               <Text>- Revamp UI header Showroom live</Text>
               <Text>- Change status bar color to dark theme</Text>
+              <Text>- Add IDN Live List screen</Text>
+              <Text>- Add Refresh button in IDN Live streaming</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="primary">

@@ -106,7 +106,7 @@ const IDNStream = () => {
   }, [profile, isFullScreen]);
 
   useEffect(() => {
-    if (userProfile) {
+    if (url) {
       activityLog({
         logName: "Watch",
         userId: userProfile?._id,
@@ -115,7 +115,7 @@ const IDNStream = () => {
       });
     }
     LogBox.ignoreAllLogs(true);
-  }, [params.item, profile, userProfile]);
+  }, [params.item, profile, userProfile, url]);
 
   const handleEndLive = () => {
     navigation.navigate("Main");
