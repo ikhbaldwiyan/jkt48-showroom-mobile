@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/templates/Layout";
 import Logo from "../../components/atoms/Logo";
-import { Box, HStack, Image, Text } from "native-base";
+import { Box, Divider, HStack, Image, Text, VStack } from "native-base";
 import { Donate } from "../../assets/icon";
 import { Linking, TouchableOpacity } from "react-native";
 import { activityLog } from "../../utils/activityLog";
 import useUser from "../../utils/hooks/useUser";
 import trackAnalytics from "../../utils/trackAnalytics";
+import { USER } from "../../services";
+import CardGradient from "../../components/atoms/CardGradient";
 
 const About = () => {
   const { userProfile } = useUser();
+  const [donator, setDonator] = useState();
 
   const donateClick = () => {
     Linking.openURL("https://saweria.co/Inzoid");
@@ -37,6 +40,18 @@ const About = () => {
     });
   };
 
+  const getDonator = async () => {
+    try {
+      const response = await USER.getDonatorList();
+      setDonator(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getDonator();
+  }, []);
 
   return (
     <Layout>
@@ -77,7 +92,7 @@ const About = () => {
         <Text my="3">
           Aplikasi JKT48 Showroom saat ini masih dalam tahap{" "}
           <Text fontWeight="semibold">Open Beta Test</Text> dan masih terus di
-          develop sampai saat ini. Jika kalian ingin mendukung perkembangan
+          develop sampai saat ini. Jika kamu ingin mendukung perkembangan
           project ini untuk biaya server dan lainnya kalian bisa donasi di link
           saweria berikut{" "}
         </Text>
@@ -91,6 +106,39 @@ const About = () => {
             </HStack>
           </Box>
         </TouchableOpacity>
+        <Divider mt="4" mb="2" />
+        <Text mb="2" fontSize="2xl" fontWeight="bold">
+          Donator
+        </Text>
+        <Text mb="3">
+          Jika kamu sudah mendukung project ini akan mendapatkan role Donator di
+          server discord dan foto profile dengan username kalian akan di
+          tampilkan di bawah ini, Terima kasih.
+        </Text>
+        <CardGradient color="light" isRounded>
+          <HStack
+            space="3"
+            flexWrap="wrap"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {donator?.map((item, idx) => (
+              <VStack key={idx} my="4" alignItems="center" width="20%">
+                <Image
+                  borderRadius="6"
+                  alt={item.user.username}
+                  style={{ width: 50, height: 50 }}
+                  source={{
+                    uri: `https://cdn.discordapp.com/avatars/${item.user.id}/${item.user.avatar}.png`
+                  }}
+                />
+                <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
+                  {item.user.global_name ?? item.user.username}
+                </Text>
+              </VStack>
+            ))}
+          </HStack>
+        </CardGradient>
       </Box>
     </Layout>
   );

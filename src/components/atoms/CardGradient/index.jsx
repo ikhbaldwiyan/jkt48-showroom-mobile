@@ -3,7 +3,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { StyleSheet } from "react-native";
 import useThemeStore from "../../../store/themeStore";
 
-const CardGradient = ({ children, color, halfCard }) => {
+const CardGradient = ({ children, color, halfCard, isRounded = false }) => {
   const { theme } = useThemeStore();
 
   const light = ["#24A2B7", "#3B82F6"];
@@ -21,6 +21,7 @@ const CardGradient = ({ children, color, halfCard }) => {
     linearGradient: {
       flex: halfCard ? 0 : 1,
       padding: 12,
+      borderRadius: isRounded ? 6 : 0,
       borderBottomLeftRadius: 6,
       borderBottomRightRadius: 6,
       shadowColor: "#000",

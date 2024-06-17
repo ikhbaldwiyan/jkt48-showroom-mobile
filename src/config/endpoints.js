@@ -10,6 +10,7 @@ export default {
     USER_PROFILE: "/profile/user",
     ACTIVIY_LOG: "/activity/", //required user id
     CREATE_USER: "/users/",
+    DONATOR: "/discord/role?type=donator"
   },
   ROOM: {
     LIST: "/rooms",
