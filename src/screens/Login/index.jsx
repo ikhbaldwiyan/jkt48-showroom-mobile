@@ -177,7 +177,7 @@ const Login = ({ navigation }) => {
               }
               isInvalid={formData?.error_message}
             />
-            <Box position="absolute" right="1" top="60%">
+            <Box position="absolute" right="1" top="53%">
               <Button onPress={() => setShowPassword(!showPassword)}>
                 {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
               </Button>

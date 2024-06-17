@@ -58,6 +58,7 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Change status bar color to dark theme</Text>
               <Text>- Add IDN Live List screen</Text>
               <Text>- Add Refresh button in IDN Live streaming</Text>
+              <Text>- Fix duplicate podium name</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="primary">

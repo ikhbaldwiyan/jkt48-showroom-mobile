@@ -170,7 +170,7 @@ const Register = ({ navigation }) => {
               }
               isInvalid={error === "Incorrect authentication password"}
             />
-            <Box position="absolute" right="1" top="60%">
+            <Box position="absolute" right="1" top="53%">
               <Button onPress={() => setShowPassword(!showPassword)}>
                 {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
               </Button>
@@ -195,7 +195,7 @@ const Register = ({ navigation }) => {
               }
               isInvalid={error === "Incorrect authentication password"}
             />
-            <Box position="absolute" right="1" top="60%">
+            <Box position="absolute" right="1" top="53%">
               <Button
                 onPress={() =>
                   setShowPasswordConfirmation(!showPasswordConfirmation)
