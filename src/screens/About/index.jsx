@@ -56,11 +56,14 @@ const About = () => {
   return (
     <Layout>
       <Box flex="1" mb="6">
-        <Logo />
-        <Text mt="4" mb="2" fontSize="2xl" fontWeight="bold">
-          About
-        </Text>
+        <Box display="flex" alignItems="center">
+          <Logo />
+          <Text mt="3" fontSize="2xl" fontWeight="bold">
+            About
+          </Text>
+        </Box>
         <Image
+          mt="1"
           size="md"
           alt="banner"
           width="100%"
@@ -77,18 +80,20 @@ const About = () => {
           IDN Live semua member JKT48, jangan lupa join komunitas discord kita
           untuk info update apk.
         </Text>
-        <TouchableOpacity activeOpacity={0.6} onPress={discordClick}>
-          <Image
-            mt="3"
-            alt="banner"
-            width="200"
-            height="20"
-            source={{
-              uri: "https://discordapp.com/api/guilds/1076511743909564506/widget.png?style=banner3"
-            }}
-            borderRadius="md"
-          />
-        </TouchableOpacity>
+        <Box display="flex" alignItems="center" justifyContent="center">
+          <TouchableOpacity activeOpacity={0.6} onPress={discordClick}>
+            <Image
+              mt="3"
+              alt="banner"
+              width="200"
+              height="20"
+              source={{
+                uri: "https://discordapp.com/api/guilds/1076511743909564506/widget.png?style=banner3"
+              }}
+              borderRadius="md"
+            />
+          </TouchableOpacity>
+        </Box>
         <Text my="3">
           Aplikasi JKT48 Showroom saat ini masih dalam tahap{" "}
           <Text fontWeight="semibold">Open Beta Test</Text> dan masih terus di
