@@ -8,12 +8,11 @@ import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 
 export const Podium = () => {
-  const route = useRoute();
-  const { params } = route;
   const { profile } = useLiveStreamStore();
   const [podium, setPodium] = useState([]);
   const [views, setViews] = useState(0);
   const { refreshing, onRefresh } = useRefresh();
+  const displayedNames = new Set();
 
   async function getPodiumList() {
     const response = await STREAM.getLivePodium(profile?.live_id);
@@ -58,18 +57,24 @@ export const Podium = () => {
           alignItems="center"
           justifyContent="center"
         >
-          {podium?.map((item, idx) => (
-            <VStack my="4" key={idx} alignItems="center" width="20%">
-              <Image
-                alt={item.user.name}
-                style={{ width: 50, height: 50 }}
-                source={{ uri: item?.user?.avatar }}
-              />
-              <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
-                {item.user.name}
-              </Text>
-            </VStack>
-          ))}
+          {podium?.map((item, idx) => {
+            if (displayedNames.has(item.user.name)) {
+              return null;
+            }
+            displayedNames.add(item.user.name);
+            return (
+              <VStack my="4" key={idx} alignItems="center" width="20%">
+                <Image
+                  alt={item.user.name}
+                  style={{ width: 50, height: 50 }}
+                  source={{ uri: item?.user?.avatar }}
+                />
+                <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
+                  {item.user.name}
+                </Text>
+              </VStack>
+            );
+          })}
         </HStack>
       </ScrollView>
     </CardGradient>
