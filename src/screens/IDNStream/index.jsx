@@ -154,16 +154,18 @@ const IDNStream = () => {
     return () => clearInterval(interval);
   }, [refreshing]);
 
+  const customHeight = profile?.user?.name === "JKT48" ? 200 : 480;
+
   return (
     <Box flex="1" bg="secondary">
-      <Box height={isFullScreen ? Dimensions.get("window").height : 480}>
+      <Box height={isFullScreen ? Dimensions.get("window").height : customHeight}>
         {url ? (
           <VideoPlayer
             source={{ uri: url }}
             style={{
               position: "absolute",
               width: "100%",
-              height: isFullScreen ? Dimensions.get("window").height : 480
+              height: isFullScreen ? Dimensions.get("window").height : customHeight
             }}
             disableSeekbar
             disableBack
@@ -171,6 +173,7 @@ const IDNStream = () => {
             onEnterFullscreen={() => setIsFullScreen(true)}
             onExitFullscreen={() => setIsFullScreen(false)}
             onEnd={() => handleEndLive()}
+            toggleResizeModeOnFullscreen={false}
           />
         ) : (
           <Loading color="white" />

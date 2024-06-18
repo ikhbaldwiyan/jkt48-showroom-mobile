@@ -62,7 +62,9 @@ export const RoomListIDN = () => {
               />
               <View justifyContent="center" alignItems="center">
                 <Text fontSize="16" fontWeight="bold">
-                  {item?.user?.name.replace("JKT48", "")}
+                  {item?.user?.name !== "JKT48"
+                    ? item?.user?.name.replace("JKT48", "")
+                    : item?.user?.name}
                 </Text>
                 <Box bg="red" mt="2" rounded="lg" p="1" px="4">
                   <Text fontWeight="semibold">Live</Text>
