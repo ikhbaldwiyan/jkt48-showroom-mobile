@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Box, Pressable, Text, useColorModeValue } from "native-base";
 import { Dimensions } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
-import { Comment, Podium, Room, Members } from "../LiveStream";
+import { Comment, Podium, Room, Members, Rank } from "../LiveStream";
 import { Songs } from "../LiveStream/Songs";
 import useThemeStore from "../../../store/themeStore";
 
@@ -19,7 +19,8 @@ const renderPremiumLive = SceneMap({
 const renderScene = SceneMap({
   room: Room,
   comment: Comment,
-  podium: Podium
+  podium: Podium,
+  rank: Rank,
 });
 
 const LiveStreamTabs = ({ isPremiumLive }) => {
@@ -35,9 +36,10 @@ const LiveStreamTabs = ({ isPremiumLive }) => {
       ];
     } else {
       return [
-        { key: "room", title: "Room Live" },
-        { key: "comment", title: "Comment" },
-        { key: "podium", title: "Podium" }
+        { key: "room", title: "Room" },
+        { key: "comment", title: "Chat" },
+        { key: "podium", title: "Podium" },
+        { key: "rank", title: "Rank" },
       ];
     }
   }, [isPremiumLive]);
