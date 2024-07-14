@@ -27,7 +27,7 @@ const MemberList = () => {
             name="id"
             height="36px"
             placeholderTextColor="secondary"
-            placeholder="Search member"
+            placeholder="Cari member"
             value={searchQuery}
             onChangeText={handleSearch}
           />

@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "emulator": "C:/Users/User/AppData/Local/Android/Sdk/emulator/emulator -avd Pixel_2_XL_API_30",
     "build": "cd android && gradlew assembleRelease",
-    "build-aab": "cd android && gradlew bundleRelease"
+    "build-aab": "cd android && gradlew bundleRelease",
+    "build-debug": "cd android && gradlew assembleDebug"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",

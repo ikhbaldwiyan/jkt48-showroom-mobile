@@ -35,7 +35,7 @@ const RecentLives = ({ refreshing }) => {
     recentLives.length > 0 && (
       <View>
         <Text fontSize="2xl" mb="3" fontWeight="semibold">
-          Recent Lives
+          Live Terakhir
         </Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {recentLives?.map((log, idx) => {
