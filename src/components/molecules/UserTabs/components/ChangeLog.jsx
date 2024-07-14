@@ -29,14 +29,14 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
   return (
     <>
       {!hideButton && (
-        <Button onPress={toggleModal}>
-          <HStack space={1} alignItems="center">
-            <History size={20} />
-            <Text fontWeight="bold" color="gray.200">
+        <Text mt="2" onPress={toggleModal}>
+          <HStack space={1} just alignItems="center">
+            <History size={24} />
+            <Text ml="1" fontWeight="bold" color="white">
               Check Change Log
             </Text>
           </HStack>
-        </Button>
+        </Text>
       )}
       <Modal isOpen={modal} size="xl" onClose={toggleModal}>
         <Modal.Content maxH="500">

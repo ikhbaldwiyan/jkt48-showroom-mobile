@@ -3,19 +3,23 @@ import { Dimensions } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
 import { Box, Pressable, Text, useColorModeValue } from "native-base";
 import useThemeStore from "../../../store/themeStore";
-import { UserProfile } from "./components";
+import { UserProfile, Settings } from "./components";
 
 const initialLayout = {
   width: Dimensions.get("window").width
 };
 
 const renderScene = SceneMap({
-  profile: UserProfile
+  profile: UserProfile,
+  settings: Settings
 });
 
 const UserTabs = () => {
   const [index, setIndex] = useState(0);
-  const routes = [{ key: "profile", title: "Profile" }];
+  const routes = [
+    { key: "profile", title: "Profile" },
+    { key: "settings", title: "Settings" }
+  ];
   const { header } = useThemeStore();
 
   const renderTabBar = ({ navigationState }) => (
