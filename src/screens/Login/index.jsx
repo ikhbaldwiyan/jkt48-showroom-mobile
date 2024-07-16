@@ -93,6 +93,24 @@ const Login = ({ navigation }) => {
       }
     } catch (error) {
       console.log(error);
+      toast.show({
+        render: () => {
+          return (
+            <Box
+              m="3"
+              py="1"
+              px="2"
+              mt="10"
+              mb={5}
+              bg="red"
+              rounded="sm"
+            >
+              <Text>Login Gagal, Silahkan coba lagi nanti</Text>
+            </Box>
+          );
+        },
+        placement: "top-right"
+      });
     } finally {
       setLoading(false);
     }
