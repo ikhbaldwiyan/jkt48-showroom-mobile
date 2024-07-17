@@ -44,21 +44,22 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
             <HStack space={2} alignItems="center">
               <History size={24} />
               <Text fontWeight="bold" fontSize="lg">
-                Change Log APK Version 1.2
+                Change Log APK Version 1.2.1
               </Text>
             </HStack>
           </Modal.Header>
           <Modal.Body bg="black">
             <VStack space={3}>
-              <Text>- Add New User Profile menu</Text>
-              <Text>- Add About project tab menu</Text>
+              <Text>- Add Profile tab menu</Text>
+              <Text>- Add About Project tab menu</Text>
               <Text>- Add Switch Dark Mode background theme</Text>
               <Text>- Implement Full screen Showroom & IDN Live</Text>
               <Text>- Revamp UI header Showroom live</Text>
               <Text>- Change status bar color to dark theme</Text>
-              <Text>- Add IDN Live List screen</Text>
-              <Text>- Add Refresh button in IDN Live streaming</Text>
-              <Text>- Fix duplicate podium name</Text>
+              <Text>- Add Settings Tab in Profile</Text>
+              <Text>- Update some wording title to indonesia</Text>
+              <Text>- Show Remove Account button on settings</Text>
+              <Text>- Change APK name to JKT48 Showroom Fanmade</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="primary">

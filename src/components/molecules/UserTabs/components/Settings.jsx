@@ -23,7 +23,7 @@ export const Settings = () => {
           <HStack space={2} alignItems="center">
             <AndroidIcon />
             <Text fontSize={14} fontWeight="semibold">
-              APK Version 1.2
+              APK Version 1.2.1
             </Text>
           </HStack>
           <ChangeLog modal={modal} toggleModal={toggleModal} />

@@ -42,6 +42,9 @@ import ChevronBack from "./ChevronBack";
 import AndroidIcon from "./AndroidIcon";
 import Cloud from "./Cloud";
 import DownloadIcon from "./DownloadIcon";
+import GithubIcon from "./GithubIcon";
+import DiscordIcon from "./DiscordIcon";
+import GooglePlayIcon from "./GooglePlayIcon";
 
 export {
   LogoIcon,
@@ -88,4 +91,7 @@ export {
   AndroidIcon,
   Cloud,
   DownloadIcon,
+  GithubIcon, 
+  DiscordIcon,
+  GooglePlayIcon,
 };
