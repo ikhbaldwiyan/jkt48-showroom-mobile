@@ -39,3 +39,7 @@ export const visitRoom = (params) => {
 export const getPremiumLiveToday = () => {
   return apiUser.get(ENDPOINTS.STREAM.PREMIUM_LIVE)
 }
+
+export const getRankShowroom = (roomId) => {
+  return apiShowroom.get(ENDPOINTS.STREAM.RANK + roomId + "/rank" )
+}
