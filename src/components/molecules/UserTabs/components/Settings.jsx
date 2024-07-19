@@ -4,6 +4,7 @@ import { Linking, TouchableOpacity } from "react-native";
 import { AndroidIcon } from "../../../../assets/icon";
 import CardGradient from "../../../atoms/CardGradient";
 import ChangeLog from "./ChangeLog";
+import { APK_VERSION } from "@env";
 
 export const Settings = () => {
   const [modal, setModal] = useState(false);
@@ -23,7 +24,7 @@ export const Settings = () => {
           <HStack space={2} alignItems="center">
             <AndroidIcon />
             <Text fontSize={14} fontWeight="semibold">
-              APK Version 1.2.1
+              APK Version {APK_VERSION}
             </Text>
           </HStack>
           <ChangeLog modal={modal} toggleModal={toggleModal} />
