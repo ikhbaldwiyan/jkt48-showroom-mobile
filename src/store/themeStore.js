@@ -5,9 +5,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const useThemeStore = create(
   persist(
     (set) => ({
-      mode: "light",
-      header: "primary",
-      theme: ["#24A2B7", "#3B82F6"],
+      mode: "dark",
+      header: "#4A5568",
+      theme: ["#4A5568", "#282C34"],
       setDarkMode: () =>
         set({
           mode: "dark",

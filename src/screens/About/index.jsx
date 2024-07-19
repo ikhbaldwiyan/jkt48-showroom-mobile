@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../components/templates/Layout";
 import Logo from "../../components/atoms/Logo";
 import { Box, Divider, HStack, Image, Text, VStack } from "native-base";
-import { Donate } from "../../assets/icon";
+import {
+  DiscordIcon,
+  Donate,
+  GithubIcon,
+  GooglePlayIcon
+} from "../../assets/icon";
 import { Linking, TouchableOpacity } from "react-native";
 import { activityLog } from "../../utils/activityLog";
 import useUser from "../../utils/hooks/useUser";
@@ -69,16 +74,16 @@ const About = () => {
           width="100%"
           height="210"
           source={{
-            uri: "https://res.cloudinary.com/dkkagbzl4/image/upload/v1717693440/urrttkuzx7mqrlayfgho.png"
+            uri: "https://res.cloudinary.com/dkkagbzl4/image/upload/v1721372451/enzbvfxozrq4xn7uiaeo.png"
           }}
           borderRadius="md"
         />
         <Text mt="2">
-          <Text fontWeight="bold">JKT48 SHOWROOM</Text> adalah aplikasi{" "}
-          <Text fontWeight="bold">FANMADE</Text> yang bertujuan untuk memfilter
-          room member JKT48. disini kalian bisa menonton streaming Showroom atau
-          IDN Live semua member JKT48, jangan lupa join komunitas discord kita
-          untuk info update apk.
+          <Text fontWeight="bold">JKT48 Showroom Fanmade</Text> adalah platform
+          Live Streaming yang bertujuan untuk memfilter room member JKT48.
+          disini kalian bisa menonton streaming Showroom atau IDN Live semua
+          member JKT48, jangan lupa join komunitas discord kita untuk info
+          update apk.
         </Text>
         <Box display="flex" alignItems="center" justifyContent="center">
           <TouchableOpacity activeOpacity={0.6} onPress={discordClick}>
@@ -96,10 +101,10 @@ const About = () => {
         </Box>
         <Text my="3">
           Aplikasi JKT48 Showroom saat ini masih dalam tahap{" "}
-          <Text fontWeight="semibold">Open Beta Test</Text> dan masih terus di
-          develop sampai saat ini. Jika kamu ingin mendukung perkembangan
-          project ini untuk biaya server dan lainnya kalian bisa donasi di link
-          saweria berikut{" "}
+          <Text fontWeight="semibold">Open Beta Test</Text> di Play Store dan
+          masih terus di develop sampai saat ini. Jika kamu ingin mendukung
+          perkembangan project ini untuk biaya server dan lainnya kalian bisa
+          donasi di link saweria berikut{" "}
         </Text>
         <TouchableOpacity activeOpacity={0.6} onPress={donateClick}>
           <Box bg="#E49C20" p="3" borderRadius="xl">
@@ -111,6 +116,85 @@ const About = () => {
             </HStack>
           </Box>
         </TouchableOpacity>
+        <Divider mt="4" />
+        <Text mt="2" fontSize="2xl" fontWeight="bold">
+          Social Media
+        </Text>
+        <HStack mt="4" space={4} overflowX="scroll">
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL("https://x.com/JKT48_SHOWROOM"),
+                trackAnalytics("twitter_click", {
+                  username: userProfile?.name ?? "Guest"
+                });
+            }}
+          >
+            <VStack alignItems="center" space={2} justifyContent="center">
+              <Image
+                alt="twitter"
+                borderRadius="xl"
+                width={50}
+                size="sm"
+                source={{
+                  uri: "https://www.shutterstock.com/image-vector/new-design-twitter-logo-600nw-2346506357.jpg"
+                }}
+              />
+              <Text fontWeight="semibold" fontSize="16">
+                Follow X
+              </Text>
+            </VStack>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL("https://github.com/jkt48-showroom"),
+                trackAnalytics("github_click", {
+                  username: userProfile?.name ?? "Guest"
+                });
+            }}
+          >
+            <VStack space={2} alignItems="center" justifyContent="center">
+              <GithubIcon />
+              <Text fontWeight="semibold" fontSize="16">
+                GitHub
+              </Text>
+            </VStack>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL(
+                "https://discord.com/servers/jkt48-showroom-fanmade-1076511743909564506"
+              ),
+                trackAnalytics("discord_about_click", {
+                  username: userProfile?.name ?? "Guest"
+                });
+            }}
+          >
+            <VStack space={2} alignItems="center" justifyContent="center">
+              <DiscordIcon />
+              <Text fontWeight="semibold" fontSize="16">
+                Discord
+              </Text>
+            </VStack>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL(
+                "https://play.google.com/store/apps/details?id=com.inzoid.jkt48showroom"
+              ),
+                trackAnalytics("play_store_click", {
+                  username: userProfile?.name ?? "Guest"
+                });
+            }}
+          >
+            <VStack space={2} alignItems="center" justifyContent="center">
+              <GooglePlayIcon />
+              <Text mt="1" fontWeight="semibold" fontSize="16">
+                Play Store
+              </Text>
+            </VStack>
+          </TouchableOpacity>
+        </HStack>
+
         <Divider mt="4" mb="2" />
         <Text mb="2" fontSize="2xl" fontWeight="bold">
           Donator
@@ -144,6 +228,7 @@ const About = () => {
             ))}
           </HStack>
         </CardGradient>
+        <Divider mt="4" mb="2" />
       </Box>
     </Layout>
   );

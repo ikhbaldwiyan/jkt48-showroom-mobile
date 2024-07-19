@@ -3,6 +3,7 @@ import { Button, HStack, Modal, Text, VStack } from "native-base";
 import { DownloadIcon, History } from "../../../../assets/icon";
 import { getCurrentVersion } from "../../../../services/versions";
 import DeviceInfo from "react-native-device-info";
+import { APK_VERSION } from "@env";
 
 const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
   const [latestVersion, setLatestVersion] = useState("");
@@ -44,21 +45,23 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
             <HStack space={2} alignItems="center">
               <History size={24} />
               <Text fontWeight="bold" fontSize="lg">
-                Change Log APK Version 1.2
+                Change Log APK Version {APK_VERSION}
               </Text>
             </HStack>
           </Modal.Header>
           <Modal.Body bg="black">
             <VStack space={3}>
-              <Text>- Add New User Profile menu</Text>
-              <Text>- Add About project tab menu</Text>
-              <Text>- Add Switch Dark Mode background theme</Text>
-              <Text>- Implement Full screen Showroom & IDN Live</Text>
-              <Text>- Revamp UI header Showroom live</Text>
-              <Text>- Change status bar color to dark theme</Text>
-              <Text>- Add IDN Live List screen</Text>
-              <Text>- Add Refresh button in IDN Live streaming</Text>
-              <Text>- Fix duplicate podium name</Text>
+              <Text>- Add Rank menu in live stream tabs</Text>
+              <Text>- Set default to dark mode background theme</Text>
+              <Text>- Show social media info on About screen</Text>
+              <Text>- Add Settings Tab in Profile</Text>
+              <Text>- Update some wording title to indonesia</Text>
+              <Text>- Show Delete Account button on settings</Text>
+              <Text>
+                - Change Splash Screen and APK name to{" "}
+                <Text fontWeight="semibold">JKT48 Showroom Fanmade</Text>
+              </Text>
+              <Text>- Open Test Release on Play Store</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="primary">
