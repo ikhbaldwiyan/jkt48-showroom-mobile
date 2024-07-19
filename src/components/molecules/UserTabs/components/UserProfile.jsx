@@ -10,6 +10,7 @@ import {
 import useUser from "../../../../utils/hooks/useUser";
 import CardGradient from "../../../atoms/CardGradient";
 import Theme from "../../../templates/Theme";
+import { formatViews } from "../../../../utils/helpers";
 
 export const UserProfile = () => {
   const { profile, user, userProfile } = useUser();
@@ -46,7 +47,7 @@ export const UserProfile = () => {
             </Text>
             <Text fontSize="md">
               {userProfile?.totalWatchLive
-                ? userProfile?.totalWatchLive + "x"
+                ? formatViews(userProfile?.totalWatchLive) + "x"
                 : "0x"}
             </Text>
           </HStack>

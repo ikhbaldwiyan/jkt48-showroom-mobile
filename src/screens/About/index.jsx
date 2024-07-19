@@ -74,16 +74,16 @@ const About = () => {
           width="100%"
           height="210"
           source={{
-            uri: "https://res.cloudinary.com/dkkagbzl4/image/upload/v1717693440/urrttkuzx7mqrlayfgho.png"
+            uri: "https://res.cloudinary.com/dkkagbzl4/image/upload/v1721372451/enzbvfxozrq4xn7uiaeo.png"
           }}
           borderRadius="md"
         />
         <Text mt="2">
-          <Text fontWeight="bold">JKT48 SHOWROOM</Text> adalah aplikasi{" "}
-          <Text fontWeight="bold">FANMADE</Text> yang bertujuan untuk memfilter
-          room member JKT48. disini kalian bisa menonton streaming Showroom atau
-          IDN Live semua member JKT48, jangan lupa join komunitas discord kita
-          untuk info update apk.
+          <Text fontWeight="bold">JKT48 Showroom Fanmade</Text> adalah platform
+          Live Streaming yang bertujuan untuk memfilter room member JKT48.
+          disini kalian bisa menonton streaming Showroom atau IDN Live semua
+          member JKT48, jangan lupa join komunitas discord kita untuk info
+          update apk.
         </Text>
         <Box display="flex" alignItems="center" justifyContent="center">
           <TouchableOpacity activeOpacity={0.6} onPress={discordClick}>
@@ -101,10 +101,10 @@ const About = () => {
         </Box>
         <Text my="3">
           Aplikasi JKT48 Showroom saat ini masih dalam tahap{" "}
-          <Text fontWeight="semibold">Open Beta Test</Text> dan masih terus di
-          develop sampai saat ini. Jika kamu ingin mendukung perkembangan
-          project ini untuk biaya server dan lainnya kalian bisa donasi di link
-          saweria berikut{" "}
+          <Text fontWeight="semibold">Open Beta Test</Text> di Play Store dan
+          masih terus di develop sampai saat ini. Jika kamu ingin mendukung
+          perkembangan project ini untuk biaya server dan lainnya kalian bisa
+          donasi di link saweria berikut{" "}
         </Text>
         <TouchableOpacity activeOpacity={0.6} onPress={donateClick}>
           <Box bg="#E49C20" p="3" borderRadius="xl">
