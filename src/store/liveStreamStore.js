@@ -9,6 +9,7 @@ const useLiveStreamStore = create((set) => ({
   users: [],
   token: null,
   hideComment: false,
+  streamOptions: [],
   setProfile: (newProfile) => set({ profile: newProfile }),
   setToken: (newToken) => set({ token: newToken }),
   setHideComment: (value) => set({ hideComment: value }),
@@ -26,10 +27,18 @@ const useLiveStreamStore = create((set) => ({
   getStreamUrl: async (roomId, cookieLoginId) => {
     try {
       const streams = await STREAM.getStreamUrl(roomId, cookieLoginId);
+      const streamsOptions = await STREAM.getStreamUrlOptions(
+        roomId,
+        cookieLoginId
+      );
       set({ url: streams?.data[0]?.url });
+      set({ streamOptions: streamsOptions?.data });
     } catch (error) {
       console.log("get stream url error", error);
     }
+  },
+  setSelectedUrl: (newUrl) => {
+    set({ url: newUrl });
   },
   registerUserRoom: async (session, profile) => {
     try {

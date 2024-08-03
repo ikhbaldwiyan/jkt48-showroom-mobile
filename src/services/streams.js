@@ -4,6 +4,10 @@ export const getStreamUrl = (roomId, cookies) => {
   return apiShowroom.get(ENDPOINTS.STREAM.URL + roomId + "/" + cookies );
 };
 
+export const getStreamUrlOptions = (roomId, cookies) => {
+  return apiShowroom.get(ENDPOINTS.STREAM.URL + roomId + "&abr_available=1" + "/" + cookies );
+};
+
 export const getStreamInfo = (roomId, cookies) => {
   return apiShowroom.get(ENDPOINTS.STREAM.INFO + roomId + "/" + cookies );
 };

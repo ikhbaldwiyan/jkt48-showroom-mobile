@@ -45,6 +45,7 @@ import DownloadIcon from "./DownloadIcon";
 import GithubIcon from "./GithubIcon";
 import DiscordIcon from "./DiscordIcon";
 import GooglePlayIcon from "./GooglePlayIcon";
+import SettingsIcon from "./SettingsIcon";
 
 export {
   LogoIcon,
@@ -94,4 +95,5 @@ export {
   GithubIcon, 
   DiscordIcon,
   GooglePlayIcon,
+  SettingsIcon,
 };

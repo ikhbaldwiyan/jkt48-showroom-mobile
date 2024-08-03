@@ -14,7 +14,7 @@ import useLiveStreamStore from "../../store/liveStreamStore";
 import Loading from "../../components/atoms/Loading";
 import trackAnalytics from "../../utils/trackAnalytics";
 import useThemeStore from "../../store/themeStore";
-import Theme from "../../components/templates/Theme";
+import QualitySettings from "../../components/atoms/QualitySettings";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -40,7 +40,8 @@ const LiveStream = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HStack space={2} alignItems="center">
+        <HStack space={1} alignItems="center">
+          <QualitySettings />
           <Button
             py="1"
             size="xs"
@@ -51,8 +52,10 @@ const LiveStream = () => {
           >
             <RefreshIcon />
           </Button>
-          <Theme />
-          <Views color="primary" number={liveInfo?.views ?? profile?.view_num ?? 0} />
+          <Views
+            color="primary"
+            number={liveInfo?.views ?? profile?.view_num ?? 0}
+          />
         </HStack>
       ),
       headerShown: isFullScreen ? false : true
@@ -74,8 +77,8 @@ const LiveStream = () => {
     await getUrl();
 
     trackAnalytics("refresh_button", {
-      username: user?.account_id ?? "Guest",
-    })
+      username: user?.account_id ?? "Guest"
+    });
   };
 
   async function fetchLiveInfo() {
@@ -186,7 +189,7 @@ const LiveStream = () => {
 
     if (isFullScreen) {
       trackAnalytics("open_full_screen_showroom", {
-        username: userProfile?.account_id ?? "Guest",
+        username: userProfile?.user_id ?? "Guest",
         room: profile?.user?.name
       });
     }

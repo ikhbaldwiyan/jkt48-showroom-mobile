@@ -8,7 +8,7 @@ export const formatName = (name, hideGroup) => {
   let memberName;
   !hideGroup
     ? (memberName = name ? name?.replace("JKT48_", "") + " JKT48" : "Loading")
-    : (memberName = name?.replace("JKT48_", ""));
+    : (memberName = name?.includes("JKT48_") ? name?.replace("JKT48_", "") : name?.replace("JKT48", ""));
   return memberName;
 };
 
