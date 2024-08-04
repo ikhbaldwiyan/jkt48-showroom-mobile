@@ -3,17 +3,20 @@ import { Box, Button, HStack, Spinner, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Dimensions, LogBox, StatusBar } from "react-native";
 import VideoPlayer from "react-native-video-controls";
-import Views from "../../components/atoms/Views";
-import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
-import { STREAM } from "../../services";
-import { activityLog } from "../../utils/activityLog";
+
 import useUser from "../../utils/hooks/useUser";
+import useThemeStore from "../../store/themeStore";
 import useLiveStreamStore from "../../store/liveStreamStore";
+
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { RefreshIcon } from "../../assets/icon";
+import { STREAM } from "../../services";
+import { activityLog } from "../../utils/activityLog";
+
+import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
+import Views from "../../components/atoms/Views";
 import Loading from "../../components/atoms/Loading";
-import useThemeStore from "../../store/themeStore";
-import Theme from "../../components/templates/Theme";
+import QualitySettings from "../../components/atoms/QualitySettings";
 
 const PremiumLive = () => {
   const route = useRoute();
@@ -21,9 +24,7 @@ const PremiumLive = () => {
   const navigation = useNavigation();
   const { params } = route;
 
-  const [url, setUrl] = useState();
   const [isPaid, setIsPaid] = useState(false);
-
   const { session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -43,6 +44,8 @@ const PremiumLive = () => {
     getPremiumLive,
     premiumLive,
     setHideComment,
+    url,
+    getStreamUrl,
     clearLiveStream
   } = useLiveStreamStore();
   const { mode } = useThemeStore();
@@ -60,9 +63,9 @@ const PremiumLive = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HStack space={2} alignItems="center">
+        <HStack space={3} alignItems="center">
           <Button
-            py="1"
+            pr="0.5"
             onPress={handleRefresh}
             borderRadius="md"
             background="black"
@@ -70,7 +73,7 @@ const PremiumLive = () => {
           >
             {refreshing ? <Spinner size={16} color="white" /> : <RefreshIcon />}
           </Button>
-          <Theme />
+          <QualitySettings />
           <Views
             color="primary"
             number={liveInfo?.views ?? profile?.view_num ?? 0}
@@ -89,7 +92,7 @@ const PremiumLive = () => {
 
   const handleRefresh = async () => {
     onRefresh();
-    setUrl("");
+    setSelectedUrl("");
     getUrl();
   };
 
@@ -113,6 +116,7 @@ const PremiumLive = () => {
   }
 
   async function getUrl() {
+    await getStreamUrl(profile?.room_id, token);
     const streams = await STREAM.getStreamUrl(roomId, token);
 
     if (streams.data.code === 404) {
@@ -120,7 +124,7 @@ const PremiumLive = () => {
       !isPaid && handleNoTicket();
     } else {
       setIsPaid(true);
-      setUrl(streams?.data[0]?.url);
+      setSelectedUrl(streams?.data[0]?.url);
     }
   }
 

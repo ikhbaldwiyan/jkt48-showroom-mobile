@@ -31,8 +31,10 @@ const useLiveStreamStore = create((set) => ({
         roomId,
         cookieLoginId
       );
-      set({ url: streams?.data[0]?.url });
-      set({ streamOptions: streamsOptions?.data });
+      if (Array.isArray(streamsOptions?.data) && streamsOptions.data.length > 0) {
+        set({ url: streams.data[0]?.url });
+        set({ streamOptions: streamsOptions.data });
+      } 
     } catch (error) {
       console.log("get stream url error", error);
     }
