@@ -8,7 +8,7 @@ import {
   Icon,
   Modal,
   CheckIcon,
-  Switch
+  Switch,
 } from "native-base";
 import { SettingsIcon } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
@@ -19,24 +19,18 @@ const QualitySettings = () => {
   const [selectedQuality, setSelectedQuality] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [streamType, setStreamType] = useState("hls");
-  const { streamOptions, setSelectedUrl } = useLiveStreamStore();
+  const { profile, streamOptions, setSelectedUrl } = useLiveStreamStore();
 
   useEffect(() => {
-    streamOptions && fetchQualities();
-  }, [streamType]);
+    fetchQualities();
+  }, [streamType, profile, streamOptions]);
 
   const fetchQualities = () => {
-    if (!Array.isArray(streamOptions)) {
-      console.error("streamOptions is not an array:", streamOptions);
-      setQualities([]);
-      return;
-    }
-
     let filteredQualities = streamOptions.filter(
       (item) => item?.type === streamType
     );
 
-    // Include "Automatic" option only for non-low latency
+    // Show "Automatic" option only for non-low latency
     if (streamType === "hls") {
       const automaticOption = streamOptions.find(
         (item) => item?.type === "hls_all"
@@ -76,13 +70,6 @@ const QualitySettings = () => {
     setStreamType(newStreamType);
     // Reset selected quality when changing stream type
     setSelectedQuality(null);
-    // Fetch new qualities based on the new stream type
-    fetchQualities();
-  };
-
-  const getSelectedQualityLabel = () => {
-    const selected = qualities.find((q) => q.id === selectedQuality);
-    return selected ? selected.label : "Automatic";
   };
 
   return (
@@ -92,20 +79,16 @@ const QualitySettings = () => {
       </TouchableOpacity>
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <Modal.Content bg="secondary" maxWidth="400px">
+          <Modal.Header bg="secondary">
+            <HStack justifyContent="space-between" alignItems="center">
+              <Text fontSize="15" color="white" fontWeight="bold">
+                Stream Quality
+              </Text>
+            </HStack>
+            <Modal.CloseButton />
+          </Modal.Header>
           <Modal.Body>
             <VStack space={3}>
-              <HStack justifyContent="space-between" alignItems="center">
-                <Text fontSize="md" color="white" fontWeight="bold">
-                  Stream Quality
-                </Text>
-                <HStack alignItems="center" space={2}>
-                  <CheckIcon color="primary" />
-                  <Text fontWeight="semibold" color="white">
-                    {getSelectedQualityLabel()}
-                  </Text>
-                </HStack>
-              </HStack>
-
               <Radio.Group
                 name="qualityGroup"
                 value={selectedQuality}
@@ -119,13 +102,17 @@ const QualitySettings = () => {
                       colorScheme="blue"
                       _text={{ color: "white", fontSize: "14px" }}
                     >
-                      {quality.label}
+                      {quality.label.charAt(0).toUpperCase() +
+                        quality.label.slice(1)}
+                      {quality.id === selectedQuality && (
+                        <CheckIcon size="5" color="primary" />
+                      )}
                     </Radio>
                   ))}
                 </VStack>
               </Radio.Group>
               <HStack justifyContent="space-between" alignItems="center">
-                <Text color="white">Low Latency</Text>
+                <Text color="white">Low latency</Text>
                 <Switch
                   isChecked={streamType === "lhls"}
                   onToggle={(value) => handleLowLatencyToggle(value)}
