@@ -40,10 +40,9 @@ const LiveStream = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HStack space={1} alignItems="center">
-          <QualitySettings />
+        <HStack space={3} alignItems="center">
           <Button
-            py="1"
+            pr="1"
             size="xs"
             onPress={handleRefresh}
             isLoading={refreshing}
@@ -52,6 +51,7 @@ const LiveStream = () => {
           >
             <RefreshIcon />
           </Button>
+          <QualitySettings />
           <Views
             color="primary"
             number={liveInfo?.views ?? profile?.view_num ?? 0}
