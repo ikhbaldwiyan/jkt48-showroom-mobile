@@ -8,13 +8,13 @@ import {
   Icon,
   Modal,
   CheckIcon,
-  Switch,
+  Switch
 } from "native-base";
 import { SettingsIcon } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
 import useLiveStreamStore from "../../../store/liveStreamStore";
 
-const QualitySettings = () => {
+const QualitySettings = ({ refreshing }) => {
   const [qualities, setQualities] = useState([]);
   const [selectedQuality, setSelectedQuality] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -24,6 +24,22 @@ const QualitySettings = () => {
   useEffect(() => {
     fetchQualities();
   }, [streamType, profile, streamOptions]);
+
+  useEffect(() => {
+    let filteredQualities = streamOptions.filter(
+      (item) => item?.type === streamType
+    );
+
+    if (filteredQualities.length > 0) {
+      const defaultQuality =
+        streamType === "hls"
+          ? filteredQualities.find((q) => q.type === "hls_all") ||
+            filteredQualities[0]
+          : filteredQualities[0];
+      setSelectedQuality(defaultQuality.id);
+      setSelectedUrl(defaultQuality.url);
+    }
+  }, [refreshing]);
 
   const fetchQualities = () => {
     let filteredQualities = streamOptions.filter(

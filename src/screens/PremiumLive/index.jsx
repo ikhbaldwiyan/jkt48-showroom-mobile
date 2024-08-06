@@ -73,7 +73,7 @@ const PremiumLive = () => {
           >
             {refreshing ? <Spinner size={16} color="white" /> : <RefreshIcon />}
           </Button>
-          <QualitySettings />
+          <QualitySettings refreshing={refreshing} />
           <Views
             color="primary"
             number={liveInfo?.views ?? profile?.view_num ?? 0}
