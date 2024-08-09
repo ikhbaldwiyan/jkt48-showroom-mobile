@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, HStack, Text, VStack } from "native-base";
 import UserTabs from "../../components/molecules/UserTabs";
 import useUser from "../../utils/hooks/useUser";
-import { Image } from "react-native";
-import { LoginIcon } from "../../assets/icon";
+import { Image, TouchableOpacity } from "react-native";
+import { LoginIcon, PencilIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import { useNavigation } from "@react-navigation/native";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
@@ -34,7 +34,7 @@ const Profile = () => {
         h="120"
         justifyContent="center"
         alignItems="center"
-        backgroundColor="teal"
+        backgroundColor="#A9EDF9"
         borderRadius="full"
       >
         <Image
@@ -49,6 +49,23 @@ const Profile = () => {
           alt="avatar"
         />
       </Box>
+      <Box
+        top="110"
+        bg="white"
+        borderColor="primary"
+        borderWidth="2"
+        position="absolute"
+        w="10"
+        h="10"
+        borderRadius="50"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <TouchableOpacity onPress={() => navigation.navigate("Avatar")}>
+          <PencilIcon />
+        </TouchableOpacity>
+      </Box>
     </Box>
   );
 
@@ -58,9 +75,7 @@ const Profile = () => {
         <Box py="45" justifyContent="center" alignItems="center">
           <VStack space={5} alignItems="center">
             <Avatar />
-            <Text fontWeight="bold">
-              Silahkan login untuk mengakses menu profile
-            </Text>
+            <Text>Silakan login untuk mengakses menu profile</Text>
             <Button
               onPress={() => navigation.replace("Login")}
               borderRadius="lg"
@@ -69,7 +84,7 @@ const Profile = () => {
             >
               <HStack alignItems="center" space={1}>
                 <LoginIcon size={24} />
-                <Text color="white" fontWeight="semibold" mr="2" isTruncated>
+                <Text color="white" fontWeight="bold" mr="2" isTruncated>
                   Login Disini
                 </Text>
               </HStack>
@@ -84,7 +99,7 @@ const Profile = () => {
     <Box flex={1} bg="secondary">
       <VStack mt="4" space={3} alignItems="center">
         <Avatar />
-        <Text fontWeight="bold" fontSize="2xl">
+        <Text mt="1" fontWeight="bold" fontSize="2xl">
           {profile?.name}
         </Text>
       </VStack>
