@@ -229,7 +229,7 @@ const EditAvatar = ({ navigation }) => {
               </TouchableOpacity>
             </Button>
           ) : (
-            <Button opacity={0.7} onPress={handleNextPage} borderRadius="lg" bg="cyan.700">
+            <Button opacity={0.7} borderRadius="lg" bg="cyan.700">
               <HStack alignItems="center" space="1">
                 <ChevronLeftIcon color="white" />
                 <Text>Prev</Text>
@@ -249,7 +249,7 @@ const EditAvatar = ({ navigation }) => {
               </TouchableOpacity>
             </Button>
           ) : (
-            <Button opacity={0.7} onPress={handleNextPage} borderRadius="lg" bg="cyan.700">
+            <Button opacity={0.7} borderRadius="lg" bg="cyan.700">
               <HStack alignItems="center" space="1">
                 <Text>Next</Text>
                 <ChevronRightIcon color="white" />
