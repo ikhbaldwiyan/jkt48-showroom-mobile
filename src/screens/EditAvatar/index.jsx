@@ -17,16 +17,21 @@ import LinearGradient from "react-native-linear-gradient";
 import { PencilIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import { getAvatarList, updateAvatar } from "../../services/user";
+import useAuthStore from "../../store/authStore";
 import useUser from "../../utils/hooks/useUser";
 
 const EditAvatar = ({ navigation }) => {
   const { profile, session } = useUser();
+  const { setProfile } = useAuthStore();
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [avatarImage, setAvatarImage] = useState(null);
   const [avatars, setAvatars] = useState([]);
   const [limit] = useState(12);
   const [totalAvatar, setTotalAvatar] = useState(0);
   const [page, setPage] = useState(1);
+  const [type, setType] = useState("all");
+  const [title, setTitle] = useState("Unlocked");
+
   const totalPages = Math.ceil(totalAvatar / limit);
   const toast = useToast();
 
@@ -43,7 +48,8 @@ const EditAvatar = ({ navigation }) => {
           csrf_token: session.csrf_token,
           cookies_id: session.cookie_login_id,
           limit,
-          page
+          page,
+          type
         });
         const { avatars, current_user_avatar, total_entries } = response.data;
         setAvatars(avatars);
@@ -54,7 +60,7 @@ const EditAvatar = ({ navigation }) => {
       }
     };
     fetchAvatar();
-  }, [page]);
+  }, [page, type]);
 
   const updateAvatarImage = async (e) => {
     e.preventDefault();
@@ -63,6 +69,10 @@ const EditAvatar = ({ navigation }) => {
         csrf_token: session.csrf_token,
         cookies_id: session.cookie_login_id,
         avatar_id: selectedAvatar
+      });
+      setProfile({
+        ...profile,
+        avatar_url: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
       });
       toast.show({
         render: () => {
@@ -93,6 +103,12 @@ const EditAvatar = ({ navigation }) => {
     setPage(Math.min(totalPages, page + 1));
   };
 
+  const handleTab = (type, title) => {
+    setPage(1);
+    setType(type);
+    setTitle(title);
+  };
+
   return (
     <Layout>
       <Box py="3">
@@ -103,11 +119,8 @@ const EditAvatar = ({ navigation }) => {
           w="100%"
           space={4}
         >
-          <Text fontSize="xl" fontWeight="bold">
-            Selected Avatar
-          </Text>
           <LinearGradient
-            colors={["#24A2B7", "#3B82F6"]}
+            colors={["#24A2B7", "#A9EDF9"]}
             style={[styles.avatarImage]}
           >
             <Image
@@ -124,27 +137,50 @@ const EditAvatar = ({ navigation }) => {
             w="100%"
             bg="teal"
           >
-            <HStack alignItems="center" space={2}>
-              <PencilIcon color="white" size="16" />
-              <Text fontWeight="bold">Update Avatar</Text>
-            </HStack>
+            <TouchableOpacity onPress={updateAvatarImage}>
+              <HStack alignItems="center" space={2}>
+                <PencilIcon color="white" size="16" />
+                <Text fontWeight="bold">Update Avatar</Text>
+              </HStack>
+            </TouchableOpacity>
           </Button>
         </VStack>
       </Box>
       <VStack mt="2" space={4}>
-        <Text fontWeight="semibold" color="white">
-          Unlocked Avatar: {totalAvatar}
+        <Text color="white">
+          {title} Avatar: {totalAvatar}
         </Text>
 
         <HStack space={2}>
-          <Button bg="primary" borderRadius="xl" size="sm">
-            All
+          <Button
+            onPress={() => handleTab("all", "Unlocked")}
+            bg={type === "all" ? "primary" : "blueGray.500"}
+            borderRadius="xl"
+            size="sm"
+          >
+            <Text fontSize="13" fontWeight="semibold">
+              All
+            </Text>
           </Button>
-          <Button bg="gray.500" borderRadius="xl" size="sm">
-            Favorite
+          <Button
+            onPress={() => handleTab("fav", "Favorite")}
+            bg={type === "fav" ? "primary" : "blueGray.500"}
+            borderRadius="xl"
+            size="sm"
+          >
+            <Text fontSize="13" fontWeight="semibold">
+              Favorite
+            </Text>
           </Button>
-          <Button bg="gray.500" borderRadius="xl" size="sm">
-            History
+          <Button
+            onPress={() => handleTab("recent_used", "History")}
+            bg={type === "recent_used" ? "primary" : "blueGray.500"}
+            borderRadius="xl"
+            size="sm"
+          >
+            <Text fontSize="13" fontWeight="semibold">
+              History
+            </Text>
           </Button>
         </HStack>
 
@@ -178,35 +214,48 @@ const EditAvatar = ({ navigation }) => {
         />
 
         <HStack alignItems="center" justifyContent="space-between" mt={2}>
-          <Button
-            onPress={handlePrevPage}
-            disabled={page === 1}
-            borderRadius="lg"
-            bg="primary"
-          >
-            <TouchableOpacity opacity="0.8" onPress={handlePrevPage}>
+          {page !== 1 ? (
+            <Button
+              onPress={handlePrevPage}
+              disabled={page === 1}
+              borderRadius="lg"
+              bg="primary"
+            >
+              <TouchableOpacity opacity="0.8" onPress={handlePrevPage}>
+                <HStack alignItems="center" space="1">
+                  <ChevronLeftIcon color="white" />
+                  <Text>Prev</Text>
+                </HStack>
+              </TouchableOpacity>
+            </Button>
+          ) : (
+            <Button opacity={0.7} onPress={handleNextPage} borderRadius="lg" bg="cyan.700">
               <HStack alignItems="center" space="1">
                 <ChevronLeftIcon color="white" />
                 <Text>Prev</Text>
               </HStack>
-            </TouchableOpacity>
-          </Button>
-          <Text fontWeight="bold">
+            </Button>
+          )}
+          <Text fontSize="15" fontWeight="bold">
             {page} / {totalPages}
           </Text>
-          <Button
-            onPress={handleNextPage}
-            disabled={page === totalPages}
-            borderRadius="lg"
-            bg="primary"
-          >
-            <TouchableOpacity opacity="0.8" onPress={handleNextPage}>
+          {page !== totalPages ? (
+            <Button onPress={handleNextPage} borderRadius="lg" bg="primary">
+              <TouchableOpacity opacity="0.8" onPress={handleNextPage}>
+                <HStack alignItems="center" space="1">
+                  <Text>Next</Text>
+                  <ChevronRightIcon color="white" />
+                </HStack>
+              </TouchableOpacity>
+            </Button>
+          ) : (
+            <Button opacity={0.7} onPress={handleNextPage} borderRadius="lg" bg="cyan.700">
               <HStack alignItems="center" space="1">
                 <Text>Next</Text>
                 <ChevronRightIcon color="white" />
               </HStack>
-            </TouchableOpacity>
-          </Button>
+            </Button>
+          )}
         </HStack>
       </VStack>
     </Layout>

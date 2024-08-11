@@ -5,13 +5,14 @@ import useUser from "../../utils/hooks/useUser";
 import { Image, TouchableOpacity } from "react-native";
 import { LoginIcon, PencilIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
 
 const Profile = () => {
   const { profile, session } = useUser();
   const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (session) {
@@ -49,7 +50,7 @@ const Profile = () => {
           alt="avatar"
         />
       </Box>
-      <Box
+      <Button
         top="110"
         bg="white"
         borderColor="primary"
@@ -61,11 +62,15 @@ const Profile = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
+        onPress={() => navigation.navigate("Avatar")}
       >
-        <TouchableOpacity onPress={() => navigation.navigate("Avatar")}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate("Avatar")}
+        >
           <PencilIcon />
         </TouchableOpacity>
-      </Box>
+      </Button>
     </Box>
   );
 
