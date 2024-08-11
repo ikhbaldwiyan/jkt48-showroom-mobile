@@ -21,31 +21,31 @@ export const UserProfile = () => {
         <VStack space={4}>
           <HStack space={2} alignItems="center">
             <UserIcon size="16" />
-            <Text fontSize="md" fontWeight="semibold">
+            <Text fontSize="14" fontWeight="semibold">
               Name:
             </Text>
-            <Text fontSize="md">{profile?.name}</Text>
+            <Text fontSize="14">{profile?.name}</Text>
           </HStack>
           <HStack space={2} alignItems="center">
             <IDCard size="16" />
-            <Text fontSize="md" fontWeight="semibold">
+            <Text fontSize="14" fontWeight="semibold">
               ID SR:
             </Text>
-            <Text fontSize="md">{user?.account_id}</Text>
+            <Text fontSize="14">{user?.account_id}</Text>
           </HStack>
           <HStack space={2} alignItems="center">
             <Star />
-            <Text fontSize="md" fontWeight="semibold">
+            <Text fontSize="14" fontWeight="semibold">
               Level:
             </Text>
-            <Text fontSize="md">{profile?.fan_level}</Text>
+            <Text fontSize="14">{profile?.fan_level}</Text>
           </HStack>
           <HStack space={2} alignItems="center">
             <LiveIcon />
-            <Text fontSize="md" fontWeight="semibold">
+            <Text fontSize="14" fontWeight="semibold">
               Total Watch Live:
             </Text>
-            <Text fontSize="md">
+            <Text fontSize="14">
               {userProfile?.totalWatchLive
                 ? formatViews(userProfile?.totalWatchLive) + "x"
                 : "0x"}
