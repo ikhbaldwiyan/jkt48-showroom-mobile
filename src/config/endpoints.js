@@ -8,6 +8,8 @@ export default {
   USER: {
     PROFILE: "/profile/room",
     USER_PROFILE: "/profile/user",
+    AVATAR: "/profile/get_avatar",
+    UPDATE_AVATAR: "/profile/update_avatar",
     ACTIVIY_LOG: "/activity/", //required user id
     CREATE_USER: "/users/",
     DONATOR: "/discord/role?type=donator"

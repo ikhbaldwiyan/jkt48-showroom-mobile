@@ -17,6 +17,7 @@ import {
   About,
   Profile,
   IDNLives,
+  EditAvatar
 } from "../../../screens";
 import {
   HomeIcon,
@@ -60,11 +61,7 @@ const Navigation = () => {
         <UserIconOutline />
       );
     } else if (route.name === "About") {
-      icon = isActive ? (
-        <Info color="#24A2B7" size={22} />
-      ) : (
-        <InfoOutline />
-      );
+      icon = isActive ? <Info color="#24A2B7" size={22} /> : <InfoOutline />;
     }
 
     return icon;
@@ -119,7 +116,7 @@ const Navigation = () => {
   };
 
   useEffect(() => {
-    StatusBar.setBackgroundColor("#21252B")
+    StatusBar.setBackgroundColor("#21252B");
   }, []);
 
   return (
@@ -140,11 +137,7 @@ const Navigation = () => {
         component={RoomLives}
         options={showHeader}
       />
-      <Stack.Screen
-        name="IDNLives"
-        component={IDNLives}
-        options={showHeader}
-      />
+      <Stack.Screen name="IDNLives" component={IDNLives} options={showHeader} />
       <Stack.Screen
         name="RoomDetail"
         component={RoomDetail}
@@ -169,6 +162,11 @@ const Navigation = () => {
         name="PremiumLive"
         component={PremiumLive}
         options={showHeader}
+      />
+      <Stack.Screen 
+        name="Avatar" 
+        component={EditAvatar} 
+        options={showHeader} 
       />
     </Stack.Navigator>
   );
