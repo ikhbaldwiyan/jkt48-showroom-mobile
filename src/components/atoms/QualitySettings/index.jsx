@@ -39,7 +39,7 @@ const QualitySettings = ({ refreshing }) => {
       setSelectedQuality(defaultQuality.id);
       setSelectedUrl(defaultQuality.url);
     }
-  }, [refreshing]);
+  }, [refreshing, profile]);
 
   const fetchQualities = () => {
     let filteredQualities = streamOptions.filter(

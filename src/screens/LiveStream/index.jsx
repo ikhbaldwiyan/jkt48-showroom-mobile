@@ -68,13 +68,13 @@ const LiveStream = () => {
 
     return () => {
       clearLiveStream();
+      clearUrl();
     };
   }, []);
 
   const handleRefresh = async () => {
     onRefresh();
     clearUrl();
-    await getUrl();
 
     trackAnalytics("refresh_button", {
       username: user?.account_id ?? "Guest"
