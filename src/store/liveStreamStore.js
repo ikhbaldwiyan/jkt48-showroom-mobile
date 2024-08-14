@@ -26,6 +26,14 @@ const useLiveStreamStore = create((set) => ({
   },
   getStreamUrl: async (roomId, cookieLoginId) => {
     try {
+      const streams = await STREAM.getStreamUrl(roomId, cookieLoginId);
+      set({ url: streams?.data[0]?.url });
+    } catch (error) {
+      console.log("get stream url error", error);
+    }
+  },
+  getStreamOptions: async (roomId, cookieLoginId) => {
+    try {
       const streamsOptions = await STREAM.getStreamUrlOptions(
         roomId,
         cookieLoginId

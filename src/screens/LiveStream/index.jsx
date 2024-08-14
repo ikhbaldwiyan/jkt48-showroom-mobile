@@ -27,9 +27,10 @@ const LiveStream = () => {
     setProfile,
     getLiveInfo,
     getStreamUrl,
+    getStreamOptions,
     registerUserRoom,
     clearLiveStream,
-    clearUrl
+    clearUrl,
   } = useLiveStreamStore();
   const toast = useToast();
   const { user, session, userProfile } = useUser();
@@ -87,6 +88,7 @@ const LiveStream = () => {
 
   async function getUrl() {
     await getStreamUrl(profile?.room_id, session?.cookie_login_id);
+    await getStreamOptions(profile?.room_id, session?.cookie_login_id);
   }
 
   useEffect(() => {

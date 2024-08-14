@@ -37,7 +37,6 @@ const QualitySettings = ({ refreshing }) => {
             filteredQualities[0]
           : filteredQualities[0];
       setSelectedQuality(defaultQuality.id);
-      setSelectedUrl(defaultQuality.url);
     }
   }, [refreshing, profile]);
 

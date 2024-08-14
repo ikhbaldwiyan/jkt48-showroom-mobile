@@ -46,6 +46,7 @@ const PremiumLive = () => {
     setHideComment,
     url,
     getStreamUrl,
+    getStreamOptions,
     clearLiveStream
   } = useLiveStreamStore();
   const { mode } = useThemeStore();
@@ -117,6 +118,7 @@ const PremiumLive = () => {
 
   async function getUrl() {
     await getStreamUrl(profile?.room_id, token);
+    await getStreamOptions(profile?.room_id, token);
     const streams = await STREAM.getStreamUrl(roomId, token);
 
     if (streams.data.code === 404) {
