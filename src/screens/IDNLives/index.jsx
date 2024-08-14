@@ -84,11 +84,11 @@ const IDNLives = ({ navigation }) => {
               }}
             />
           </Box>
-          <Box mt="2" left="2" position="absolute" shadow="3">
+          {/* <Box mt="2" left="2" position="absolute" shadow="3">
             <Text fontWeight="semibold" fontSize="md">
               {getIDNLiveTime(item.live_at)}
             </Text>
-          </Box>
+          </Box> */}
         </Box>
         <TouchableOpacity
           activeOpacity={0.6}
