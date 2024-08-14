@@ -3,7 +3,8 @@ export default {
     LOGIN: "/login",
     REGISTER: "/register",
     REGISTER: "/register",
-    DETAIL_USER: "/users/" //required user id
+    DETAIL_USER: "/users/", //required user id
+    UPDATE_USER: "/users/" //required user id
   },
   USER: {
     PROFILE: "/profile/room",

@@ -16,12 +16,15 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { PencilIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
+import { updateDetailUser } from "../../services/auth";
 import { getAvatarList, updateAvatar } from "../../services/user";
 import useAuthStore from "../../store/authStore";
+import { activityLog } from "../../utils/activityLog";
 import useUser from "../../utils/hooks/useUser";
+import trackAnalytics from "../../utils/trackAnalytics";
 
 const EditAvatar = ({ navigation }) => {
-  const { profile, session } = useUser();
+  const { profile, session, userProfile } = useUser();
   const { setProfile } = useAuthStore();
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [avatarImage, setAvatarImage] = useState(null);
@@ -62,6 +65,24 @@ const EditAvatar = ({ navigation }) => {
     fetchAvatar();
   }, [page, type]);
 
+  const updateUserAvatar = async () => {
+    try {
+      await updateDetailUser(userProfile.user_id, {
+        avatar: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
+      });
+      activityLog({
+        logName: "User",
+        description: "Update avatar image",
+        userId: userProfile._id
+      });
+      trackAnalytics("update_user_avatar", {
+        userId: userProfile.user_id,
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const updateAvatarImage = async (e) => {
     e.preventDefault();
     try {
@@ -84,6 +105,8 @@ const EditAvatar = ({ navigation }) => {
         },
         placement: "bottom"
       });
+      await updateUserAvatar();
+
       navigation.navigate("Profile");
     } catch (error) {
       console.log(error);
