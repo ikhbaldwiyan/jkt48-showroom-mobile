@@ -12,3 +12,7 @@ export const detailUserApi = (id) => {
   return apiUser.get(ENDPOINTS.AUTH.DETAIL_USER + id);
 };
 
+export const updateDetailUser = (id, params) => {
+  return apiUser.put(ENDPOINTS.AUTH.UPDATE_USER + id, params);
+};
+

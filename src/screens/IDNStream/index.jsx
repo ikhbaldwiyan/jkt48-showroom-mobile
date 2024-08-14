@@ -12,6 +12,7 @@ import { RefreshIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import Loading from "../../components/atoms/Loading";
 import trackAnalytics from "../../utils/trackAnalytics";
+import { formatName } from "../../utils/helpers";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -76,7 +77,7 @@ const IDNStream = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HStack>
+        <HStack alignItems="center">
           <Button
             py="1"
             size="xs"
@@ -96,7 +97,10 @@ const IDNStream = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: profile?.user?.name,
+      headerTitle:
+        profile?.user?.name !== "JKT48"
+          ? formatName(profile?.user?.name, true)
+          : profile?.user?.name,
       headerShown: isFullScreen ? false : true
     });
   }, [profile, isFullScreen]);
@@ -132,7 +136,7 @@ const IDNStream = () => {
 
     if (isFullScreen) {
       trackAnalytics("open_full_screen_idn", {
-        username: userProfile?.account_id ?? "Guest",
+        username: userProfile?.user_id ?? "Guest",
         room: profile?.user?.name
       });
     }

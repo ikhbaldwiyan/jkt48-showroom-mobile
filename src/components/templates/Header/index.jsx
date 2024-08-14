@@ -1,31 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, HStack, Image, Text } from "native-base";
 import Logo from "../../atoms/Logo";
 import useUser from "../../../utils/hooks/useUser";
-import { ModalConfirmation } from "../../atoms/Modal";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LoginIcon } from "../../../assets/icon";
-import analytics from "@react-native-firebase/analytics";
-import useAuthStore from "../../../store/authStore";
 
 const Header = () => {
   const { profile } = useUser();
-  const { logout } = useAuthStore();
-  const [modalLogout, setModalLogout] = useState(false);
   const navigation = useNavigation();
-
-  const handleModal = () => {
-    setModalLogout(!modalLogout);
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigation.replace("Login");
-    analytics().logEvent("logout", {
-      username: profile.name
-    });
-  };
 
   const handleLogin = () => {
     navigation.replace("Login");
@@ -40,7 +23,9 @@ const Header = () => {
       alignItems="center"
     >
       <Logo isHeader />
-      <TouchableOpacity onPress={profile ? handleModal : handleLogin}>
+      <TouchableOpacity
+        onPress={profile ? () => navigation.navigate("Avatar") : handleLogin}
+      >
         <Box maxW="100">
           {profile ? (
             <HStack alignItems="center" space={2}>
@@ -67,14 +52,6 @@ const Header = () => {
           )}
         </Box>
       </TouchableOpacity>
-      <ModalConfirmation
-        title="Logout"
-        modal={modalLogout}
-        onClose={handleModal}
-        confrimAction={handleLogout}
-      >
-        <Text color="black">Are you sure want logout?</Text>
-      </ModalConfirmation>
     </Box>
   );
 };
