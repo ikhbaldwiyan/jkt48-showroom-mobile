@@ -3,11 +3,14 @@ export default {
     LOGIN: "/login",
     REGISTER: "/register",
     REGISTER: "/register",
-    DETAIL_USER: "/users/" //required user id
+    DETAIL_USER: "/users/", //required user id
+    UPDATE_USER: "/users/" //required user id
   },
   USER: {
     PROFILE: "/profile/room",
     USER_PROFILE: "/profile/user",
+    AVATAR: "/profile/get_avatar",
+    UPDATE_AVATAR: "/profile/update_avatar",
     ACTIVIY_LOG: "/activity/", //required user id
     CREATE_USER: "/users/",
     DONATOR: "/discord/role?type=donator"

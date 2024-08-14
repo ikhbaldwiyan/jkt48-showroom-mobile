@@ -8,19 +8,35 @@ import {
   Image,
   Pressable,
   Text,
+  useToast,
   VStack
 } from "native-base";
-import React, { useLayoutEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { PencilIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
+import { updateDetailUser } from "../../services/auth";
+import { getAvatarList, updateAvatar } from "../../services/user";
+import useAuthStore from "../../store/authStore";
+import { activityLog } from "../../utils/activityLog";
 import useUser from "../../utils/hooks/useUser";
+import trackAnalytics from "../../utils/trackAnalytics";
 
 const EditAvatar = ({ navigation }) => {
-  const { profile } = useUser();
-  const [selectedAvatar, setSelectedAvatar] = React.useState(null);
+  const { profile, session, userProfile } = useUser();
+  const { setProfile } = useAuthStore();
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [avatarImage, setAvatarImage] = useState(null);
+  const [avatars, setAvatars] = useState([]);
+  const [limit] = useState(12);
+  const [totalAvatar, setTotalAvatar] = useState(0);
+  const [page, setPage] = useState(1);
+  const [type, setType] = useState("all");
+  const [title, setTitle] = useState("Unlocked");
+
+  const totalPages = Math.ceil(totalAvatar / limit);
+  const toast = useToast();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -28,141 +44,92 @@ const EditAvatar = ({ navigation }) => {
     });
   }, []);
 
-  const avatars = [
-    {
-      user_id: 7056968,
-      avatar_id: 1035785,
-      last_used_at: 1715785824,
-      is_fav: 0,
-      image_url:
-        "https://static.showroom-live.com/image/avatar/1045785.png?v=103",
-      room_name: "Super ZeeOshi Room",
-      created_at: 1715785768,
-      updated_at: 1715785824
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 1036659,
-      last_used_at: 0,
-      is_fav: 0,
-      image_url:
-        "https://static.showroom-live.com/image/avatar/1034659.png?v=103",
-      room_name: "Super ZeeOshi Room",
-      created_at: 1715785768,
-      updated_at: 1715785768
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 1036683,
-      last_used_at: 1723220121,
-      is_fav: 0,
-      image_url:
-        "https://static.showroom-live.com/image/avatar/1038683.png?v=103",
-      room_name: "Super ZeeOshi Room",
-      created_at: 1715785768,
-      updated_at: 1723220121
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 1038309,
-      last_used_at: 0,
-      is_fav: 0,
-      image_url:
-        "https://static.showroom-live.com/image/avatar/1038319.png?v=103",
-      room_name: "Super ZeeOshi Room",
-      created_at: 1715785768,
-      updated_at: 1715785768
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 1038679,
-      last_used_at: 0,
-      is_fav: 0,
-      image_url:
-        "https://static.showroom-live.com/image/avatar/1038669.png?v=103",
-      room_name: "Super ZeeOshi Room",
-      created_at: 1715785768,
-      updated_at: 1715785768
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 1039403,
-      last_used_at: 0,
-      is_fav: 0,
-      image_url:
-        "https://static.showroom-live.com/image/avatar/1039413.png?v=103",
-      room_name: "Super ZeeOshi Room",
-      created_at: 1715785768,
-      updated_at: 1715785768
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 1042177,
-      last_used_at: 1716993054,
-      is_fav: 0,
-      image_url:
-        "https://static.showroom-live.com/image/avatar/1042177.png?v=103",
-      room_name: "Super ZeeOshi Room",
-      created_at: 1715785768,
-      updated_at: 1716993054
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 1042180,
-      last_used_at: 0,
-      is_fav: 0,
-      image_url:
-        "https://static.showroom-live.com/image/avatar/1042180.png?v=103",
-      room_name: "Super ZeeOshi Room",
-      created_at: 1715785768,
-      updated_at: 1715785768
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 1045791,
-      last_used_at: 0,
-      is_fav: 0,
-      image_url:
-        "https://static.showroom-live.com/image/avatar/1045791.png?v=103",
-      room_name: "Super ZeeOshi Room",
-      created_at: 1715785768,
-      updated_at: 1715785768
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 39,
-      last_used_at: 1703410593,
-      is_fav: 0,
-      image_url: "https://static.showroom-live.com/image/avatar/20.png?v=103",
-      room_name: null,
-      created_at: 1689154484,
-      updated_at: 1703410593
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 40,
-      last_used_at: 0,
-      is_fav: 0,
-      image_url: "https://static.showroom-live.com/image/avatar/40.png?v=103",
-      room_name: null,
-      created_at: 1689154484,
-      updated_at: 1689154484
-    },
-    {
-      user_id: 7056968,
-      avatar_id: 37,
-      last_used_at: 1716905901,
-      is_fav: 0,
-      image_url: "https://static.showroom-live.com/image/avatar/37.png?v=103",
-      room_name: null,
-      created_at: 1688819356,
-      updated_at: 1716905901
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      try {
+        const response = await getAvatarList({
+          csrf_token: session.csrf_token,
+          cookies_id: session.cookie_login_id,
+          limit,
+          page,
+          type
+        });
+        const { avatars, current_user_avatar, total_entries } = response.data;
+        setAvatars(avatars);
+        setTotalAvatar(total_entries);
+        setSelectedAvatar(current_user_avatar.avatar_id);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchAvatar();
+  }, [page, type]);
+
+  const updateUserAvatar = async () => {
+    try {
+      await updateDetailUser(userProfile.user_id, {
+        avatar: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
+      });
+      activityLog({
+        logName: "User",
+        description: "Update avatar image",
+        userId: userProfile._id
+      });
+      trackAnalytics("update_user_avatar", {
+        userId: userProfile.user_id,
+      })
+    } catch (err) {
+      console.log(err);
     }
-  ];
+  };
+
+  const updateAvatarImage = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await updateAvatar({
+        csrf_token: session.csrf_token,
+        cookies_id: session.cookie_login_id,
+        avatar_id: selectedAvatar
+      });
+      setProfile({
+        ...profile,
+        avatar_url: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
+      });
+      toast.show({
+        render: () => {
+          return (
+            <Box m="3" py="1" px="2" mt="10" mb={5} bg="green.600" rounded="sm">
+              <Text>{response.data.message}</Text>
+            </Box>
+          );
+        },
+        placement: "bottom"
+      });
+      await updateUserAvatar();
+
+      navigation.navigate("Profile");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleChangeAvatar = (avatarId, image) => {
     setSelectedAvatar(avatarId);
     setAvatarImage(image);
+  };
+
+  const handlePrevPage = () => {
+    setPage(Math.max(1, page - 1));
+  };
+
+  const handleNextPage = () => {
+    setPage(Math.min(totalPages, page + 1));
+  };
+
+  const handleTab = (type, title) => {
+    setPage(1);
+    setType(type);
+    setTitle(title);
   };
 
   return (
@@ -175,11 +142,8 @@ const EditAvatar = ({ navigation }) => {
           w="100%"
           space={4}
         >
-          <Text fontSize="xl" fontWeight="bold">
-            Selected Avatar
-          </Text>
           <LinearGradient
-            colors={["#24A2B7", "#3B82F6"]}
+            colors={["#24A2B7", "#A9EDF9"]}
             style={[styles.avatarImage]}
           >
             <Image
@@ -190,28 +154,56 @@ const EditAvatar = ({ navigation }) => {
               alt="avatar"
             />
           </LinearGradient>
-          <Button borderRadius="full" w="100%" bg="teal">
-            <HStack alignItems="center" space={2}>
-              <PencilIcon color="white" size="16" />
-              <Text fontWeight="bold">Update Avatar</Text>
-            </HStack>
+          <Button
+            onPress={updateAvatarImage}
+            borderRadius="full"
+            w="100%"
+            bg="teal"
+          >
+            <TouchableOpacity onPress={updateAvatarImage}>
+              <HStack alignItems="center" space={2}>
+                <PencilIcon color="white" size="16" />
+                <Text fontWeight="bold">Update Avatar</Text>
+              </HStack>
+            </TouchableOpacity>
           </Button>
         </VStack>
       </Box>
       <VStack mt="2" space={4}>
-        <Text fontWeight="semibold" color="white">
-          Unlocked Avatar: 29
+        <Text color="white">
+          {title} Avatar: {totalAvatar}
         </Text>
 
         <HStack space={2}>
-          <Button bg="primary" borderRadius="xl" size="sm">
-            All
+          <Button
+            onPress={() => handleTab("all", "Unlocked")}
+            bg={type === "all" ? "primary" : "blueGray.500"}
+            borderRadius="xl"
+            size="sm"
+          >
+            <Text fontSize="13" fontWeight="semibold">
+              All
+            </Text>
           </Button>
-          <Button bg="gray.500" borderRadius="xl" size="sm">
-            Favorite
+          <Button
+            onPress={() => handleTab("fav", "Favorite")}
+            bg={type === "fav" ? "primary" : "blueGray.500"}
+            borderRadius="xl"
+            size="sm"
+          >
+            <Text fontSize="13" fontWeight="semibold">
+              Favorite
+            </Text>
           </Button>
-          <Button bg="gray.500" borderRadius="xl" size="sm">
-            History
+          <Button
+            onPress={() => handleTab("recent_used", "History")}
+            bg={type === "recent_used" ? "primary" : "blueGray.500"}
+            borderRadius="xl"
+            size="sm"
+          >
+            <Text fontSize="13" fontWeight="semibold">
+              History
+            </Text>
           </Button>
         </HStack>
 
@@ -244,19 +236,49 @@ const EditAvatar = ({ navigation }) => {
           keyExtractor={(item) => item.avatar_id.toString()}
         />
 
-        <HStack justifyContent="space-between" mt={2}>
-          <Button borderRadius="lg" bg="primary">
-            <HStack alignItems="center" space="1">
-              <ChevronLeftIcon color="white" />
-              <Text>Prev</Text>
-            </HStack>
-          </Button>
-          <Button borderRadius="lg" bg="primary">
-            <HStack alignItems="center" space="1">
-              <Text>Next</Text>
-              <ChevronRightIcon color="white" />
-            </HStack>
-          </Button>
+        <HStack alignItems="center" justifyContent="space-between" mt={2}>
+          {page !== 1 ? (
+            <Button
+              onPress={handlePrevPage}
+              disabled={page === 1}
+              borderRadius="lg"
+              bg="primary"
+            >
+              <TouchableOpacity opacity="0.8" onPress={handlePrevPage}>
+                <HStack alignItems="center" space="1">
+                  <ChevronLeftIcon color="white" />
+                  <Text>Prev</Text>
+                </HStack>
+              </TouchableOpacity>
+            </Button>
+          ) : (
+            <Button opacity={0.7} borderRadius="lg" bg="cyan.700">
+              <HStack alignItems="center" space="1">
+                <ChevronLeftIcon color="white" />
+                <Text>Prev</Text>
+              </HStack>
+            </Button>
+          )}
+          <Text fontSize="15" fontWeight="bold">
+            {page} / {totalPages}
+          </Text>
+          {page !== totalPages ? (
+            <Button onPress={handleNextPage} borderRadius="lg" bg="primary">
+              <TouchableOpacity opacity="0.8" onPress={handleNextPage}>
+                <HStack alignItems="center" space="1">
+                  <Text>Next</Text>
+                  <ChevronRightIcon color="white" />
+                </HStack>
+              </TouchableOpacity>
+            </Button>
+          ) : (
+            <Button opacity={0.7} borderRadius="lg" bg="cyan.700">
+              <HStack alignItems="center" space="1">
+                <Text>Next</Text>
+                <ChevronRightIcon color="white" />
+              </HStack>
+            </Button>
+          )}
         </HStack>
       </VStack>
     </Layout>

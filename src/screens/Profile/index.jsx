@@ -5,13 +5,14 @@ import useUser from "../../utils/hooks/useUser";
 import { Image, TouchableOpacity } from "react-native";
 import { LoginIcon, PencilIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
 
 const Profile = () => {
   const { profile, session } = useUser();
   const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (session) {
@@ -20,18 +21,12 @@ const Profile = () => {
   }, [session]);
 
   const Avatar = () => (
-    <Box
-      mt="2"
-      w="135"
-      h="135"
-      justifyContent="center"
-      alignItems="center"
-      backgroundColor="white"
-      borderRadius="full"
-    >
+    <>
       <Box
         w="120"
         h="120"
+        borderWidth="8px"
+        borderColor="white"
         justifyContent="center"
         alignItems="center"
         backgroundColor="#A9EDF9"
@@ -49,24 +44,30 @@ const Profile = () => {
           alt="avatar"
         />
       </Box>
-      <Box
-        top="110"
-        bg="white"
-        borderColor="primary"
-        borderWidth="2"
-        position="absolute"
-        w="10"
-        h="10"
-        borderRadius="50"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <TouchableOpacity onPress={() => navigation.navigate("Avatar")}>
-          <PencilIcon />
-        </TouchableOpacity>
-      </Box>
-    </Box>
+      {session && (
+        <Button
+          top="95"
+          bg="white"
+          borderColor="primary"
+          borderWidth="2"
+          position="absolute"
+          w="10"
+          h="10"
+          borderRadius="50"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          onPress={() => navigation.navigate("Avatar")}
+        >
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate("Avatar")}
+          >
+            <PencilIcon />
+          </TouchableOpacity>
+        </Button>
+      )}
+    </>
   );
 
   if (!isLogin) {
@@ -82,12 +83,14 @@ const Profile = () => {
               variant="filled"
               bg="primary"
             >
-              <HStack alignItems="center" space={1}>
-                <LoginIcon size={24} />
-                <Text color="white" fontWeight="bold" mr="2" isTruncated>
-                  Login Disini
-                </Text>
-              </HStack>
+              <TouchableOpacity onPress={() => navigation.replace("Login")}>
+                <HStack alignItems="center" space={1}>
+                  <LoginIcon size={24} />
+                  <Text color="white" fontWeight="bold" mr="2" isTruncated>
+                    Login Disini
+                  </Text>
+                </HStack>
+              </TouchableOpacity>
             </Button>
           </VStack>
         </Box>
