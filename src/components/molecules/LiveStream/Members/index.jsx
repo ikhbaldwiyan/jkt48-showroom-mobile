@@ -33,7 +33,7 @@ export const Members = () => {
                       justifyContent="space-around"
                     >
                       <Image
-                        alt={member.name}
+                        alt="Member"
                         style={{ width: 70, height: 92 }}
                         source={{ uri: member?.image }}
                         rounded="lg"
