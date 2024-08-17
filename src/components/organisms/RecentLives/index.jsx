@@ -7,6 +7,7 @@ import {
   Calendar,
   GiftFill,
   History,
+  LiveIcon,
   TimesFill,
   UsersFill
 } from "../../../assets/icon";
@@ -43,7 +44,9 @@ const RecentLives = ({ refreshing }) => {
             return (
               <Box w="265" mr="3" key={idx}>
                 <LinearGradient
-                  colors={["#24A2B7", "#4724B7"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  colors={["#004A66", "#009FCB"]}
                   style={styles.linearGradient}
                 >
                   <Box>
@@ -70,7 +73,7 @@ const RecentLives = ({ refreshing }) => {
                           <HStack alignItems="center" space={2}>
                             <UsersFill />
                             <Text fontWeight="semibold">
-                              {formatViews(live_info?.viewers?.num)} Views
+                              {formatViews(live_info?.viewers?.num)} views
                             </Text>
                           </HStack>
                           <HStack alignItems="center" space={2}>
@@ -80,9 +83,9 @@ const RecentLives = ({ refreshing }) => {
                             </Text>
                           </HStack>
                           <HStack alignItems="center" space={2}>
-                            <GiftFill />
+                            <LiveIcon size={16} />
                             <Text fontWeight="semibold">
-                              {formatViews(log.points)} Gold
+                              {log.type === "showroom" ? "Showroom" : "IDN Live"}
                             </Text>
                           </HStack>
                         </VStack>

@@ -12,6 +12,7 @@ import { ScheduleList, ScheduleDetail } from "./Schedule";
 import Profile from "./Profile";
 import IDNLives from "./IDNLives";
 import EditAvatar from "./EditAvatar";
+import HistoryLive from "./HistoryLive";
 
 export {
   SplashScreen,
@@ -28,5 +29,6 @@ export {
   About,
   Profile,
   IDNLives,
-  EditAvatar
+  EditAvatar,
+  HistoryLive,
 };

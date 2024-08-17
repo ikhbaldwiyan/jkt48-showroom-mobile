@@ -17,7 +17,8 @@ import {
   About,
   Profile,
   IDNLives,
-  EditAvatar
+  EditAvatar,
+  HistoryLive
 } from "../../../screens";
 import {
   HomeIcon,
@@ -37,6 +38,8 @@ import { Box, Text } from "native-base";
 import { StatusBar, TouchableOpacity } from "react-native";
 import MemberList from "../../../screens/MemberList";
 import UserIconOutline from "../../../assets/icon/UserIconOutline";
+import HistoryFill from "../../../assets/icon/HistoryFill";
+import HistoryOutline from "../../../assets/icon/HistoryOutline";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -60,11 +63,26 @@ const Navigation = () => {
       ) : (
         <UserIconOutline />
       );
-    } else if (route.name === "About") {
-      icon = isActive ? <Info color="#24A2B7" size={22} /> : <InfoOutline />;
+    } else if (route.name === "History") {
+      icon = isActive ? (
+        <HistoryFill color="#24A2B7" size={22} />
+      ) : (
+        <HistoryOutline />
+      );
     }
 
     return icon;
+  };
+
+  const BasicHeader = {
+    headerShown: true,
+    headerStyle: {
+      backgroundColor: "#21252B"
+    },
+    headerTitleStyle: {
+      color: "white",
+      fontWeight: "bold"
+    }
   };
 
   const TabNavigator = () => (
@@ -102,10 +120,15 @@ const Navigation = () => {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Member" component={MemberList} />
+      <Tab.Screen name="Member" component={MemberList}  />
+      <Tab.Screen
+        name="History"
+        component={HistoryLive}
+        options={BasicHeader}
+      />
       <Tab.Screen name="Theater" component={ScheduleList} />
       <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="About" component={About} />
+      {/* <Tab.Screen name="About" component={About} /> */}
     </Tab.Navigator>
   );
 
@@ -168,11 +191,7 @@ const Navigation = () => {
         component={PremiumLive}
         options={showHeader}
       />
-      <Stack.Screen 
-        name="Avatar" 
-        component={EditAvatar} 
-        options={showHeader} 
-      />
+      <Stack.Screen name="Avatar" component={EditAvatar} options={showHeader} />
     </Stack.Navigator>
   );
 };
