@@ -33,7 +33,7 @@ import {
 } from "../../../assets/icon";
 
 import { useNavigation } from "@react-navigation/native";
-import { Box } from "native-base";
+import { Box, Text } from "native-base";
 import { StatusBar, TouchableOpacity } from "react-native";
 import MemberList from "../../../screens/MemberList";
 import UserIconOutline from "../../../assets/icon/UserIconOutline";
@@ -71,17 +71,22 @@ const Navigation = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarStyle: { backgroundColor: theme.colors.black, height: 60 },
+        tabBarStyle: { backgroundColor: theme.colors.black, height: 70 },
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.white,
         tabBarIconStyle: {
-          marginTop: 5
+          marginTop: 8
         },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          marginBottom: 10,
-          fontWeight: "bold"
-        },
+        tabBarLabel: ({ focused, color }) => (
+          <Text
+            color={color}
+            fontSize="12"
+            marginBottom="15"
+            fontWeight={focused ? "700" : "400"}
+          >
+            {route.name}
+          </Text>
+        ),
         tabBarIcon: ({ focused }) => {
           return navigationIcon(route, focused);
         },
