@@ -5,9 +5,9 @@ import { ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import {
   Calendar,
-  GiftFill,
   History,
   LiveIcon,
+  RightArrow,
   TimesFill,
   UsersFill
 } from "../../../assets/icon";
@@ -18,7 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const RecentLives = ({ refreshing }) => {
   const [recentLives, setRecentLives] = useState([]);
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function getRecentLive() {
@@ -35,9 +35,20 @@ const RecentLives = ({ refreshing }) => {
   return (
     recentLives.length > 0 && (
       <View>
-        <Text fontSize="2xl" mb="3" fontWeight="semibold">
-          Live Terakhir
-        </Text>
+        <HStack alignItems="center" justifyContent="space-between">
+          <Text fontSize="2xl" mb="3" fontWeight="semibold">
+            Live Terakhir
+          </Text>
+          <TouchableOpacity
+            onPress={() => navigation.replace("Main", { screen: "History" })}
+          >
+          <HStack  alignItems="center" mb="1" space={2}>
+            <Text fontSize="md">See All</Text>
+            <RightArrow />
+          </HStack>
+
+          </TouchableOpacity>
+        </HStack>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {recentLives?.map((log, idx) => {
             const { member, live_info } = log;
@@ -84,7 +95,7 @@ const RecentLives = ({ refreshing }) => {
                           </HStack>
                           <HStack alignItems="center" space={2}>
                             <LiveIcon size={16} />
-                            <Text>
+                            <Text fontWeight="semibold">
                               {log.type === "showroom" ? "Showroom" : "IDN Live"}
                             </Text>
                           </HStack>
@@ -105,7 +116,7 @@ const RecentLives = ({ refreshing }) => {
                     <TouchableOpacity
                       activeOpacity={0.6}
                       onPress={() => {
-                        navigate("RoomDetail", {
+                        navigation.navigate("RoomDetail", {
                           room: log
                         });
                       }}

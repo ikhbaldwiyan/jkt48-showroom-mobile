@@ -30,7 +30,7 @@ const HistoryLive = () => {
 
   useLayoutEffect(() => {
     setOptions({
-      headerTitle: 'History Live Streaming',
+      headerTitle: 'History Live',
     });
   }, [setOptions]);
 
@@ -119,8 +119,8 @@ const HistoryLive = () => {
                           source={{
                             uri: 'https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k',
                           }}
-                          width="38"
-                          height="38"
+                          width="50"
+                          height="50"
                           position="absolute"
                           zIndex="99"
                           bottom={0}
@@ -131,7 +131,7 @@ const HistoryLive = () => {
                       ) : (
                         <Image
                           size="md"
-                          alt="showroom"
+                          alt="idn live"
                           source={{
                             uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/IDN_Live.svg/2560px-IDN_Live.svg.png',
                           }}
