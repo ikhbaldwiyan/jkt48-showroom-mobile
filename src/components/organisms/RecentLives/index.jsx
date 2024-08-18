@@ -66,25 +66,25 @@ const RecentLives = ({ refreshing }) => {
                             <Calendar />
                             <Text fontWeight="semibold">
                               {moment(live_info?.date?.start).format(
-                                "dddd, D MMMM"
+                                "dddd, D MMM"
                               )}
                             </Text>
                           </HStack>
                           <HStack alignItems="center" space={2}>
                             <UsersFill />
-                            <Text fontWeight="semibold">
+                            <Text>
                               {formatViews(live_info?.viewers?.num)} views
                             </Text>
                           </HStack>
                           <HStack alignItems="center" space={2}>
                             <TimesFill />
-                            <Text fontWeight="semibold">
+                            <Text>
                               {getLiveDurationMinutes(live_info?.duration)}
                             </Text>
                           </HStack>
                           <HStack alignItems="center" space={2}>
                             <LiveIcon size={16} />
-                            <Text fontWeight="semibold">
+                            <Text>
                               {log.type === "showroom" ? "Showroom" : "IDN Live"}
                             </Text>
                           </HStack>

@@ -36,6 +36,6 @@ export const getRecentLives = () => {
   return apiHistory.get(ENDPOINTS.ROOM.RECENT_LIVE);
 };
 
-export const getHistoryLives = (roomId) => {
-  return apiHistory.get(`${ENDPOINTS.ROOM.HISTORY_LIVE}&room_id=${roomId}`);
+export const getHistoryLives = (type, search) => {
+  return apiHistory.get(`${ENDPOINTS.ROOM.HISTORY_LIVE}&type=${type}&filter=${type}&search=${search}`);
 };
