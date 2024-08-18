@@ -24,6 +24,7 @@ export default {
     FOLLOW: "/room/follow",
     RECENT_LIVE: "/recent?sort=date&page=1&filter=all&order=-1&group=jkt48&type=all",
     HISTORY_LIVE: "/recent?sort=date&page=1&order=-1&group=jkt48",
+    HISTORY_LIVE_PROFILE: "/recent?sort=date&page=1&order=-1&perpage=6&group=jkt48&type=all",
   },
   IDN_LIVE: {
     ROOM_LIVES: "/idn_lives",

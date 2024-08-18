@@ -25,7 +25,7 @@ const useProfileStore = create((set) => ({
   },
   getHistoryLive: async (roomId) => {
     try {
-      const response = await ROOMS.getHistoryLives(roomId);
+      const response = await ROOMS.getHistoryProfile(roomId);
       set({ historyLive: response.data.recents });
     } catch (error) {
       console.log(error);

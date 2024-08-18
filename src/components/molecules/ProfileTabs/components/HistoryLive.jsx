@@ -50,26 +50,26 @@ const HistoryLive = () => {
               <Box>
                 <VStack space={2.5}>
                   <Text color="gray.100" fontSize="md" fontWeight="bold">
-                    {moment(item.live_info?.date?.start).format("dddd, D MMMM")}
+                    {moment(item?.live_info?.date?.start).format("dddd, D MMMM")}
                   </Text>
                   <HStack space={1} alignItems="center">
                     <UsersIconFill />
                     <Text>
-                      {formatViews(item.live_info?.viewers?.num)} Views
+                      {formatViews(item?.live_info?.viewers?.num)} Views
                     </Text>
                   </HStack>
                   <HStack space={1} alignItems="center">
                     <TimesFill />
                     <Text>
                       {" "}
-                      {getLiveDurationMinutes(item.live_info?.duration)}
+                      {getLiveDurationMinutes(item?.live_info?.duration)}
                     </Text>
                   </HStack>
                   <HStack space={1} alignItems="center">
                     <History size="18" />
                     <Text>
                       <TimeAgo
-                        time={item.live_info?.date?.end}
+                        time={item?.live_info?.date?.end}
                         interval={20000}
                       />
                     </Text>

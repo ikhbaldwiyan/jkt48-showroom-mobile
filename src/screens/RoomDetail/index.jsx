@@ -146,7 +146,7 @@ const RoomDetail = () => {
               <Text fontWeight="semibold">Last Live:</Text>
               <Text fontWeight="semibold">
                 {historyLive ? (
-                  moment(historyLive[0].live_info.date.end).format(
+                  moment(historyLive[0]?.live_info?.date?.end).format(
                     "dddd, D MMMM hh:mm"
                   ) + " WIB"
                 ) : (
