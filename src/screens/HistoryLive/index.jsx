@@ -1,5 +1,5 @@
-import moment from 'moment';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import moment from "moment";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,27 +10,27 @@ import {
   Input,
   Text,
   VStack,
-} from 'native-base';
-import { StyleSheet } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { Calendar, History, TimesFill, UsersFill } from '../../assets/icon';
-import { ROOMS } from '../../services';
-import { formatViews, getLiveDurationMinutes } from '../../utils/helpers';
-import TimeAgo from 'react-native-timeago';
-import { useNavigation } from '@react-navigation/native';
-import Layout from '../../components/templates/Layout';
-import { useRefresh } from '../../utils/hooks/useRefresh';
+} from "native-base";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import { Calendar, History, TimesFill, UsersFill } from "../../assets/icon";
+import { ROOMS } from "../../services";
+import { formatViews, getLiveDurationMinutes } from "../../utils/helpers";
+import TimeAgo from "react-native-timeago";
+import { useNavigation } from "@react-navigation/native";
+import Layout from "../../components/templates/Layout";
+import { useRefresh } from "../../utils/hooks/useRefresh";
 
 const HistoryLive = () => {
   const [recentLives, setRecentLives] = useState([]);
   const { navigate, setOptions } = useNavigation();
   const { refreshing, onRefresh } = useRefresh();
-  const [type, setType] = useState('all');
-  const [search, setSearch] = useState('');
+  const [type, setType] = useState("all");
+  const [search, setSearch] = useState("");
 
   useLayoutEffect(() => {
     setOptions({
-      headerTitle: 'History Live',
+      headerTitle: "History Live",
     });
   }, [setOptions]);
 
@@ -71,8 +71,8 @@ const HistoryLive = () => {
             p="2"
             height="36px"
             borderRadius={6}
-            bg={type === 'all' ? 'teal' : 'blueGray.500'}
-            onPress={() => setType('all')}>
+            bg={type === "all" ? "teal" : "blueGray.500"}
+            onPress={() => setType("all")}>
             <HStack space={1} alignItems="center">
               <Text fontWeight="semibold">All</Text>
             </HStack>
@@ -81,8 +81,8 @@ const HistoryLive = () => {
             p="2"
             height="36px"
             borderRadius={6}
-            bg={type === 'showroom' ? 'teal' : 'blueGray.500'}
-            onPress={() => setType('showroom')}>
+            bg={type === "showroom" ? "teal" : "blueGray.500"}
+            onPress={() => setType("showroom")}>
             <HStack space={1} alignItems="center">
               <Text fontWeight="semibold">Showroom</Text>
             </HStack>
@@ -91,8 +91,8 @@ const HistoryLive = () => {
             p="2"
             height="36px"
             borderRadius={6}
-            bg={type === 'idn' ? 'teal' : 'blueGray.500'}
-            onPress={() => setType('idn')}>
+            bg={type === "idn" ? "teal" : "blueGray.500"}
+            onPress={() => setType("idn")}>
             <HStack space={1} alignItems="center">
               <Text fontWeight="semibold">IDN Live</Text>
             </HStack>
@@ -108,16 +108,16 @@ const HistoryLive = () => {
                 <LinearGradient
                   start={{ x: -0, y: 0 }}
                   end={{ x: 1, y: 2 }}
-                  colors={['#004A66', '#009FCB']}
+                  colors={["#004A66", "#009FCB"]}
                   style={styles.linearGradient}>
                   <Box>
                     <HStack>
-                      {log.type === 'showroom' ? (
+                      {log.type === "showroom" ? (
                         <Image
                           size="md"
                           alt="showroom"
                           source={{
-                            uri: 'https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k',
+                            uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
                           }}
                           width="50"
                           height="50"
@@ -133,13 +133,13 @@ const HistoryLive = () => {
                           size="md"
                           alt="idn live"
                           source={{
-                            uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/IDN_Live.svg/2560px-IDN_Live.svg.png',
+                            uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/IDN_Live.svg/2560px-IDN_Live.svg.png",
                           }}
                           width="120"
                           left={2}
                           height="35"
                           position="absolute"
-                          bg="rgba(0, 0, 0, 0.1)" 
+                          bg="rgba(0, 0, 0, 0.1)"
                           zIndex="99"
                           bottom={1}
                           borderRightRadius={6}
@@ -158,25 +158,39 @@ const HistoryLive = () => {
                       />
                       <Box px="2">
                         <VStack space={2} p="3">
-                          <HStack
-                            alignItems="center"
-                            justifyContent="space-between">
-                            <Text
-                              color="blueGray.100"
-                              fontSize="xl"
-                              fontWeight="bold">
-                              {member.url === 'jkt48'
-                                ? 'JKT48 Ofiicial'
-                                : member?.nickname}
-                            </Text>
-                            {/* <ChevronRightIcon color="white" /> */}
-                          </HStack>
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigate("HistoryDetail", {
+                                url: `https://www.jkt48showroom.com/history/${member.url}/${log.data_id}`,
+                                title: member.is_official
+                                  ? "JKT48 Official"
+                                  : member.nickname +
+                                    " - " +
+                                    moment(live_info.date.start).format(
+                                      "DD MMMM YYYY",
+                                    ),
+                              })
+                            }>
+                            <HStack
+                              alignItems="center"
+                              justifyContent="space-between">
+                              <Text
+                                color="blueGray.100"
+                                fontSize="xl"
+                                fontWeight="bold">
+                                {member.url === "jkt48"
+                                  ? "JKT48 Ofiicial"
+                                  : member?.nickname}
+                              </Text>
+                              <ChevronRightIcon color="white" />
+                            </HStack>
+                          </TouchableOpacity>
                           <Divider />
                           <HStack alignItems="center" space={2}>
                             <Calendar size={20} />
                             <Text fontSize="15">
                               {moment(live_info?.date?.start).format(
-                                'dddd, D MMMM',
+                                "dddd, D MMMM",
                               )}
                             </Text>
                           </HStack>

@@ -24,6 +24,7 @@ import {
   EditAvatar,
   HistoryLive,
   MemberList,
+  HistoryLiveDetail,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -192,6 +193,7 @@ const Navigation = () => {
         options={showHeader}
       />
       <Stack.Screen name="Avatar" component={EditAvatar} options={showHeader} />
+      <Stack.Screen name="HistoryDetail" component={HistoryLiveDetail} options={showHeader} />
     </Stack.Navigator>
   );
 };
