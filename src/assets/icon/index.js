@@ -3,6 +3,7 @@ import HomeIcon from "./HomeIcon";
 import HomeIconOutline from "./HomeIconOutline";
 import UsersIcon from "./UsersIcon";
 import UserIcon from "./UserIcon";
+import UserIconOutline from "./UserIconOutline"
 import UsersIconOutline from "./UsersIconOutline";
 import TimesIcon from "./TimesIcon";
 import TheaterIcon from "./TheaterIcon";
@@ -56,6 +57,7 @@ export {
   HomeIconOutline,
   UsersIcon,
   UserIcon,
+  UserIconOutline,
   UsersIconOutline,
   TimesIcon,
   TheaterIcon,

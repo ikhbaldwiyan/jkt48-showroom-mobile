@@ -139,6 +139,7 @@ const HistoryLive = () => {
                           left={2}
                           height="35"
                           position="absolute"
+                          bg="rgba(0, 0, 0, 0.1)" 
                           zIndex="99"
                           bottom={1}
                           borderRightRadius={6}

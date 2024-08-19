@@ -38,6 +38,7 @@ import {
   ChevronBack,
   HistoryFill,
   HistoryOutline,
+  UserIconOutline,
 } from "../../../assets/icon";
 
 const Navigation = () => {
@@ -60,7 +61,7 @@ const Navigation = () => {
       icon = isActive ? (
         <UserIcon color="#24A2B7" size={22} />
       ) : (
-        <UsersIconOutline />
+        <UserIconOutline />
       );
     } else if (route.name === "History") {
       icon = isActive ? (
