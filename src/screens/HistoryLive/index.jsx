@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -11,20 +11,20 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {Calendar, History, TimesFill, UsersFill} from '../../assets/icon';
-import {ROOMS} from '../../services';
-import {formatViews, getLiveDurationMinutes} from '../../utils/helpers';
+import { Calendar, History, TimesFill, UsersFill } from '../../assets/icon';
+import { ROOMS } from '../../services';
+import { formatViews, getLiveDurationMinutes } from '../../utils/helpers';
 import TimeAgo from 'react-native-timeago';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Layout from '../../components/templates/Layout';
-import {useRefresh} from '../../utils/hooks/useRefresh';
+import { useRefresh } from '../../utils/hooks/useRefresh';
 
 const HistoryLive = () => {
   const [recentLives, setRecentLives] = useState([]);
-  const {navigate, setOptions} = useNavigation();
-  const {refreshing, onRefresh} = useRefresh();
+  const { navigate, setOptions } = useNavigation();
+  const { refreshing, onRefresh } = useRefresh();
   const [type, setType] = useState('all');
   const [search, setSearch] = useState('');
 
@@ -102,12 +102,12 @@ const HistoryLive = () => {
       {recentLives.length > 0 && (
         <VStack space={4}>
           {recentLives?.map((log, idx) => {
-            const {member, live_info} = log;
+            const { member, live_info } = log;
             return (
               <Box w="100%" mr="3" key={idx}>
                 <LinearGradient
-                  start={{x: -0, y: 0}}
-                  end={{x: 1, y: 2}}
+                  start={{ x: -0, y: 0 }}
+                  end={{ x: 1, y: 2 }}
                   colors={['#004A66', '#009FCB']}
                   style={styles.linearGradient}>
                   <Box>
@@ -147,7 +147,7 @@ const HistoryLive = () => {
                         />
                       )}
                       <Image
-                        source={{uri: member.img_alt}}
+                        source={{ uri: member.img_alt }}
                         size="md"
                         alt="image"
                         w="130"

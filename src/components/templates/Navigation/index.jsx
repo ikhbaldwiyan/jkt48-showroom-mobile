@@ -2,6 +2,10 @@ import React, { useEffect } from "react";
 import { theme } from "../../../config/theme";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import { Box, Text } from "native-base";
+import { StatusBar, TouchableOpacity } from "react-native";
+
 import {
   Home,
   IDNStream,
@@ -18,7 +22,8 @@ import {
   Profile,
   IDNLives,
   EditAvatar,
-  HistoryLive
+  HistoryLive,
+  MemberList,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -30,16 +35,10 @@ import {
   UserIcon,
   Info,
   InfoOutline,
-  ChevronBack
+  ChevronBack,
+  HistoryFill,
+  HistoryOutline,
 } from "../../../assets/icon";
-
-import { useNavigation } from "@react-navigation/native";
-import { Box, Text } from "native-base";
-import { StatusBar, TouchableOpacity } from "react-native";
-import MemberList from "../../../screens/MemberList";
-import UserIconOutline from "../../../assets/icon/UserIconOutline";
-import HistoryFill from "../../../assets/icon/HistoryFill";
-import HistoryOutline from "../../../assets/icon/HistoryOutline";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -61,7 +60,7 @@ const Navigation = () => {
       icon = isActive ? (
         <UserIcon color="#24A2B7" size={22} />
       ) : (
-        <UserIconOutline />
+        <UsersIconOutline />
       );
     } else if (route.name === "History") {
       icon = isActive ? (
@@ -120,7 +119,7 @@ const Navigation = () => {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Member" component={MemberList}  />
+      <Tab.Screen name="Member" component={MemberList} />
       <Tab.Screen
         name="History"
         component={HistoryLive}

@@ -47,6 +47,8 @@ import DiscordIcon from "./DiscordIcon";
 import GooglePlayIcon from "./GooglePlayIcon";
 import SettingsIcon from "./SettingsIcon";
 import PencilIcon from "./PencilIcon";
+import HistoryFill from "./HistoryFill";
+import HistoryOutline from "./HistoryOutline";
 
 export {
   LogoIcon,
@@ -98,4 +100,6 @@ export {
   GooglePlayIcon,
   SettingsIcon,
   PencilIcon,
+  HistoryFill,
+  HistoryOutline
 };

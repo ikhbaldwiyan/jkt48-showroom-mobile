@@ -11,6 +11,7 @@ import About from "./About";
 import { ScheduleList, ScheduleDetail } from "./Schedule";
 import Profile from "./Profile";
 import IDNLives from "./IDNLives";
+import MemberList from "./MemberList"
 import EditAvatar from "./EditAvatar";
 import HistoryLive from "./HistoryLive";
 
@@ -28,6 +29,7 @@ export {
   PremiumLive,
   About,
   Profile,
+  MemberList,
   IDNLives,
   EditAvatar,
   HistoryLive,
