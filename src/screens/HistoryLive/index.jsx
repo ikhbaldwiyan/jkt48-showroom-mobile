@@ -9,7 +9,7 @@ import {
   Image,
   Input,
   Text,
-  VStack,
+  VStack
 } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -30,7 +30,7 @@ const HistoryLive = () => {
 
   useLayoutEffect(() => {
     setOptions({
-      headerTitle: "History Live",
+      headerTitle: "History Live"
     });
   }, [setOptions]);
 
@@ -46,18 +46,18 @@ const HistoryLive = () => {
     getRecentLive();
   }, [refreshing, type, search]);
 
-  const handleSearch = query => {
+  const handleSearch = (query) => {
     setSearch(query);
   };
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="4">
-        <HStack space={1.5}>
+        <HStack space={1.5} alignItems="center">
           <Input
             bgColor="white"
             variant="filled"
-            w="38%"
+            flex={2}
             fontSize="sm"
             name="id"
             height="36px"
@@ -72,8 +72,9 @@ const HistoryLive = () => {
             height="36px"
             borderRadius={6}
             bg={type === "all" ? "teal" : "blueGray.500"}
-            onPress={() => setType("all")}>
-            <HStack space={1} alignItems="center">
+            onPress={() => setType("all")}
+          >
+            <HStack space={1} alignItems="center" justifyContent="center">
               <Text fontWeight="semibold">All</Text>
             </HStack>
           </Button>
@@ -82,23 +83,27 @@ const HistoryLive = () => {
             height="36px"
             borderRadius={6}
             bg={type === "showroom" ? "teal" : "blueGray.500"}
-            onPress={() => setType("showroom")}>
-            <HStack space={1} alignItems="center">
+            onPress={() => setType("showroom")}
+          >
+            <HStack space={1} alignItems="center" justifyContent="center">
               <Text fontWeight="semibold">Showroom</Text>
             </HStack>
           </Button>
           <Button
+            flex={1}
             p="2"
             height="36px"
             borderRadius={6}
             bg={type === "idn" ? "teal" : "blueGray.500"}
-            onPress={() => setType("idn")}>
-            <HStack space={1} alignItems="center">
+            onPress={() => setType("idn")}
+          >
+            <HStack space={1} alignItems="center" justifyContent="center">
               <Text fontWeight="semibold">IDN Live</Text>
             </HStack>
           </Button>
         </HStack>
       </Box>
+
       {recentLives.length > 0 && (
         <VStack space={4}>
           {recentLives?.map((log, idx) => {
@@ -109,116 +114,118 @@ const HistoryLive = () => {
                   start={{ x: -0, y: 0 }}
                   end={{ x: 1, y: 2 }}
                   colors={["#004A66", "#009FCB"]}
-                  style={styles.linearGradient}>
-                  <Box>
-                    <HStack>
-                      {log.type === "showroom" ? (
-                        <Image
-                          size="md"
-                          alt="showroom"
-                          source={{
-                            uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
-                          }}
-                          width="50"
-                          height="50"
-                          position="absolute"
-                          zIndex="99"
-                          bottom={0}
-                          borderRightRadius={6}
-                          borderBottomRightRadius={0}
-                          borderBottomLeftRadius={6}
-                        />
-                      ) : (
-                        <Image
-                          size="md"
-                          alt="idn live"
-                          source={{
-                            uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/IDN_Live.svg/2560px-IDN_Live.svg.png",
-                          }}
-                          width="120"
-                          left={2}
-                          height="35"
-                          position="absolute"
-                          bg="rgba(0, 0, 0, 0.1)"
-                          zIndex="99"
-                          bottom={1}
-                          borderRightRadius={6}
-                          borderBottomRightRadius={0}
-                          shadow="4"
-                        />
-                      )}
+                  style={styles.linearGradient}
+                >
+                  <HStack>
+                    {log.type === "showroom" ? (
                       <Image
-                        source={{ uri: member.img_alt }}
                         size="md"
-                        alt="image"
-                        w="130"
-                        h="auto"
-                        borderTopLeftRadius={6}
+                        alt="showroom"
+                        source={{
+                          uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k"
+                        }}
+                        width="50"
+                        height="50"
+                        position="absolute"
+                        zIndex="99"
+                        bottom={0}
+                        borderRightRadius={6}
+                        borderBottomRightRadius={0}
                         borderBottomLeftRadius={6}
                       />
-                      <Box px="2">
-                        <VStack space={2} p="3">
-                          <TouchableOpacity
-                            onPress={() =>
-                              navigate("HistoryDetail", {
-                                url: `https://www.jkt48showroom.com/history/${member.url}/${log.data_id}`,
-                                title: member.is_official
-                                  ? "JKT48 Official"
-                                  : member.nickname +
-                                    " - " +
-                                    moment(live_info.date.start).format(
-                                      "DD MMMM YYYY",
-                                    ),
-                              })
-                            }>
-                            <HStack
-                              alignItems="center"
-                              justifyContent="space-between">
-                              <Text
-                                color="blueGray.100"
-                                fontSize="xl"
-                                fontWeight="bold">
-                                {member.url === "jkt48"
-                                  ? "JKT48 Ofiicial"
-                                  : member?.nickname}
-                              </Text>
-                              <ChevronRightIcon color="white" />
-                            </HStack>
-                          </TouchableOpacity>
-                          <Divider />
-                          <HStack alignItems="center" space={2}>
-                            <Calendar size={20} />
-                            <Text fontSize="15">
-                              {moment(live_info?.date?.start).format(
-                                "dddd, D MMMM",
-                              )}
+                    ) : (
+                      <Image
+                        size="md"
+                        alt="idn live"
+                        source={{
+                          uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/IDN_Live.svg/2560px-IDN_Live.svg.png"
+                        }}
+                        width="120"
+                        left={2}
+                        height="35"
+                        position="absolute"
+                        bg="rgba(0, 0, 0, 0.1)"
+                        zIndex="99"
+                        bottom={1}
+                        borderRightRadius={6}
+                        borderBottomRightRadius={0}
+                        shadow="4"
+                      />
+                    )}
+                    <Image
+                      source={{ uri: member.img_alt }}
+                      size="md"
+                      alt="image"
+                      w="130"
+                      h="auto"
+                      borderTopLeftRadius={6}
+                      borderBottomLeftRadius={6}
+                    />
+                    <Box px="2" flex={1}>
+                      <VStack space={2} p="3">
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigate("HistoryDetail", {
+                              url: `https://www.jkt48showroom.com/history/${member.url}/${log.data_id}`,
+                              title: member.is_official
+                                ? "JKT48 Official"
+                                : member.nickname +
+                                  " - " +
+                                  moment(live_info.date.start).format(
+                                    "DD MMMM YYYY"
+                                  )
+                            })
+                          }
+                        >
+                          <HStack
+                            alignItems="center"
+                            justifyContent="space-between"
+                          >
+                            <Text
+                              color="blueGray.100"
+                              fontSize="xl"
+                              fontWeight="bold"
+                            >
+                              {member.url === "jkt48"
+                                ? "JKT48 Ofiicial"
+                                : member?.nickname}
                             </Text>
+                            <ChevronRightIcon color="white" />
                           </HStack>
-                          <HStack alignItems="center" space={2}>
-                            <UsersFill size={20} />
-                            <Text fontSize="15">
-                              {formatViews(live_info?.viewers?.num)} views
-                            </Text>
-                          </HStack>
-                          <HStack alignItems="center" space={2}>
-                            <TimesFill size={20} />
-                            <Text fontSize="15">
-                              {getLiveDurationMinutes(live_info?.duration)}
-                            </Text>
-                          </HStack>
-                          <HStack space={2} alignItems="center">
-                            <History size={20} />
-                            <Text fontSize="15" fontWeight="semibold">
-                              <TimeAgo
-                                time={live_info?.date?.end}
-                                interval={20000}
-                              />
-                            </Text>
-                          </HStack>
-                        </VStack>
-                      </Box>
-                    </HStack>
-                  </Box>
+                        </TouchableOpacity>
+                        <Divider />
+                        <HStack alignItems="center" space={2}>
+                          <Calendar size={20} />
+                          <Text fontSize="15">
+                            {moment(live_info?.date?.start).format(
+                              "dddd, D MMMM"
+                            )}
+                          </Text>
+                        </HStack>
+                        <HStack alignItems="center" space={2}>
+                          <UsersFill size={20} />
+                          <Text fontSize="15">
+                            {formatViews(live_info?.viewers?.num)} views
+                          </Text>
+                        </HStack>
+                        <HStack alignItems="center" space={2}>
+                          <TimesFill size={20} />
+                          <Text fontSize="15">
+                            {getLiveDurationMinutes(live_info?.duration)}
+                          </Text>
+                        </HStack>
+                        <HStack space={2} alignItems="center">
+                          <History size={20} />
+                          <Text fontSize="15" fontWeight="semibold">
+                            <TimeAgo
+                              time={live_info?.date?.end}
+                              interval={20000}
+                            />
+                          </Text>
+                        </HStack>
+                      </VStack>
+                    </Box>
+                  </HStack>
                 </LinearGradient>
               </Box>
             );
@@ -235,6 +242,6 @@ export default HistoryLive;
 const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
-    borderRadius: 6,
-  },
+    borderRadius: 6
+  }
 });

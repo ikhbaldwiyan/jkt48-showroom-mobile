@@ -24,7 +24,7 @@ import {
   EditAvatar,
   HistoryLive,
   MemberList,
-  HistoryLiveDetail,
+  HistoryLiveDetail
 } from "../../../screens";
 import {
   HomeIcon,
@@ -34,12 +34,10 @@ import {
   TheaterIcon,
   TheaterIconOutline,
   UserIcon,
-  Info,
-  InfoOutline,
   ChevronBack,
   HistoryFill,
   HistoryOutline,
-  UserIconOutline,
+  UserIconOutline
 } from "../../../assets/icon";
 
 const Navigation = () => {
@@ -129,7 +127,6 @@ const Navigation = () => {
       />
       <Tab.Screen name="Theater" component={ScheduleList} />
       <Tab.Screen name="Profile" component={Profile} />
-      {/* <Tab.Screen name="About" component={About} /> */}
     </Tab.Navigator>
   );
 
@@ -193,7 +190,12 @@ const Navigation = () => {
         options={showHeader}
       />
       <Stack.Screen name="Avatar" component={EditAvatar} options={showHeader} />
-      <Stack.Screen name="HistoryDetail" component={HistoryLiveDetail} options={showHeader} />
+      <Stack.Screen
+        name="HistoryDetail"
+        component={HistoryLiveDetail}
+        options={showHeader}
+      />
+      <Stack.Screen name="About" component={About} options={showHeader} />
     </Stack.Navigator>
   );
 };
