@@ -32,6 +32,13 @@ const RecentLives = ({ refreshing }) => {
     getRecentLive();
   }, [refreshing]);
 
+  const getSpacingBasedOnTimeAgo = (endDate) => {
+    const currentTime = new Date();
+    const diffMinutes = Math.floor((currentTime - new Date(endDate)) / 60000);
+
+    return diffMinutes < 60 ? "0.5" : "1";
+  };
+
   return (
     recentLives.length > 0 && (
       <View>
@@ -42,11 +49,10 @@ const RecentLives = ({ refreshing }) => {
           <TouchableOpacity
             onPress={() => navigation.replace("Main", { screen: "History" })}
           >
-          <HStack  alignItems="center" mb="1" space={2}>
-            <Text fontSize="md">See All</Text>
-            <RightArrow />
-          </HStack>
-
+            <HStack alignItems="center" mb="1" space={2}>
+              <Text fontSize="md">See All</Text>
+              <RightArrow />
+            </HStack>
           </TouchableOpacity>
         </HStack>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -96,7 +102,9 @@ const RecentLives = ({ refreshing }) => {
                           <HStack alignItems="center" space={2}>
                             <LiveIcon size={16} />
                             <Text fontWeight="semibold">
-                              {log.type === "showroom" ? "Showroom" : "IDN Live"}
+                              {log.type === "showroom"
+                                ? "Showroom"
+                                : "IDN Live"}
                             </Text>
                           </HStack>
                         </VStack>
@@ -136,9 +144,12 @@ const RecentLives = ({ refreshing }) => {
                     w="50%"
                     background="red"
                   >
-                    <HStack alignItems="center">
+                    <HStack
+                      space={getSpacingBasedOnTimeAgo(live_info?.date?.end)}
+                      alignItems="center"
+                    >
                       <History />
-                      <Text ml="0.5" fontSize="13" fontWeight="semibold">
+                      <Text fontSize="13" fontWeight="semibold">
                         <TimeAgo time={live_info?.date?.end} interval={20000} />
                       </Text>
                     </HStack>
