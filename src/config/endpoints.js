@@ -22,9 +22,11 @@ export default {
     ONLIVES: "/rooms/onlives",
     PROFILE: "/profile/room/",
     FOLLOW: "/room/follow",
-    RECENT_LIVE: "/recent?sort=date&page=1&filter=all&order=-1&group=jkt48&type=all",
-    HISTORY_LIVE: "/recent?sort=date&page=1&order=-1&group=jkt48",
-    HISTORY_LIVE_PROFILE: "/recent?sort=date&page=1&order=-1&perpage=6&group=jkt48&type=all",
+    RECENT_LIVE:
+      "/recent?sort=date&page=1&filter=all&order=-1&group=jkt48&type=all",
+    HISTORY_LIVE: "/recent?sort=date&order=-1&group=jkt48",
+    HISTORY_LIVE_PROFILE:
+      "/recent?sort=date&page=1&order=-1&perpage=6&group=jkt48&type=all"
   },
   IDN_LIVE: {
     ROOM_LIVES: "/idn_lives",
@@ -38,14 +40,14 @@ export default {
     PODIUM: "/history-live/",
     SEND_COMMENT: "/live/comment/", //required room id
     VISIT: "/farm/start", //required room id
-    PREMIUM_LIVE: "/premium-lives/today", 
+    PREMIUM_LIVE: "/premium-lives/today",
     RANK: "/lives/rank/" //required room id
   },
   SCHEDULE: {
     LIST: "/schedules",
     DETAIL: "/schedules/", //required schedule id
     WEEK: "/schedules?isOnWeekSchedule=true",
-    TODAY: "/schedules/today",
+    TODAY: "/schedules/today"
   },
   VERSIONS: {
     CURRENT_VERSION: "/mobile/app-version"
