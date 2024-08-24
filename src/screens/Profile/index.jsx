@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, HStack, Text, VStack } from "native-base";
+import { Box, Button, HStack, InfoIcon, Text, VStack } from "native-base";
 import UserTabs from "../../components/molecules/UserTabs";
 import useUser from "../../utils/hooks/useUser";
 import { Image, TouchableOpacity } from "react-native";
-import { LoginIcon, PencilIcon } from "../../assets/icon";
+import { Info, LoginIcon, PencilIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
+import trackAnalytics from "../../utils/trackAnalytics";
 
 const Profile = () => {
-  const { profile, session } = useUser();
+  const { userProfile, profile, session } = useUser();
   const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState();
   const isFocused = useIsFocused();
@@ -19,6 +20,13 @@ const Profile = () => {
       setIsLogin(true);
     }
   }, [session]);
+
+  const handleAbout = () => {
+    navigation.navigate("About");
+    trackAnalytics("about_app_click", {
+      username: userProfile?.name ?? "Guest"
+    });
+  };
 
   const Avatar = () => (
     <>
@@ -92,6 +100,19 @@ const Profile = () => {
                 </HStack>
               </TouchableOpacity>
             </Button>
+            <Button
+              bgColor="teal"
+              variant="solid"
+              borderRadius="lg"
+              onPress={handleAbout}
+            >
+              <TouchableOpacity onPress={handleAbout}>
+                <HStack alignItems="center" space={1}>
+                  <Info color="white" />
+                  <Text fontWeight="semibold">About App</Text>
+                </HStack>
+              </TouchableOpacity>
+            </Button>
           </VStack>
         </Box>
       </Layout>
@@ -108,6 +129,21 @@ const Profile = () => {
       </VStack>
       <Box flex={1} p="3">
         <UserTabs />
+        <Button
+          bgColor="teal"
+          variant="solid"
+          borderRadius="lg"
+          onPress={handleAbout}
+        >
+          <TouchableOpacity onPress={handleAbout}>
+            <HStack alignItems="center" space={2}>
+              <Info color="white" />
+              <Text fontSize="15" fontWeight="semibold">
+                About App
+              </Text>
+            </HStack>
+          </TouchableOpacity>
+        </Button>
         <Logout />
       </Box>
     </Box>

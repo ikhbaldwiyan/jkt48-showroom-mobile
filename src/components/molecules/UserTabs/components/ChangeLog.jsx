@@ -4,6 +4,8 @@ import { DownloadIcon, History } from "../../../../assets/icon";
 import { getCurrentVersion } from "../../../../services/versions";
 import DeviceInfo from "react-native-device-info";
 import { APK_VERSION } from "@env";
+import { Linking } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
   const [latestVersion, setLatestVersion] = useState("");
@@ -30,26 +32,26 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
   return (
     <>
       {!hideButton && (
-        <Text mt="2" onPress={toggleModal}>
+        <TouchableOpacity onPress={toggleModal}>
           <HStack space={1} just alignItems="center">
             <History size={24} />
-            <Text ml="1" fontWeight="bold" color="white">
+            <Text ml="1" color="white">
               Check Change Log
             </Text>
           </HStack>
-        </Text>
+        </TouchableOpacity>
       )}
       <Modal isOpen={modal} size="xl" onClose={toggleModal}>
         <Modal.Content maxH="500">
           <Modal.Header bg="primary">
             <HStack space={2} alignItems="center">
               <History size={24} />
-              <Text fontWeight="bold" fontSize="lg">
+              <Text fontWeight="bold" fontSize="16">
                 Change Log APK Version {APK_VERSION}
               </Text>
             </HStack>
           </Modal.Header>
-          <Modal.Body bg="black">
+          <Modal.Body bg="secondary">
             <VStack space={3}>
               <Text>- Add Rank menu in live stream tabs</Text>
               <Text>- Set default to dark mode background theme</Text>
@@ -64,13 +66,17 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Open Test Release on Play Store</Text>
             </VStack>
           </Modal.Body>
-          <Modal.Footer bg="primary">
+          <Modal.Footer bg="black">
             <Button.Group space={2}>
               {isNewVersion && (
                 <Button
-                  variant="gray"
+                  variant="outline"
                   backgroundColor="teal"
-                  onPress={toggleModal}
+                  onPress={() =>
+                    Linking.openURL(
+                      "https://play.google.com/store/apps/details?id=com.inzoid.jkt48showroom"
+                    )
+                  }
                 >
                   <HStack space={2}>
                     <DownloadIcon />
@@ -80,7 +86,7 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               )}
               <Button
                 variant="gray"
-                backgroundColor="disabled"
+                backgroundColor="blueGray.500"
                 onPress={toggleModal}
               >
                 <Text fontWeight="semibold" color="white">

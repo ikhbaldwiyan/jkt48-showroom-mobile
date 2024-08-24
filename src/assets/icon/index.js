@@ -3,7 +3,7 @@ import HomeIcon from "./HomeIcon";
 import HomeIconOutline from "./HomeIconOutline";
 import UsersIcon from "./UsersIcon";
 import UserIcon from "./UserIcon";
-import UserIconOutline from "./UserIconOutline"
+import UserIconOutline from "./UserIconOutline";
 import UsersIconOutline from "./UsersIconOutline";
 import TimesIcon from "./TimesIcon";
 import TheaterIcon from "./TheaterIcon";
@@ -50,6 +50,7 @@ import SettingsIcon from "./SettingsIcon";
 import PencilIcon from "./PencilIcon";
 import HistoryFill from "./HistoryFill";
 import HistoryOutline from "./HistoryOutline";
+import WebIcon from "./WebIcon";
 
 export {
   LogoIcon,
@@ -97,11 +98,12 @@ export {
   AndroidIcon,
   Cloud,
   DownloadIcon,
-  GithubIcon, 
+  GithubIcon,
   DiscordIcon,
   GooglePlayIcon,
   SettingsIcon,
   PencilIcon,
   HistoryFill,
-  HistoryOutline
+  HistoryOutline,
+  WebIcon,
 };

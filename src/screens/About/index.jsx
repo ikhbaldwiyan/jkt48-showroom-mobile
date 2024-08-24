@@ -2,13 +2,8 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../components/templates/Layout";
 import Logo from "../../components/atoms/Logo";
 import { Box, Divider, HStack, Image, Text, VStack } from "native-base";
-import {
-  DiscordIcon,
-  Donate,
-  GithubIcon,
-  GooglePlayIcon
-} from "../../assets/icon";
-import { Linking, TouchableOpacity } from "react-native";
+import { DiscordIcon, Donate, GithubIcon, WebIcon } from "../../assets/icon";
+import { Dimensions, Linking, TouchableOpacity } from "react-native";
 import { activityLog } from "../../utils/activityLog";
 import useUser from "../../utils/hooks/useUser";
 import trackAnalytics from "../../utils/trackAnalytics";
@@ -58,21 +53,56 @@ const About = () => {
     getDonator();
   }, []);
 
+  const socialMedia = [
+    {
+      url: "https://x.com/JKT48_SHOWROOM",
+      icon: (
+        <Image
+          alt="twitter"
+          borderRadius="xl"
+          width={50}
+          size="sm"
+          source={{
+            uri: "https://www.shutterstock.com/image-vector/new-design-twitter-logo-600nw-2346506357.jpg"
+          }}
+        />
+      ),
+      text: "Follow X",
+      analyticsEvent: "twitter_click"
+    },
+    {
+      url: "https://github.com/jkt48-showroom",
+      icon: <GithubIcon />,
+      text: "GitHub",
+      analyticsEvent: "github_click"
+    },
+    {
+      url: "https://www.jkt48showroom.com",
+      icon: <WebIcon />,
+      text: "Website",
+      analyticsEvent: "website_click"
+    },
+    {
+      url: "https://discord.com/servers/jkt48-showroom-fanmade-1076511743909564506",
+      icon: <DiscordIcon />,
+      text: "Discord",
+      analyticsEvent: "discord_about_click"
+    }
+  ];
+
   return (
     <Layout>
       <Box flex="1" mb="6">
         <Box display="flex" alignItems="center">
           <Logo />
-          <Text mt="3" fontSize="2xl" fontWeight="bold">
-            About
-          </Text>
         </Box>
         <Image
-          mt="1"
+          mt="4"
+          mb="2"
           size="md"
           alt="banner"
           width="100%"
-          height="210"
+          height={Dimensions.get("window").width * 0.6}
           source={{
             uri: "https://res.cloudinary.com/dkkagbzl4/image/upload/v1721372451/enzbvfxozrq4xn7uiaeo.png"
           }}
@@ -120,81 +150,33 @@ const About = () => {
         <Text mt="2" fontSize="2xl" fontWeight="bold">
           Social Media
         </Text>
-        <HStack mt="4" space={4} overflowX="scroll">
-          <TouchableOpacity
-            onPress={() => {
-              Linking.openURL("https://x.com/JKT48_SHOWROOM"),
-                trackAnalytics("twitter_click", {
+        <HStack
+          mt="4"
+          space={3}
+          overflowX="scroll"
+          justifyContent="space-between"
+          w="100%"
+        >
+          {socialMedia.map((link, index) => (
+            <TouchableOpacity
+              key={index}
+              style={{ flex: 1 }}
+              onPress={() => {
+                Linking.openURL(link.url);
+                trackAnalytics(link.analyticsEvent, {
                   username: userProfile?.name ?? "Guest"
                 });
-            }}
-          >
-            <VStack alignItems="center" space={2} justifyContent="center">
-              <Image
-                alt="twitter"
-                borderRadius="xl"
-                width={50}
-                size="sm"
-                source={{
-                  uri: "https://www.shutterstock.com/image-vector/new-design-twitter-logo-600nw-2346506357.jpg"
-                }}
-              />
-              <Text fontWeight="semibold" fontSize="16">
-                Follow X
-              </Text>
-            </VStack>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              Linking.openURL("https://github.com/jkt48-showroom"),
-                trackAnalytics("github_click", {
-                  username: userProfile?.name ?? "Guest"
-                });
-            }}
-          >
-            <VStack space={2} alignItems="center" justifyContent="center">
-              <GithubIcon />
-              <Text fontWeight="semibold" fontSize="16">
-                GitHub
-              </Text>
-            </VStack>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              Linking.openURL(
-                "https://discord.com/servers/jkt48-showroom-fanmade-1076511743909564506"
-              ),
-                trackAnalytics("discord_about_click", {
-                  username: userProfile?.name ?? "Guest"
-                });
-            }}
-          >
-            <VStack space={2} alignItems="center" justifyContent="center">
-              <DiscordIcon />
-              <Text fontWeight="semibold" fontSize="16">
-                Discord
-              </Text>
-            </VStack>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              Linking.openURL(
-                "https://play.google.com/store/apps/details?id=com.inzoid.jkt48showroom"
-              ),
-                trackAnalytics("play_store_click", {
-                  username: userProfile?.name ?? "Guest"
-                });
-            }}
-          >
-            <VStack space={2} alignItems="center" justifyContent="center">
-              <GooglePlayIcon />
-              <Text mt="1" fontWeight="semibold" fontSize="16">
-                Play Store
-              </Text>
-            </VStack>
-          </TouchableOpacity>
+              }}
+            >
+              <VStack space={2} alignItems="center" justifyContent="center">
+                {link.icon}
+                <Text fontWeight="semibold" fontSize="16">
+                  {link.text}
+                </Text>
+              </VStack>
+            </TouchableOpacity>
+          ))}
         </HStack>
-
         <Divider mt="4" mb="2" />
         <Text mb="2" fontSize="2xl" fontWeight="bold">
           Donator
