@@ -77,7 +77,7 @@ const Login = ({ navigation }) => {
                 px="2"
                 mt="10"
                 mb={5}
-                bg="green.500"
+                bg="green.700"
                 rounded="sm"
               >
                 <Text>Login Sukses</Text>
@@ -96,15 +96,7 @@ const Login = ({ navigation }) => {
       toast.show({
         render: () => {
           return (
-            <Box
-              m="3"
-              py="1"
-              px="2"
-              mt="10"
-              mb={5}
-              bg="red"
-              rounded="sm"
-            >
+            <Box m="3" py="1" px="2" mt="10" mb={5} bg="red" rounded="sm">
               <Text>Login Gagal, Silahkan coba lagi nanti</Text>
             </Box>
           );

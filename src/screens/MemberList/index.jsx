@@ -30,12 +30,15 @@ const MemberList = () => {
             placeholder="Cari member"
             value={searchQuery}
             onChangeText={handleSearch}
+            borderRadius={6}
           />
           <Button
             p="2"
             height="36px"
             bg={activeTab === "regular" ? "primary" : "teal"}
             onPress={() => setActiveTab("regular")}
+            flex={1}
+            borderRadius={6}
           >
             <HStack space={1} alignItems="center">
               <Dashboard />
@@ -47,6 +50,8 @@ const MemberList = () => {
             height="36px"
             bg={activeTab === "trainee" ? "primary" : "teal"}
             onPress={() => setActiveTab("trainee")}
+            flex={1}
+            borderRadius={6}
           >
             <HStack space={1} alignItems="center">
               <GraduateIcon size={15} />

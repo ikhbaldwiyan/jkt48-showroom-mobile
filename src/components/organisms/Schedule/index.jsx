@@ -4,7 +4,12 @@ import moment from "moment";
 import "moment/locale/id";
 import SkeletonSchedule from "../../atoms/Skeleteon";
 import { SCHEDULES } from "../../../services";
-import { Calendar, RightArrow, TimesIcon } from "../../../assets/icon";
+import {
+  BirthdayIcon,
+  Calendar,
+  GraduateIcon,
+  RightArrow
+} from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
 
 const Schedule = ({ refreshing, isWeek, navigation }) => {
@@ -44,59 +49,111 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
               activeOpacity={0.7}
               onPress={() => navigation.navigate("ScheduleDetail", { item })}
             >
-              <HStack py="3">
-                <Box>
-                  <Box bg="primary" py="0.8" borderRadius="md" mb="2">
+              <HStack space={3} py="3">
+                <Box w="40%">
+                  <Box bg="primary" py="1" borderRadius="md" mb="2">
                     <HStack
                       space={1}
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <Calendar size={13} />
+                      <Calendar size={12} />
                       <Text
                         textAlign="center"
-                        fontSize="xs"
-                        fontWeight="semibold"
+                        fontSize="12"
+                        fontWeight="medium"
                       >
                         {moment(item.showDate)
                           .locale("id")
-                          .format("dddd, DD MMMM")}
+                          .format("ddd, DD MMM")}
                       </Text>
-                    </HStack>
-                  </Box>
-                  <Image
-                    width="100%"
-                    height="215"
-                    size="xl"
-                    borderRadius="md"
-                    alt="Theater image"
-                    source={{
-                      uri: item.setlist.image
-                    }}
-                  />
-                  <Box bg="teal" borderRadius="md" mt="2">
-                    <HStack
-                      space={1}
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <TimesIcon size={13} />
                       <Text
                         textAlign="center"
-                        fontSize="xs"
-                        fontWeight="semibold"
+                        fontSize="11.5"
+                        fontWeight="medium"
                       >
-                        {item.showTime} WIB
+                        - {item.showTime}
                       </Text>
                     </HStack>
                   </Box>
+                  <Box position="relative">
+                    <Image
+                      height="235"
+                      size="xl"
+                      borderRadius="md"
+                      alt="Theater"
+                      source={{
+                        uri:
+                          item.setlist.image ??
+                          "https://static.showroom-live.com/image/room/cover/73f495d564945090f4af7338a42ce09ffa12d35fbfa8ce35c856220bcf96c5f3_m.png?v=1715261567"
+                      }}
+                      style={{ width: "100%" }}
+                    />
+                    {item.isGraduationShow && (
+                      <Box
+                        position="absolute"
+                        bottom="0"
+                        left="0"
+                        right="0"
+                        bg="teal"
+                        px="2"
+                        borderBottomRadius="md"
+                      >
+                        <HStack
+                          justifyContent="center"
+                          alignItems="center"
+                          space={2}
+                        >
+                          <GraduateIcon size={12} />
+                          <Text
+                            color="white"
+                            fontSize="12"
+                            fontWeight="bold"
+                            isTruncated
+                          >
+                            {item?.graduateMember?.stage_name}
+                          </Text>
+                        </HStack>
+                      </Box>
+                    )}
+                    {item.isBirthdayShow && (
+                      <Box
+                        position="absolute"
+                        bottom="0"
+                        left="0"
+                        right="0"
+                        bg="teal"
+                        px="2"
+                        borderBottomRadius="md"
+                      >
+                        <HStack
+                          justifyContent="center"
+                          alignItems="center"
+                          space={2}
+                        >
+                          <BirthdayIcon size={12} />
+                          <Text
+                            color="white"
+                            fontSize="12"
+                            fontWeight="bold"
+                            isTruncated
+                          >
+                            {item?.birthdayMemberName ??
+                              item?.birthdayMember?.stage_name}
+                          </Text>
+                        </HStack>
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
-                <Box ml="3" maxW="200">
-                  <Text fontSize="md" fontWeight="bold">
-                    {item.setlist.name}
-                  </Text>
+                <Box w="60%">
+                  <HStack space={1} alignItems="center">
+                    <Text fontSize="md" fontWeight="bold">
+                      {item.setlist.name}
+                    </Text>
+                  </HStack>
                   <Text mt="2" color="gray.300">
-                    {item.setlist.description.slice(0, 175)}...
+                    {item.setlist.description.slice(0, 150)}...
                   </Text>
                 </Box>
               </HStack>
