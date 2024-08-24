@@ -32,11 +32,11 @@ const RecentLives = ({ refreshing }) => {
     getRecentLive();
   }, [refreshing]);
 
-  const getSpacingBasedOnTimeAgo = (endDate) => {
+  const isMinuteTime = (endDate) => {
     const currentTime = new Date();
     const diffMinutes = Math.floor((currentTime - new Date(endDate)) / 60000);
 
-    return diffMinutes < 60 ? "0.5" : "1";
+    return diffMinutes < 60 ? true : false;
   };
 
   return (
@@ -144,12 +144,14 @@ const RecentLives = ({ refreshing }) => {
                     w="50%"
                     background="red"
                   >
-                    <HStack
-                      space={getSpacingBasedOnTimeAgo(live_info?.date?.end)}
-                      alignItems="center"
-                    >
+                    <HStack space="1" alignItems="center">
                       <History />
-                      <Text fontSize="13" fontWeight="semibold">
+                      <Text
+                        fontSize={
+                          isMinuteTime(live_info?.date?.end) ? "12" : "13"
+                        }
+                        fontWeight="semibold"
+                      >
                         <TimeAgo time={live_info?.date?.end} interval={20000} />
                       </Text>
                     </HStack>
