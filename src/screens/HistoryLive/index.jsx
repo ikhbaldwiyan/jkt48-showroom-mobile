@@ -1,5 +1,10 @@
 import moment from "moment";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useCallback
+} from "react";
 import {
   Box,
   Button,
@@ -21,6 +26,7 @@ import TimeAgo from "react-native-timeago";
 import { useNavigation } from "@react-navigation/native";
 import Layout from "../../components/templates/Layout";
 import { useRefresh } from "../../utils/hooks/useRefresh";
+import debounce from "lodash/debounce";
 
 const HistoryLive = () => {
   const [recentLives, setRecentLives] = useState([]);
@@ -28,6 +34,7 @@ const HistoryLive = () => {
   const { refreshing, onRefresh } = useRefresh();
   const [type, setType] = useState("all");
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
@@ -40,14 +47,14 @@ const HistoryLive = () => {
 
   useEffect(() => {
     loadLives();
-  }, [refreshing, type, search, page]);
+  }, [refreshing, type, debouncedSearch, page]);
 
   const loadLives = async () => {
     try {
       if (loadingMore || allLoaded) return;
 
       setLoadingMore(true);
-      const response = await ROOMS.getHistoryLives(type, search, page);
+      const response = await ROOMS.getHistoryLives(type, debouncedSearch, page);
 
       if (response.data.recents.length > 0) {
         setRecentLives((prevLives) => [...prevLives, ...response.data.recents]);
@@ -62,11 +69,19 @@ const HistoryLive = () => {
     }
   };
 
+  const debouncedChangeHandler = useCallback(
+    debounce((value) => {
+      setDebouncedSearch(value);
+    }, 500),
+    []
+  );
+
   const handleSearch = (query) => {
     setSearch(query);
     setPage(1); // Reset page
     setRecentLives([]); // Clear current list
     setAllLoaded(false); // Reset allLoaded status
+    debouncedChangeHandler(query);
   };
 
   const handleLoadMore = () => {
@@ -81,7 +96,7 @@ const HistoryLive = () => {
       try {
         setPage(1);
         setAllLoaded(false);
-        const response = await ROOMS.getHistoryLives(type, search, 1);
+        const response = await ROOMS.getHistoryLives(type, debouncedSearch, 1);
         setRecentLives(response.data.recents);
       } catch (error) {
         console.log(error);
@@ -146,7 +161,7 @@ const HistoryLive = () => {
       </Box>
 
       {recentLives.length > 0 && (
-        <VStack space={4}>
+        <VStack space={3}>
           {recentLives?.map((log, idx) => {
             const { member, live_info } = log;
             return (
@@ -271,29 +286,29 @@ const HistoryLive = () => {
               </Box>
             );
           })}
-          {!allLoaded && !loadingMore && (
-            <TouchableOpacity onPress={handleLoadMore}>
-              <Button
-                mt="2"
-                variant="filled"
-                borderRadius="6"
-                bg="teal"
-                onPress={handleLoadMore}
-              >
-                <Text fontWeight="bold" fontSize="16">
-                  Load More
-                </Text>
-              </Button>
-            </TouchableOpacity>
-          )}
-          {loadingMore && !allLoaded && (
-            <HStack justifyContent="center" mt="3">
-              <Spinner color="white" size="lg" />
-            </HStack>
-          )}
-          <Box my="3" />
         </VStack>
       )}
+      {loadingMore && (
+        <HStack justifyContent="center" mt="5" my="4">
+          <Spinner color="white" size="lg" />
+        </HStack>
+      )}
+      {!allLoaded && !loadingMore && recentLives.length > 0 && (
+        <TouchableOpacity onPress={handleLoadMore}>
+          <Button
+            mt="3"
+            variant="filled"
+            borderRadius="6"
+            bg="teal"
+            onPress={handleLoadMore}
+          >
+            <Text fontWeight="bold" fontSize="16">
+              Load More
+            </Text>
+          </Button>
+        </TouchableOpacity>
+      )}
+      <Box my="4" />
     </Layout>
   );
 };
@@ -302,7 +317,6 @@ export default HistoryLive;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    flex: 1,
     borderRadius: 6
   }
 });
