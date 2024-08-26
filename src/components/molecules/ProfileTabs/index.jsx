@@ -1,36 +1,47 @@
-import React, { useState } from 'react';
-import { Box, Pressable, Text, useColorModeValue } from 'native-base';
-import { Dimensions } from 'react-native';
-import { SceneMap, TabView } from 'react-native-tab-view';
-import { Profile} from "./components";
-import HistoryLive from "./components/HistoryLive";
+import React, { useState } from "react";
+import { Box, Pressable, Text, useColorModeValue } from "native-base";
+import { Dimensions } from "react-native";
+import { SceneMap, TabView } from "react-native-tab-view";
+import { Profile, HistoryLiveProfile } from "./components";
 
 const initialLayout = {
-  width: Dimensions.get('window').width,
+  width: Dimensions.get("window").width
 };
 
 const renderScene = SceneMap({
   profile: Profile,
-  history: HistoryLive,
+  history: HistoryLiveProfile
 });
 
 const ProfileTabs = () => {
   const [index, setIndex] = useState(0);
   const routes = [
-    { key: 'profile', title: 'Profile' },
-    { key: 'history', title: 'History Live' },
+    { key: "profile", title: "Profile" },
+    { key: "history", title: "History Live" }
   ];
 
   const renderTabBar = ({ navigationState }) => (
     <Box bg="primary" borderRadius="md" flexDirection="row">
       {navigationState.routes.map((route, i) => {
-        const color = index === i ? useColorModeValue('white', '#e5e5e5') : useColorModeValue('#e5e5e5', 'red');
-        const borderColor = index === i ? '#ECFAFC' : useColorModeValue('gray.500', 'gray.400');
-        
+        const color =
+          index === i
+            ? useColorModeValue("white", "#e5e5e5")
+            : useColorModeValue("#e5e5e5", "red");
+        const borderColor =
+          index === i ? "#ECFAFC" : useColorModeValue("gray.500", "gray.400");
+
         return (
-          <Box key={i} borderBottomWidth="3" borderColor={borderColor} flex={1} alignItems="center" p="3" cursor="pointer">
+          <Box
+            key={i}
+            borderBottomWidth="3"
+            borderColor={borderColor}
+            flex={1}
+            alignItems="center"
+            p="3"
+            cursor="pointer"
+          >
             <Pressable onPress={() => setIndex(i)}>
-              <Text color={color} fontWeight={i === index ? 'bold' : 'normal'}>
+              <Text color={color} fontWeight={i === index ? "bold" : "normal"}>
                 {route.title}
               </Text>
             </Pressable>

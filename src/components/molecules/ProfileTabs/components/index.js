@@ -1,4 +1,4 @@
 import { Profile } from "./Profile";
-import { HistoryLive } from "./HistoryLive";
+import { HistoryLiveProfile } from "./HistoryLiveProfile";
 
-export { Profile, HistoryLive };
+export { Profile, HistoryLiveProfile };

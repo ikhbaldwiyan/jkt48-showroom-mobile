@@ -17,7 +17,7 @@ import { formatViews, getLiveDurationMinutes } from "../../../../utils/helpers";
 import { History, TimesFill, UsersIconFill } from "../../../../assets/icon";
 import useProfileStore from "../../../../store/profileStore";
 
-const HistoryLive = () => {
+export const HistoryLiveProfile = () => {
   const { profile, historyLive, getHistoryLive } = useProfileStore();
 
   useEffect(() => {
@@ -84,8 +84,6 @@ const HistoryLive = () => {
     </LinearGradient>
   );
 };
-
-export default HistoryLive;
 
 const styles = StyleSheet.create({
   linearGradient: {
