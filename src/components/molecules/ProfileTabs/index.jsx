@@ -3,6 +3,7 @@ import { Box, Pressable, Text, useColorModeValue } from "native-base";
 import { Dimensions } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
 import { Profile, HistoryLiveProfile } from "./components";
+import useThemeStore from "../../../store/themeStore";
 
 const initialLayout = {
   width: Dimensions.get("window").width
@@ -15,13 +16,15 @@ const renderScene = SceneMap({
 
 const ProfileTabs = () => {
   const [index, setIndex] = useState(0);
+  const { header } = useThemeStore();
+
   const routes = [
     { key: "profile", title: "Profile" },
     { key: "history", title: "History Live" }
   ];
 
   const renderTabBar = ({ navigationState }) => (
-    <Box bg="primary" borderRadius="md" flexDirection="row">
+    <Box bg={header} borderRadius="md" flexDirection="row">
       {navigationState.routes.map((route, i) => {
         const color =
           index === i

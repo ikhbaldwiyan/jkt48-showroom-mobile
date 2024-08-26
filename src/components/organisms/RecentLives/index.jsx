@@ -148,7 +148,7 @@ const RecentLives = ({ refreshing }) => {
                       <History />
                       <Text
                         fontSize={
-                          isMinuteTime(live_info?.date?.end) ? "12" : "13"
+                          isMinuteTime(live_info?.date?.end) ? "12.3" : "13"
                         }
                         fontWeight="semibold"
                       >

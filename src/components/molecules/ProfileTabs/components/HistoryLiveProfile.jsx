@@ -6,19 +6,22 @@ import {
   Box,
   VStack,
   Divider,
-  ScrollView
+  ScrollView,
+  ChevronRightIcon
 } from "native-base";
-import { StyleSheet } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { TouchableOpacity } from "react-native";
 import TimeAgo from "react-native-timeago";
 import moment from "moment";
 
-import { formatViews, getLiveDurationMinutes } from "../../../../utils/helpers";
-import { History, TimesFill, UsersIconFill } from "../../../../assets/icon";
+import { getLiveDurationMinutes } from "../../../../utils/helpers";
+import { History, LiveIcon, TimesFill } from "../../../../assets/icon";
 import useProfileStore from "../../../../store/profileStore";
+import { useNavigation } from "@react-navigation/native";
+import CardGradient from "../../../atoms/CardGradient";
 
 export const HistoryLiveProfile = () => {
   const { profile, historyLive, getHistoryLive } = useProfileStore();
+  const { navigate } = useNavigation();
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -29,10 +32,7 @@ export const HistoryLiveProfile = () => {
   }, [profile]);
 
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
-    >
+    <CardGradient>
       <ScrollView mt="2">
         {historyLive?.map((item, idx) => (
           <Box key={idx}>
@@ -47,25 +47,52 @@ export const HistoryLiveProfile = () => {
                 width="90"
                 height="120"
               />
-              <Box>
+              <Box flex={1}>
                 <VStack space={2.5}>
-                  <Text color="gray.100" fontSize="md" fontWeight="bold">
-                    {moment(item?.live_info?.date?.start).format("dddd, D MMMM")}
-                  </Text>
-                  <HStack space={1} alignItems="center">
-                    <UsersIconFill />
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigate("HistoryDetail", {
+                        url: `https://www.jkt48showroom.com/history/${item?.member.url}/${item?.data_id}`,
+                        title: item?.member.is_official
+                          ? "JKT48 Official"
+                          : item?.member.nickname +
+                            " - " +
+                            moment(item?.live_info.date.start).format(
+                              "DD MMMM YYYY"
+                            )
+                      })
+                    }
+                  >
+                    <HStack alignItems="center" justifyContent="space-between">
+                      <Text color="gray.100" fontSize="md" fontWeight="bold">
+                        {moment(item?.live_info?.date?.start).format(
+                          "dddd, D MMM"
+                        )}
+                      </Text>
+                      <Box>
+                        <HStack alignItems="center" space={1}>
+                          <Text color="gray.200" fontSize="xs">
+                            Detail
+                          </Text>
+                          <ChevronRightIcon size="xs" color="gray.200" />
+                        </HStack>
+                      </Box>
+                    </HStack>
+                  </TouchableOpacity>
+
+                  <HStack space={2} alignItems="center">
+                    <LiveIcon size={18} />
                     <Text>
-                      {formatViews(item?.live_info?.viewers?.num)} Views
+                      {item?.type === "showroom" ? "Showroom" : "IDN Live"}
                     </Text>
                   </HStack>
-                  <HStack space={1} alignItems="center">
-                    <TimesFill />
+                  <HStack space={2} alignItems="center">
+                    <TimesFill size={18} />
                     <Text>
-                      {" "}
                       {getLiveDurationMinutes(item?.live_info?.duration)}
                     </Text>
                   </HStack>
-                  <HStack space={1} alignItems="center">
+                  <HStack space={2} alignItems="center">
                     <History size="18" />
                     <Text>
                       <TimeAgo
@@ -81,15 +108,6 @@ export const HistoryLiveProfile = () => {
           </Box>
         ))}
       </ScrollView>
-    </LinearGradient>
+    </CardGradient>
   );
 };
-
-const styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});
