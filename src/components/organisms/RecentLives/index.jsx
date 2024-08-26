@@ -60,58 +60,72 @@ const RecentLives = ({ refreshing }) => {
             const { member, live_info } = log;
             return (
               <Box w="265" mr="3" key={idx}>
-                <LinearGradient
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  colors={["#004A66", "#009FCB"]}
-                  style={styles.linearGradient}
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() =>
+                    navigation.navigate("HistoryDetail", {
+                      url: `https://www.jkt48showroom.com/history/${member.url}/${log.data_id}`,
+                      title: member?.is_official
+                        ? "JKT48 Official"
+                        : member?.nickname +
+                          " - " +
+                          moment(live_info?.date.start).format("DD MMMM YYYY")
+                    })
+                  }
                 >
-                  <Box>
-                    <HStack>
-                      <Image
-                        source={{ uri: member.img_alt }}
-                        size="md"
-                        alt="image"
-                        w="100"
-                        h="auto"
-                        borderTopLeftRadius={6}
-                        borderBottomLeftRadius={6}
-                      />
-                      <Box>
-                        <VStack space={2} p="3">
-                          <HStack alignItems="center" space={2}>
-                            <Calendar />
-                            <Text fontWeight="semibold">
-                              {moment(live_info?.date?.start).format(
-                                "dddd, D MMM"
-                              )}
-                            </Text>
-                          </HStack>
-                          <HStack alignItems="center" space={2}>
-                            <UsersFill />
-                            <Text>
-                              {formatViews(live_info?.viewers?.num)} views
-                            </Text>
-                          </HStack>
-                          <HStack alignItems="center" space={2}>
-                            <TimesFill />
-                            <Text>
-                              {getLiveDurationMinutes(live_info?.duration)}
-                            </Text>
-                          </HStack>
-                          <HStack alignItems="center" space={2}>
-                            <LiveIcon size={16} />
-                            <Text fontWeight="semibold">
-                              {log.type === "showroom"
-                                ? "Showroom"
-                                : "IDN Live"}
-                            </Text>
-                          </HStack>
-                        </VStack>
-                      </Box>
-                    </HStack>
-                  </Box>
-                </LinearGradient>
+                  <LinearGradient
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    colors={["#004A66", "#009FCB"]}
+                    style={styles.linearGradient}
+                  >
+                    <Box>
+                      <HStack>
+                        <Image
+                          source={{ uri: member.img_alt }}
+                          size="md"
+                          alt="image"
+                          w="100"
+                          h="auto"
+                          borderTopLeftRadius={6}
+                          borderBottomLeftRadius={6}
+                        />
+                        <Box>
+                          <VStack space={2} p="3">
+                            <HStack alignItems="center" space={2}>
+                              <Calendar />
+                              <Text fontWeight="semibold">
+                                {moment(live_info?.date?.start).format(
+                                  "dddd, D MMM"
+                                )}
+                              </Text>
+                            </HStack>
+                            <HStack alignItems="center" space={2}>
+                              <UsersFill />
+                              <Text>
+                                {formatViews(live_info?.viewers?.num)} views
+                              </Text>
+                            </HStack>
+                            <HStack alignItems="center" space={2}>
+                              <TimesFill />
+                              <Text>
+                                {getLiveDurationMinutes(live_info?.duration)}
+                              </Text>
+                            </HStack>
+                            <HStack alignItems="center" space={2}>
+                              <LiveIcon size={16} />
+                              <Text fontWeight="semibold">
+                                {log.type === "showroom"
+                                  ? "Showroom"
+                                  : "IDN Live"}
+                              </Text>
+                            </HStack>
+                          </VStack>
+                        </Box>
+                      </HStack>
+                    </Box>
+                  </LinearGradient>
+                </TouchableOpacity>
                 <HStack space={3}>
                   <Box
                     mt="3"
