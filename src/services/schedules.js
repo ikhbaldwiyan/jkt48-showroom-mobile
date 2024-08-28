@@ -1,7 +1,7 @@
 import { ENDPOINTS, apiUser } from "../config";
 
-export const getScheduleList = () => {
-  return apiUser.get(ENDPOINTS.SCHEDULE.LIST);
+export const getScheduleList = (page) => {
+  return apiUser.get(ENDPOINTS.SCHEDULE.LIST + `?page=${page}&paginate=true`);
 };
 
 export const getScheduleWeek = () => {

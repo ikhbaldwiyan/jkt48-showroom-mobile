@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Divider, HStack, Image, Pressable, Text } from "native-base";
+import { Box, HStack, Image, Text, Button, Spinner } from "native-base";
 import moment from "moment";
 import "moment/locale/id";
 import SkeletonSchedule from "../../atoms/Skeleteon";
@@ -14,16 +14,49 @@ import { TouchableOpacity } from "react-native";
 
 const Schedule = ({ refreshing, isWeek, navigation }) => {
   const [schedules, setSchedules] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    async function getTheaterList() {
-      const theater = isWeek
-        ? await SCHEDULES.getScheduleWeek()
-        : await SCHEDULES.getScheduleList();
-      setSchedules(theater.data);
-    }
-    getTheaterList();
+    setPage(1);
+    fetchSchedules(1, true);
   }, [refreshing]);
+
+  const fetchSchedules = async (pageNum, reset = false) => {
+    if (isLoading || !hasMore) return;
+    setIsLoading(true);
+
+    const theater = isWeek
+      ? await SCHEDULES.getScheduleWeek()
+      : await SCHEDULES.getScheduleList(pageNum);
+
+    const { data } = theater;
+
+    if (isWeek) {
+      setSchedules(data);
+    } else {
+      setSchedules((prev) => (reset ? data?.data : [...prev, ...data?.data]));
+    }
+
+    if (data?.paginator?.currentPage >= data?.paginator?.totalPage) {
+      setHasMore(false);
+    }
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchSchedules(page);
+    }
+  }, [page]);
+
+  const handleLoadMore = () => {
+    if (hasMore && !isLoading) {
+      setPage(page + 1);
+    }
+  };
 
   return (
     <Box>
@@ -124,6 +157,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                         right="0"
                         bg="teal"
                         px="2"
+                        py="1"
                         borderBottomRadius="md"
                       >
                         <HStack
@@ -131,7 +165,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                           alignItems="center"
                           space={2}
                         >
-                          <BirthdayIcon size={12} />
+                          <BirthdayIcon size={13} />
                           <Text
                             color="white"
                             fontSize="12"
@@ -160,10 +194,26 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
             </TouchableOpacity>
           ))
         : [...Array(4)].map((_, idx) => <SkeletonSchedule key={idx} />)}
-      {isWeek && (
-        <Box py="2">
-          <Divider />
-        </Box>
+
+      {hasMore && !isLoading && !isWeek && (
+        <TouchableOpacity onPress={handleLoadMore}>
+          <Button
+            my="3"
+            variant="filled"
+            borderRadius="8"
+            bg="teal"
+            onPress={handleLoadMore}
+          >
+            <Text fontWeight="bold" fontSize="14">
+              Load More Schedules
+            </Text>
+          </Button>
+        </TouchableOpacity>
+      )}
+      {isLoading && !isWeek && (
+        <HStack justifyContent="center" mt="5" my="4">
+          <Spinner color="white" size="lg" />
+        </HStack>
       )}
     </Box>
   );
