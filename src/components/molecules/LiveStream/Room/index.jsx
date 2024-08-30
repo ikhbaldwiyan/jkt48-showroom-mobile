@@ -14,6 +14,7 @@ import { LiveIcon } from "../../../../assets/icon";
 import { ROOMS } from "../../../../services";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
 import useThemeStore from "../../../../store/themeStore";
+import { formatName } from "../../../../utils/helpers";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 
@@ -58,7 +59,7 @@ export const Room = () => {
               />
               <View justifyContent="center" alignItems="center">
                 <Text fontSize="16" fontWeight="bold">
-                  {item.room_url_key.replace("JKT48_", "")}
+                  {formatName(item.room_url_key)}
                 </Text>
                 <Box bg="red" mt="2" rounded="lg" p="1" px="3">
                   <HStack alignItems="center" space={1}>
