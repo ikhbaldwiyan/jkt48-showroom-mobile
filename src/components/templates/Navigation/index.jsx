@@ -2,6 +2,10 @@ import React, { useEffect } from "react";
 import { theme } from "../../../config/theme";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import { Box, Text } from "native-base";
+import { StatusBar, TouchableOpacity } from "react-native";
+
 import {
   Home,
   IDNStream,
@@ -17,7 +21,10 @@ import {
   About,
   Profile,
   IDNLives,
-  EditAvatar
+  EditAvatar,
+  HistoryLive,
+  MemberList,
+  HistoryLiveDetail
 } from "../../../screens";
 import {
   HomeIcon,
@@ -27,16 +34,11 @@ import {
   TheaterIcon,
   TheaterIconOutline,
   UserIcon,
-  Info,
-  InfoOutline,
-  ChevronBack
+  ChevronBack,
+  HistoryFill,
+  HistoryOutline,
+  UserIconOutline
 } from "../../../assets/icon";
-
-import { useNavigation } from "@react-navigation/native";
-import { Box, Text } from "native-base";
-import { StatusBar, TouchableOpacity } from "react-native";
-import MemberList from "../../../screens/MemberList";
-import UserIconOutline from "../../../assets/icon/UserIconOutline";
 
 const Navigation = () => {
   const Stack = createNativeStackNavigator();
@@ -60,11 +62,26 @@ const Navigation = () => {
       ) : (
         <UserIconOutline />
       );
-    } else if (route.name === "About") {
-      icon = isActive ? <Info color="#24A2B7" size={22} /> : <InfoOutline />;
+    } else if (route.name === "History") {
+      icon = isActive ? (
+        <HistoryFill color="#24A2B7" size={22} />
+      ) : (
+        <HistoryOutline />
+      );
     }
 
     return icon;
+  };
+
+  const BasicHeader = {
+    headerShown: true,
+    headerStyle: {
+      backgroundColor: "#21252B"
+    },
+    headerTitleStyle: {
+      color: "white",
+      fontWeight: "bold"
+    }
   };
 
   const TabNavigator = () => (
@@ -103,9 +120,13 @@ const Navigation = () => {
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Member" component={MemberList} />
+      <Tab.Screen
+        name="History"
+        component={HistoryLive}
+        options={BasicHeader}
+      />
       <Tab.Screen name="Theater" component={ScheduleList} />
       <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="About" component={About} />
     </Tab.Navigator>
   );
 
@@ -168,11 +189,13 @@ const Navigation = () => {
         component={PremiumLive}
         options={showHeader}
       />
-      <Stack.Screen 
-        name="Avatar" 
-        component={EditAvatar} 
-        options={showHeader} 
+      <Stack.Screen name="Avatar" component={EditAvatar} options={showHeader} />
+      <Stack.Screen
+        name="HistoryDetail"
+        component={HistoryLiveDetail}
+        options={showHeader}
       />
+      <Stack.Screen name="About" component={About} options={showHeader} />
     </Stack.Navigator>
   );
 };

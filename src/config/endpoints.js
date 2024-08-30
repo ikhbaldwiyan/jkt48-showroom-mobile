@@ -4,7 +4,7 @@ export default {
     REGISTER: "/register",
     REGISTER: "/register",
     DETAIL_USER: "/users/", //required user id
-    UPDATE_USER: "/users/" //required user id
+    UPDATE_USER: "/users/", //required user id
   },
   USER: {
     PROFILE: "/profile/room",
@@ -13,7 +13,7 @@ export default {
     UPDATE_AVATAR: "/profile/update_avatar",
     ACTIVIY_LOG: "/activity/", //required user id
     CREATE_USER: "/users/",
-    DONATOR: "/discord/role?type=donator"
+    DONATOR: "/discord/role?type=donator",
   },
   ROOM: {
     LIST: "/rooms",
@@ -22,13 +22,16 @@ export default {
     ONLIVES: "/rooms/onlives",
     PROFILE: "/profile/room/",
     FOLLOW: "/room/follow",
-    RECENT_LIVE: "/recent?sort=date&page=1&filter=active&order=-1&perpage=8&search=&room_id=&group=jkt48",
-    HISTORY_LIVE: "/recent?sort=date&page=1&filter=all&order=-1&perpage=6&search=&group=jkt48", //require roomId
+    RECENT_LIVE:
+      "/recent?sort=date&page=1&filter=all&order=-1&group=jkt48&type=all",
+    HISTORY_LIVE: "/recent?sort=date&order=-1&group=jkt48",
+    HISTORY_LIVE_PROFILE:
+      "/recent?sort=date&page=1&order=-1&perpage=10&group=jkt48&type=all",
   },
   IDN_LIVE: {
     ROOM_LIVES: "/idn_lives",
     PODIUM: "/idn-live-history/",
-    DETAIL: "/watch"
+    DETAIL: "/watch",
   },
   STREAM: {
     URL: "/lives/stream/",
@@ -37,8 +40,8 @@ export default {
     PODIUM: "/history-live/",
     SEND_COMMENT: "/live/comment/", //required room id
     VISIT: "/farm/start", //required room id
-    PREMIUM_LIVE: "/premium-lives/today", 
-    RANK: "/lives/rank/" //required room id
+    PREMIUM_LIVE: "/premium-lives/today",
+    RANK: "/lives/rank/", //required room id
   },
   SCHEDULE: {
     LIST: "/schedules",
@@ -47,6 +50,6 @@ export default {
     TODAY: "/schedules/today",
   },
   VERSIONS: {
-    CURRENT_VERSION: "/mobile/app-version"
-  }
+    CURRENT_VERSION: "/mobile/app-version",
+  },
 };

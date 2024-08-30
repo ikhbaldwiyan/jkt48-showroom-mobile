@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Divider, HStack, ScrollView, Text, VStack } from "native-base";
-import { StyleSheet } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { Linking, StyleSheet, TouchableOpacity } from "react-native";
 import useProfileStore from "../../../../store/profileStore";
 import { parseDescription } from "../../../../utils/helpers";
 import {
@@ -13,6 +12,7 @@ import {
   Star,
   Twitter
 } from "../../../../assets/icon";
+import CardGradient from "../../../atoms/CardGradient";
 
 export const Profile = () => {
   const { profile } = useProfileStore();
@@ -24,10 +24,7 @@ export const Profile = () => {
   }, []);
 
   return (
-    <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
-      style={styles.linearGradient}
-    >
+    <CardGradient>
       <ScrollView mt="2">
         {profile?.room_url_key !== "officialJKT48" ? (
           <VStack space={4}>
@@ -62,18 +59,38 @@ export const Profile = () => {
                   <Divider />
                   <Text>Social Media:</Text>
                   <HStack direction="row" space={4}>
-                    <HStack space={1}>
-                      <Twitter />
-                      <Text>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          `https://x.com/${description?.Twitter.replace(
+                            " ",
+                            ""
+                          )}`
+                        )
+                      }
+                    >
+                      <HStack space={1}>
+                        <Twitter />
                         <Text>{description?.Twitter ?? "-"}</Text>
-                      </Text>
-                    </HStack>
-                    <HStack space={1}>
-                      <Instagram />
-                      <Text>
-                        <Text>{description?.Instagram ?? "-"}</Text>
-                      </Text>
-                    </HStack>
+                      </HStack>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          `https://www.instagram.com/${description?.Instagram.replace(
+                            " ",
+                            ""
+                          )}`
+                        )
+                      }
+                    >
+                      <HStack space={1}>
+                        <Instagram />
+                        <Text>
+                          <Text>{description?.Instagram ?? "-"}</Text>
+                        </Text>
+                      </HStack>
+                    </TouchableOpacity>
                   </HStack>
                 </>
               )}
@@ -82,7 +99,7 @@ export const Profile = () => {
           <Text>{profile?.description}</Text>
         )}
       </ScrollView>
-    </LinearGradient>
+    </CardGradient>
   );
 };
 

@@ -3,6 +3,7 @@ import HomeIcon from "./HomeIcon";
 import HomeIconOutline from "./HomeIconOutline";
 import UsersIcon from "./UsersIcon";
 import UserIcon from "./UserIcon";
+import UserIconOutline from "./UserIconOutline";
 import UsersIconOutline from "./UsersIconOutline";
 import TimesIcon from "./TimesIcon";
 import TheaterIcon from "./TheaterIcon";
@@ -47,6 +48,8 @@ import DiscordIcon from "./DiscordIcon";
 import GooglePlayIcon from "./GooglePlayIcon";
 import SettingsIcon from "./SettingsIcon";
 import PencilIcon from "./PencilIcon";
+import HistoryFill from "./HistoryFill";
+import HistoryOutline from "./HistoryOutline";
 import WebIcon from "./WebIcon";
 
 export {
@@ -55,6 +58,7 @@ export {
   HomeIconOutline,
   UsersIcon,
   UserIcon,
+  UserIconOutline,
   UsersIconOutline,
   TimesIcon,
   TheaterIcon,
@@ -99,5 +103,7 @@ export {
   GooglePlayIcon,
   SettingsIcon,
   PencilIcon,
-  WebIcon
+  HistoryFill,
+  HistoryOutline,
+  WebIcon,
 };

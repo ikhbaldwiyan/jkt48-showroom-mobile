@@ -1,4 +1,4 @@
-import { ENDPOINTS, apiShowroom, apiAuth, apiHistory  } from "../config";
+import { ENDPOINTS, apiShowroom, apiAuth, apiHistory } from "../config";
 
 export const getRoomList = () => {
   return apiShowroom.get(ENDPOINTS.ROOM.LIST);
@@ -36,6 +36,14 @@ export const getRecentLives = () => {
   return apiHistory.get(ENDPOINTS.ROOM.RECENT_LIVE);
 };
 
-export const getHistoryLives = (roomId) => {
-  return apiHistory.get(`${ENDPOINTS.ROOM.HISTORY_LIVE}&room_id=${roomId}`);
+export const getHistoryProfile = (roomId) => {
+  return apiHistory.get(
+    `${ENDPOINTS.ROOM.HISTORY_LIVE_PROFILE}&room_id=${roomId}`
+  );
+};
+
+export const getHistoryLives = (type, search, page) => {
+  return apiHistory.get(
+    `${ENDPOINTS.ROOM.HISTORY_LIVE}&type=${type}&filter=${type}&search=${search}&page=${page}&perpage=8`
+  );
 };

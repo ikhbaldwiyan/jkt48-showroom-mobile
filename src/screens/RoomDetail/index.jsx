@@ -22,8 +22,9 @@ import {
 } from "../../assets/icon";
 import moment from "moment";
 import useUser from "../../utils/hooks/useUser";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, StyleSheet } from "react-native";
 import trackAnalytics from "../../utils/trackAnalytics";
+import LinearGradient from "react-native-linear-gradient";
 
 const RoomDetail = () => {
   const route = useRoute();
@@ -70,7 +71,7 @@ const RoomDetail = () => {
             py="1"
             size="xs"
             borderRadius="md"
-            background={isFollow ? "green.600" : "primary"}
+            background={isFollow ? "teal" : "primary"}
             disabled={loadingFollow}
             onPress={() => handleFollowRoom(!isFollow ? 1 : 0)}
           >
@@ -105,7 +106,7 @@ const RoomDetail = () => {
       username: userProfile?.account_id ?? "Guest",
       room: profile?.room_url_key
     });
-    
+
     try {
       await followRoom({
         flag,
@@ -134,48 +135,72 @@ const RoomDetail = () => {
             width="100%"
             height={215}
           />
-          <Box
-            p="3"
-            bg="teal"
-            borderBottomLeftRadius="5"
-            borderBottomRightRadius="6"
-            width="100%"
+          <LinearGradient
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            colors={["#004A66", "#009FCB"]}
+            style={styles.linearGradient}
           >
-            <HStack space={2}>
-              <LiveIcon />
-              <Text fontWeight="semibold">Last Live:</Text>
-              <Text fontWeight="semibold">
-                {historyLive ? (
-                  moment(historyLive[0].live_info.date.end).format(
-                    "dddd, D MMMM hh:mm"
-                  ) + " WIB"
+            <Box
+              p="3"
+              borderBottomLeftRadius="5"
+              borderBottomRightRadius="6"
+              width="100%"
+            >
+              <HStack space={2}>
+                <LiveIcon />
+                <Text fontWeight="semibold">Last Live:</Text>
+                <Text fontWeight="semibold">
+                  {historyLive ? (
+                    moment(historyLive[0]?.live_info?.date?.end).format(
+                      "dddd, D MMMM hh:mm"
+                    ) + " WIB"
+                  ) : (
+                    <Skeleton size="3" w="200" rounded="full" />
+                  )}
+                </Text>
+              </HStack>
+              <HStack justifyContent="space-between" mt="3">
+                <HStack space={2} alignItems="center">
+                  <IDCard />
+                  <Text fontWeight="semibold">
+                    Room Level: {profile?.room_level}
+                  </Text>
+                </HStack>
+                {session ? (
+                  <HStack space={2} alignItems="center">
+                    <Followers />
+                    <Text fontWeight="semibold">
+                      Total Watching: {profile?.visit_count}x
+                    </Text>
+                  </HStack>
                 ) : (
-                  <Skeleton size="3" w="200" rounded="full" />
+                  <HStack space={2} alignItems="center">
+                    <Followers />
+                    <Text fontWeight="semibold">
+                      Follower: {formatViews(profile?.follower_num ?? 0)}
+                    </Text>
+                  </HStack>
                 )}
-              </Text>
-            </HStack>
-            <HStack justifyContent="space-between" mt="3">
-              <HStack space={2} alignItems="center">
-                <IDCard />
-                <Text fontWeight="semibold">
-                  Room Level: {profile?.room_level}
-                </Text>
               </HStack>
-              <HStack space={2} alignItems="center">
-                <Followers />
-                <Text fontWeight="semibold">
-                  Follower: {formatViews(profile?.follower_num ?? 0)}
-                </Text>
-              </HStack>
-            </HStack>
-          </Box>
+            </Box>
+          </LinearGradient>
+
           <ProfileTabs />
         </>
       ) : (
-        <Loading />
+        <Loading color="white" />
       )}
     </Box>
   );
 };
 
 export default RoomDetail;
+
+const styles = StyleSheet.create({
+  linearGradient: {
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderRadius: 6
+  }
+});

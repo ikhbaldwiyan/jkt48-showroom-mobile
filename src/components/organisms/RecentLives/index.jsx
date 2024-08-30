@@ -5,8 +5,9 @@ import { ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import {
   Calendar,
-  GiftFill,
   History,
+  LiveIcon,
+  RightArrow,
   TimesFill,
   UsersFill
 } from "../../../assets/icon";
@@ -17,7 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const RecentLives = ({ refreshing }) => {
   const [recentLives, setRecentLives] = useState([]);
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function getRecentLive() {
@@ -31,65 +32,100 @@ const RecentLives = ({ refreshing }) => {
     getRecentLive();
   }, [refreshing]);
 
+  const isMinuteTime = (endDate) => {
+    const currentTime = new Date();
+    const diffMinutes = Math.floor((currentTime - new Date(endDate)) / 60000);
+
+    return diffMinutes < 60 ? true : false;
+  };
+
   return (
     recentLives.length > 0 && (
       <View>
-        <Text fontSize="2xl" mb="3" fontWeight="semibold">
-          Live Terakhir
-        </Text>
+        <HStack alignItems="center" justifyContent="space-between">
+          <Text fontSize="2xl" mb="3" fontWeight="semibold">
+            Live Terakhir
+          </Text>
+          <TouchableOpacity
+            onPress={() => navigation.replace("Main", { screen: "History" })}
+          >
+            <HStack alignItems="center" mb="1" space={2}>
+              <Text fontSize="md">See All</Text>
+              <RightArrow />
+            </HStack>
+          </TouchableOpacity>
+        </HStack>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {recentLives?.map((log, idx) => {
             const { member, live_info } = log;
             return (
               <Box w="265" mr="3" key={idx}>
-                <LinearGradient
-                  colors={["#24A2B7", "#4724B7"]}
-                  style={styles.linearGradient}
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() =>
+                    navigation.navigate("HistoryDetail", {
+                      url: `https://www.jkt48showroom.com/history/${member.url}/${log.data_id}`,
+                      title: member?.is_official
+                        ? "JKT48 Official"
+                        : member?.nickname +
+                          " - " +
+                          moment(live_info?.date.start).format("DD MMMM YYYY")
+                    })
+                  }
                 >
-                  <Box>
-                    <HStack>
-                      <Image
-                        source={{ uri: member.img_alt }}
-                        size="md"
-                        alt="image"
-                        w="100"
-                        h="auto"
-                        borderTopLeftRadius={6}
-                        borderBottomLeftRadius={6}
-                      />
-                      <Box>
-                        <VStack space={2} p="3">
-                          <HStack alignItems="center" space={2}>
-                            <Calendar />
-                            <Text fontWeight="semibold">
-                              {moment(live_info?.date?.start).format(
-                                "dddd, D MMMM"
-                              )}
-                            </Text>
-                          </HStack>
-                          <HStack alignItems="center" space={2}>
-                            <UsersFill />
-                            <Text fontWeight="semibold">
-                              {formatViews(live_info?.viewers?.num)} Views
-                            </Text>
-                          </HStack>
-                          <HStack alignItems="center" space={2}>
-                            <TimesFill />
-                            <Text fontWeight="semibold">
-                              {getLiveDurationMinutes(live_info?.duration)}
-                            </Text>
-                          </HStack>
-                          <HStack alignItems="center" space={2}>
-                            <GiftFill />
-                            <Text fontWeight="semibold">
-                              {formatViews(log.points)} Gold
-                            </Text>
-                          </HStack>
-                        </VStack>
-                      </Box>
-                    </HStack>
-                  </Box>
-                </LinearGradient>
+                  <LinearGradient
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    colors={["#004A66", "#009FCB"]}
+                    style={styles.linearGradient}
+                  >
+                    <Box>
+                      <HStack>
+                        <Image
+                          source={{ uri: member.img_alt }}
+                          size="md"
+                          alt="image"
+                          w="100"
+                          h="auto"
+                          borderTopLeftRadius={6}
+                          borderBottomLeftRadius={6}
+                        />
+                        <Box>
+                          <VStack space={2} p="3">
+                            <HStack alignItems="center" space={2}>
+                              <Calendar />
+                              <Text fontWeight="semibold">
+                                {moment(live_info?.date?.start).format(
+                                  "dddd, D MMM"
+                                )}
+                              </Text>
+                            </HStack>
+                            <HStack alignItems="center" space={2}>
+                              <UsersFill />
+                              <Text>
+                                {formatViews(live_info?.viewers?.num)} views
+                              </Text>
+                            </HStack>
+                            <HStack alignItems="center" space={2}>
+                              <TimesFill />
+                              <Text>
+                                {getLiveDurationMinutes(live_info?.duration)}
+                              </Text>
+                            </HStack>
+                            <HStack alignItems="center" space={2}>
+                              <LiveIcon size={16} />
+                              <Text fontWeight="semibold">
+                                {log.type === "showroom"
+                                  ? "Showroom"
+                                  : "IDN Live"}
+                              </Text>
+                            </HStack>
+                          </VStack>
+                        </Box>
+                      </HStack>
+                    </Box>
+                  </LinearGradient>
+                </TouchableOpacity>
                 <HStack space={3}>
                   <Box
                     mt="3"
@@ -102,7 +138,7 @@ const RecentLives = ({ refreshing }) => {
                     <TouchableOpacity
                       activeOpacity={0.6}
                       onPress={() => {
-                        navigate("RoomDetail", {
+                        navigation.navigate("RoomDetail", {
                           room: log
                         });
                       }}
@@ -122,9 +158,14 @@ const RecentLives = ({ refreshing }) => {
                     w="50%"
                     background="red"
                   >
-                    <HStack alignItems="center">
+                    <HStack space="1" alignItems="center">
                       <History />
-                      <Text ml="0.5" fontSize="13" fontWeight="semibold">
+                      <Text
+                        fontSize={
+                          isMinuteTime(live_info?.date?.end) ? "12.3" : "13"
+                        }
+                        fontWeight="semibold"
+                      >
                         <TimeAgo time={live_info?.date?.end} interval={20000} />
                       </Text>
                     </HStack>
