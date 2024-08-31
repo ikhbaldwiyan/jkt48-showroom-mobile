@@ -1,24 +1,32 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Box, Button, HStack, Input, Text } from "native-base";
 import { Dashboard, GraduateIcon } from "../../assets/icon";
 import RoomRegular from "../../components/organisms/RoomRegular";
 import RoomTrainee from "../../components/organisms/RoomTrainee";
 import Layout from "../../components/templates/Layout";
 import { useRefresh } from "../../utils/hooks/useRefresh";
+import { useNavigation } from "@react-navigation/native";
 
 const MemberList = () => {
   const [activeTab, setActiveTab] = useState("regular");
   const [searchQuery, setSearchQuery] = useState("");
   const { refreshing, onRefresh } = useRefresh();
+  const { setOptions } = useNavigation();
 
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
+  useLayoutEffect(() => {
+    setOptions({
+      headerTitle: "Member List"
+    });
+  }, [setOptions]);
+
   return (
-    <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
+    <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
-        <HStack space={1.5} mb="6">
+        <HStack space={1.5} mb="4">
           <Input
             bgColor="white"
             variant="filled"

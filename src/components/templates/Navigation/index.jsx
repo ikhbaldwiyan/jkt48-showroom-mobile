@@ -81,7 +81,8 @@ const Navigation = () => {
     headerTitleStyle: {
       color: "white",
       fontWeight: "bold"
-    }
+    },
+    tabBarHideOnKeyboard: true
   };
 
   const TabNavigator = () => (
@@ -119,13 +120,17 @@ const Navigation = () => {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Member" component={MemberList} />
+      <Tab.Screen name="Member" component={MemberList} options={BasicHeader} />
       <Tab.Screen
         name="History"
         component={HistoryLive}
         options={BasicHeader}
       />
-      <Tab.Screen name="Theater" component={ScheduleList} />
+      <Tab.Screen
+        name="Theater"
+        component={ScheduleList}
+        options={BasicHeader}
+      />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
