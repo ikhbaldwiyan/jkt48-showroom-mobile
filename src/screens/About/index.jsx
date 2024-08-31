@@ -83,7 +83,7 @@ const About = () => {
       analyticsEvent: "website_click"
     },
     {
-      url: "https://discord.com/servers/jkt48-showroom-fanmade-1076511743909564506",
+      url: "https://discord.gg/jkt48-showroom-fanmade-1076511743909564506",
       icon: <DiscordIcon />,
       text: "Discord",
       analyticsEvent: "discord_about_click"

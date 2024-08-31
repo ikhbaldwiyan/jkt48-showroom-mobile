@@ -8,6 +8,7 @@ import {
   BirthdayIcon,
   Calendar,
   GraduateIcon,
+  LoadingIcon,
   RightArrow
 } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
@@ -61,18 +62,20 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
   return (
     <Box>
       <HStack alignItems="center" justifyContent="space-between">
-        <Text color="white" fontSize="2xl" mb="1" fontWeight="semibold">
-          Jadwal Theater
-        </Text>
         {isWeek && (
-          <TouchableOpacity
-            onPress={() => navigation.replace("Main", { screen: "Theater" })}
-          >
-            <HStack alignItems="center" space={2}>
-              <Text fontSize="md">See All</Text>
-              <RightArrow />
-            </HStack>
-          </TouchableOpacity>
+          <>
+            <Text color="white" fontSize="2xl" mb="1" fontWeight="semibold">
+              Jadwal Theater
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.replace("Main", { screen: "Theater" })}
+            >
+              <HStack alignItems="center" space={2}>
+                <Text fontSize="md">See All</Text>
+                <RightArrow />
+              </HStack>
+            </TouchableOpacity>
+          </>
         )}
       </HStack>
       {schedules.length > 0
@@ -193,25 +196,29 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
               </HStack>
             </TouchableOpacity>
           ))
-        : [...Array(4)].map((_, idx) => <SkeletonSchedule key={idx} />)}
+        : [...Array(5)].map((_, idx) => <SkeletonSchedule key={idx} />)}
 
       {hasMore && !isLoading && !isWeek && (
         <TouchableOpacity onPress={handleLoadMore}>
           <Button
-            my="3"
+            my="2"
             variant="filled"
             borderRadius="8"
             bg="teal"
             onPress={handleLoadMore}
           >
-            <Text fontWeight="bold" fontSize="14">
-              Load More Schedules
-            </Text>
+            <HStack alignItems="center" space={2}>
+              <LoadingIcon />
+              <Text fontWeight="bold" fontSize="14">
+                Load More Schedules
+              </Text>
+            </HStack>
           </Button>
         </TouchableOpacity>
       )}
+
       {isLoading && !isWeek && (
-        <HStack justifyContent="center" mt="5" my="4">
+        <HStack justifyContent="center" my="4">
           <Spinner color="white" size="lg" />
         </HStack>
       )}

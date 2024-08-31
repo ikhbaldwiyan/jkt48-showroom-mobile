@@ -59,7 +59,7 @@ export const Room = () => {
               />
               <View justifyContent="center" alignItems="center">
                 <Text fontSize="16" fontWeight="bold">
-                  {formatName(item.room_url_key)}
+                  {formatName(item.room_url_key, true)}
                 </Text>
                 <Box bg="red" mt="2" rounded="lg" p="1" px="3">
                   <HStack alignItems="center" space={1}>

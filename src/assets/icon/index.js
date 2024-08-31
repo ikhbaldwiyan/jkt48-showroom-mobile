@@ -51,6 +51,7 @@ import PencilIcon from "./PencilIcon";
 import HistoryFill from "./HistoryFill";
 import HistoryOutline from "./HistoryOutline";
 import WebIcon from "./WebIcon";
+import LoadingIcon from "./LoadingIcon";
 
 export {
   LogoIcon,
@@ -106,4 +107,5 @@ export {
   HistoryFill,
   HistoryOutline,
   WebIcon,
+  LoadingIcon,
 };
