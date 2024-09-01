@@ -37,12 +37,14 @@ const Home = ({ navigation }) => {
     if (latestVersion > currentVersion) {
       Alert.alert(
         `Versi terbaru tersedia wots`,
-        `Jangan lupa update versi APK ke versi ${latestVersion} di website untuk mendapatkan fitur baru!`,
+        `Jangan lupa update versi APK ke versi ${latestVersion} di Play Store untuk menggunakan fitur baru!`,
         [
           {
             text: "Update APK",
             onPress: () => {
-              Linking.openURL("https://www.jkt48showroom.com/android");
+              Linking.openURL(
+                "https://play.google.com/store/apps/details?id=com.inzoid.jkt48showroom"
+              );
             }
           },
           {

@@ -52,19 +52,17 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
             </HStack>
           </Modal.Header>
           <Modal.Body bg="secondary">
-            <VStack space={3}>
-              <Text>- Add Rank menu in live stream tabs</Text>
-              <Text>- Set default to dark mode background theme</Text>
-              <Text>- Show social media info on About screen</Text>
-              <Text>- Add Settings Tab in Profile</Text>
-              <Text>- Update some wording title to indonesia</Text>
-              <Text>- Show Delete Account button on settings</Text>
-              <Text>
-                - Change Splash Screen and APK name to{" "}
-                <Text fontWeight="semibold">JKT48 Showroom Fanmade</Text>
-              </Text>
-              <Text>- Open Test Release on Play Store</Text>
-            </VStack>
+          <VStack space={3}>
+            <Text>- Add History Live List and Detail screen</Text>
+            <Text>- Add Edit Avatar screen on profile</Text>
+            <Text>- Add Quality Live streaming showroom setting</Text>
+            <Text>- Optimize and revamp thetater schedule</Text>
+            <Text>- Implement infinite load button schedules</Text>
+            <Text>- Show recent live card live stream type</Text>
+            <Text>- Revamp profile member detail</Text>
+            <Text>- Show total watching live on Account SR</Text>
+            <Text>- Add Filter History Live Showroom and IDN</Text>
+          </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
             <Button.Group space={2}>

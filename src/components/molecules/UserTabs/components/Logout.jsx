@@ -51,7 +51,7 @@ const Logout = () => {
         onClose={handleModal}
         confrimAction={handleLogout}
       >
-        <Text color="black">Are you sure want logout?</Text>
+        <Text color="black">Apakah Anda yakin ingin logout ?</Text>
       </ModalConfirmation>
     </View>
   );
