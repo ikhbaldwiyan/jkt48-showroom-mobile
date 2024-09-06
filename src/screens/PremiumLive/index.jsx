@@ -101,8 +101,8 @@ const PremiumLive = () => {
     toast.show({
       render: () => {
         return (
-          <Box bg="red" px="2" mt="3" m="3" py="1" rounded="sm" mb={5}>
-            <Text>No Ticket Showroom</Text>
+          <Box bg="red" px="2" mt="3" m="3" py="2" rounded="sm" mb={5}>
+            <Text>Kamu belum mempunyai tiket untuk show premium live ini</Text>
           </Box>
         );
       },
