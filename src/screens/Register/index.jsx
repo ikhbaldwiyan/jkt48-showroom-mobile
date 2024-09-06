@@ -6,24 +6,24 @@ import {
   Input,
   Spinner,
   Text,
-  useToast
+  useToast,
 } from "native-base";
 import React, { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
 import Logo from "../../components/atoms/Logo";
-import { loginApi, regsiterApi } from "../../services/auth";
 import { activityLog } from "../../utils/activityLog";
 import analytics from "@react-native-firebase/analytics";
 import useAuthStore from "../../store/authStore";
+import { AUTH } from "../../services";
 
 const Register = ({ navigation }) => {
-  const { setUser, setSession, setProfile } = useAuthStore();
+  const { setUser, setSession, setProfile, setUserProfile } = useAuthStore();
   const [formData, setFormData] = useState({
     account_id: "",
     name: "",
     password: "",
     password_confirm: "",
-    avatar_id: 1
+    avatar_id: 1,
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -38,9 +38,9 @@ const Register = ({ navigation }) => {
   };
 
   const autoLogin = async () => {
-    const response = await loginApi({
+    const response = await AUTH.loginApi({
       account_id: formData.account_id,
-      password: formData.password
+      password: formData.password,
     });
 
     const data = response.data;
@@ -50,16 +50,28 @@ const Register = ({ navigation }) => {
 
     activityLog({
       description: "Register from android",
-      logName: "Register"
+      logName: "Register",
+    }).then(() => {
+      setRegisterProfile(formData.account_id);
     });
 
     navigation.replace("Main");
   };
 
+  const setRegisterProfile = async (userId) => {
+    await AUTH.detailUserApi(userId)
+      .then((res) => {
+        setUserProfile(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleRegister = async () => {
     setLoading(true);
     try {
-      const response = await regsiterApi(formData);
+      const response = await AUTH.regsiterApi(formData);
 
       const isError = response.data.error;
       isError && setError(isError);
@@ -83,11 +95,11 @@ const Register = ({ navigation }) => {
               </Box>
             );
           },
-          placement: "top-right"
+          placement: "top-right",
         });
 
         await analytics().logEvent("Register", {
-          username: formData.account_id
+          username: formData.account_id,
         });
       }
     } catch (error) {
