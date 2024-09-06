@@ -53,7 +53,7 @@ const RoomDetail = () => {
 
   useEffect(() => {
     trackAnalytics("visit_showroom_profile", {
-      username: userProfile?.account_id ?? "Guest",
+      username: userProfile?.user_id ?? "Guest",
       room: profile?.room_url_key,
     });
   }, [userProfile, profile]);
@@ -103,7 +103,7 @@ const RoomDetail = () => {
   const handleFollowRoom = async (flag) => {
     setLoadingFollow(true);
     trackAnalytics("follow_member", {
-      username: userProfile?.account_id ?? "Guest",
+      username: userProfile?.name ?? "Guest",
       room: profile?.room_url_key,
     });
 

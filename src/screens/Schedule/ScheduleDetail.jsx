@@ -6,7 +6,7 @@ import {
   BirthdayIcon,
   Calendar,
   GraduateIcon,
-  TimesIcon
+  TimesIcon,
 } from "../../assets/icon";
 import Loading from "../../components/atoms/Loading";
 import ScheduleTabs from "../../components/molecules/ScheduleTabs";
@@ -40,14 +40,14 @@ const ScheduleDetail = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: params?.item?.setlist?.name
+      headerTitle: params?.item?.setlist?.name,
     });
   }, []);
 
   useEffect(() => {
     trackAnalytics("visit_theater_schedule", {
-      username: userProfile?.account_id,
-      setlist: params?.item?.setlist?.name
+      username: userProfile?.name,
+      setlist: params?.item?.setlist?.name,
     });
   }, [userProfile]);
 
@@ -104,7 +104,7 @@ const ScheduleDetail = ({ navigation }) => {
             borderBottomLeftRadius="0"
             borderBottomRightRadius="0"
             source={{
-              uri: theater?.setlist?.image
+              uri: theater?.setlist?.image,
             }}
           />
           <Box

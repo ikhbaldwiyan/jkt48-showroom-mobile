@@ -27,7 +27,7 @@ const IDNStream = () => {
     clearLiveStream,
     getStreamUrl,
     url,
-    clearUrl
+    clearUrl,
   } = useIDNLiveStore();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { refreshing, onRefresh } = useRefresh();
@@ -52,8 +52,8 @@ const IDNStream = () => {
     await getStreamUrl(profile?.user?.username);
 
     trackAnalytics("refresh_idn_button", {
-      username: userProfile?.account_id ?? "Guest",
-      room: profile?.user?.name
+      username: userProfile?.name ?? "Guest",
+      room: profile?.user?.name,
     });
   };
 
@@ -68,8 +68,8 @@ const IDNStream = () => {
   useEffect(() => {
     if (url) {
       trackAnalytics("watch_idn_live", {
-        username: userProfile?.account_id ?? "Guest",
-        room: profile?.user?.name
+        username: userProfile?.name ?? "Guest",
+        room: profile?.user?.name,
       });
     }
   }, [userProfile, url]);
@@ -91,7 +91,7 @@ const IDNStream = () => {
           </Button>
           <Views number={profile?.view_count ?? 0} />
         </HStack>
-      )
+      ),
     });
   }, [profile, refreshing]);
 
@@ -101,7 +101,7 @@ const IDNStream = () => {
         profile?.user?.name !== "JKT48"
           ? formatName(profile?.user?.name, true)
           : profile?.user?.name,
-      headerShown: isFullScreen ? false : true
+      headerShown: isFullScreen ? false : true,
     });
   }, [profile, isFullScreen]);
 
@@ -111,7 +111,7 @@ const IDNStream = () => {
         logName: "Watch",
         userId: userProfile?._id,
         description: `Watch IDN Live ${profile?.user?.name}`,
-        liveId: profile?.slug
+        liveId: profile?.slug,
       });
     }
     LogBox.ignoreAllLogs(true);
@@ -127,7 +127,7 @@ const IDNStream = () => {
           </Box>
         );
       },
-      placement: "top-right"
+      placement: "top-right",
     });
   };
 
@@ -136,8 +136,8 @@ const IDNStream = () => {
 
     if (isFullScreen) {
       trackAnalytics("open_full_screen_idn", {
-        username: userProfile?.user_id ?? "Guest",
-        room: profile?.user?.name
+        username: userProfile?.name ?? "Guest",
+        room: profile?.user?.name,
       });
     }
 
@@ -174,7 +174,7 @@ const IDNStream = () => {
               width: "100%",
               height: isFullScreen
                 ? Dimensions.get("window").height
-                : customHeight
+                : customHeight,
             }}
             disableSeekbar
             disableBack
