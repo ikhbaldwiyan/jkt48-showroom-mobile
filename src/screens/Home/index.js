@@ -7,7 +7,7 @@ import {
   ShowroomLive,
   PremiumLive,
   RecentLives,
-  Schedule
+  Schedule,
 } from "../../components/organisms";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import DeviceInfo from "react-native-device-info";
@@ -15,11 +15,14 @@ import { getCurrentVersion } from "../../services/versions";
 import { firebase } from "@react-native-firebase/messaging";
 import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
 import useChangeLogStore from "../../store/changeLogStore";
+import useAuthStore from "../../store/authStore";
+import { AUTH } from "../../services";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
   const [latestVersion, setLatestVersion] = useState("");
   const { showChangeLog, setCloseModal } = useChangeLogStore();
+  const { userProfile, session, user, setUserProfile } = useAuthStore();
 
   const getVersionAndroid = async () => {
     try {
@@ -45,16 +48,32 @@ const Home = ({ navigation }) => {
               Linking.openURL(
                 "https://play.google.com/store/apps/details?id=com.inzoid.jkt48showroom"
               );
-            }
+            },
           },
           {
-            text: "Nanti"
-          }
+            text: "Nanti",
+          },
         ]
       );
       firebase.messaging().subscribeToTopic("update-reminder");
     }
   }, [latestVersion]);
+
+  const setRegisterProfile = async (userId) => {
+    await AUTH.detailUserApi(userId)
+      .then((res) => {
+        setUserProfile(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    if (session && !userProfile) {
+      setRegisterProfile(user?.account_id);
+    }
+  }, [userProfile]);
 
   return (
     <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
