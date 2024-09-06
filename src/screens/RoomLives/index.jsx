@@ -16,9 +16,7 @@ const RoomLives = ({ navigation }) => {
   useEffect(() => {
     async function getRoomLive() {
       const room = await ROOMS.getRoomLive();
-      const roomLiveFilter = room?.data.data?.filter(
-        (room) => room.premium_room_type !== 1
-      );
+      const roomLiveFilter = room?.data.data;
       setRooms(roomLiveFilter);
     }
     getRoomLive();
@@ -26,7 +24,7 @@ const RoomLives = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Showroom Live"
+      headerTitle: "Showroom Live",
     });
   }, []);
 
@@ -41,7 +39,7 @@ const RoomLives = ({ navigation }) => {
         <Image
           borderRadius={8}
           source={{
-            uri: cleanImage(item.image_square)
+            uri: cleanImage(item.image_square),
           }}
           alt={item.main_name}
           size="xl"

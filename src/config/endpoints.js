@@ -20,6 +20,7 @@ export default {
     GEN_10: "/rooms/academy",
     TRAINEE: "/rooms/trainee",
     ONLIVES: "/rooms/onlives",
+    PREMIUM_LIVE: "/rooms/premium-live",
     PROFILE: "/profile/room/",
     FOLLOW: "/room/follow",
     RECENT_LIVE:

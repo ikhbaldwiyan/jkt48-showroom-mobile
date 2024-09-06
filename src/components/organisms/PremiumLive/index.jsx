@@ -15,10 +15,8 @@ const PremiumLive = ({ refreshing }) => {
 
   useEffect(() => {
     async function getPremiumLive() {
-      const room = await ROOMS.getRoomLive();
-      const premiumLive = room?.data.data?.filter(
-        (room) => room.premium_room_type === 1
-      );
+      const room = await ROOMS.getPremiumLive();
+      const premiumLive = room?.data.data;
       setRooms(premiumLive);
     }
     getPremiumLive();
@@ -46,8 +44,8 @@ const PremiumLive = ({ refreshing }) => {
                 navigate("PremiumLive", {
                   item: {
                     profile: item,
-                    theater
-                  }
+                    theater,
+                  },
                 });
               }}
             >
@@ -56,7 +54,7 @@ const PremiumLive = ({ refreshing }) => {
                 source={{
                   uri: theater
                     ? theater?.setlist?.image
-                    : cleanImage(item.image)
+                    : cleanImage(item.image),
                 }}
                 alt={item.main_name}
                 width="330"

@@ -47,7 +47,7 @@ const PremiumLive = () => {
     url,
     getStreamUrl,
     getStreamOptions,
-    clearLiveStream
+    clearLiveStream,
   } = useLiveStreamStore();
   const { mode } = useThemeStore();
 
@@ -81,13 +81,13 @@ const PremiumLive = () => {
           />
         </HStack>
       ),
-      headerShown: isFullScreen ? false : true
+      headerShown: isFullScreen ? false : true,
     });
   }, [profile, params.item.profile, liveInfo, isFullScreen, mode]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "JKT48"
+      headerTitle: "JKT48",
     });
   }, []);
 
@@ -106,7 +106,7 @@ const PremiumLive = () => {
           </Box>
         );
       },
-      placement: "bottom"
+      placement: "bottom",
     });
     navigation.replace("ScheduleDetail", { item: params.item.theater });
   };
@@ -157,13 +157,13 @@ const PremiumLive = () => {
         logName: "Premium Live",
         userId: userProfile?._id,
         description: `Watch Premium Live ${setlist}`,
-        liveId: liveIdUser
+        liveId: liveIdUser,
       });
       activityLog({
         logName: "Watch",
         userId: userProfile?._id,
         description: `Watch Live JKT48 Room`,
-        liveId: profile?.live_id
+        liveId: profile?.live_id,
       });
     }
     LogBox.ignoreAllLogs(true);
@@ -185,18 +185,18 @@ const PremiumLive = () => {
             </Box>
           );
         },
-        placement: "top-right"
+        placement: "top-right",
       });
     }
     navigation.navigate("RoomDetail", {
       room: {
-        room_id: profile?.room_id
-      }
+        room_id: profile?.room_id,
+      },
     });
   };
 
   useEffect(() => {
-    setToken(session?.cookie_login_id);
+    setToken(session?.cookie_login_id ?? "token");
     users?.map((item) => {
       if (item?.user_id?.user_id === userProfile?.user_id) {
         if (item.status === "paid") {
@@ -234,7 +234,7 @@ const PremiumLive = () => {
                 style={{
                   position: "absolute",
                   width: "100%",
-                  height: "100%"
+                  height: "100%",
                 }}
                 disableSeekbar
                 disableBack

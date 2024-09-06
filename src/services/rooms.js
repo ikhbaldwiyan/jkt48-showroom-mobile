@@ -8,6 +8,10 @@ export const getRoomLive = () => {
   return apiShowroom.get(ENDPOINTS.ROOM.ONLIVES);
 };
 
+export const getPremiumLive = () => {
+  return apiShowroom.get(ENDPOINTS.ROOM.PREMIUM_LIVE);
+};
+
 export const getRoomGen10 = () => {
   return apiShowroom.get(ENDPOINTS.ROOM.GEN_10);
 };
