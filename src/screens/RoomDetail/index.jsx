@@ -7,7 +7,7 @@ import {
   Image,
   Skeleton,
   Spinner,
-  Text
+  Text,
 } from "native-base";
 import { cleanImage, formatName, formatViews } from "../../utils/helpers";
 import useProfileStore from "../../store/profileStore";
@@ -18,7 +18,7 @@ import {
   IDCard,
   LiveIcon,
   UserAdd,
-  UserCheck
+  UserCheck,
 } from "../../assets/icon";
 import moment from "moment";
 import useUser from "../../utils/hooks/useUser";
@@ -54,7 +54,7 @@ const RoomDetail = () => {
   useEffect(() => {
     trackAnalytics("visit_showroom_profile", {
       username: userProfile?.account_id ?? "Guest",
-      room: profile?.room_url_key
+      room: profile?.room_url_key,
     });
   }, [userProfile, profile]);
 
@@ -96,7 +96,7 @@ const RoomDetail = () => {
               </HStack>
             </TouchableOpacity>
           </Button>
-        )
+        ),
     });
   }, [profile]);
 
@@ -104,7 +104,7 @@ const RoomDetail = () => {
     setLoadingFollow(true);
     trackAnalytics("follow_member", {
       username: userProfile?.account_id ?? "Guest",
-      room: profile?.room_url_key
+      room: profile?.room_url_key,
     });
 
     try {
@@ -112,7 +112,7 @@ const RoomDetail = () => {
         flag,
         room_id: profile?.room_id,
         csrf_token: session?.csrf_token,
-        cookies_id: session?.cookie_login_id
+        cookies_id: session?.cookie_login_id,
       });
       setLoadingFollow(false);
       await fetchProfile();
@@ -153,7 +153,7 @@ const RoomDetail = () => {
                 <Text fontWeight="semibold">
                   {historyLive ? (
                     moment(historyLive[0]?.live_info?.date?.end).format(
-                      "dddd, D MMMM hh:mm"
+                      "dddd, D MMMM HH:mm"
                     ) + " WIB"
                   ) : (
                     <Skeleton size="3" w="200" rounded="full" />
@@ -201,6 +201,6 @@ const styles = StyleSheet.create({
   linearGradient: {
     borderTopRightRadius: 0,
     borderTopLeftRadius: 0,
-    borderRadius: 6
-  }
+    borderRadius: 6,
+  },
 });
