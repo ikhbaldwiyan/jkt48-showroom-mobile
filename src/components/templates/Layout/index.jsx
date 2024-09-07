@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { Box, HStack, ScrollView, Text, useToast } from "native-base";
-import { Linking, RefreshControl } from "react-native";
+import { RefreshControl } from "react-native";
 import Header from "../Header";
 import messaging from "@react-native-firebase/messaging";
 import { LiveIcon } from "../../../assets/icon";
 import { useNavigation } from "@react-navigation/native";
-import { PLAY_STORE_URL } from "@env";
 
 const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
   const toast = useToast();

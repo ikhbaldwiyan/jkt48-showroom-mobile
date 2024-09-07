@@ -1,26 +1,59 @@
-import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { Box, Divider, HStack, Image, Pressable, Text } from "native-base";
-import { ScrollView, TouchableOpacity } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
+import { TouchableOpacity, AppState } from "react-native";
+import { useQuery } from "@tanstack/react-query";
 import { ROOMS } from "../../../services";
 import { cleanImage, formatName, getTimes } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
 import { RightArrow, TimesFill } from "../../../assets/icon";
 
 const ShowroomLive = ({ refreshing }) => {
-  const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
+  const [appState, setAppState] = useState(AppState.currentState);
+
+  const fetchRoomLive = async () => {
+    const response = await ROOMS.getRoomLive();
+    return response?.data.data;
+  };
+
+  // Use the new React Query v5 signature
+  const { data: rooms = [], refetch } = useQuery({
+    queryKey: ["roomLive"],
+    queryFn: fetchRoomLive
+  });
+
+  // Refetch when the screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   useEffect(() => {
-    async function getRoomLive() {
-      const room = await ROOMS.getRoomLive();
-      const roomLiveFilter = room?.data.data?.filter(
-        (room) => room.premium_room_type !== 1
-      );
-      setRooms(roomLiveFilter);
-    }
-    getRoomLive();
+    refetch();
   }, [refreshing]);
+
+  // Handle app state changes (background -> foreground)
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState) => {
+      if (appState.match(/inactive|background/) && nextAppState === "active") {
+        refetch(); // Refetch data when app comes to foreground
+      }
+      setAppState(nextAppState);
+    };
+
+    // Listen to app state changes
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+
+    // Clean up the event listener on component unmount
+    return () => {
+      subscription.remove();
+    };
+  }, [appState, refetch]);
 
   return (
     rooms?.length > 0 && (
@@ -51,9 +84,7 @@ const ShowroomLive = ({ refreshing }) => {
               >
                 <Image
                   borderRadius={8}
-                  source={{
-                    uri: cleanImage(item.image)
-                  }}
+                  source={{ uri: cleanImage(item.image) }}
                   alt={item.main_name}
                   size="xl"
                   width={200}
@@ -71,25 +102,25 @@ const ShowroomLive = ({ refreshing }) => {
                     <Text>{getTimes(item?.started_at)}</Text>
                   </HStack>
                 </Box>
-                <TouchableOpacity
-                  activeOpacity={0.6}
-                  onPress={() => {
-                    navigate("LiveStream", { item });
-                  }}
-                >
-                  <HStack alignItems="center" mt="1">
-                    <Text
-                      fontSize="md"
-                      mr="2"
-                      fontWeight="semibold"
-                      color="white"
-                      py="2"
-                    >
-                      {formatName(item?.room_url_key)}
-                    </Text>
-                    <Views number={item?.view_num} />
-                  </HStack>
-                </TouchableOpacity>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  navigate("LiveStream", { item });
+                }}
+              >
+                <HStack alignItems="center" mt="1">
+                  <Text
+                    fontSize="md"
+                    mr="2"
+                    fontWeight="semibold"
+                    color="white"
+                    py="2"
+                  >
+                    {formatName(item?.room_url_key)}
+                  </Text>
+                  <Views number={item?.view_num} />
+                </HStack>
               </TouchableOpacity>
             </Box>
           ))}

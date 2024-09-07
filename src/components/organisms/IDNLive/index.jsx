@@ -1,26 +1,58 @@
-import React, { useEffect, useState } from "react";
-import { Box, Divider, HStack, Image, Pressable, Text } from "native-base";
-import { useNavigation } from "@react-navigation/native";
-import { ScrollView, TouchableOpacity } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
+import { TouchableOpacity, Pressable, AppState } from "react-native";
+import { useQuery } from "@tanstack/react-query";
 import { ROOMS } from "../../../services";
 import Views from "../../atoms/Views";
 import { RightArrow } from "../../../assets/icon";
 
-const IDNLIve = ({ refreshing }) => {
-  const [rooms, setRooms] = useState([]);
+const IDNLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
+  const [appState, setAppState] = useState(AppState.currentState);
+
+  const fetchIDNLiveRoom = async () => {
+    const response = await ROOMS.getIDNLIveRoom();
+    return response?.data;
+  };
+
+  // Use the new React Query v5 signature
+  const { data: rooms = [], refetch } = useQuery({
+    queryKey: ["idnLiveRoom"],
+    queryFn: fetchIDNLiveRoom,
+  });
+
+  // Refetch when the screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   useEffect(() => {
-    async function getIDNLIve() {
-      try {
-        const response = await ROOMS.getIDNLIveRoom();
-        setRooms(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getIDNLIve();
+    refetch();
   }, [refreshing]);
+
+  // Handle app state changes (background -> foreground)
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState) => {
+      if (appState.match(/inactive|background/) && nextAppState === "active") {
+        refetch(); // Refetch data when app comes to foreground
+      }
+      setAppState(nextAppState);
+    };
+
+    // Listen to app state changes
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+
+    // Clean up the event listener on component unmount
+    return () => {
+      subscription.remove();
+    };
+  }, [appState, refetch]);
 
   return (
     rooms.length > 0 && (
@@ -102,4 +134,4 @@ const IDNLIve = ({ refreshing }) => {
   );
 };
 
-export default IDNLIve;
+export default IDNLive;
