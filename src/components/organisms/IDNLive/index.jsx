@@ -29,14 +29,16 @@ const IDNLIve = ({ refreshing }) => {
           <Text color="white" fontSize="2xl" fontWeight="semibold">
             IDN Live
           </Text>
-          <TouchableOpacity onPress={() => navigate("IDNLives")}>
-            <HStack space={2} alignItems="center">
-              <Text color="white" fontSize="md">
-                All Live
-              </Text>
-              <RightArrow />
-            </HStack>
-          </TouchableOpacity>
+          {rooms.length > 2 && (
+            <TouchableOpacity onPress={() => navigate("IDNLives")}>
+              <HStack space={2} alignItems="center">
+                <Text color="white" fontSize="md">
+                  All Live
+                </Text>
+                <RightArrow />
+              </HStack>
+            </TouchableOpacity>
+          )}
         </HStack>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {rooms?.map((item, idx) => (

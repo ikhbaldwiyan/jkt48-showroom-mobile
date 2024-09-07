@@ -21,7 +21,7 @@ export const PodiumIDN = () => {
 
   useEffect(() => {
     try {
-      profile && getIDNPodiumList();
+     getIDNPodiumList();
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +38,7 @@ export const PodiumIDN = () => {
     }, 2 * 60 * 1000); // 2 minutes in milliseconds
 
     return () => clearInterval(interval);
-  }, [refreshing]);
+  }, [profile, refreshing]);
 
   return (
     <CardGradient>

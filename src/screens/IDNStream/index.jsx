@@ -106,7 +106,7 @@ const IDNStream = () => {
   }, [profile, isFullScreen]);
 
   useEffect(() => {
-    if (url) {
+    if (userProfile && url) {
       activityLog({
         logName: "Watch",
         userId: userProfile?._id,
