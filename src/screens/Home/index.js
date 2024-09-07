@@ -7,7 +7,7 @@ import {
   ShowroomLive,
   PremiumLive,
   RecentLives,
-  Schedule,
+  Schedule
 } from "../../components/organisms";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import DeviceInfo from "react-native-device-info";
@@ -18,12 +18,14 @@ import useChangeLogStore from "../../store/changeLogStore";
 import useAuthStore from "../../store/authStore";
 import { AUTH } from "../../services";
 import { PLAY_STORE_URL } from "@env";
+import RatingApp from "../../components/templates/RatingApp";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
   const [latestVersion, setLatestVersion] = useState("");
   const { showChangeLog, setCloseModal } = useChangeLogStore();
   const { userProfile, session, user, setUserProfile } = useAuthStore();
+  const [ratingApp, setRatingApp] = useState(false);
 
   const getVersionAndroid = async () => {
     try {
@@ -47,11 +49,11 @@ const Home = ({ navigation }) => {
             text: "Update APK",
             onPress: () => {
               Linking.openURL(PLAY_STORE_URL);
-            },
+            }
           },
           {
-            text: "Nanti",
-          },
+            text: "Nanti"
+          }
         ]
       );
       firebase.messaging().subscribeToTopic("update-reminder");
@@ -88,6 +90,7 @@ const Home = ({ navigation }) => {
         toggleModal={() => setCloseModal()}
         hideButton={true}
       />
+      <RatingApp isVisible={ratingApp} onOpen={() => setRatingApp(true)} onClose={() => setRatingApp(false)} />
     </Layout>
   );
 };
