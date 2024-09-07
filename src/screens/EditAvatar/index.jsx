@@ -9,7 +9,7 @@ import {
   Pressable,
   Text,
   useToast,
-  VStack
+  VStack,
 } from "native-base";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
@@ -40,7 +40,7 @@ const EditAvatar = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Avatar"
+      headerTitle: "Avatar",
     });
   }, []);
 
@@ -52,7 +52,7 @@ const EditAvatar = ({ navigation }) => {
           cookies_id: session.cookie_login_id,
           limit,
           page,
-          type
+          type,
         });
         const { avatars, current_user_avatar, total_entries } = response.data;
         setAvatars(avatars);
@@ -68,16 +68,16 @@ const EditAvatar = ({ navigation }) => {
   const updateUserAvatar = async () => {
     try {
       await updateDetailUser(userProfile.user_id, {
-        avatar: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
+        avatar: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`,
       });
       activityLog({
         logName: "User",
         description: "Update avatar image",
-        userId: userProfile._id
+        userId: userProfile._id,
       });
       trackAnalytics("update_user_avatar", {
         userId: userProfile.user_id,
-      })
+      });
     } catch (err) {
       console.log(err);
     }
@@ -89,11 +89,11 @@ const EditAvatar = ({ navigation }) => {
       const response = await updateAvatar({
         csrf_token: session.csrf_token,
         cookies_id: session.cookie_login_id,
-        avatar_id: selectedAvatar
+        avatar_id: selectedAvatar,
       });
       setProfile({
         ...profile,
-        avatar_url: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
+        avatar_url: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`,
       });
       toast.show({
         render: () => {
@@ -103,7 +103,7 @@ const EditAvatar = ({ navigation }) => {
             </Box>
           );
         },
-        placement: "bottom"
+        placement: "bottom",
       });
       await updateUserAvatar();
 
@@ -149,7 +149,7 @@ const EditAvatar = ({ navigation }) => {
             <Image
               style={{ width: 80, height: 80 }}
               source={{
-                uri: avatarImage ?? profile?.avatar_url
+                uri: avatarImage ?? profile?.avatar_url,
               }}
               alt="avatar"
             />
@@ -207,6 +207,8 @@ const EditAvatar = ({ navigation }) => {
           </Button>
         </HStack>
 
+        {totalAvatar === 0 && <Text mt="3">Avatar Not found</Text>}
+
         <FlatList
           data={avatars}
           numColumns={4}
@@ -216,7 +218,7 @@ const EditAvatar = ({ navigation }) => {
               colors={["#4A5568", "#9FAEBD"]}
               style={[
                 styles.gradientContainer,
-                selectedAvatar === item.avatar_id && styles.selectedGradient
+                selectedAvatar === item.avatar_id && styles.selectedGradient,
               ]}
             >
               <Pressable
@@ -288,11 +290,11 @@ const EditAvatar = ({ navigation }) => {
 const styles = StyleSheet.create({
   columnWrapper: {
     justifyContent: "space-between",
-    marginBottom: 8 // Equivalent to mb={2} in NativeBase
+    marginBottom: 8, // Equivalent to mb={2} in NativeBase
   },
   avatarImage: {
     padding: 15,
-    borderRadius: 20
+    borderRadius: 20,
   },
   gradientContainer: {
     width: "23%",
@@ -301,19 +303,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "transparent"
+    borderColor: "transparent",
   },
   image: {
     width: 60,
     height: 60,
     borderRadius: 8, // Equivalent to rounded="md"
     marginVertical: 4,
-    marginBottom: 8
+    marginBottom: 8,
   },
   selectedGradient: {
     borderRadius: 15,
-    borderColor: "cyan"
-  }
+    borderColor: "cyan",
+  },
 });
 
 export default EditAvatar;

@@ -52,17 +52,18 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
             </HStack>
           </Modal.Header>
           <Modal.Body bg="secondary">
-          <VStack space={3}>
-            <Text>- Add History Live List and Detail screen</Text>
-            <Text>- Add Edit Avatar screen on profile</Text>
-            <Text>- Add Quality Live streaming showroom setting</Text>
-            <Text>- Optimize and revamp thetater schedule</Text>
-            <Text>- Implement infinite load button schedules</Text>
-            <Text>- Show recent live card live stream type</Text>
-            <Text>- Revamp profile member detail</Text>
-            <Text>- Show total watching live on Account SR</Text>
-            <Text>- Add Filter History Live Showroom and IDN</Text>
-          </VStack>
+            <VStack space={3}>
+              <Text>- Add History Live List and Detail screen</Text>
+              <Text>- Add Edit Avatar screen on profile</Text>
+              <Text>- Add Quality Live streaming showroom setting</Text>
+              <Text>- Optimize and revamp thetater schedule</Text>
+              <Text>- Implement infinite load button schedules</Text>
+              <Text>- Show recent live card live stream type</Text>
+              <Text>- Revamp profile member detail</Text>
+              <Text>- Show total watching live on Account SR</Text>
+              <Text>- Add Filter History Live Showroom and IDN</Text>
+              <Text>- Fix register user podium not showing</Text>
+            </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
             <Button.Group space={2}>

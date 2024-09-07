@@ -21,7 +21,7 @@ export const PodiumIDN = () => {
 
   useEffect(() => {
     try {
-      getIDNPodiumList();
+      profile && getIDNPodiumList();
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +66,11 @@ export const PodiumIDN = () => {
                 <Image
                   alt={item.user.name}
                   style={{ width: 50, height: 50 }}
-                  source={{ uri: item?.user?.avatar ?? "https://static.showroom-live.com/image/avatar/1028686.png?v=100" }}
+                  source={{
+                    uri:
+                      item?.user?.avatar ??
+                      "https://static.showroom-live.com/image/avatar/1028686.png?v=100",
+                  }}
                 />
                 <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
                   {item.user.name}

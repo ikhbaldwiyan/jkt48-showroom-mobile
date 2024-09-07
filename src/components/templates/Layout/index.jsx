@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { Box, HStack, ScrollView, Text, useToast } from "native-base";
-import { RefreshControl } from "react-native";
+import { Linking, RefreshControl } from "react-native";
 import Header from "../Header";
 import messaging from "@react-native-firebase/messaging";
 import { LiveIcon } from "../../../assets/icon";
 import { useNavigation } from "@react-navigation/native";
+import { PLAY_STORE_URL } from "@env";
 
 const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
   const toast = useToast();
@@ -15,21 +16,21 @@ const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
 
     if (data.type === "Showroom" || data.type === "IDN") {
       navigate(data.screen, {
-        item: JSON.parse(data.profile)
+        item: JSON.parse(data.profile),
       });
     } else if (data.type === "Schedule") {
       navigate(data.screen, {
         item: {
           _id: data.schedule_id,
-          setlist: JSON.parse(data.setlist)
-        }
+          setlist: JSON.parse(data.setlist),
+        },
       });
     } else if (data.type === "Premium Live") {
       navigate(data.screen, {
         item: {
           profile: JSON.parse(data.profile),
-          theater: JSON.parse(data.theater)
-        }
+          theater: JSON.parse(data.theater),
+        },
       });
     }
   };
@@ -71,12 +72,12 @@ const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
               >
                 <HStack alignItems="center" space="2">
                   <LiveIcon size={14} />
-                  <Text>{`${data.name} lagi live ${data.type} nih  `}</Text>
+                  <Text>{`${data.name} lagi live ${data.type} cuy`}</Text>
                 </HStack>
               </Box>
             );
           },
-          placement: "top-right"
+          placement: "top-right",
         });
       }
     });

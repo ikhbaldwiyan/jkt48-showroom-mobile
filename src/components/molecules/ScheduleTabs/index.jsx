@@ -8,7 +8,7 @@ import { Members } from "./components/Members";
 import { SongsSetlist } from "./components/SongsSetlist";
 
 const initialLayout = {
-  width: Dimensions.get("window").width
+  width: Dimensions.get("window").width,
 };
 
 const ScheduleTabs = ({ refreshing }) => {
@@ -18,7 +18,7 @@ const ScheduleTabs = ({ refreshing }) => {
 
   const routes = [
     { key: "member", title: "Members" },
-    { key: "songs", title: "Songs" }
+    { key: "songs", title: "Songs" },
   ];
 
   const [members, setMembers] = useState([]);
@@ -39,11 +39,11 @@ const ScheduleTabs = ({ refreshing }) => {
 
   const renderTabs = SceneMap({
     member: () => <Members members={members} />,
-    songs: () => <SongsSetlist songs={songs} />
+    songs: () => <SongsSetlist songs={songs} />,
   });
 
   const renderTabBar = ({ navigationState }) => (
-    <Box bg="primary" borderRadius="md" flexDirection="row">
+    <Box bg="#0082A6" borderRadius="md" flexDirection="row">
       {navigationState.routes.map((route, i) => {
         const color =
           index === i

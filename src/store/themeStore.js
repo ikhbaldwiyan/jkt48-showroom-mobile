@@ -12,18 +12,18 @@ const useThemeStore = create(
         set({
           mode: "dark",
           header: "#4A5568",
-          theme: ["#4A5568", "#282C34"]
+          theme: ["#4A5568", "#282C34"],
         }),
       setLightMode: () =>
         set({
           mode: "light",
-          header: "primary",
-          theme: ["#24A2B7", "#3B82F6"]
-        })
+          header: "#0082A6",
+          theme: ["#0082A6", "#004A66"],
+        }),
     }),
     {
       name: "theme-store",
-      storage: createJSONStorage(() => AsyncStorage)
+      storage: createJSONStorage(() => AsyncStorage),
     }
   )
 );

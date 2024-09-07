@@ -5,7 +5,7 @@ import LinearGradient from "react-native-linear-gradient";
 export const Members = ({ members }) => {
   return (
     <LinearGradient
-      colors={["#24A2B7", "#3B82F6"]}
+      colors={["#0082A6", "#004A66"]}
       style={styles.linearGradient}
     >
       <ScrollView>
@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
+    borderBottomRightRadius: 6,
+  },
 });

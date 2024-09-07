@@ -17,6 +17,7 @@ import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog"
 import useChangeLogStore from "../../store/changeLogStore";
 import useAuthStore from "../../store/authStore";
 import { AUTH } from "../../services";
+import { PLAY_STORE_URL } from "@env";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
@@ -45,9 +46,7 @@ const Home = ({ navigation }) => {
           {
             text: "Update APK",
             onPress: () => {
-              Linking.openURL(
-                "https://play.google.com/store/apps/details?id=com.inzoid.jkt48showroom"
-              );
+              Linking.openURL(PLAY_STORE_URL);
             },
           },
           {
