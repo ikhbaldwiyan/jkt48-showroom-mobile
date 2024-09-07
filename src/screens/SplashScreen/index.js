@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Box, Text } from "native-base";
-import LogoIcon from "../../assets/icon/LogoIcon";
+import { LogoNormal } from "../../assets/icon";
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
@@ -11,8 +11,8 @@ const SplashScreen = ({ navigation }) => {
 
   return (
     <Box flex="1" bg="secondary" justifyContent="center" alignItems="center">
-      <Box py="3">
-        <LogoIcon width="70" height="110" />
+      <Box py="4">
+        <LogoNormal width="100" height="150" />
       </Box>
       <Text color="white" fontSize="2xl" fontWeight="bold">
         JKT48
