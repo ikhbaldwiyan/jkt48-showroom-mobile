@@ -7,6 +7,7 @@ import analytics from "@react-native-firebase/analytics";
 import messaging, { firebase } from "@react-native-firebase/messaging";
 import { PermissionsAndroid } from "react-native";
 import { useEffect, useRef } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const App = () => {
   async function requestUserPermission() {
@@ -35,30 +36,34 @@ const App = () => {
 
   const routeNameRef = useRef();
   const navigationRef = useRef();
+  const queryClient = new QueryClient();
 
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      onReady={() => {
-        routeNameRef.current = navigationRef.current.getCurrentRoute()?.name;
-      }}
-      onStateChange={async () => {
-        const previousRouteName = routeNameRef.current;
-        const currentRouteName = navigationRef.current.getCurrentRoute()?.name;
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => {
+          routeNameRef.current = navigationRef.current.getCurrentRoute()?.name;
+        }}
+        onStateChange={async () => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName =
+            navigationRef.current.getCurrentRoute()?.name;
 
-        if (previousRouteName !== currentRouteName) {
-          await analytics().logScreenView({
-            screen_name: currentRouteName,
-            screen_class: currentRouteName
-          });
-        }
-        routeNameRef.current = currentRouteName;
-      }}
-    >
-      <NativeBaseProvider theme={theme}>
-        <Navigation />
-      </NativeBaseProvider>
-    </NavigationContainer>
+          if (previousRouteName !== currentRouteName) {
+            await analytics().logScreenView({
+              screen_name: currentRouteName,
+              screen_class: currentRouteName
+            });
+          }
+          routeNameRef.current = currentRouteName;
+        }}
+      >
+        <NativeBaseProvider theme={theme}>
+          <Navigation />
+        </NativeBaseProvider>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 };
 
