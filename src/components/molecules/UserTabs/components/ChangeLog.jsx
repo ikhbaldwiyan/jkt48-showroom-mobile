@@ -57,12 +57,11 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Add Edit Avatar screen on profile</Text>
               <Text>- Add Quality Live streaming showroom setting</Text>
               <Text>- Optimize and revamp thetater schedule</Text>
-              <Text>- Implement infinite load button schedules</Text>
-              <Text>- Show recent live card live stream type</Text>
-              <Text>- Revamp profile member detail</Text>
-              <Text>- Show total watching live on Account SR</Text>
-              <Text>- Add Filter History Live Showroom and IDN</Text>
+              <Text>- Improve real time fetch live list SR or IDN</Text>
+              <Text>- Change light mode cyan color</Text>
               <Text>- Fix register user podium not showing</Text>
+              <Text>- Fix Premium Live watching redirect no ticket</Text>
+              <Text>- Revamp profile member detail</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
