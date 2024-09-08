@@ -13,7 +13,8 @@ const initialLayout = {
 const renderPremiumLive = SceneMap({
   member: Members,
   comment: Comment,
-  songs: Songs
+  songs: Songs,
+  podium: Podium,
 });
 
 const renderScene = SceneMap({
@@ -31,8 +32,9 @@ const LiveStreamTabs = ({ isPremiumLive }) => {
     if (isPremiumLive) {
       return [
         { key: "member", title: "Member" },
-        { key: "comment", title: "Comment" },
-        { key: "songs", title: "Songs" }
+        { key: "comment", title: "Chat" },
+        { key: "songs", title: "Songs" },
+        { key: "podium", title: "Podium" },
       ];
     } else {
       return [

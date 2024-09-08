@@ -1,6 +1,15 @@
-import { HStack, Image, ScrollView, Text, View, VStack } from "native-base";
+import {
+  Box,
+  HStack,
+  Image,
+  ScrollView,
+  Text,
+  View,
+  VStack
+} from "native-base";
 import { StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { Followers } from "../../../../assets/icon";
 
 export const Members = ({ members }) => {
   return (
@@ -41,7 +50,14 @@ export const Members = ({ members }) => {
             )
           )
         ) : (
-          <Text>No members found.</Text>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <VStack mt="10" alignItems="center" justifyContent="center">
+              <Followers size="50" />
+              <Text fontWeight="semibold" mt="2">
+                Lineup Coming Soon
+              </Text>
+            </VStack>
+          </Box>
         )}
       </ScrollView>
     </LinearGradient>
@@ -53,6 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
-  },
+    borderBottomRightRadius: 6
+  }
 });

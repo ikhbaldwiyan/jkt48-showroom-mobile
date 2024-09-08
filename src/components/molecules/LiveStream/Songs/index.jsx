@@ -30,6 +30,11 @@ export const Songs = () => {
                 </Text>
               </HStack>
             ))}
+            {songs.length === 0 && (
+              <Text>
+                No songs list found
+              </Text>
+            )}
           </VStack>
         </Box>
       </ScrollView>
