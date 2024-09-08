@@ -102,7 +102,9 @@ const PremiumLive = () => {
       render: () => {
         return (
           <Box bg="red" px="2" mt="3" m="3" py="2" rounded="sm" mb={5}>
-            <Text>Kamu belum mempunyai tiket untuk show premium live ini</Text>
+            <Text fontWeight="semibold" textAlign="center">
+              Kamu belum mempunyai tiket untuk show theater Premium Live ini
+            </Text>
           </Box>
         );
       },
