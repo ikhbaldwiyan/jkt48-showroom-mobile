@@ -1,13 +1,16 @@
-// RatingModal.js
 import React, { useEffect, useState } from "react";
 import { Linking } from "react-native";
 import { Button, Text, Center, Box, Modal, HStack } from "native-base";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PLAY_STORE_URL } from "@env";
 import { StarIcon, LogoNormal } from "../../../assets/icon";
+import { activityLog } from "../../../utils/activityLog";
+import trackAnalytics from "../../../utils/trackAnalytics";
+import useUser from "../../../utils/hooks/useUser";
 
 const RatingModal = ({ isVisible, onOpen, onClose }) => {
   const [openCount, setOpenCount] = useState(0);
+  const { profile } = useUser();
 
   useEffect(() => {
     const checkAppOpenCount = async () => {
@@ -35,6 +38,26 @@ const RatingModal = ({ isVisible, onOpen, onClose }) => {
 
   const handleRateApp = () => {
     Linking.openURL(PLAY_STORE_URL);
+    activityLog({
+      logName: "Rating",
+      description: `Rate App at ${currentCount} open count`,
+      userId: "id"
+    });
+    trackAnalytics("rate_app", {
+      username: profile?.name
+    });
+    onClose();
+  };
+
+  const closeRatingApp = () => {
+    activityLog({
+      logName: "Rating",
+      description: `Close Rate App at ${openCount} app count`,
+      userId: "id"
+    });
+    trackAnalytics("close_rate_app", {
+      username: profile?.name
+    });
     onClose();
   };
 
@@ -72,7 +95,7 @@ const RatingModal = ({ isVisible, onOpen, onClose }) => {
         >
           <Text fontWeight="semibold">Rate Sekarang</Text>
         </Button>
-        <Button variant="ghost" onPress={onClose} colorScheme="gray">
+        <Button variant="ghost" onPress={closeRatingApp} colorScheme="gray">
           <Text>Nanti aja deh</Text>
         </Button>
       </Box>

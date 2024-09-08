@@ -2,7 +2,7 @@ import useAuthStore from "../store/authStore";
 import { postActivityLog, postRegisterUser } from "../services/user";
 
 export const activityLog = async ({ userId, logName, description, liveId }) => {
-  const { profile, user, setUserProfile } = useAuthStore.getState();
+  const { profile, user, userProfile, setUserProfile } = useAuthStore.getState();
 
   if (!userId) {
     postRegisterUser({
@@ -31,7 +31,7 @@ export const activityLog = async ({ userId, logName, description, liveId }) => {
       });
   } else {
     return postActivityLog({
-      user_id: userId ?? "64e2090061ec79ea209a0160",
+      user_id: userProfile._id ?? "64e2090061ec79ea209a0160",
       live_id: liveId,
       log_name: logName,
       description,
