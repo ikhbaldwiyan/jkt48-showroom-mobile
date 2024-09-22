@@ -149,6 +149,13 @@ const Register = ({ navigation }) => {
             onChangeText={(value) => handleChange("account_id", value)}
             isInvalid={error === "This account ID cannot be used."}
           />
+          {error === "This account ID cannot be used." && (
+            <Text color="red" mt="2">
+              ID Akun sudah dipakai user lain, silakan ganti ID dengan username
+              lain
+            </Text>
+          )}
+
           <Text py={3}>
             Nama <Text color="red">*</Text>
           </Text>
@@ -222,13 +229,12 @@ const Register = ({ navigation }) => {
             <Text color="red" mt="3">
               {error === "Incorrect authentication password"
                 ? "Password dan Konfirmasi Password tidak sama, tolong cek ulang"
-                : error === "This account ID cannot be used."
-                ? "ID Akun sudah dipakai user lain, silakan ganti ID akun lain"
                 : error === "Please fill in all required fields."
                 ? "Tolong isi semua form yang wajib di input"
-                : error === "Password must be 6 characters (minimum) to 30 characters (maximum) in length."
+                : error ===
+                  "Password must be 6 characters (minimum) to 30 characters (maximum) in length."
                 ? "Password harus terdiri minimal 6 karakter dan maksimal 30 karakter"
-                : error}
+                : error !== "This account ID cannot be used." && error}
             </Text>
           )}
 
