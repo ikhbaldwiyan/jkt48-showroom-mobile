@@ -129,12 +129,27 @@ const About = () => {
             />
           </TouchableOpacity>
         </Box>
+        <Text mt="3">
+          Semua data live streaming berasal dari API official
+          <Text
+            onPress={() => Linking.openURL("https://www.showroom-live.com")}
+            color="primary"
+          >
+            {" "}
+           www.showroom-live.com
+          </Text>{" "}
+          dan
+          <Text
+            onPress={() => Linking.openURL("https://www.idn.app")}
+            color="primary"
+          >
+            {" "}
+            www.idn.app
+          </Text>
+        </Text>
         <Text my="3">
-          Aplikasi JKT48 Showroom saat ini masih dalam tahap{" "}
-          <Text fontWeight="semibold">Open Beta Test</Text> di Play Store dan
-          masih terus di develop sampai saat ini. Jika kamu ingin mendukung
-          perkembangan project ini untuk biaya server dan lainnya kalian bisa
-          donasi di link saweria berikut{" "}
+          Jika kamu ingin mendukung perkembangan project ini untuk biaya server
+          dan lainnya kalian bisa donasi di link saweria berikut{" "}
         </Text>
         <TouchableOpacity activeOpacity={0.6} onPress={donateClick}>
           <Box bg="#E49C20" p="3" borderRadius="xl">

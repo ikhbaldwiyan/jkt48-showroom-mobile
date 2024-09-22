@@ -24,7 +24,7 @@ const RatingModal = ({ isVisible, onOpen, onClose }) => {
         await AsyncStorage.setItem("appOpenCount", currentCount.toString());
 
         // Show modal at specific count
-        const triggerCounts = [10, 100, 250, 330, 500, 800];
+        const triggerCounts = [20, 50, 100, 250, 330, 500, 800];
         if (triggerCounts.includes(currentCount)) {
           onOpen(); // Trigger the modal to be shown
         }
@@ -37,7 +37,6 @@ const RatingModal = ({ isVisible, onOpen, onClose }) => {
   }, []);
 
   const handleRateApp = () => {
-    Linking.openURL(PLAY_STORE_URL);
     activityLog({
       logName: "Rating",
       description: `Rate App at ${currentCount} open count`,
@@ -46,6 +45,7 @@ const RatingModal = ({ isVisible, onOpen, onClose }) => {
     trackAnalytics("rate_app", {
       username: profile?.name
     });
+    Linking.openURL(PLAY_STORE_URL);
     onClose();
   };
 
