@@ -6,7 +6,7 @@ import {
   Input,
   Spinner,
   Text,
-  useToast,
+  useToast
 } from "native-base";
 import React, { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
@@ -23,7 +23,7 @@ const Register = ({ navigation }) => {
     name: "",
     password: "",
     password_confirm: "",
-    avatar_id: 1,
+    avatar_id: 1
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +40,7 @@ const Register = ({ navigation }) => {
   const autoLogin = async () => {
     const response = await AUTH.loginApi({
       account_id: formData.account_id,
-      password: formData.password,
+      password: formData.password
     });
 
     const data = response.data;
@@ -50,7 +50,7 @@ const Register = ({ navigation }) => {
 
     activityLog({
       description: "Register from android",
-      logName: "Register",
+      logName: "Register"
     }).then(() => {
       setRegisterProfile(formData.account_id);
     });
@@ -95,11 +95,11 @@ const Register = ({ navigation }) => {
               </Box>
             );
           },
-          placement: "top-right",
+          placement: "top-right"
         });
 
         await analytics().logEvent("Register", {
-          username: formData.account_id,
+          username: formData.account_id
         });
       }
     } catch (error) {
@@ -158,7 +158,7 @@ const Register = ({ navigation }) => {
             w="100%"
             fontSize="md"
             name="id"
-            placeholder="Ex : Jhon Dopperty"
+            placeholder="Ex : Marsha"
             value={formData.name}
             onChangeText={(value) => handleChange("name", value)}
             isInvalid={formData?.error_message}
@@ -221,7 +221,13 @@ const Register = ({ navigation }) => {
           {error && (
             <Text color="red" mt="3">
               {error === "Incorrect authentication password"
-                ? "Password does not match. Please check."
+                ? "Password dan Konfirmasi Password tidak sama, tolong cek ulang"
+                : error === "This account ID cannot be used."
+                ? "ID Akun sudah dipakai user lain, silakan ganti ID akun lain"
+                : error === "Please fill in all required fields."
+                ? "Tolong isi semua form yang wajib di input"
+                : error === "Password must be 6 characters (minimum) to 30 characters (maximum) in length."
+                ? "Password harus terdiri minimal 6 karakter dan maksimal 30 karakter"
                 : error}
             </Text>
           )}
@@ -238,7 +244,12 @@ const Register = ({ navigation }) => {
             isLoading={loading}
           >
             <HStack alignItems="center" space="1">
-              <Text fontSize="16" color="white" fontWeight="medium">
+              <Text
+                onPress={handleRegister}
+                fontSize="16"
+                color="white"
+                fontWeight="medium"
+              >
                 Register
               </Text>
             </HStack>

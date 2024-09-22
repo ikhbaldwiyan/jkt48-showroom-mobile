@@ -11,11 +11,13 @@ export const activityLog = async ({ userId, logName, description, liveId }) => {
       avatar: profile?.avatar_url
     })
       .then((res) => {
-        activityLog({
-          userId: res?.data?.user?._id,
-          logName: "Auto Register",
-          description: `Register profile from log ${logName.toLowerCase()}`
-        });
+        if (logName !== "Register") {
+          activityLog({
+            userId: res?.data?.user?._id,
+            logName: "Auto Register",
+            description: `Register profile from log ${logName.toLowerCase()}`
+          });
+        }
         setUserProfile(JSON.stringify(res.data.user));
 
         return postActivityLog({
