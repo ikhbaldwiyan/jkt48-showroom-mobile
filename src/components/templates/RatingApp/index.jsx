@@ -39,7 +39,7 @@ const RatingModal = ({ isVisible, onOpen, onClose }) => {
   const handleRateApp = () => {
     activityLog({
       logName: "Rating",
-      description: `Rate App at ${currentCount} open count`,
+      description: `Rate App at ${openCount} open count`,
       userId: "id"
     });
     trackAnalytics("rate_app", {
