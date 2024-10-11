@@ -7,7 +7,13 @@ import Views from "../../components/atoms/Views";
 import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
-import { Dimensions, LogBox, StatusBar } from "react-native";
+import {
+  AppState,
+  Dimensions,
+  LogBox,
+  NativeModules,
+  StatusBar
+} from "react-native";
 import { LiveIcon, RefreshIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import useLiveStreamStore from "../../store/liveStreamStore";
@@ -15,6 +21,7 @@ import Loading from "../../components/atoms/Loading";
 import trackAnalytics from "../../utils/trackAnalytics";
 import useThemeStore from "../../store/themeStore";
 import QualitySettings from "../../components/atoms/QualitySettings";
+import Video from "react-native-video";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -30,18 +37,47 @@ const LiveStream = () => {
     getStreamOptions,
     registerUserRoom,
     clearLiveStream,
-    clearUrl,
+    clearUrl
   } = useLiveStreamStore();
   const toast = useToast();
   const { user, session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { mode } = useThemeStore();
+  const [isPipMode, setIsPipMode] = useState(false);
+  const { PipModule } = NativeModules;
+
+  useEffect(() => {
+    const appstatus = AppState.addEventListener('change', ev => {
+      if (ev === 'background') {
+        setIsPipMode(true);
+      } else {
+        setIsPipMode(false);
+      }
+    });
+    return () => {
+      appstatus.remove();
+    };
+  }, [PipModule]);
+
+  const handlePipMode = () => {
+    PipModule.EnterPipMode(16, 9);
+    setIsPipMode(true);
+  };
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <HStack space={3} alignItems="center">
+          <Button
+            pr="1"
+            size="xs"
+            onPress={handlePipMode}
+            borderRadius="md"
+            background="black"
+          >
+            PIP
+          </Button>
           <Button
             pr="1"
             size="xs"
@@ -212,25 +248,39 @@ const LiveStream = () => {
     <Box flex="1" bg="secondary">
       <Box height={isFullScreen ? Dimensions.get("window").height : 200}>
         {url ? (
-          <VideoPlayer
-            source={{ uri: url }}
-            style={{
-              flex: 1,
-              position: "absolute",
-              width: Dimensions.get("window").width,
-              height: "100%"
-            }}
-            toggleResizeModeOnFullscreen={false}
-            onEnterFullscreen={() => setIsFullScreen(true)}
-            onExitFullscreen={() => setIsFullScreen(false)}
-            onError={handleStreamError}
-            onEnd={() => {
-              navigation.navigate("Main");
-            }}
-            disableSeekbar
-            disableBack
-            disableTimer
-          />
+          !isPipMode ? (
+            <VideoPlayer
+              source={{ uri: url }}
+              style={{
+                flex: 1,
+                position: "absolute",
+                width: Dimensions.get("window").width,
+                height: "100%"
+              }}
+              toggleResizeModeOnFullscreen={false}
+              onEnterFullscreen={() => setIsFullScreen(true)}
+              onExitFullscreen={() => setIsFullScreen(false)}
+              onError={handleStreamError}
+              onEnd={() => {
+                navigation.navigate("Main");
+              }}
+              disableSeekbar
+              disableBack
+              disableTimer
+            />
+          ) : (
+            <Video
+              source={{ uri: url }}
+              playInBackground
+              pictureInPicture
+              style={{
+                flex: 1,
+                position: "absolute",
+                width: Dimensions.get("window").width,
+                height: "100%"
+              }}
+            />
+          )
         ) : (
           <Loading color="white" />
         )}
