@@ -1,27 +1,22 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
+import { Dimensions, LogBox, StatusBar } from "react-native";
 import { Box, Button, HStack, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { formatName } from "../../utils/helpers";
-import VideoPlayer from "react-native-video-controls";
-import Views from "../../components/atoms/Views";
-import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
-import useUser from "../../utils/hooks/useUser";
+
 import { activityLog } from "../../utils/activityLog";
-import {
-  AppState,
-  Dimensions,
-  LogBox,
-  NativeModules,
-  StatusBar
-} from "react-native";
-import { LiveIcon, RefreshIcon } from "../../assets/icon";
-import { useRefresh } from "../../utils/hooks/useRefresh";
-import useLiveStreamStore from "../../store/liveStreamStore";
-import Loading from "../../components/atoms/Loading";
+import { formatName } from "../../utils/helpers";
+import { LiveIcon, PipIcon, RefreshIcon } from "../../assets/icon";
+import { usePipMode, useRefresh, useUser } from "../../utils/hooks";
 import trackAnalytics from "../../utils/trackAnalytics";
+import useLiveStreamStore from "../../store/liveStreamStore";
 import useThemeStore from "../../store/themeStore";
-import QualitySettings from "../../components/atoms/QualitySettings";
+
 import Video from "react-native-video";
+import Views from "../../components/atoms/Views";
+import VideoPlayer from "react-native-video-controls";
+import Loading from "../../components/atoms/Loading";
+import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
+import QualitySettings from "../../components/atoms/QualitySettings";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -44,42 +39,14 @@ const LiveStream = () => {
   const { refreshing, onRefresh } = useRefresh();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { mode } = useThemeStore();
-  const [isPipMode, setIsPipMode] = useState(false);
-  const { PipModule } = NativeModules;
-
-  useEffect(() => {
-    const appstatus = AppState.addEventListener('change', ev => {
-      if (ev === 'background') {
-        setIsPipMode(true);
-      } else {
-        setIsPipMode(false);
-      }
-    });
-    return () => {
-      appstatus.remove();
-    };
-  }, [PipModule]);
-
-  const handlePipMode = () => {
-    PipModule.EnterPipMode(16, 9);
-    setIsPipMode(true);
-  };
+  const { isPipMode, enterPipMode } = usePipMode();
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HStack space={3} alignItems="center">
+        <HStack space={3.5} alignItems="center">
           <Button
-            pr="1"
-            size="xs"
-            onPress={handlePipMode}
-            borderRadius="md"
-            background="black"
-          >
-            PIP
-          </Button>
-          <Button
-            pr="1"
+            px="0"
             size="xs"
             onPress={handleRefresh}
             isLoading={refreshing}
@@ -88,6 +55,17 @@ const LiveStream = () => {
           >
             <RefreshIcon />
           </Button>
+          {!isPipMode && (
+            <Button
+              px="0"
+              size="xs"
+              onPress={() => enterPipMode(16, 9)}
+              borderRadius="md"
+              background="black"
+            >
+              <PipIcon />
+            </Button>
+          )}
           <QualitySettings refreshing={refreshing} />
           <Views
             color="primary"
@@ -97,7 +75,7 @@ const LiveStream = () => {
       ),
       headerShown: isFullScreen ? false : true
     });
-  }, [profile, liveInfo, refreshing, isFullScreen, mode]);
+  }, [profile, liveInfo, refreshing, isFullScreen, mode, isPipMode]);
 
   useEffect(() => {
     setProfile(params.item);
