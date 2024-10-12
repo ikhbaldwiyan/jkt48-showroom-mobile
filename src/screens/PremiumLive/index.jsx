@@ -9,7 +9,7 @@ import useThemeStore from "../../store/themeStore";
 import useLiveStreamStore from "../../store/liveStreamStore";
 
 import { useRefresh } from "../../utils/hooks/useRefresh";
-import { RefreshIcon } from "../../assets/icon";
+import { PipIcon, RefreshIcon } from "../../assets/icon";
 import { STREAM } from "../../services";
 import { activityLog } from "../../utils/activityLog";
 
@@ -17,6 +17,8 @@ import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import Views from "../../components/atoms/Views";
 import Loading from "../../components/atoms/Loading";
 import QualitySettings from "../../components/atoms/QualitySettings";
+import usePipMode from "../../utils/hooks/usePipMode";
+import Video from "react-native-video";
 
 const PremiumLive = () => {
   const route = useRoute();
@@ -28,6 +30,7 @@ const PremiumLive = () => {
   const { session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const { isPipMode, enterPipMode } = usePipMode();
 
   const roomId = params?.item?.profile?.room_id;
   const setlist = params?.item?.theater?.setlist?.name;
@@ -66,7 +69,7 @@ const PremiumLive = () => {
       headerRight: () => (
         <HStack space={3} alignItems="center">
           <Button
-            pr="0.5"
+            px="0"
             onPress={handleRefresh}
             borderRadius="md"
             background="black"
@@ -74,6 +77,17 @@ const PremiumLive = () => {
           >
             {refreshing ? <Spinner size={16} color="white" /> : <RefreshIcon />}
           </Button>
+          {!isPipMode && (
+            <Button
+              px="0"
+              size="xs"
+              onPress={() => enterPipMode(20, 11)}
+              borderRadius="md"
+              background="black"
+            >
+              <PipIcon />
+            </Button>
+          )}
           <QualitySettings refreshing={refreshing} />
           <Views
             color="primary"
@@ -231,24 +245,39 @@ const PremiumLive = () => {
         <>
           <Box height={isFullScreen ? Dimensions.get("window").height : 200}>
             {url ? (
-              <VideoPlayer
-                source={{ uri: url }}
-                style={{
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                }}
-                disableSeekbar
-                disableBack
-                disableTimer
-                toggleResizeModeOnFullscreen={false}
-                onEnterFullscreen={() => setIsFullScreen(true)}
-                onExitFullscreen={() => setIsFullScreen(false)}
-                onEnd={() => {
-                  navigation.navigate("Main");
-                }}
-                onError={handleRefresh}
-              />
+              !isPipMode ? (
+                <VideoPlayer
+                  source={{ uri: url }}
+                  style={{
+                    flex: 1,
+                    position: "absolute",
+                    width: Dimensions.get("window").width,
+                    height: "100%"
+                  }}
+                  toggleResizeModeOnFullscreen={false}
+                  onEnterFullscreen={() => setIsFullScreen(true)}
+                  onExitFullscreen={() => setIsFullScreen(false)}
+                  onError={handleRefresh}
+                  onEnd={() => {
+                    navigation.navigate("Main");
+                  }}
+                  disableSeekbar
+                  disableBack
+                  disableTimer
+                />
+              ) : (
+                <Video
+                  source={{ uri: url }}
+                  playInBackground
+                  pictureInPicture
+                  style={{
+                    flex: 1,
+                    position: "absolute",
+                    width: Dimensions.get("window").width,
+                    height: "100%"
+                  }}
+                />
+              )
             ) : (
               <Loading />
             )}
