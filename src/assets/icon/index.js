@@ -54,6 +54,7 @@ import WebIcon from "./WebIcon";
 import LoadingIcon from "./LoadingIcon";
 import StarIcon from "./StarIcon"
 import LogoNormal from "./LogoNormal";
+import PipIcon from "./PipIcon";
 
 export {
   LogoIcon,
@@ -112,4 +113,5 @@ export {
   LoadingIcon,
   StarIcon,
   LogoNormal,
+  PipIcon,
 };
