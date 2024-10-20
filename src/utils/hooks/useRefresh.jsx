@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 
-// Custom hook for handling refreshing state and refresh action
 export const useRefresh = () => {
   const [refreshing, setRefreshing] = useState(false);
 

@@ -1,18 +1,20 @@
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Dimensions, LogBox, StatusBar } from "react-native";
 import { Box, Button, HStack, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+
+import { activityLog } from "../../utils/activityLog";
+import { formatName } from "../../utils/helpers";
+import { PipIcon, RefreshIcon } from "../../assets/icon";
+import { usePipMode, useRefresh, useUser } from "../../utils/hooks";
+import trackAnalytics from "../../utils/trackAnalytics";
+import useIDNLiveStore from "../../store/idnLiveStore";
+
+import Loading from "../../components/atoms/Loading";
+import Video from "react-native-video";
 import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
 import IDNLiveTabs from "../../components/molecules/IDNLiveTabs";
-import useUser from "../../utils/hooks/useUser";
-import { activityLog } from "../../utils/activityLog";
-import { Dimensions, LogBox, StatusBar } from "react-native";
-import useIDNLiveStore from "../../store/idnLiveStore";
-import { RefreshIcon } from "../../assets/icon";
-import { useRefresh } from "../../utils/hooks/useRefresh";
-import Loading from "../../components/atoms/Loading";
-import trackAnalytics from "../../utils/trackAnalytics";
-import { formatName } from "../../utils/helpers";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -31,6 +33,17 @@ const IDNStream = () => {
   } = useIDNLiveStore();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { refreshing, onRefresh } = useRefresh();
+  const { isPipMode, enterPipMode } = usePipMode();
+  const isOfficial = profile?.user?.name === "JKT48";
+  const customHeight = isOfficial ? 200 : 400;
+
+  const customPipMode = () => {
+    if (isOfficial) {
+      enterPipMode(16, 9); 
+    } else {
+      enterPipMode(4, 5);
+    }
+  };
 
   useEffect(() => {
     setProfile(params.item);
@@ -79,6 +92,15 @@ const IDNStream = () => {
       headerRight: () => (
         <HStack alignItems="center">
           <Button
+            pr="1"
+            size="xs"
+            onPress={() => customPipMode()}
+            borderRadius="md"
+            background="black"
+          >
+            <PipIcon />
+          </Button>
+          <Button
             py="1"
             size="xs"
             onPress={handleRefresh}
@@ -93,7 +115,7 @@ const IDNStream = () => {
         </HStack>
       ),
     });
-  }, [profile, refreshing]);
+  }, [profile, refreshing, isPipMode]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -101,9 +123,9 @@ const IDNStream = () => {
         profile?.user?.name !== "JKT48"
           ? formatName(profile?.user?.name, true)
           : profile?.user?.name,
-      headerShown: isFullScreen ? false : true,
+      headerShown: isPipMode || isFullScreen ? false : true,
     });
-  }, [profile, isFullScreen]);
+  }, [profile, isFullScreen, isPipMode]);
 
   useEffect(() => {
     if (userProfile && url) {
@@ -158,32 +180,48 @@ const IDNStream = () => {
     return () => clearInterval(interval);
   }, [refreshing]);
 
-  const isOfficial = profile?.user?.name === "JKT48";
-  const customHeight = isOfficial ? 200 : 400;
-
   return (
     <Box flex="1" bg="secondary">
       <Box
-        height={isFullScreen ? Dimensions.get("window").height : customHeight}
+        height={
+          isFullScreen
+            ? Dimensions.get("window").height
+            : isPipMode
+            ? 180
+            : customHeight
+        }
       >
         {url ? (
-          <VideoPlayer
-            source={{ uri: url }}
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: isFullScreen
-                ? Dimensions.get("window").height
-                : customHeight,
-            }}
-            disableSeekbar
-            disableBack
-            disableTimer
-            onEnterFullscreen={() => setIsFullScreen(true)}
-            onExitFullscreen={() => setIsFullScreen(false)}
-            onEnd={() => handleEndLive()}
-            toggleResizeModeOnFullscreen={isOfficial ? false : true}
-          />
+          !isPipMode ? (
+            <VideoPlayer
+              source={{ uri: url }}
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: isFullScreen
+                  ? Dimensions.get("window").height
+                  : customHeight
+              }}
+              disableSeekbar
+              disableBack
+              disableTimer
+              onEnterFullscreen={() => setIsFullScreen(true)}
+              onExitFullscreen={() => setIsFullScreen(false)}
+              onEnd={() => handleEndLive()}
+              toggleResizeModeOnFullscreen={isOfficial ? false : true}
+            />
+          ) : (
+            <Video
+              source={{ uri: url }}
+              playInBackground
+              pictureInPicture
+              style={{
+                flex: 1,
+                width: "100%",
+                height: 400
+              }}
+            />
+          )
         ) : (
           <Loading color="white" />
         )}

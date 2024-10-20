@@ -1,19 +1,21 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
+import { Dimensions, LogBox, StatusBar } from "react-native";
 import { Box, Button, HStack, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { formatName } from "../../utils/helpers";
-import VideoPlayer from "react-native-video-controls";
-import Views from "../../components/atoms/Views";
-import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
-import useUser from "../../utils/hooks/useUser";
+
 import { activityLog } from "../../utils/activityLog";
-import { Dimensions, LogBox, StatusBar } from "react-native";
-import { LiveIcon, RefreshIcon } from "../../assets/icon";
-import { useRefresh } from "../../utils/hooks/useRefresh";
-import useLiveStreamStore from "../../store/liveStreamStore";
-import Loading from "../../components/atoms/Loading";
+import { formatName } from "../../utils/helpers";
+import { LiveIcon, PipIcon, RefreshIcon } from "../../assets/icon";
+import { usePipMode, useRefresh, useUser } from "../../utils/hooks";
 import trackAnalytics from "../../utils/trackAnalytics";
+import useLiveStreamStore from "../../store/liveStreamStore";
 import useThemeStore from "../../store/themeStore";
+
+import Video from "react-native-video";
+import Views from "../../components/atoms/Views";
+import VideoPlayer from "react-native-video-controls";
+import Loading from "../../components/atoms/Loading";
+import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
 import QualitySettings from "../../components/atoms/QualitySettings";
 
 const LiveStream = () => {
@@ -30,20 +32,21 @@ const LiveStream = () => {
     getStreamOptions,
     registerUserRoom,
     clearLiveStream,
-    clearUrl,
+    clearUrl
   } = useLiveStreamStore();
   const toast = useToast();
   const { user, session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { mode } = useThemeStore();
+  const { isPipMode, enterPipMode } = usePipMode();
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HStack space={3} alignItems="center">
+        <HStack space={3.5} alignItems="center">
           <Button
-            pr="1"
+            px="0"
             size="xs"
             onPress={handleRefresh}
             isLoading={refreshing}
@@ -52,6 +55,17 @@ const LiveStream = () => {
           >
             <RefreshIcon />
           </Button>
+          {!isPipMode && (
+            <Button
+              px="0"
+              size="xs"
+              onPress={() => enterPipMode(16, 9)}
+              borderRadius="md"
+              background="black"
+            >
+              <PipIcon />
+            </Button>
+          )}
           <QualitySettings refreshing={refreshing} />
           <Views
             color="primary"
@@ -59,9 +73,9 @@ const LiveStream = () => {
           />
         </HStack>
       ),
-      headerShown: isFullScreen ? false : true
+      headerShown: isPipMode || isFullScreen ? false : true,
     });
-  }, [profile, liveInfo, refreshing, isFullScreen, mode]);
+  }, [profile, liveInfo, refreshing, isFullScreen, mode, isPipMode]);
 
   useEffect(() => {
     setProfile(params.item);
@@ -212,25 +226,39 @@ const LiveStream = () => {
     <Box flex="1" bg="secondary">
       <Box height={isFullScreen ? Dimensions.get("window").height : 200}>
         {url ? (
-          <VideoPlayer
-            source={{ uri: url }}
-            style={{
-              flex: 1,
-              position: "absolute",
-              width: Dimensions.get("window").width,
-              height: "100%"
-            }}
-            toggleResizeModeOnFullscreen={false}
-            onEnterFullscreen={() => setIsFullScreen(true)}
-            onExitFullscreen={() => setIsFullScreen(false)}
-            onError={handleStreamError}
-            onEnd={() => {
-              navigation.navigate("Main");
-            }}
-            disableSeekbar
-            disableBack
-            disableTimer
-          />
+          !isPipMode ? (
+            <VideoPlayer
+              source={{ uri: url }}
+              style={{
+                flex: 1,
+                position: "absolute",
+                width: Dimensions.get("window").width,
+                height: "100%"
+              }}
+              toggleResizeModeOnFullscreen={false}
+              onEnterFullscreen={() => setIsFullScreen(true)}
+              onExitFullscreen={() => setIsFullScreen(false)}
+              onError={handleStreamError}
+              onEnd={() => {
+                navigation.navigate("Main");
+              }}
+              disableSeekbar
+              disableBack
+              disableTimer
+            />
+          ) : (
+            <Video
+              source={{ uri: url }}
+              playInBackground
+              pictureInPicture
+              style={{
+                flex: 1,
+                position: "absolute",
+                width: Dimensions.get("window").width,
+                height: "100%"
+              }}
+            />
+          )
         ) : (
           <Loading color="white" />
         )}
