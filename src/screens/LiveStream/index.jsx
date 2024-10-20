@@ -73,7 +73,7 @@ const LiveStream = () => {
           />
         </HStack>
       ),
-      headerShown: isFullScreen ? false : true
+      headerShown: isPipMode || isFullScreen ? false : true,
     });
   }, [profile, liveInfo, refreshing, isFullScreen, mode, isPipMode]);
 

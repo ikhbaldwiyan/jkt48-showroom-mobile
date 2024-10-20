@@ -34,6 +34,16 @@ const IDNStream = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { refreshing, onRefresh } = useRefresh();
   const { isPipMode, enterPipMode } = usePipMode();
+  const isOfficial = profile?.user?.name === "JKT48";
+  const customHeight = isOfficial ? 200 : 400;
+
+  const customPipMode = () => {
+    if (isOfficial) {
+      enterPipMode(16, 9); 
+    } else {
+      enterPipMode(4, 5);
+    }
+  };
 
   useEffect(() => {
     setProfile(params.item);
@@ -79,32 +89,31 @@ const IDNStream = () => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () =>
-        !isPipMode && (
-          <HStack alignItems="center">
-            <Button
-              pr="1"
-              size="xs"
-              onPress={() => enterPipMode(4, 5)}
-              borderRadius="md"
-              background="black"
-            >
-              <PipIcon />
-            </Button>
-            <Button
-              py="1"
-              size="xs"
-              onPress={handleRefresh}
-              isLoading={refreshing}
-              borderRadius="md"
-              background="black"
-              mr={2}
-            >
-              <RefreshIcon />
-            </Button>
-            <Views number={profile?.view_count ?? 0} />
-          </HStack>
-        )
+      headerRight: () => (
+        <HStack alignItems="center">
+          <Button
+            pr="1"
+            size="xs"
+            onPress={() => customPipMode()}
+            borderRadius="md"
+            background="black"
+          >
+            <PipIcon />
+          </Button>
+          <Button
+            py="1"
+            size="xs"
+            onPress={handleRefresh}
+            isLoading={refreshing}
+            borderRadius="md"
+            background="black"
+            mr={2}
+          >
+            <RefreshIcon />
+          </Button>
+          <Views number={profile?.view_count ?? 0} />
+        </HStack>
+      ),
     });
   }, [profile, refreshing, isPipMode]);
 
@@ -170,9 +179,6 @@ const IDNStream = () => {
 
     return () => clearInterval(interval);
   }, [refreshing]);
-
-  const isOfficial = profile?.user?.name === "JKT48";
-  const customHeight = isOfficial ? 200 : 400;
 
   return (
     <Box flex="1" bg="secondary">
