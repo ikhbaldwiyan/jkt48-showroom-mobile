@@ -6,7 +6,7 @@ import { ROOMS, STREAM } from "../../../services";
 import { cleanImage } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
 import Times from "../../atoms/Times";
-import { BirthdayIcon } from "../../../assets/icon";
+import { BirthdayIcon, GraduateIcon } from "../../../assets/icon";
 
 const PremiumLive = ({ refreshing }) => {
   const [rooms, setRooms] = useState([]);
@@ -73,6 +73,22 @@ const PremiumLive = ({ refreshing }) => {
                   <HStack space={2} alignItems="center">
                     <BirthdayIcon size={16} />
                     <Text>{theater.birthdayMember.stage_name}</Text>
+                  </HStack>
+                </Box>
+              )}
+              {theater?.isGraduationShow && (
+                <Box
+                  py="1"
+                  px="2"
+                  borderTopRightRadius="8"
+                  borderBottomLeftRadius="8"
+                  position="absolute"
+                  background="teal"
+                  right={0}
+                >
+                  <HStack space={2} alignItems="center">
+                    <GraduateIcon size={16} />
+                    <Text>{theater.graduateMember.stage_name}</Text>
                   </HStack>
                 </Box>
               )}

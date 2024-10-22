@@ -6,6 +6,7 @@ import { SceneMap, TabView } from "react-native-tab-view";
 import { SCHEDULES } from "../../../services";
 import { Members } from "./components/Members";
 import { SongsSetlist } from "./components/SongsSetlist";
+import { Ticket } from "./components/Ticket";
 
 const initialLayout = {
   width: Dimensions.get("window").width,
@@ -19,10 +20,12 @@ const ScheduleTabs = ({ refreshing }) => {
   const routes = [
     { key: "member", title: "Members" },
     { key: "songs", title: "Songs" },
+    { key: "ticket", title: "Ticket" },
   ];
 
   const [members, setMembers] = useState([]);
   const [songs, setSongs] = useState([]);
+  const [ticket, setTicket] = useState({});
 
   useEffect(() => {
     async function getTheaterDetail() {
@@ -30,6 +33,7 @@ const ScheduleTabs = ({ refreshing }) => {
         const response = await SCHEDULES.getScheduleDetail(params.item._id);
         setMembers(response.data.memberList);
         setSongs(response.data.setlist.songs);
+        setTicket(response.data)
       } catch (error) {
         console.log(error);
       }
@@ -40,6 +44,7 @@ const ScheduleTabs = ({ refreshing }) => {
   const renderTabs = SceneMap({
     member: () => <Members members={members} />,
     songs: () => <SongsSetlist songs={songs} />,
+    ticket: () => <Ticket ticket={ticket} />,
   });
 
   const renderTabBar = ({ navigationState }) => (
