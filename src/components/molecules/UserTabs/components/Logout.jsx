@@ -32,7 +32,7 @@ const Logout = () => {
     <View mt="2" mb="8">
       <Button
         bg="gray.500"
-        borderRadius="lg"
+        borderRadius="10"
         variant="solid"
         onPress={handleModal}
       >

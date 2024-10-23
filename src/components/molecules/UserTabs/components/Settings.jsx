@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, HStack, ScrollView, Text, VStack } from "native-base";
 import { Linking, TouchableOpacity } from "react-native";
-import { AndroidIcon, GithubIcon } from "../../../../assets/icon";
+import { AndroidIcon, Donate, GithubIcon } from "../../../../assets/icon";
 import CardGradient from "../../../atoms/CardGradient";
 import ChangeLog from "./ChangeLog";
 import { APK_VERSION } from "@env";
@@ -42,6 +42,17 @@ export const Settings = () => {
               <Text fontSize={14}>GitHub Source Code</Text>
             </HStack>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL("https://saweria.co/Inzoid"),
+                trackAnalytics("github_link_click");
+            }}
+          >
+            <HStack space={2} alignItems="center">
+              <Donate size={24} />
+              <Text fontSize={14}>Donate Project</Text>
+            </HStack>
+          </TouchableOpacity>
           <HStack space={2} alignItems="center">
             <Text fontSize={14} fontWeight="semibold">
               Delete Account:
@@ -52,6 +63,7 @@ export const Settings = () => {
             variant="solid"
             size="sm"
             background="red"
+            borderRadius="10"
           >
             <TouchableOpacity onPress={handleRemoveAccount} activeOpacity={0.6}>
               <Text>Delete showroom account</Text>

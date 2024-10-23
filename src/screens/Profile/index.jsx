@@ -132,7 +132,7 @@ const Profile = () => {
         <Button
           bgColor="teal"
           variant="solid"
-          borderRadius="lg"
+          borderRadius="10"
           onPress={handleAbout}
         >
           <TouchableOpacity onPress={handleAbout}>
