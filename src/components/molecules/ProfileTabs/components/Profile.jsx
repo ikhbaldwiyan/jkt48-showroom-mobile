@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Divider, HStack, ScrollView, Text, VStack } from "native-base";
-import { Linking, StyleSheet, TouchableOpacity } from "react-native";
+import { Linking, TouchableOpacity } from "react-native";
 import useProfileStore from "../../../../store/profileStore";
 import { parseDescription } from "../../../../utils/helpers";
 import {
@@ -102,12 +102,3 @@ export const Profile = () => {
     </CardGradient>
   );
 };
-
-const styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1,
-    padding: 12,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
-});
