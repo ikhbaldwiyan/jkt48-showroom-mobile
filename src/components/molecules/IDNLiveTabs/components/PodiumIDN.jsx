@@ -51,7 +51,7 @@ export const PodiumIDN = () => {
           <Text fontWeight="bold">{views} Orang sedang menonton</Text>
         </Center>
         <HStack
-          space={2}
+          space={3}
           flexWrap="wrap"
           alignItems="center"
           justifyContent="center"

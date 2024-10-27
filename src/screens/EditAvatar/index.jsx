@@ -19,7 +19,6 @@ import Layout from "../../components/templates/Layout";
 import { updateDetailUser } from "../../services/auth";
 import { getAvatarList, updateAvatar } from "../../services/user";
 import useAuthStore from "../../store/authStore";
-import { activityLog } from "../../utils/activityLog";
 import useUser from "../../utils/hooks/useUser";
 import trackAnalytics from "../../utils/trackAnalytics";
 
@@ -69,11 +68,6 @@ const EditAvatar = ({ navigation }) => {
     try {
       await updateDetailUser(userProfile.user_id, {
         avatar: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`,
-      });
-      activityLog({
-        logName: "User",
-        description: "Update avatar image",
-        userId: userProfile._id,
       });
       trackAnalytics("update_user_avatar", {
         userId: userProfile.user_id,

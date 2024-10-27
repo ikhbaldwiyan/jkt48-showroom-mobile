@@ -1,14 +1,15 @@
-import { Box, Divider, HStack, Image, Text, View } from "native-base";
+import { Box, FlatList, HStack, Image, Text, View } from "native-base";
 import { useEffect, useState } from "react";
-import { RefreshControl, ScrollView } from "react-native";
+import { RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
+import { FlashList } from "@shopify/flash-list"
 
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 
 export const Rank = () => {
-  const { profile } = useLiveStreamStore()
+  const { profile } = useLiveStreamStore();
   const [ranks, setRanks] = useState([]);
   const { refreshing, onRefresh } = useRefresh();
 
@@ -40,13 +41,10 @@ export const Rank = () => {
 
   return (
     <CardGradient>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {ranks?.map((item, idx) => (
-          <Box key={idx}>
+      <FlashList
+        data={ranks}
+        renderItem={({ item }) => (
+          <Box>
             <HStack
               py="1"
               alignItems="center"
@@ -54,7 +52,7 @@ export const Rank = () => {
               px="3"
               space={6}
             >
-              <Text  fontWeight="bold">{item?.order_no}</Text>
+              <Text fontWeight="bold">{item?.order_no}</Text>
               <Box p="2">
                 <HStack space={3} alignItems="center" justifyContent="center">
                   <Image
@@ -65,16 +63,19 @@ export const Rank = () => {
                     alt="avatar"
                   />
                   <View justifyContent="center" alignItems="center">
-                    <Text  fontWeight="semibold">
-                      {item?.user?.name}
-                    </Text>
+                    <Text fontWeight="semibold">{item?.user?.name}</Text>
                   </View>
                 </HStack>
               </Box>
             </HStack>
           </Box>
-        ))}
-      </ScrollView>
+        )}
+        estimatedItemSize={100}
+        keyExtractor={(item, index) => index.toString()}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
     </CardGradient>
   );
 };

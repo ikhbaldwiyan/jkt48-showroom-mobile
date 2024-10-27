@@ -1,10 +1,11 @@
-import { Center, HStack, Image, ScrollView, Text, VStack } from "native-base";
 import { useEffect, useState } from "react";
+import { Center, Image, Text, VStack } from "native-base";
 import { RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
+import { FlashList } from "@shopify/flash-list";
 
 export const Podium = () => {
   const { profile } = useLiveStreamStore();
@@ -32,50 +33,54 @@ export const Podium = () => {
       getPodiumList();
     }, 1000);
 
-    // Set interval to fetch data every 2 minutes
     const interval = setInterval(() => {
       getPodiumList();
-    }, 2 * 60 * 1000); // 2 minutes in milliseconds
+    }, 2 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [profile, refreshing]);
 
+  const renderItem = ({ item }) => {
+    if (displayedNames.has(item.user.name)) {
+      return null;
+    }
+    displayedNames.add(item.user.name);
+
+    return (
+      <VStack my="4" alignItems="center" width="100%">
+        <Image
+          alt={item.user.name}
+          style={{ width: 50, height: 50 }}
+          source={{
+            uri:
+              item?.user?.avatar ??
+              "https://static.showroom-live.com/image/avatar/1028686.png?v=100"
+          }}
+        />
+        <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
+          {item.user.name}
+        </Text>
+      </VStack>
+    );
+  };
+
   return (
     <CardGradient>
-      <ScrollView
+      <FlashList
+        data={podium}
+        renderItem={renderItem}
+        keyExtractor={(item, idx) => `${item.user.name}-${idx}`}
+        numColumns={4}
+        contentContainerStyle={{ padding: 6 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-      >
-        <Center>
-          <Text fontWeight="bold">{views} Orang sedang menonton</Text>
-        </Center>
-        <HStack
-          space={2}
-          flexWrap="wrap"
-          alignItems="center"
-          justifyContent="center"
-        >
-          {podium?.map((item, idx) => {
-            if (displayedNames.has(item.user.name)) {
-              return null;
-            }
-            displayedNames.add(item.user.name);
-            return (
-              <VStack my="4" key={idx} alignItems="center" width="20%">
-                <Image
-                  alt={item.user.name}
-                  style={{ width: 50, height: 50 }}
-                  source={{ uri: item?.user?.avatar ?? "https://static.showroom-live.com/image/avatar/1028686.png?v=100" }}
-                />
-                <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
-                  {item.user.name}
-                </Text>
-              </VStack>
-            );
-          })}
-        </HStack>
-      </ScrollView>
+        ListHeaderComponent={
+          <Center>
+            <Text fontWeight="bold">{views} Orang sedang menonton</Text>
+          </Center>
+        }
+      />
     </CardGradient>
   );
 };

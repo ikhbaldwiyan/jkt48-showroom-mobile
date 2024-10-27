@@ -22,6 +22,7 @@ import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 import useThemeStore from "../../../../store/themeStore";
+import { FlashList } from "@shopify/flash-list"
 
 export const Comment = () => {
   const route = useRoute();
@@ -176,9 +177,10 @@ export const Comment = () => {
 
   return (
     <CardGradient>
-      <FlatList
+      <FlashList
         data={comments?.length > 0 ? comments?.slice(0, 45) : []}
         keyExtractor={(item, index) => index.toString()}
+        estimatedItemSize={50}
         renderItem={({ item }) =>
           item.comment.length > 2 && (
             <Box>

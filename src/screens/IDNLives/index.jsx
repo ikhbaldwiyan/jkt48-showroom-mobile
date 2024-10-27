@@ -1,12 +1,13 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Box, Button, HStack, Image, Pressable, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { FlatList, Linking, TouchableOpacity } from "react-native";
+import { Linking, TouchableOpacity } from "react-native";
 import { ROOMS } from "../../services";
 import Layout from "../../components/templates/Layout";
-import { formatViews, getIDNLiveTime } from "../../utils/helpers";
+import { formatViews } from "../../utils/helpers";
 import { LiveIcon, UserIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
+import { FlashList } from "@shopify/flash-list";
 
 const IDNLives = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
@@ -129,7 +130,7 @@ const IDNLives = ({ navigation }) => {
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       {rooms.length > 0 && (
         <Box mb="4">
-          <FlatList
+          <FlashList
             data={rooms}
             renderItem={renderItem}
             keyExtractor={(item, idx) => idx.toString()}
