@@ -21,8 +21,11 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import {
   Calendar,
+  CloseIcon,
   History,
+  LiveIcon,
   LoadingIcon,
+  SearchMember,
   TimesFill,
   UsersFill
 } from "../../assets/icon";
@@ -47,9 +50,38 @@ const HistoryLive = () => {
 
   useLayoutEffect(() => {
     setOptions({
-      headerTitle: "History Live"
+      headerTitle: "History Live",
+      headerRight: () => (
+        <Input
+          mt="1"
+          bgColor="white"
+          variant="filled"
+          w="90%"
+          mr="3"
+          fontSize="sm"
+          name="id"
+          height="35px"
+          placeholderTextColor="secondary"
+          placeholder="Cari member"
+          value={search}
+          onChangeText={handleSearch}
+          borderRadius={6}
+          InputLeftElement={
+            <Box ml="2">
+              <SearchMember />
+            </Box>
+          }
+          InputRightElement={
+            search.length > 0 && (
+              <Text onPress={() => handleSearch("")} color="secondary" mr="2">
+                <CloseIcon />
+              </Text>
+            )
+          }
+        />
+      )
     });
-  }, [setOptions]);
+  }, [search]);
 
   useEffect(() => {
     loadLives();
@@ -127,32 +159,22 @@ const HistoryLive = () => {
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="4">
         <HStack space={1.5} alignItems="center">
-          <Input
-            bgColor="white"
-            variant="filled"
-            flex={2}
-            fontSize="sm"
-            name="id"
-            height="36px"
-            placeholderTextColor="secondary"
-            placeholder="Cari member"
-            value={search}
-            onChangeText={handleSearch}
-            borderRadius={6}
-          />
           <Button
             p="2"
+            flex={1}
             height="36px"
             borderRadius={6}
             bg={type === "all" ? "teal" : "blueGray.500"}
             onPress={() => setType("all")}
           >
-            <HStack space={1} alignItems="center" justifyContent="center">
-              <Text fontWeight="semibold">All</Text>
+            <HStack space={2} alignItems="center" justifyContent="center">
+              <LiveIcon size={18} />
+              <Text fontWeight="semibold">All Live</Text>
             </HStack>
           </Button>
           <Button
             p="2"
+            flex={1}
             height="36px"
             borderRadius={6}
             bg={type === "showroom" ? "teal" : "blueGray.500"}

@@ -13,10 +13,10 @@ export const SongsSetlist = ({ songs }) => {
           <VStack space={2}>
             {songs?.map((item, idx) => (
               <HStack key={idx} space={3}>
-                <Text fontWeight="semibold" fontSize="md">
+                <Text fontSize="sm">
                   {idx + 1}.
                 </Text>
-                <Text fontWeight="semibold" fontSize="md">
+                <Text fontSize="sm">
                   {item?.title}
                 </Text>
               </HStack>

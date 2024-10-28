@@ -1,6 +1,11 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Box, Button, HStack, Input, Text } from "native-base";
-import { Dashboard, GraduateIcon } from "../../assets/icon";
+import {
+  CloseIcon,
+  Dashboard,
+  GraduateIcon,
+  SearchMember
+} from "../../assets/icon";
 import RoomRegular from "../../components/organisms/RoomRegular";
 import RoomTrainee from "../../components/organisms/RoomTrainee";
 import Layout from "../../components/templates/Layout";
@@ -19,27 +24,43 @@ const MemberList = () => {
 
   useLayoutEffect(() => {
     setOptions({
-      headerTitle: "Member List"
+      headerTitle: "Member List",
+      headerRight: () => (
+        <Input
+          mt="1"
+          bgColor="white"
+          variant="filled"
+          w="90%"
+          mr="3"
+          fontSize="sm"
+          name="id"
+          height="35px"
+          placeholderTextColor="secondary"
+          placeholder="Cari member"
+          value={searchQuery}
+          onChangeText={handleSearch}
+          borderRadius={6}
+          InputLeftElement={
+            <Box ml="2">
+              <SearchMember />
+            </Box>
+          }
+          InputRightElement={
+            searchQuery.length > 0 && (
+              <Text onPress={() => handleSearch("")} color="secondary" mr="2">
+                <CloseIcon />
+              </Text>
+            )
+          }
+        />
+      )
     });
-  }, [setOptions]);
+  }, [searchQuery]);
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
         <HStack space={1.5} mb="4">
-          <Input
-            bgColor="white"
-            variant="filled"
-            w="45%"
-            fontSize="sm"
-            name="id"
-            height="36px"
-            placeholderTextColor="secondary"
-            placeholder="Cari member"
-            value={searchQuery}
-            onChangeText={handleSearch}
-            borderRadius={6}
-          />
           <Button
             p="2"
             height="36px"
@@ -48,7 +69,7 @@ const MemberList = () => {
             flex={1}
             borderRadius={6}
           >
-            <HStack space={1} alignItems="center">
+            <HStack space={2} alignItems="center">
               <Dashboard />
               <Text fontWeight="semibold">Regular</Text>
             </HStack>
@@ -61,7 +82,7 @@ const MemberList = () => {
             flex={1}
             borderRadius={6}
           >
-            <HStack space={1} alignItems="center">
+            <HStack space={2} alignItems="center">
               <GraduateIcon size={15} />
               <Text fontWeight="semibold">Trainee</Text>
             </HStack>

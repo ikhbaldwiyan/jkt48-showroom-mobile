@@ -55,6 +55,8 @@ import LoadingIcon from "./LoadingIcon";
 import StarIcon from "./StarIcon"
 import LogoNormal from "./LogoNormal";
 import PipIcon from "./PipIcon";
+import SearchMember from "./SearchMember";
+import CloseIcon from "./CloseIcon";
 
 export {
   LogoIcon,
@@ -114,4 +116,6 @@ export {
   StarIcon,
   LogoNormal,
   PipIcon,
+  SearchMember,
+  CloseIcon,
 };

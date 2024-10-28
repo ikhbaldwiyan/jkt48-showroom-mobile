@@ -185,7 +185,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                 </Box>
                 <Box w="60%">
                   <HStack space={1} alignItems="center">
-                    <Text fontSize="md" fontWeight="bold">
+                    <Text fontSize="md" fontWeight="semibold">
                       {item.setlist.name}
                     </Text>
                   </HStack>
