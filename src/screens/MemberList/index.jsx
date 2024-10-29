@@ -51,18 +51,16 @@ const MemberList = () => {
               </Box>
             }
             InputRightElement={
-              searchQuery.length > 0 && (
-                <Text
-                  onPress={() => {
-                    handleSearch("");
-                    setIsSearch(false);
-                  }}
-                  color="secondary"
-                  mr="2"
-                >
-                  <CloseIcon />
-                </Text>
-              )
+              <Button
+                onPress={() => {
+                  handleSearch("");
+                  setIsSearch(false);
+                }}
+                color="secondary"
+                mr="2"
+              >
+                <CloseIcon />
+              </Button>
             }
           />
         ) : (

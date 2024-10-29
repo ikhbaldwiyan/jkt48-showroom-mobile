@@ -79,18 +79,16 @@ const HistoryLive = () => {
               </Box>
             }
             InputRightElement={
-              search.length > 0 && (
-                <Text
-                  onPress={() => {
-                    handleSearch("");
-                    setIsSearch(false);
-                  }}
-                  color="secondary"
-                  mr="2"
-                >
-                  <CloseIcon />
-                </Text>
-              )
+              <Button
+                onPress={() => {
+                  search.length > 0 && handleSearch("");
+                  setIsSearch(false);
+                }}
+                color="secondary"
+                mr="2"
+              >
+                <CloseIcon />
+              </Button>
             }
           />
         ) : (
