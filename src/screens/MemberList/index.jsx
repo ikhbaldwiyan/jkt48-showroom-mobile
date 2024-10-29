@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState } from "react";
-import { Box, Button, HStack, Input, Text } from "native-base";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Box, Button, HStack, IconButton, Input, Text } from "native-base";
 import {
   CloseIcon,
   Dashboard,
@@ -17,6 +17,8 @@ const MemberList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { refreshing, onRefresh } = useRefresh();
   const { setOptions } = useNavigation();
+  const [isSearch, setIsSearch] = useState(false);
+  const inputRef = useRef(null);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -25,37 +27,60 @@ const MemberList = () => {
   useLayoutEffect(() => {
     setOptions({
       headerTitle: "Member List",
-      headerRight: () => (
-        <Input
-          mt="1"
-          bgColor="white"
-          variant="filled"
-          w="90%"
-          mr="3"
-          fontSize="sm"
-          name="id"
-          height="35px"
-          placeholderTextColor="secondary"
-          placeholder="Cari member"
-          value={searchQuery}
-          onChangeText={handleSearch}
-          borderRadius={6}
-          InputLeftElement={
-            <Box ml="2">
-              <SearchMember />
-            </Box>
-          }
-          InputRightElement={
-            searchQuery.length > 0 && (
-              <Text onPress={() => handleSearch("")} color="secondary" mr="2">
-                <CloseIcon />
-              </Text>
-            )
-          }
-        />
-      )
+      headerRight: () =>
+        isSearch ? (
+          <Input
+            mt="1"
+            mr="3"
+            w="90%"
+            autoFocus
+            ref={inputRef}
+            bgColor="white"
+            variant="filled"
+            fontSize="sm"
+            name="id"
+            height="35px"
+            placeholderTextColor="secondary"
+            placeholder="Cari member"
+            value={searchQuery}
+            onChangeText={handleSearch}
+            borderRadius={6}
+            InputLeftElement={
+              <Box ml="2">
+                <SearchMember />
+              </Box>
+            }
+            InputRightElement={
+              searchQuery.length > 0 && (
+                <Text
+                  onPress={() => {
+                    handleSearch("");
+                    setIsSearch(false);
+                  }}
+                  color="secondary"
+                  mr="2"
+                >
+                  <CloseIcon />
+                </Text>
+              )
+            }
+          />
+        ) : (
+          <IconButton
+            icon={<SearchMember color="white" size={25} />}
+            onPress={() => setIsSearch(true)}
+            mt="2"
+            mr="4"
+          />
+        )
     });
-  }, [searchQuery]);
+  }, [searchQuery, isSearch]);
+
+  useEffect(() => {
+    if (isSearch && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isSearch]);
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>

@@ -3,7 +3,8 @@ import React, {
   useEffect,
   useLayoutEffect,
   useState,
-  useCallback
+  useCallback,
+  useRef
 } from "react";
 import {
   Box,
@@ -15,7 +16,8 @@ import {
   Input,
   Text,
   VStack,
-  Spinner
+  Spinner,
+  IconButton
 } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -47,41 +49,66 @@ const HistoryLive = () => {
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
+  const inputRef = useRef(null);
 
   useLayoutEffect(() => {
     setOptions({
       headerTitle: "History Live",
-      headerRight: () => (
-        <Input
-          mt="1"
-          bgColor="white"
-          variant="filled"
-          w="90%"
-          mr="3"
-          fontSize="sm"
-          name="id"
-          height="35px"
-          placeholderTextColor="secondary"
-          placeholder="Cari member"
-          value={search}
-          onChangeText={handleSearch}
-          borderRadius={6}
-          InputLeftElement={
-            <Box ml="2">
-              <SearchMember />
-            </Box>
-          }
-          InputRightElement={
-            search.length > 0 && (
-              <Text onPress={() => handleSearch("")} color="secondary" mr="2">
-                <CloseIcon />
-              </Text>
-            )
-          }
-        />
-      )
+      headerRight: () =>
+        isSearch ? (
+          <Input
+            mt="1"
+            mr="3"
+            w="90%"
+            autoFocus
+            ref={inputRef}
+            bgColor="white"
+            variant="filled"
+            fontSize="sm"
+            name="id"
+            height="35px"
+            placeholderTextColor="secondary"
+            placeholder="Cari member"
+            value={search}
+            onChangeText={handleSearch}
+            borderRadius={6}
+            InputLeftElement={
+              <Box ml="2">
+                <SearchMember />
+              </Box>
+            }
+            InputRightElement={
+              search.length > 0 && (
+                <Text
+                  onPress={() => {
+                    handleSearch("");
+                    setIsSearch(false);
+                  }}
+                  color="secondary"
+                  mr="2"
+                >
+                  <CloseIcon />
+                </Text>
+              )
+            }
+          />
+        ) : (
+          <IconButton
+            icon={<SearchMember color="white" size={25} />}
+            onPress={() => setIsSearch(true)}
+            mt="2"
+            mr="4"
+          />
+        )
     });
-  }, [search]);
+  }, [search, isSearch]);
+
+  useEffect(() => {
+    if (isSearch && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isSearch]);
 
   useEffect(() => {
     loadLives();
