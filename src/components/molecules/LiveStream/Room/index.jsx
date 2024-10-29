@@ -1,17 +1,17 @@
 import {
   Box,
-  Button,
   Divider,
   HStack,
+  IconButton,
   Image,
   PlayIcon,
   Text,
   View
 } from "native-base";
 import { useEffect, useState } from "react";
-import { RefreshControl, TouchableOpacity } from "react-native";
+import { RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import { LiveIcon } from "../../../../assets/icon";
+import { LiveIcon, UserCheck } from "../../../../assets/icon";
 import { ROOMS } from "../../../../services";
 import { formatName } from "../../../../utils/helpers";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
@@ -59,9 +59,12 @@ export const Room = () => {
             </HStack>
           </Box>
         </View>
-        <Button
+        <IconButton
           mt="8"
-          colorScheme="black"
+          w="42"
+          h="35"
+          size="lg"
+          colorScheme="primary"
           bg={
             item.room_id === profile.room_id
               ? "red"
@@ -69,16 +72,16 @@ export const Room = () => {
               ? "secondary"
               : "primary"
           }
-        >
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => {
-              setProfile(item);
-            }}
-          >
-            <PlayIcon size={14} color="white" />
-          </TouchableOpacity>
-        </Button>
+          onPress={() => setProfile(item)}
+          disabled={item.room_id === profile.room_id}
+          icon={
+            item.room_id === profile.room_id ? (
+              <UserCheck />
+            ) : (
+              <PlayIcon size={17} color="white" />
+            )
+          }
+        />
       </HStack>
       {roomLives.length > 1 && <Divider mt="2" />}
     </Box>

@@ -1,15 +1,16 @@
 import {
   Box,
-  Button,
   Divider,
   HStack,
+  IconButton,
   Image,
   PlayIcon,
   Text,
   View
 } from "native-base";
 import { useEffect, useState } from "react";
-import { RefreshControl, ScrollView, TouchableOpacity } from "react-native";
+import { RefreshControl, ScrollView } from "react-native";
+import { UserCheck } from "../../../../assets/icon";
 import { ROOMS } from "../../../../services";
 import useIDNLiveStore from "../../../../store/idnLiveStore";
 import useThemeStore from "../../../../store/themeStore";
@@ -70,20 +71,23 @@ export const RoomListIDN = () => {
                   <Text fontWeight="semibold">Live</Text>
                 </Box>
               </View>
-              <Button
+              <IconButton
                 mt="8"
-                colorScheme="black"
+                size="lg"
+                colorScheme="primary"
+                onPress={() => setProfile(item)}
                 bg={getTheme(item.user.username === profile?.user?.username)}
-              >
-                <TouchableOpacity
-                  activeOpacity={0.6}
-                  onPress={() => {
-                    setProfile(item);
-                  }}
-                >
-                  <PlayIcon size={14} color="white" />
-                </TouchableOpacity>
-              </Button>
+                disabled={item.user.username === profile?.user?.username}
+                w="42"
+                h="35"
+                icon={
+                  item.user.username === profile?.user?.username ? (
+                    <UserCheck />
+                  ) : (
+                    <PlayIcon size={17} color="white" />
+                  )
+                }
+              />
             </HStack>
             {roomLives.length > 1 && <Divider mt="2" />}
           </Box>

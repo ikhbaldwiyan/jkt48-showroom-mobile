@@ -71,7 +71,11 @@ const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
               >
                 <HStack alignItems="center" space="2">
                   <LiveIcon size={14} />
-                  <Text>{`${data.name} lagi live ${data.type} cuy`}</Text>
+                  <Text>
+                    {data?.type === "IDN"
+                      ? `${data.name} lagi ${data.type} Live cuy`
+                      : `${data.name} lagi live ${data.type} cuy`}
+                  </Text>
                 </HStack>
               </Box>
             );
