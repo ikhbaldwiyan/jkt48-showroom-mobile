@@ -235,6 +235,7 @@ const LiveStream = () => {
                 width: Dimensions.get("window").width,
                 height: "100%"
               }}
+              poster={profile?.image}
               toggleResizeModeOnFullscreen={false}
               onEnterFullscreen={() => setIsFullScreen(true)}
               onExitFullscreen={() => setIsFullScreen(false)}

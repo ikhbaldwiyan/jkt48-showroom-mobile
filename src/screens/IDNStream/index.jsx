@@ -180,6 +180,10 @@ const IDNStream = () => {
     return () => clearInterval(interval);
   }, [refreshing]);
 
+  const handleStreamError = () => {
+    handleRefresh();
+  };
+
   return (
     <Box flex="1" bg="secondary">
       <Box
@@ -209,6 +213,8 @@ const IDNStream = () => {
               onExitFullscreen={() => setIsFullScreen(false)}
               onEnd={() => handleEndLive()}
               toggleResizeModeOnFullscreen={isOfficial ? false : true}
+              onError={handleStreamError}
+              poster={profile?.image}
             />
           ) : (
             <Video
