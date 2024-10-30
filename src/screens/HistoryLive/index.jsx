@@ -85,7 +85,6 @@ const HistoryLive = () => {
                   setIsSearch(false);
                 }}
                 color="secondary"
-                mr="2"
               >
                 <CloseIcon />
               </Button>
