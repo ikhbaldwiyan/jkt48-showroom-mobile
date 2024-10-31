@@ -254,6 +254,7 @@ const PremiumLive = () => {
                     width: Dimensions.get("window").width,
                     height: "100%"
                   }}
+                  poster={premiumLive?.setlist?.image}
                   toggleResizeModeOnFullscreen={false}
                   onEnterFullscreen={() => setIsFullScreen(true)}
                   onExitFullscreen={() => setIsFullScreen(false)}
