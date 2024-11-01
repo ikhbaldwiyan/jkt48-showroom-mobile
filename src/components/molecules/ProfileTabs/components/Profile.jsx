@@ -48,10 +48,10 @@ export const Profile = () => {
               <Text fontWeight="semibold">Blood type :</Text>
               <Text>{description?.["Blood type"] ?? "-"}</Text>
             </HStack>
-            <HStack space={2}>
+            <HStack space={2} flexWrap="wrap">
               <Star />
               <Text fontWeight="semibold">Hobby:</Text>
-              <Text>{description?.Hobby ?? "-"}</Text>
+              <Text flexShrink={1}>{description?.Hobby ?? "-"}</Text>
             </HStack>
             {!description?.Twitter?.includes("www") &&
               !description?.Instagram?.includes("www") && (
