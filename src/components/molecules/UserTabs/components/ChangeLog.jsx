@@ -53,15 +53,13 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
           </Modal.Header>
           <Modal.Body bg="secondary">
             <VStack space={3}>
-              <Text>- Add History Live List and Detail screen</Text>
-              <Text>- Add Edit Avatar screen on profile</Text>
-              <Text>- Add Quality Live streaming showroom setting</Text>
-              <Text>- Optimize and revamp thetater schedule</Text>
-              <Text>- Improve real time fetch live list SR or IDN</Text>
-              <Text>- Change light mode cyan color</Text>
-              <Text>- Fix register user podium not showing</Text>
-              <Text>- Fix Premium Live watching redirect no ticket</Text>
-              <Text>- Revamp profile member detail</Text>
+              <Text>- Add Ticket info tab on schedule detail</Text>
+              <Text>- Add Picture in Picture Mode on SR and IDN</Text>
+              <Text>- Show Donate Project on settings profile</Text>
+              <Text>- Optimize live streaming showroom memory</Text>
+              <Text>- Improve screen history live and member list</Text>
+              <Text>- Updated active room icon button</Text>
+              <Text>- Show IDN stream video thumbnail</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
