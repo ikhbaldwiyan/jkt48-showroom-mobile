@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
-import { Dimensions, LogBox, StatusBar } from "react-native";
-import { Box, Button, HStack, Text, useToast } from "native-base";
+import { Dimensions, LogBox, StatusBar, StyleSheet } from "react-native";
+import { Box, Button, HStack, Text, useToast, View } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { activityLog } from "../../utils/activityLog";
@@ -235,7 +235,6 @@ const LiveStream = () => {
                 width: Dimensions.get("window").width,
                 height: "100%"
               }}
-              poster={profile?.image}
               toggleResizeModeOnFullscreen={false}
               onEnterFullscreen={() => setIsFullScreen(true)}
               onExitFullscreen={() => setIsFullScreen(false)}
@@ -261,7 +260,16 @@ const LiveStream = () => {
             />
           )
         ) : (
-          <Loading color="white" />
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0, 0, 0, 0.5)"
+            }}
+          >
+            <Loading size={25} color="white" />
+          </View>
         )}
       </Box>
       <Box flex={1} p="2">
