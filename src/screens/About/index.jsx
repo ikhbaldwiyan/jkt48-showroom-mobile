@@ -111,9 +111,9 @@ const About = () => {
         <Text mt="2">
           <Text fontWeight="bold">JKT48 Showroom Fanmade</Text> adalah platform
           Live Streaming yang bertujuan untuk memfilter room member JKT48.
-          disini kalian bisa menonton streaming Showroom atau IDN Live semua
-          member JKT48, jangan lupa join komunitas discord kita untuk info
-          update apk.
+          disini kalian bisa menonton streaming Showroom atau IDN Live semua,
+          Jangan lupa gabung di komunitas Discord kita untuk seru-seruan bareng
+          sesama fans JKT48!.
         </Text>
         <Box display="flex" alignItems="center" justifyContent="center">
           <TouchableOpacity activeOpacity={0.6} onPress={discordClick}>
@@ -136,7 +136,7 @@ const About = () => {
             color="primary"
           >
             {" "}
-           www.showroom-live.com
+            www.showroom-live.com
           </Text>{" "}
           dan
           <Text
@@ -148,8 +148,9 @@ const About = () => {
           </Text>
         </Text>
         <Text my="3">
-          Jika kamu ingin mendukung perkembangan project ini untuk biaya server
-          dan lainnya kalian bisa donasi di link saweria berikut{" "}
+          Aplikasi ini gratis dan bebas iklan. Jika kamu ingin mendukung biaya
+          server dan pengembangan oleh developer, kamu bisa memberikan donasi
+          melalui link Saweria berikut.{" "}
         </Text>
         <TouchableOpacity activeOpacity={0.6} onPress={donateClick}>
           <Box bg="#E49C20" p="3" borderRadius="xl">
