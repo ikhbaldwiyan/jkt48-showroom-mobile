@@ -253,10 +253,10 @@ const LiveStream = () => {
               pictureInPicture
               style={{
                 flex: 1,
-                position: "absolute",
-                width: Dimensions.get("window").width,
+                width: "100%",
                 height: "100%"
               }}
+              resizeMode="cover"
             />
           )
         ) : (

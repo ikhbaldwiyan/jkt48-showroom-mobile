@@ -221,6 +221,7 @@ const IDNStream = () => {
               source={{ uri: url }}
               playInBackground
               pictureInPicture
+              resizeMode="cover"
               style={{
                 flex: 1,
                 width: "100%",
