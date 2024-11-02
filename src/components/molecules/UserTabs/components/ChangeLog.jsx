@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Linking } from "react-native";
+import { APK_VERSION, PLAY_STORE_URL } from "@env";
 import { Button, HStack, Modal, Text, VStack } from "native-base";
+import DeviceInfo from "react-native-device-info";
+import { TouchableOpacity } from "react-native";
 import { DownloadIcon, History } from "../../../../assets/icon";
 import { getCurrentVersion } from "../../../../services/versions";
-import DeviceInfo from "react-native-device-info";
-import { APK_VERSION } from "@env";
-import { Linking } from "react-native";
-import { TouchableOpacity } from "react-native";
 
 const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
   const [latestVersion, setLatestVersion] = useState("");
@@ -60,6 +60,7 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Improve screen history live and member list</Text>
               <Text>- Updated active room icon button</Text>
               <Text>- Show IDN stream video thumbnail</Text>
+              <Text>- Added new UI reminder update APK</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
@@ -68,11 +69,7 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
                 <Button
                   variant="outline"
                   backgroundColor="teal"
-                  onPress={() =>
-                    Linking.openURL(
-                      "https://play.google.com/store/apps/details?id=com.inzoid.jkt48showroom"
-                    )
-                  }
+                  onPress={() => Linking.openURL(PLAY_STORE_URL)}
                 >
                   <HStack space={2}>
                     <DownloadIcon />

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Linking } from "react-native";
-import Layout from "../../components/templates/Layout";
 import { Box } from "native-base";
+
+import { AUTH } from "../../services";
+import { useRefresh } from "../../utils/hooks/useRefresh";
+import useAuthStore from "../../store/authStore";
+import useChangeLogStore from "../../store/changeLogStore";
+
 import {
   IDNLIve,
   ShowroomLive,
@@ -9,56 +13,16 @@ import {
   RecentLives,
   Schedule
 } from "../../components/organisms";
-import { useRefresh } from "../../utils/hooks/useRefresh";
-import DeviceInfo from "react-native-device-info";
-import { getCurrentVersion } from "../../services/versions";
-import { firebase } from "@react-native-firebase/messaging";
-import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
-import useChangeLogStore from "../../store/changeLogStore";
-import useAuthStore from "../../store/authStore";
-import { AUTH } from "../../services";
-import { PLAY_STORE_URL } from "@env";
+import Layout from "../../components/templates/Layout";
 import RatingApp from "../../components/templates/RatingApp";
+import UpdateApp from "../../components/templates/UpdateApp";
+import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
-  const [latestVersion, setLatestVersion] = useState("");
   const { showChangeLog, setCloseModal } = useChangeLogStore();
   const { userProfile, session, user, setUserProfile } = useAuthStore();
   const [ratingApp, setRatingApp] = useState(false);
-
-  const getVersionAndroid = async () => {
-    try {
-      const response = await getCurrentVersion();
-      setLatestVersion(response.data.version);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getVersionAndroid();
-    const currentVersion = DeviceInfo.getVersion();
-
-    if (latestVersion > currentVersion) {
-      Alert.alert(
-        `Versi terbaru tersedia wots`,
-        `Jangan lupa update versi APK ke versi ${latestVersion} di Play Store untuk menggunakan fitur baru!`,
-        [
-          {
-            text: "Update APK",
-            onPress: () => {
-              Linking.openURL(PLAY_STORE_URL);
-            }
-          },
-          {
-            text: "Nanti"
-          }
-        ]
-      );
-      firebase.messaging().subscribeToTopic("update-reminder");
-    }
-  }, [latestVersion]);
 
   const setRegisterProfile = async (userId) => {
     await AUTH.detailUserApi(userId)
@@ -85,12 +49,17 @@ const Home = ({ navigation }) => {
         <RecentLives refreshing={refreshing} />
         <Schedule refreshing={refreshing} navigation={navigation} isWeek />
       </Box>
+      <UpdateApp />
       <ChangeLog
         modal={showChangeLog}
         toggleModal={() => setCloseModal()}
         hideButton={true}
       />
-      <RatingApp isVisible={ratingApp} onOpen={() => setRatingApp(true)} onClose={() => setRatingApp(false)} />
+      <RatingApp
+        isVisible={ratingApp}
+        onOpen={() => setRatingApp(true)}
+        onClose={() => setRatingApp(false)}
+      />
     </Layout>
   );
 };
