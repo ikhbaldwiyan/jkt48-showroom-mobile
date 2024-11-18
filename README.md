@@ -2,6 +2,8 @@
 
 JKT48 SHOWROOM is a Fanmade streaming App for filtering JKT48 SHOWROOM Member, in this project we can see all room member JKT48 in real time, this API get from offical Showroom API and also give info about theater schedule or upcoming member live.
 
+[![Play Store](https://res.cloudinary.com/dkkagbzl4/image/upload/v1731933078/mfs3ybmkhbukpxp69y7k.png)](https://play.google.com/store/apps/details?id=com.inzoid.jkt48showroom)
+
 ### Join Discord Community
 [![Discord Banner](https://discordapp.com/api/guilds/1076511743909564506/widget.png?style=banner2)](https://discord.com/invite/BX8BAs4kgu)
 
