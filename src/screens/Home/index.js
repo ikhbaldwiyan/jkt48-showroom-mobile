@@ -17,6 +17,7 @@ import Layout from "../../components/templates/Layout";
 import RatingApp from "../../components/templates/RatingApp";
 import UpdateApp from "../../components/templates/UpdateApp";
 import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
+import WrappedAlert from "../../components/atoms/WrappedAlert";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
@@ -43,6 +44,7 @@ const Home = ({ navigation }) => {
   return (
     <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
+        <WrappedAlert />
         <PremiumLive refreshing={refreshing} />
         <ShowroomLive refreshing={refreshing} />
         <IDNLIve refreshing={refreshing} />
