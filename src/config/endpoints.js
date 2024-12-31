@@ -33,6 +33,7 @@ export default {
     ROOM_LIVES: "/idn_lives",
     PODIUM: "/idn-live-history/",
     DETAIL: "/watch",
+    CHAT: "/scrapper/channel-id"
   },
   STREAM: {
     URL: "/lives/stream/",

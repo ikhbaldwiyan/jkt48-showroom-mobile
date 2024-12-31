@@ -44,7 +44,7 @@ const Home = ({ navigation }) => {
   return (
     <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
-        <WrappedAlert />
+        {/* <WrappedAlert /> */}
         <PremiumLive refreshing={refreshing} />
         <ShowroomLive refreshing={refreshing} />
         <IDNLIve refreshing={refreshing} />

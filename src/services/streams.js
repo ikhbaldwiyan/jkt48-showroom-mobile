@@ -1,3 +1,5 @@
+import axios from "axios";
+import { JKT48_SHOWROOM_API } from "@env";
 import { ENDPOINTS, apiShowroom, apiUser, apiAuth, apiHistory } from "../config";
 
 export const getStreamUrl = (roomId, cookies) => {
@@ -46,4 +48,8 @@ export const getPremiumLiveToday = () => {
 
 export const getRankShowroom = (roomId) => {
   return apiShowroom.get(ENDPOINTS.STREAM.RANK + roomId + "/rank" )
+}
+
+export const getChatIDN = (username, slug) => {
+  return axios.get(`${JKT48_SHOWROOM_API}/scrapper/channel-id?username=${username}&slug=${slug}`)
 }
