@@ -9,28 +9,36 @@ import {
   View,
   VStack
 } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Calendar, LiveIcon } from "../../../assets/icon";
 import { useLeaderboardMember } from "../../../services/hooks/useLeaderboardMember";
 import { formatName } from "../../../utils/helpers";
 import GradientButton from "../../atoms/ButtonGradient";
 
-const TopMember = () => {
+const TopMember = ({ refreshing }) => {
   const [type, setType] = useState("showroom");
-  const { data: topMember, isFetched } = useLeaderboardMember({
+  const {
+    data: topMember,
+    isFetched,
+    refetch
+  } = useLeaderboardMember({
     page: "1",
     month: "01",
     year: "2025",
     type
   });
 
+  useEffect(() => {
+    refetch();
+  }, [refreshing]);
+
   return (
     isFetched && (
       <View>
         <HStack alignItems="center" justifyContent="space-between">
           <Text fontSize="2xl" mb="3" fontWeight="semibold">
-            Top Live Member
+            Top Member
           </Text>
           <HStack space={2}>
             <Button
@@ -83,8 +91,8 @@ const TopMember = () => {
                 </Box>
                 <HStack space={2} alignItems="center">
                   <Text fontSize={14} fontWeight="semibold">
-                    {formatName(item?.username, true)} - {item?.total_live}x
-                    Live
+                    {formatName(item?.username, true)} -
+                    <Text fontWeight="normal"> {item?.total_live}x Live</Text>
                   </Text>
                 </HStack>
               </VStack>
@@ -96,17 +104,17 @@ const TopMember = () => {
           <Button py="1.5" bg="blueGray.600" borderRadius="md">
             <HStack space={2}>
               <Calendar />
-              <Text fontWeight="semibold">
+              <Text fontSize="sm" fontWeight="semibold">
                 {topMember?.filterDate?.startDate?.slice(0, 2)} -{" "}
                 {topMember?.filterDate?.endDate?.slice(0, 2)}{" "}
-                {topMember?.filterDate?.month} 2025
+                {topMember?.filterDate?.month}
               </Text>
             </HStack>
           </Button>
           <GradientButton>
             <HStack alignItems="center" space={2}>
               <LiveIcon size={15} />
-              <Text fontWeight="semibold">
+              <Text fontSize="sm" fontWeight="semibold">
                 Total Member: {topMember?.totalData}
               </Text>
             </HStack>
