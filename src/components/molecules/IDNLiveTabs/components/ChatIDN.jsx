@@ -84,13 +84,17 @@ const ChatIDN = () => {
                   timestamp: data.timestamp || Date.now()
                 };
 
-                // Update the messages state with the mapped message
                 setMessages((prevMessages) => {
-                  if (Array.isArray(prevMessages)) {
-                    return [mappedMessage, ...prevMessages];
-                  } else {
-                    return [mappedMessage];
+                  if (
+                    prevMessages.some(
+                      (msg) =>
+                        msg.user?.username === data?.user?.username &&
+                        msg.comment === data?.chat?.message
+                    )
+                  ) {
+                    return prevMessages; // Skip adding duplicate message
                   }
+                  return [mappedMessage, ...prevMessages];
                 });
               }
             } catch (error) {
@@ -140,7 +144,11 @@ const ChatIDN = () => {
                 <Text
                   fontSize="md"
                   fontWeight="bold"
-                  color={item?.user?.color_code}
+                  color={
+                    item?.user?.color_code === "#ED2227"
+                      ? "primary"
+                      : item?.user?.color_code
+                  }
                 >
                   {item?.user?.name ?? item?.user?.username}
                 </Text>
