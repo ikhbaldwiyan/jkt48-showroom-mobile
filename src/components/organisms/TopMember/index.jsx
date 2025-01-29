@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -7,25 +8,31 @@ import {
   ScrollView,
   Text,
   View,
-  VStack
+  VStack,
 } from "native-base";
-import React, { useEffect, useState } from "react";
+import moment from "moment";
 import { TouchableOpacity } from "react-native";
 import { Calendar, LiveIcon } from "../../../assets/icon";
 import { useLeaderboardMember } from "../../../services/hooks/useLeaderboardMember";
 import { formatName } from "../../../utils/helpers";
 import GradientButton from "../../atoms/ButtonGradient";
+import { ThropyIcon } from "../../../assets/icon";
+import { useNavigation } from "@react-navigation/native";
 
 const TopMember = ({ refreshing }) => {
   const [type, setType] = useState("showroom");
+  const year = moment().format("YYYY");
+  const month = moment().format("MM");
+  const navigation = useNavigation();
+
   const {
     data: topMember,
     isFetched,
     refetch
   } = useLeaderboardMember({
     page: "1",
-    month: "01",
-    year: "2025",
+    month,
+    year,
     type
   });
 
@@ -43,18 +50,18 @@ const TopMember = ({ refreshing }) => {
           <HStack space={2}>
             <Button
               py="1"
-              px="1.5"
+              px="2.5"
               bg={type === "showroom" ? "teal" : "blueGray.500"}
             >
               <TouchableOpacity onPress={() => setType("showroom")}>
-                <Text fontSize="sm" fontWeight="semibold">
+                <Text fontSize="12" fontWeight="semibold">
                   Showroom
                 </Text>
               </TouchableOpacity>
             </Button>
-            <Button py="1" bg={type === "idn" ? "teal" : "blueGray.500"}>
+            <Button py="1" px="3" bg={type === "idn" ? "teal" : "blueGray.500"}>
               <TouchableOpacity onPress={() => setType("idn")}>
-                <Text fontSize="sm" fontWeight="semibold">
+                <Text fontSize="12" fontWeight="semibold">
                   IDN
                 </Text>
               </TouchableOpacity>
@@ -90,9 +97,12 @@ const TopMember = ({ refreshing }) => {
                   </Box>
                 </Box>
                 <HStack space={2} alignItems="center">
-                  <Text fontSize={14} fontWeight="semibold">
+                  <Text fontSize={13} fontWeight="semibold">
                     {formatName(item?.username, true)} -
-                    <Text fontWeight="normal"> {item?.total_live}x Live</Text>
+                    <Text fontWeight="normal" fontSize="12">
+                      {" "}
+                      {item?.total_live}x Live
+                    </Text>
                   </Text>
                 </HStack>
               </VStack>
@@ -102,24 +112,32 @@ const TopMember = ({ refreshing }) => {
 
         <HStack space={2}>
           <Button py="1.5" bg="blueGray.600" borderRadius="md">
-            <HStack space={2}>
-              <Calendar />
-              <Text fontSize="sm" fontWeight="semibold">
+            <HStack alignItems="center" space={2}>
+              <Calendar size="15" />
+              <Text fontSize="xs" fontWeight="semibold">
                 {topMember?.filterDate?.startDate?.slice(0, 2)} -{" "}
                 {topMember?.filterDate?.endDate?.slice(0, 2)}{" "}
-                {topMember?.filterDate?.month}
+                {topMember?.filterDate?.month} {year}
               </Text>
             </HStack>
           </Button>
           <GradientButton>
             <HStack alignItems="center" space={2}>
               <LiveIcon size={15} />
-              <Text fontSize="sm" fontWeight="semibold">
+              <Text fontSize="xs" fontWeight="semibold">
                 Total Member: {topMember?.totalData}
               </Text>
             </HStack>
           </GradientButton>
         </HStack>
+        <TouchableOpacity onPress={() => navigation.navigate("TopMember")}>
+          <HStack pt="4" alignItems="center" space={2.5}>
+            <ThropyIcon size="18" />
+            <Text color="gray.200" fontWeight="semibold">
+              Lihat Semua Top Member
+            </Text>
+          </HStack>
+        </TouchableOpacity>
         <Divider my="4" />
       </View>
     )
