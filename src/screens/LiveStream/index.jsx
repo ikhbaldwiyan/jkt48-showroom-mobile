@@ -44,14 +44,15 @@ const LiveStream = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HStack space={3.5} alignItems="center">
+        <HStack space={2} alignItems="center">
           <Button
-            px="0"
+            px="1.5"
             size="xs"
             onPress={handleRefresh}
             isLoading={refreshing}
             borderRadius="md"
             background="black"
+            mr="0.5"
           >
             <RefreshIcon />
           </Button>

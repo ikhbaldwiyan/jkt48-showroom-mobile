@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Linking } from "react-native";
 import { Button, HStack, Menu, Pressable, Text } from "native-base";
 import { KebabMenu, PipIcon, WatchIcon } from "../../../assets/icon";
@@ -8,17 +8,34 @@ import useLiveStreamStore from "../../../store/liveStreamStore";
 
 const MenuList = ({ refreshing }) => {
   const { enterPipMode } = usePipMode();
-  const { profile } = useLiveStreamStore();
+  const { liveInfo } = useLiveStreamStore();
+  const [isOpen, setIsOpen] = useState(false); 
+  const [showModal, setShowModal] = useState(false);
+  const closeMenu = () => setIsOpen(false);
 
   const menu = [
     {
       key: "stream-quality",
-      component: <QualitySettings refreshing={refreshing} />
+      component: (
+        <QualitySettings
+          refreshing={refreshing}
+          showModal={showModal}
+          setShowModal={setShowModal}
+          closeMenu={closeMenu}
+        />
+      )
     },
     {
       key: "pip-mode",
       component: (
-        <Button px="0" size="xs" onPress={() => enterPipMode(16, 9)}>
+        <Button
+          px="0"
+          size="xs"
+          onPress={() => {
+            enterPipMode(16, 9);
+            closeMenu();
+          }}
+        >
           <HStack space={2}>
             <PipIcon />
             <Text color="secondary">Picture in Picture</Text>
@@ -30,13 +47,16 @@ const MenuList = ({ refreshing }) => {
       key: "showroom",
       component: (
         <Button
-          px="0"
+          p="0"
           size="xs"
-          onPress={() => Linking.openURL(profile?.share_url_live)}
+          onPress={() => {
+            Linking.openURL(liveInfo?.share_url_live);
+            closeMenu();
+          }}
         >
           <HStack space={2}>
             <WatchIcon />
-            <Text color="secondary">Watch In Showroom</Text>
+            <Text color="secondary">Watch in Showroom</Text>
           </HStack>
         </Button>
       )
@@ -47,7 +67,9 @@ const MenuList = ({ refreshing }) => {
     <Menu
       mt="3"
       mr="3"
-      w="150"
+      w="160"
+      isOpen={isOpen}
+      onOpen={() => setIsOpen(true)}
       trigger={(triggerProps) => (
         <Pressable {...triggerProps}>
           <KebabMenu color="white" />
@@ -55,7 +77,14 @@ const MenuList = ({ refreshing }) => {
       )}
     >
       {menu.map((item) => (
-        <Menu.Item key={item.key} py="1" px="0">
+        <Menu.Item
+          onPress={() =>
+            item.key === "stream-quality" ? setShowModal(true) : null
+          }
+          key={item.key}
+          py="1.5"
+          px="0"
+        >
           {item.component}
         </Menu.Item>
       ))}

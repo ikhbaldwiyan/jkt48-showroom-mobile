@@ -7,8 +7,12 @@ import useLiveStreamStore from "../../../store/liveStreamStore";
 // Lazy load modal content
 const QualityContent = lazy(() => import("./QualityContent"));
 
-const QualitySettings = ({ refreshing }) => {
-  const [showModal, setShowModal] = useState(false);
+const QualitySettings = ({
+  refreshing,
+  closeMenu,
+  showModal,
+  setShowModal
+}) => {
   const [selectedQuality, setSelectedQuality] = useState(null);
   const [streamType, setStreamType] = useState("hls");
   const { profile, streamOptions, setSelectedUrl } = useLiveStreamStore();
@@ -34,6 +38,7 @@ const QualitySettings = ({ refreshing }) => {
     const selectedOption = streamOptions.find((q) => q.id === id);
     if (selectedOption) {
       setSelectedUrl(selectedOption.url);
+      closeMenu();
     }
     setTimeout(() => {
       setShowModal(false);
@@ -53,7 +58,12 @@ const QualitySettings = ({ refreshing }) => {
           <Text color="black">Stream Quality</Text>
         </HStack>
       </TouchableOpacity>
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+      <Modal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false), closeMenu();
+        }}
+      >
         <Suspense fallback={<Spinner color="white" />}>
           <QualityContent
             refreshing={refreshing}
