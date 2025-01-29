@@ -1,6 +1,5 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
-import { Box, HStack, Modal, Spinner, Text } from "native-base";
-import { TouchableOpacity } from "react-native";
+import { Button, HStack, Modal, Spinner, Text } from "native-base";
 import { SettingsIcon } from "../../../assets/icon";
 import useLiveStreamStore from "../../../store/liveStreamStore";
 
@@ -51,13 +50,15 @@ const QualitySettings = ({
   };
 
   return (
-    <Box>
-      <TouchableOpacity opacity="0.8" onPress={() => setShowModal(true)}>
+    <>
+      <Button p="0" size="xs" onPress={() => setShowModal(true)}>
         <HStack space={2}>
           <SettingsIcon />
-          <Text color="black">Stream Quality</Text>
+          <Text fontSize="xs" color="black">
+            Stream Quality
+          </Text>
         </HStack>
-      </TouchableOpacity>
+      </Button>
       <Modal
         isOpen={showModal}
         onClose={() => {
@@ -77,7 +78,7 @@ const QualitySettings = ({
           />
         </Suspense>
       </Modal>
-    </Box>
+    </>
   );
 };
 

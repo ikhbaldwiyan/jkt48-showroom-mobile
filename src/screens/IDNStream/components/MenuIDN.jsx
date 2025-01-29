@@ -1,5 +1,5 @@
 import React from "react";
-import { Linking } from "react-native";
+import { Linking, TouchableOpacity } from "react-native";
 import { KebabMenu, PipIcon, WatchIcon } from "../../../assets/icon";
 import { Button, HStack, Menu, Pressable, Text } from "native-base";
 import { usePipMode } from "../../../utils/hooks";
@@ -24,7 +24,9 @@ const MenuIDN = () => {
         <Button px="0" size="xs" onPress={customPipMode}>
           <HStack space={2}>
             <PipIcon />
-            <Text color="secondary">Picture in Picture</Text>
+            <Text fontSize="xs" color="secondary">
+              Picture in Picture
+            </Text>
           </HStack>
         </Button>
       )
@@ -37,13 +39,15 @@ const MenuIDN = () => {
           size="xs"
           onPress={() =>
             Linking.openURL(
-              `https://www.idn.app/${profile?.user?.username}/live/${profile?.live?.slug}`
+              `https://www.idn.app/${profile?.user?.username}/live/${profile?.slug}`
             )
           }
         >
           <HStack space={2}>
             <WatchIcon />
-            <Text color="secondary">Watch In IDN App</Text>
+            <Text fontSize="xs" color="secondary">
+              Watch In IDN App
+            </Text>
           </HStack>
         </Button>
       )
@@ -55,7 +59,7 @@ const MenuIDN = () => {
       mt="3"
       mr="3"
       mx="3"
-      w="150"
+      w="160"
       trigger={(triggerProps) => (
         <Pressable {...triggerProps}>
           <KebabMenu color="white" />
@@ -64,7 +68,9 @@ const MenuIDN = () => {
     >
       {menu.map((item) => (
         <Menu.Item key={item.key} py="1" px="0">
-          {item.component}
+          <TouchableOpacity activeOpacity={0.8}>
+            {item.component}
+          </TouchableOpacity>
         </Menu.Item>
       ))}
     </Menu>

@@ -91,6 +91,7 @@ const IDNStream = () => {
             isLoading={refreshing}
             borderRadius="md"
             background="black"
+            px="1.5"
           >
             <RefreshIcon />
           </Button>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Linking } from "react-native";
+import { Linking, TouchableOpacity } from "react-native";
 import { Button, HStack, Menu, Pressable, Text } from "native-base";
 import { KebabMenu, PipIcon, WatchIcon } from "../../../assets/icon";
 import { usePipMode } from "../../../utils/hooks";
@@ -9,7 +9,7 @@ import useLiveStreamStore from "../../../store/liveStreamStore";
 const MenuList = ({ refreshing }) => {
   const { enterPipMode } = usePipMode();
   const { liveInfo } = useLiveStreamStore();
-  const [isOpen, setIsOpen] = useState(false); 
+  const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const closeMenu = () => setIsOpen(false);
 
@@ -38,7 +38,9 @@ const MenuList = ({ refreshing }) => {
         >
           <HStack space={2}>
             <PipIcon />
-            <Text color="secondary">Picture in Picture</Text>
+            <Text fontSize="xs" color="secondary">
+              Picture in Picture
+            </Text>
           </HStack>
         </Button>
       )
@@ -56,7 +58,9 @@ const MenuList = ({ refreshing }) => {
         >
           <HStack space={2}>
             <WatchIcon />
-            <Text color="secondary">Watch in Showroom</Text>
+            <Text fontSize="xs" color="secondary">
+              Watch in Showroom
+            </Text>
           </HStack>
         </Button>
       )
@@ -67,9 +71,10 @@ const MenuList = ({ refreshing }) => {
     <Menu
       mt="3"
       mr="3"
-      w="160"
+      w="170"
       isOpen={isOpen}
       onOpen={() => setIsOpen(true)}
+      onClose={closeMenu}
       trigger={(triggerProps) => (
         <Pressable {...triggerProps}>
           <KebabMenu color="white" />
@@ -85,7 +90,9 @@ const MenuList = ({ refreshing }) => {
           py="1.5"
           px="0"
         >
-          {item.component}
+          <TouchableOpacity activeOpacity={0.8}>
+            {item.component}
+          </TouchableOpacity>
         </Menu.Item>
       ))}
     </Menu>
