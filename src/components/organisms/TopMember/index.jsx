@@ -8,7 +8,7 @@ import {
   ScrollView,
   Text,
   View,
-  VStack,
+  VStack
 } from "native-base";
 import moment from "moment";
 import { TouchableOpacity } from "react-native";
@@ -31,7 +31,7 @@ const TopMember = ({ refreshing }) => {
     refetch
   } = useLeaderboardMember({
     page: "1",
-    month,
+    // month,
     year,
     type
   });
@@ -47,7 +47,7 @@ const TopMember = ({ refreshing }) => {
           <Text fontSize="2xl" mb="3" fontWeight="semibold">
             Top Member
           </Text>
-          <HStack space={2}>
+          <HStack mb="2" space={2}>
             <Button
               py="1"
               px="2.5"
@@ -70,7 +70,7 @@ const TopMember = ({ refreshing }) => {
         </HStack>
 
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <HStack mt="4" space={4}>
+          <HStack mt="2" space={4}>
             {topMember?.data?.map((item, idx) => (
               <VStack key={idx} space={2} mb={4}>
                 <Box position="relative" w="100px" h="100px">
@@ -130,7 +130,9 @@ const TopMember = ({ refreshing }) => {
             </HStack>
           </GradientButton>
         </HStack>
-        <TouchableOpacity onPress={() => navigation.navigate("TopMember")}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("LeaderboardMember")}
+        >
           <HStack pt="4" alignItems="center" space={2.5}>
             <ThropyIcon size="18" />
             <Text color="gray.200" fontWeight="semibold">
