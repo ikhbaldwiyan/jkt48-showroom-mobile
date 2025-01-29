@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { activityLog } from "../../utils/activityLog";
 import { formatName } from "../../utils/helpers";
-import { LiveIcon, PipIcon, RefreshIcon } from "../../assets/icon";
+import { LiveIcon, RefreshIcon } from "../../assets/icon";
 import { usePipMode, useRefresh, useUser } from "../../utils/hooks";
 import trackAnalytics from "../../utils/trackAnalytics";
 import useLiveStreamStore from "../../store/liveStreamStore";
@@ -16,7 +16,7 @@ import Views from "../../components/atoms/Views";
 import VideoPlayer from "react-native-video-controls";
 import Loading from "../../components/atoms/Loading";
 import LiveStreamTabs from "../../components/molecules/LiveStreamTabs";
-import QualitySettings from "../../components/atoms/QualitySettings";
+import MenuList from "./components/MenuList";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -39,7 +39,7 @@ const LiveStream = () => {
   const { refreshing, onRefresh } = useRefresh();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { mode } = useThemeStore();
-  const { isPipMode, enterPipMode } = usePipMode();
+  const { isPipMode } = usePipMode();
 
   useEffect(() => {
     navigation.setOptions({
@@ -55,25 +55,14 @@ const LiveStream = () => {
           >
             <RefreshIcon />
           </Button>
-          {!isPipMode && (
-            <Button
-              px="0"
-              size="xs"
-              onPress={() => enterPipMode(16, 9)}
-              borderRadius="md"
-              background="black"
-            >
-              <PipIcon />
-            </Button>
-          )}
-          <QualitySettings refreshing={refreshing} />
           <Views
             color="primary"
             number={liveInfo?.views ?? profile?.view_num ?? 0}
           />
+          <MenuList />
         </HStack>
       ),
-      headerShown: isPipMode || isFullScreen ? false : true,
+      headerShown: isPipMode || isFullScreen ? false : true
     });
   }, [profile, liveInfo, refreshing, isFullScreen, mode, isPipMode]);
 

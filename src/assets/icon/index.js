@@ -57,6 +57,7 @@ import LogoNormal from "./LogoNormal";
 import PipIcon from "./PipIcon";
 import SearchMember from "./SearchMember";
 import CloseIcon from "./CloseIcon";
+import KebabMenu from "./KebabMenu";
 
 export {
   LogoIcon,
@@ -118,4 +119,5 @@ export {
   PipIcon,
   SearchMember,
   CloseIcon,
+  KebabMenu,
 };
