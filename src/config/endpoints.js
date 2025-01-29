@@ -54,4 +54,8 @@ export default {
   VERSIONS: {
     CURRENT_VERSION: "/mobile/app-version",
   },
+  LEADERBOARD: {
+    SHOWROOM: "/leaderboard-member/showroom",
+    IDN: "/leaderboard-member/idn",
+  }
 };

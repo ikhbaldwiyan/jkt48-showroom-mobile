@@ -50,7 +50,7 @@ const RecentLives = ({ refreshing }) => {
             onPress={() => navigation.replace("Main", { screen: "History" })}
           >
             <HStack alignItems="center" mb="1" space={2}>
-              <Text fontSize="md">See All</Text>
+              <Text fontSize="sm">Lihat semua</Text>
               <RightArrow />
             </HStack>
           </TouchableOpacity>

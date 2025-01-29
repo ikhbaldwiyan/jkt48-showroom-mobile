@@ -15,6 +15,7 @@ import MemberList from "./MemberList"
 import EditAvatar from "./EditAvatar";
 import HistoryLive from "./HistoryLive";
 import HistoryLiveDetail from "./HistoryLiveDetail";
+import LeaderboardMember from "./LeaderboardMember";
 
 export {
   SplashScreen,
@@ -35,4 +36,5 @@ export {
   EditAvatar,
   HistoryLive,
   HistoryLiveDetail,
+  LeaderboardMember,
 };

@@ -12,6 +12,7 @@ import {
   RightArrow
 } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
+import GradientButton from "../../atoms/ButtonGradient";
 
 const Schedule = ({ refreshing, isWeek, navigation }) => {
   const [schedules, setSchedules] = useState([]);
@@ -71,7 +72,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
               onPress={() => navigation.replace("Main", { screen: "Theater" })}
             >
               <HStack alignItems="center" space={2}>
-                <Text fontSize="md">See All</Text>
+                <Text fontSize="sm">Lihat semua</Text>
                 <RightArrow />
               </HStack>
             </TouchableOpacity>
@@ -87,7 +88,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
             >
               <HStack space={3} py="3">
                 <Box w="40%">
-                  <Box bg="primary" py="1" borderRadius="md" mb="2">
+                  <GradientButton size="sm">
                     <HStack
                       space={1}
                       justifyContent="center"
@@ -96,7 +97,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                       <Calendar size={12} />
                       <Text
                         textAlign="center"
-                        fontSize="12"
+                        fontSize="11"
                         fontWeight="medium"
                       >
                         {moment(item.showDate)
@@ -105,15 +106,16 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                       </Text>
                       <Text
                         textAlign="center"
-                        fontSize="11.5"
+                        fontSize="11"
                         fontWeight="medium"
                       >
                         - {item.showTime}
                       </Text>
                     </HStack>
-                  </Box>
+                  </GradientButton>
                   <Box position="relative">
                     <Image
+                      mt="2"
                       height="235"
                       size="xl"
                       borderRadius="md"
@@ -185,12 +187,12 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                 </Box>
                 <Box w="60%">
                   <HStack space={1} alignItems="center">
-                    <Text fontSize="md" fontWeight="semibold">
+                    <Text fontSize="md" fontWeight="semibold" isTruncated>
                       {item.setlist.name}
                     </Text>
                   </HStack>
                   <Text mt="2" color="gray.300">
-                    {item.setlist.description.slice(0, 150)}...
+                    {item.setlist.description.slice(0, 145)}...
                   </Text>
                 </Box>
               </HStack>

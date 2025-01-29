@@ -65,8 +65,8 @@ const ShowroomLive = ({ refreshing }) => {
           {rooms.length > 2 && (
             <TouchableOpacity onPress={() => navigate("RoomLives")}>
               <HStack space={2} alignItems="center">
-                <Text color="white" fontSize="md">
-                  All Live
+                <Text color="white" fontSize="sm">
+                  Semua live
                 </Text>
                 <RightArrow />
               </HStack>

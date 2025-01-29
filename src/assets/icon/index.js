@@ -52,11 +52,12 @@ import HistoryFill from "./HistoryFill";
 import HistoryOutline from "./HistoryOutline";
 import WebIcon from "./WebIcon";
 import LoadingIcon from "./LoadingIcon";
-import StarIcon from "./StarIcon"
+import StarIcon from "./StarIcon";
 import LogoNormal from "./LogoNormal";
 import PipIcon from "./PipIcon";
 import SearchMember from "./SearchMember";
 import CloseIcon from "./CloseIcon";
+import ThropyIcon from "./ThropyIcon";
 import KebabMenu from "./KebabMenu";
 
 export {
@@ -120,4 +121,5 @@ export {
   SearchMember,
   CloseIcon,
   KebabMenu,
+  ThropyIcon,
 };
