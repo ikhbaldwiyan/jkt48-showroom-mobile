@@ -59,6 +59,7 @@ import SearchMember from "./SearchMember";
 import CloseIcon from "./CloseIcon";
 import ThropyIcon from "./ThropyIcon";
 import KebabMenu from "./KebabMenu";
+import WatchIcon from "./WatchIcon";
 
 export {
   LogoIcon,
@@ -122,4 +123,5 @@ export {
   CloseIcon,
   KebabMenu,
   ThropyIcon,
+  WatchIcon,
 };

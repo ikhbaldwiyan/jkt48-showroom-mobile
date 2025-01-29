@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { activityLog } from "../../utils/activityLog";
 import { formatName } from "../../utils/helpers";
-import { PipIcon, RefreshIcon } from "../../assets/icon";
+import { RefreshIcon } from "../../assets/icon";
 import { usePipMode, useRefresh, useUser } from "../../utils/hooks";
 import trackAnalytics from "../../utils/trackAnalytics";
 import useIDNLiveStore from "../../store/idnLiveStore";
@@ -15,6 +15,7 @@ import Video from "react-native-video";
 import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
 import IDNLiveTabs from "../../components/molecules/IDNLiveTabs";
+import MenuIDN from "./components/MenuIDN";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -33,17 +34,9 @@ const IDNStream = () => {
   } = useIDNLiveStore();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { refreshing, onRefresh } = useRefresh();
-  const { isPipMode, enterPipMode } = usePipMode();
+  const { isPipMode } = usePipMode();
   const isOfficial = profile?.user?.name === "JKT48";
   const customHeight = isOfficial ? 200 : 400;
-
-  const customPipMode = () => {
-    if (isOfficial) {
-      enterPipMode(16, 9); 
-    } else {
-      enterPipMode(4, 5);
-    }
-  };
 
   useEffect(() => {
     setProfile(params.item);
@@ -90,16 +83,7 @@ const IDNStream = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HStack alignItems="center">
-          <Button
-            pr="1"
-            size="xs"
-            onPress={() => customPipMode()}
-            borderRadius="md"
-            background="black"
-          >
-            <PipIcon />
-          </Button>
+        <HStack space={2} alignItems="center">
           <Button
             py="1"
             size="xs"
@@ -107,11 +91,11 @@ const IDNStream = () => {
             isLoading={refreshing}
             borderRadius="md"
             background="black"
-            mr={2}
           >
             <RefreshIcon />
           </Button>
           <Views number={profile?.view_count ?? 0} />
+          <MenuIDN />
         </HStack>
       ),
     });

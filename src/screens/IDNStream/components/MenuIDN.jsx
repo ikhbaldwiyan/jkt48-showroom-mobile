@@ -1,24 +1,27 @@
 import React from "react";
 import { Linking } from "react-native";
-import { Button, HStack, Menu, Pressable, Text } from "native-base";
 import { KebabMenu, PipIcon, WatchIcon } from "../../../assets/icon";
+import { Button, HStack, Menu, Pressable, Text } from "native-base";
 import { usePipMode } from "../../../utils/hooks";
-import QualitySettings from "../../../components/atoms/QualitySettings";
-import useLiveStreamStore from "../../../store/liveStreamStore";
+import useIDNLiveStore from "../../../store/idnLiveStore";
 
-const MenuList = ({ refreshing }) => {
+const MenuIDN = () => {
+  const { profile } = useIDNLiveStore();
   const { enterPipMode } = usePipMode();
-  const { profile } = useLiveStreamStore();
+
+  const customPipMode = () => {
+    if (profile?.user?.name === "JKT48") {
+      enterPipMode(16, 9);
+    } else {
+      enterPipMode(4, 5);
+    }
+  };
 
   const menu = [
     {
-      key: "stream-quality",
-      component: <QualitySettings refreshing={refreshing} />
-    },
-    {
       key: "pip-mode",
       component: (
-        <Button px="0" size="xs" onPress={() => enterPipMode(16, 9)}>
+        <Button px="0" size="xs" onPress={customPipMode}>
           <HStack space={2}>
             <PipIcon />
             <Text color="secondary">Picture in Picture</Text>
@@ -27,16 +30,20 @@ const MenuList = ({ refreshing }) => {
       )
     },
     {
-      key: "showroom",
+      key: "idn-live",
       component: (
         <Button
           px="0"
           size="xs"
-          onPress={() => Linking.openURL(profile?.share_url_live)}
+          onPress={() =>
+            Linking.openURL(
+              `https://www.idn.app/${profile?.user?.username}/live/${profile?.live?.slug}`
+            )
+          }
         >
           <HStack space={2}>
             <WatchIcon />
-            <Text color="secondary">Watch In Showroom</Text>
+            <Text color="secondary">Watch In IDN App</Text>
           </HStack>
         </Button>
       )
@@ -47,6 +54,7 @@ const MenuList = ({ refreshing }) => {
     <Menu
       mt="3"
       mr="3"
+      mx="3"
       w="150"
       trigger={(triggerProps) => (
         <Pressable {...triggerProps}>
@@ -63,4 +71,4 @@ const MenuList = ({ refreshing }) => {
   );
 };
 
-export default MenuList;
+export default MenuIDN;
