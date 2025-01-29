@@ -58,6 +58,7 @@ import PipIcon from "./PipIcon";
 import SearchMember from "./SearchMember";
 import CloseIcon from "./CloseIcon";
 import ThropyIcon from "./ThropyIcon";
+import KebabMenu from "./KebabMenu";
 
 export {
   LogoIcon,
@@ -119,5 +120,6 @@ export {
   PipIcon,
   SearchMember,
   CloseIcon,
+  KebabMenu,
   ThropyIcon,
 };

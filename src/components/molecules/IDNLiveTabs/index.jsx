@@ -5,6 +5,7 @@ import { SceneMap, TabView } from "react-native-tab-view";
 import { PodiumIDN } from "./components/PodiumIDN";
 import { RoomListIDN } from "./components/RoomListIDN";
 import useThemeStore from "../../../store/themeStore";
+import ChatIDN from "./components/ChatIDN";
 
 const initialLayout = {
   width: Dimensions.get("window").width
@@ -16,12 +17,14 @@ const IDNLiveTabs = () => {
 
   const renderScene = SceneMap({
     room: RoomListIDN,
-    podium: PodiumIDN
+    chat: ChatIDN,
+    podium: PodiumIDN,
   });
 
   const routes = [
     { key: "room", title: "Room Live" },
-    { key: "podium", title: "Podium" }
+    { key: "chat", title: "Chat" },
+    { key: "podium", title: "Podium" },
   ];
 
   const renderTabBar = ({ navigationState }) => (
