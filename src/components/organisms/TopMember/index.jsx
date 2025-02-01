@@ -40,6 +40,9 @@ const TopMember = ({ refreshing }) => {
     refetch();
   }, [refreshing]);
 
+  const { startDate, endDate } = topMember?.filterDate || {};
+  const isSameMonth = startDate?.slice(3, 6) === endDate?.slice(3, 6);
+
   return (
     isFetched && (
       <View>
@@ -115,9 +118,16 @@ const TopMember = ({ refreshing }) => {
             <HStack alignItems="center" space={2}>
               <Calendar size="15" />
               <Text fontSize="xs" fontWeight="semibold">
-                {topMember?.filterDate?.startDate?.slice(0, 2)} -{" "}
-                {topMember?.filterDate?.endDate?.slice(0, 2)}{" "}
-                {topMember?.filterDate?.month} {year}
+                {isSameMonth ? (
+                  <>
+                    {startDate?.slice(0, 2)} - {endDate?.slice(0, 2)}{" "}
+                    {topMember?.filterDate?.month} {year}
+                  </>
+                ) : (
+                  <>
+                    {startDate?.slice(0, 6)} - {endDate?.slice(0, 6)} {year}
+                  </>
+                )}
               </Text>
             </HStack>
           </Button>
