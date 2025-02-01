@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Box, Divider, HStack, Image, Text, VStack } from "native-base";
 import { ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -14,22 +14,32 @@ import {
 import { ROOMS } from "../../../services";
 import { formatViews, getLiveDurationMinutes } from "../../../utils/helpers";
 import TimeAgo from "react-native-timeago";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
+import { useAppStateChange } from "../../../utils/hooks";
 
 const RecentLives = ({ refreshing }) => {
-  const [recentLives, setRecentLives] = useState([]);
   const navigation = useNavigation();
 
+  const fetchRecentLive = async () => {
+    const response = await ROOMS.getRecentLives();
+    return response?.data?.recents;
+  };
+
+  const { data: recentLives = [], refetch } = useQuery({
+    queryKey: ["recentLives"],
+    queryFn: fetchRecentLive
+  });
+
+  // Refetch when the screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
+
   useEffect(() => {
-    async function getRecentLive() {
-      try {
-        const response = await ROOMS.getRecentLives();
-        setRecentLives(response.data.recents);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getRecentLive();
+    refetch();
   }, [refreshing]);
 
   const isMinuteTime = (endDate) => {
@@ -38,6 +48,9 @@ const RecentLives = ({ refreshing }) => {
 
     return diffMinutes < 60 ? true : false;
   };
+
+  // Handle app state changes (background -> foreground)
+  useAppStateChange(refetch);
 
   return (
     recentLives.length > 0 && (
@@ -130,10 +143,10 @@ const RecentLives = ({ refreshing }) => {
                   <Box
                     mt="3"
                     py="1"
-                    borderRadius="md"
                     px="2"
                     w="45%"
-                    background="teal"
+                    borderRadius="md"
+                    background="blueGray.600"
                   >
                     <TouchableOpacity
                       activeOpacity={0.6}
@@ -153,10 +166,10 @@ const RecentLives = ({ refreshing }) => {
                   <Box
                     mt="3"
                     py="1"
-                    borderRadius="md"
                     px="1"
                     w="50%"
                     background="red"
+                    borderRadius="md"
                   >
                     <HStack space="1" alignItems="center">
                       <History />

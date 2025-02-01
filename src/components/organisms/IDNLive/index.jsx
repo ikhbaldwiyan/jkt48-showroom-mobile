@@ -1,28 +1,26 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
-import { TouchableOpacity, Pressable, AppState } from "react-native";
+import { TouchableOpacity, Pressable } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { ROOMS } from "../../../services";
 import Views from "../../atoms/Views";
 import { RightArrow } from "../../../assets/icon";
+import { useAppStateChange } from "../../../utils/hooks";
 
 const IDNLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
-  const [appState, setAppState] = useState(AppState.currentState);
 
   const fetchIDNLiveRoom = async () => {
     const response = await ROOMS.getIDNLIveRoom();
     return response?.data;
   };
 
-  // Use the new React Query v5 signature
   const { data: rooms = [], refetch } = useQuery({
     queryKey: ["idnLiveRoom"],
-    queryFn: fetchIDNLiveRoom,
+    queryFn: fetchIDNLiveRoom
   });
 
-  // Refetch when the screen comes into focus
   useFocusEffect(
     useCallback(() => {
       refetch();
@@ -34,25 +32,7 @@ const IDNLive = ({ refreshing }) => {
   }, [refreshing]);
 
   // Handle app state changes (background -> foreground)
-  useEffect(() => {
-    const handleAppStateChange = (nextAppState) => {
-      if (appState.match(/inactive|background/) && nextAppState === "active") {
-        refetch(); // Refetch data when app comes to foreground
-      }
-      setAppState(nextAppState);
-    };
-
-    // Listen to app state changes
-    const subscription = AppState.addEventListener(
-      "change",
-      handleAppStateChange
-    );
-
-    // Clean up the event listener on component unmount
-    return () => {
-      subscription.remove();
-    };
-  }, [appState, refetch]);
+  useAppStateChange(refetch);
 
   return (
     rooms.length > 0 && (
@@ -80,30 +60,28 @@ const IDNLive = ({ refreshing }) => {
                   navigate("IDNStream", { item });
                 }}
               >
+                <Box
+                  p="2"
+                  bg="blueGray.500"
+                  borderRightRadius="0"
+                  borderTopLeftRadius="8"
+                  borderTopRightRadius="8"
+                  maxWidth={200}
+                >
+                  <Text isTruncated>{item?.title}</Text>
+                </Box>
                 <Box>
                   <Image
                     size="xl"
-                    borderRadius={8}
+                    borderRadius="8"
+                    borderTopLeftRadius="0"
+                    borderTopRightRadius="0"
                     source={{ uri: item?.image ?? item.user.avatar }}
                     alt={item?.user?.name}
                     height={230}
                     width={200}
                     resizeMode="cover"
                   />
-                </Box>
-                <Box
-                  bg="teal"
-                  top="0"
-                  right="0"
-                  position="absolute"
-                  borderRadius="6"
-                  borderRightRadius={0}
-                  borderTopLeftRadius="0"
-                  borderTopRightRadius={6}
-                  p="2"
-                  maxWidth={120}
-                >
-                  <Text isTruncated>{item?.title}</Text>
                 </Box>
                 <TouchableOpacity
                   activeOpacity={0.6}

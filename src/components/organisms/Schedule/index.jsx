@@ -133,7 +133,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                         bottom="0"
                         left="0"
                         right="0"
-                        bg="teal"
+                        bg="blueGray.500"
                         px="2"
                         borderBottomRadius="md"
                       >
@@ -160,7 +160,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                         bottom="0"
                         left="0"
                         right="0"
-                        bg="teal"
+                        bg="blueGray.500"
                         px="2"
                         py="1"
                         borderBottomRadius="md"

@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
-import { TouchableOpacity, AppState } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { ROOMS } from "../../../services";
 import { cleanImage, formatName, getTimes } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
 import { RightArrow, TimesFill } from "../../../assets/icon";
+import { useAppStateChange } from "../../../utils/hooks";
 
 const ShowroomLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
-  const [appState, setAppState] = useState(AppState.currentState);
 
   const fetchRoomLive = async () => {
     const response = await ROOMS.getRoomLive();
@@ -35,25 +35,7 @@ const ShowroomLive = ({ refreshing }) => {
   }, [refreshing]);
 
   // Handle app state changes (background -> foreground)
-  useEffect(() => {
-    const handleAppStateChange = (nextAppState) => {
-      if (appState.match(/inactive|background/) && nextAppState === "active") {
-        refetch(); // Refetch data when app comes to foreground
-      }
-      setAppState(nextAppState);
-    };
-
-    // Listen to app state changes
-    const subscription = AppState.addEventListener(
-      "change",
-      handleAppStateChange
-    );
-
-    // Clean up the event listener on component unmount
-    return () => {
-      subscription.remove();
-    };
-  }, [appState, refetch]);
+  useAppStateChange(refetch);
 
   return (
     rooms?.length > 0 && (
