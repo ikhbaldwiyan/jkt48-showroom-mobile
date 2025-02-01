@@ -1,6 +1,5 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
-import { Button, HStack, Modal, Spinner, Text } from "native-base";
-import { SettingsIcon } from "../../../assets/icon";
+import { Modal, Spinner } from "native-base";
 import useLiveStreamStore from "../../../store/liveStreamStore";
 
 // Lazy load modal content
@@ -10,7 +9,7 @@ const QualitySettings = ({
   refreshing,
   closeMenu,
   showModal,
-  setShowModal
+  setShowModal,
 }) => {
   const [selectedQuality, setSelectedQuality] = useState(null);
   const [streamType, setStreamType] = useState("hls");
@@ -51,14 +50,6 @@ const QualitySettings = ({
 
   return (
     <>
-      <Button p="0" size="xs" onPress={() => setShowModal(true)}>
-        <HStack space={2}>
-          <SettingsIcon />
-          <Text fontSize="xs" color="black">
-            Stream Quality
-          </Text>
-        </HStack>
-      </Button>
       <Modal
         isOpen={showModal}
         onClose={() => {
