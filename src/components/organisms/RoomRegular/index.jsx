@@ -1,30 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { Box, HStack, Image, Text, VStack } from "native-base";
+import { Box, HStack, Image, Text, VStack, Skeleton } from "native-base"; // Import Skeleton from NativeBase
 import { useNavigation } from "@react-navigation/native";
 import { cleanImage, formatName, getSquareImage } from "../../../utils/helpers";
 import { ROOMS } from "../../../services";
 import { LiveIcon } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
 import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
+import SkeletonRoomList from "../../atoms/Skeleteon/SkeletonRoomList";
 
 const RoomRegular = ({ refreshing, searchQuery }) => {
   const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
   const { navigate } = useNavigation();
   const { width } = useWindowDimensions();
-  const columnCount = width > 600 ? 3 : 2; // Adjust column count based on screen width
+  const columnCount = width > 600 ? 3 : 2;
 
   useEffect(() => {
     async function getRoomList() {
-      const gen10 = await ROOMS.getRoomGen10();
-      const response = await ROOMS.getRoomRegular();
-      setRooms([...response.data, ...gen10.data]);
+      setLoading(true); 
+      try {
+        const gen10 = await ROOMS.getRoomGen10();
+        const response = await ROOMS.getRoomRegular();
+        setRooms([...response.data, ...gen10.data]);
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     getRoomList();
   }, [refreshing]);
 
-  const filteredRooms = rooms.filter(room =>
-    room.name?.toLowerCase().includes(searchQuery?.toLowerCase()) || 
-    room.main_name?.toLowerCase().includes(searchQuery?.toLowerCase())
+  const filteredRooms = rooms.filter(
+    (room) =>
+      room.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+      room.main_name?.toLowerCase().includes(searchQuery?.toLowerCase())
   );
 
   const renderRoomItem = (room, idx) => (
@@ -50,8 +60,8 @@ const RoomRegular = ({ refreshing, searchQuery }) => {
             }}
             alt={room?.main_name ?? room?.name}
             size="md"
-            width={width / columnCount - 20} // Adjust width based on column count and screen width
-            height={(width / columnCount - 16) * 0.85} // Maintain aspect ratio
+            width={width / columnCount - 20}
+            height={(width / columnCount - 16) * 0.85}
           />
           {room?.is_live && (
             <Box
@@ -99,7 +109,7 @@ const RoomRegular = ({ refreshing, searchQuery }) => {
 
   return (
     <Box>
-      <HStack>{renderRoomList()}</HStack>
+      {loading ? <SkeletonRoomList /> : <HStack>{renderRoomList()}</HStack>}
     </Box>
   );
 };

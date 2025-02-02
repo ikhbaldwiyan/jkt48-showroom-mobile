@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Box, HStack, Image, Text, VStack } from "native-base";
+import { Box, HStack, Image, Text, VStack, Skeleton } from "native-base"; // Import Skeleton from NativeBase
 import { useNavigation } from "@react-navigation/native";
 import { cleanImage, formatName } from "../../../utils/helpers";
 import { ROOMS } from "../../../services";
 import { LiveIcon } from "../../../assets/icon";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
+import SkeletonRoomList from "../../atoms/Skeleteon/SkeletonRoomList";
 
 const RoomTrainee = ({ refreshing, searchQuery }) => {
   const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
   const { navigate } = useNavigation();
   const { width } = useWindowDimensions();
-  const columnCount = width > 600 ? 3 : 2; // Adjust column count based on screen width
+  const columnCount = width > 600 ? 3 : 2;
 
   useEffect(() => {
     async function getRoomList() {
-      const response = await ROOMS.getRoomTrainee();
-      setRooms(response.data);
+      setLoading(true); // Set loading to true when fetching data
+      try {
+        const response = await ROOMS.getRoomTrainee();
+        setRooms(response.data);
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
+      }
     }
     getRoomList();
   }, [refreshing]);
@@ -94,7 +103,7 @@ const RoomTrainee = ({ refreshing, searchQuery }) => {
 
   return (
     <Box>
-      <HStack>{renderRoomList()}</HStack>
+      {loading ? <SkeletonRoomList /> : <HStack>{renderRoomList()}</HStack>}
     </Box>
   );
 };
