@@ -50,11 +50,6 @@ const RatingModal = ({ isVisible, onOpen, onClose }) => {
   };
 
   const closeRatingApp = () => {
-    activityLog({
-      logName: "Rating",
-      description: `Close Rate App at ${openCount} app count`,
-      userId: "id"
-    });
     trackAnalytics("close_rate_app", {
       username: profile?.name
     });
@@ -71,7 +66,7 @@ const RatingModal = ({ isVisible, onOpen, onClose }) => {
           <LogoNormal width={100} height={100} />
         </Center>
         <Text mt="4" textAlign="center" mb={2}>
-          Jangan lupa kasih review dan rating APK di Play Store Wots
+          Jangan lupa kasih review dan rating aplikasi di Play Store, ya!
         </Text>
         <HStack
           mt="2"
