@@ -60,7 +60,7 @@ const MenuIDN = () => {
       {menu.map((item) => (
         <Menu.Item
           px="0"
-          py="1.5"
+          py="2.5"
           key={item.key}
           onPress={() => handleMenu(item.key)}
         >

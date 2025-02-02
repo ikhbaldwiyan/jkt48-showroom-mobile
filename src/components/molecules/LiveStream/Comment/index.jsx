@@ -22,7 +22,7 @@ import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 import useThemeStore from "../../../../store/themeStore";
-import { FlashList } from "@shopify/flash-list"
+import { FlashList } from "@shopify/flash-list";
 
 export const Comment = () => {
   const route = useRoute();
@@ -116,13 +116,22 @@ export const Comment = () => {
       if (code === 1) {
         if (!Number.isNaN(msg.cm) && parseInt(msg.cm) <= 50) return;
         const newComments = formatCommentWebsocket(msg);
-        setComments((prevMessages) => {
-          if (Array.isArray(prevMessages)) {
-            return [newComments, ...prevMessages];
+        
+        setComments((prevComments) => {
+          if (
+            prevComments.some(
+              (data) => data.name === msg?.ac && data.comment === msg?.cm
+            )
+          ) {
+            return prevComments;
+          }
+          if (Array.isArray(prevComments)) {
+            return [newComments, ...prevComments];
           } else {
             return [newComments];
           }
         });
+        
       } else if (code === 101) {
         handleEndLive();
       }
@@ -235,7 +244,7 @@ export const Comment = () => {
             borderRadius="md"
             borderTopRightRadius="0"
             borderBottomRightRadius="0"
-            placeholder="Send Comment.."
+            placeholder="Kirim komentar.."
             _input={{
               textAlign: "left"
             }}
