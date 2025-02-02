@@ -92,40 +92,53 @@ const TopMember = ({ refreshing }) => {
               <HStack mt="2" space={4}>
                 {topMember?.data?.map((item, idx) => (
                   <VStack key={idx} space={2} mb={4}>
-                    <Box position="relative" w="100px" h="100px">
-                      <Image
-                        source={{
-                          uri: item?.profile?.image_square ?? item?.image
-                        }}
-                        alt={item?.profile?.room_name ?? item?.username}
-                        w="100px"
-                        h="100px"
-                        borderRadius="md"
-                      />
-                      <Box
-                        position="absolute"
-                        top={0}
-                        left={0}
-                        bg="cyan.600"
-                        px={2}
-                        py={1}
-                        borderTopLeftRadius="md"
-                        borderBottomRightRadius="md"
-                      >
-                        <Text color="white" fontWeight="bold" fontSize="xs">
-                          #{item.rank}
-                        </Text>
+                    <TouchableOpacity
+                      activeOpacity={type === "showroom" ? 0.5 : 1}
+                      onPress={() => {
+                        if (type === "showroom") {
+                          navigation.navigate("RoomDetail", {
+                            room: {
+                              room_id: item?.room_id
+                            }
+                          });
+                        }
+                      }}
+                    >
+                      <Box position="relative" w="100px" h="100px">
+                        <Image
+                          source={{
+                            uri: item?.profile?.image_square ?? item?.image
+                          }}
+                          alt={item?.profile?.room_name ?? item?.username}
+                          w="100px"
+                          h="100px"
+                          borderRadius="md"
+                        />
+                        <Box
+                          position="absolute"
+                          top={0}
+                          left={0}
+                          bg="cyan.600"
+                          px={2}
+                          py={1}
+                          borderTopLeftRadius="md"
+                          borderBottomRightRadius="md"
+                        >
+                          <Text color="white" fontWeight="bold" fontSize="xs">
+                            #{item.rank}
+                          </Text>
+                        </Box>
                       </Box>
-                    </Box>
-                    <HStack space={2} alignItems="center">
-                      <Text fontSize={13} fontWeight="semibold">
-                        {formatName(item?.username, true)} -
-                        <Text fontWeight="normal" fontSize="12">
-                          {" "}
-                          {item?.total_live}x Live
+                      <HStack mt="2" space={2} alignItems="center">
+                        <Text fontSize={13} fontWeight="semibold">
+                          {formatName(item?.username, true)} -
+                          <Text fontWeight="normal" fontSize="12">
+                            {"  "}
+                            {item?.total_live}x Live
+                          </Text>
                         </Text>
-                      </Text>
-                    </HStack>
+                      </HStack>
+                    </TouchableOpacity>
                   </VStack>
                 ))}
               </HStack>
