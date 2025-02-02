@@ -53,14 +53,13 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
           </Modal.Header>
           <Modal.Body bg="secondary">
             <VStack space={3}>
-              <Text>- Add Ticket info tab on schedule detail</Text>
-              <Text>- Add Picture in Picture Mode on SR and IDN</Text>
-              <Text>- Show Donate Project on settings profile</Text>
-              <Text>- Optimize live streaming showroom memory</Text>
-              <Text>- Improve screen history live and member list</Text>
-              <Text>- Updated active room icon button</Text>
-              <Text>- Show IDN stream video thumbnail</Text>
-              <Text>- Added new UI reminder update APK</Text>
+              <Text>- Add IDN Live chat tab</Text>
+              <Text>- Show Top Member Streaming on home</Text>
+              <Text>- Add Leaderboard Top Member feature</Text>
+              <Text>- Update header livestream with menu bar</Text>
+              <Text>- Top Live Streaming Members for Showroom and IDN </Text>
+              <Text>- Update header color jadwal theater</Text>
+              <Text>- Add youtube membership link JKT48 TV on Ticket</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
