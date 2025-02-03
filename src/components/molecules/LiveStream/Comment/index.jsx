@@ -10,7 +10,7 @@ import {
   useToast,
   Input,
   Button,
-  Spinner
+  Spinner,
 } from "native-base";
 import { FlatList, RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
@@ -63,7 +63,7 @@ export const Comment = () => {
       name: msg.ac,
       avatar_id: msg.av,
       comment: msg.cm,
-      created_at: msg.created_at
+      created_at: msg.created_at,
     };
 
     return comments;
@@ -72,8 +72,8 @@ export const Comment = () => {
   const handleEndLive = () => {
     navigation.replace("RoomDetail", {
       room: {
-        room_id: profile?.room_id
-      }
+        room_id: profile?.room_id,
+      },
     });
 
     const roomName =
@@ -88,7 +88,7 @@ export const Comment = () => {
           </Box>
         );
       },
-      placement: "top-right"
+      placement: "top-right",
     });
   };
 
@@ -116,11 +116,12 @@ export const Comment = () => {
       if (code === 1) {
         if (!Number.isNaN(msg.cm) && parseInt(msg.cm) <= 50) return;
         const newComments = formatCommentWebsocket(msg);
-        
+
         setComments((prevComments) => {
           if (
-            prevComments.some(
-              (data) => data.name === msg?.ac && data.comment === msg?.cm
+            Array.isArray(prevComments) &&
+            prevComments?.some(
+              (data) => data?.name === msg?.ac && data?.comment === msg?.cm
             )
           ) {
             return prevComments;
@@ -131,7 +132,6 @@ export const Comment = () => {
             return [newComments];
           }
         });
-        
       } else if (code === 101) {
         handleEndLive();
       }
@@ -156,13 +156,13 @@ export const Comment = () => {
         room_id: roomId?.toString(),
         comment: textComment,
         csrf: session?.csrf_token,
-        cookies_id: session?.cookie_login_id
+        cookies_id: session?.cookie_login_id,
       });
       activityLog({
         logName: "Comment",
         userId: userProfile?._id,
         description: `Send Comment to ${formatName(profile?.room_url_key)}`,
-        liveId: params?.item?.live_id
+        liveId: params?.item?.live_id,
       });
       setTextComment("");
     } catch (error) {
@@ -173,7 +173,7 @@ export const Comment = () => {
             <Text>Failed to send comment</Text>
           </Box>
         ),
-        placement: "bottom"
+        placement: "bottom",
       });
     } finally {
       setButtonLoading(false);
@@ -201,7 +201,7 @@ export const Comment = () => {
                   source={{
                     uri:
                       item?.avatar_url ??
-                      `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`
+                      `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`,
                   }}
                 />
                 <View flexShrink="1">
@@ -246,7 +246,7 @@ export const Comment = () => {
             borderBottomRightRadius="0"
             placeholder="Kirim komentar.."
             _input={{
-              textAlign: "left"
+              textAlign: "left",
             }}
             onChangeText={handleComment}
             value={textComment}
