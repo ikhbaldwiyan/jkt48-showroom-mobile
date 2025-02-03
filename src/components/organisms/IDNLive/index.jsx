@@ -62,7 +62,7 @@ const IDNLive = ({ refreshing }) => {
               >
                 <Box
                   p="2"
-                  bg="blueGray.500"
+                  bg="cyan.700"
                   borderRightRadius="0"
                   borderTopLeftRadius="8"
                   borderTopRightRadius="8"

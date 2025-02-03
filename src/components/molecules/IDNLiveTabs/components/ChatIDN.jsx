@@ -129,7 +129,7 @@ const ChatIDN = () => {
         wsRef.current.close();
       }
     };
-  }, [profile]);
+  }, [profile, refreshing]);
 
   return (
     <CardGradient>
@@ -150,7 +150,7 @@ const ChatIDN = () => {
                       : item?.user?.color_code
                   }
                 >
-                  {item?.user?.name ?? item?.user?.username}
+                  {item?.user?.name ?? "User"}
                 </Text>
                 <Text mt="1">{item?.comment}</Text>
               </View>
