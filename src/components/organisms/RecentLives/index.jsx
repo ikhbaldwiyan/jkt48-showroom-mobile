@@ -116,7 +116,7 @@ const RecentLives = ({ refreshing }) => {
                             <HStack alignItems="center" space={2}>
                               <UsersFill />
                               <Text>
-                                {formatViews(live_info?.viewers?.num)} views
+                                {formatViews(live_info?.viewers?.num ?? 0)} views
                               </Text>
                             </HStack>
                             <HStack alignItems="center" space={2}>
