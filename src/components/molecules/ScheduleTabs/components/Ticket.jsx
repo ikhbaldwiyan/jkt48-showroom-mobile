@@ -44,7 +44,7 @@ export const Ticket = ({ ticket }) => {
               variant="solid"
               bg="secondary"
               borderRadius="12"
-              onPress={() => Linking.openURL(ticket?.ticketTheater)}
+              onPress={() => Linking.openURL("https://jkt48.com/theater/schedule")}
             >
               <Text fontWeight="semibold">Buy at JKT48 Official Web</Text>
             </Button>
