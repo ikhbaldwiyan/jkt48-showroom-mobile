@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import CardGradient from "../../../atoms/CardGradient";
-import { Box, Divider, HStack, Text, View } from "native-base";
+import { Box, Center, Divider, HStack, Text, View, VStack } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 import { RefreshControl } from "react-native";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import useIDNLiveStore from "../../../../store/idnLiveStore";
 import { STREAM } from "../../../../services";
+import { RefreshIcon } from "../../../../assets/icon";
 
 const ChatIDN = () => {
   const { profile } = useIDNLiveStore();
@@ -157,6 +158,21 @@ const ChatIDN = () => {
             </HStack>
             <Divider mb="1" />
           </Box>
+        )}
+        ListEmptyComponent={() => (
+          <Center p="10">
+            <VStack
+              flex={1}
+              space={4}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <RefreshIcon size={24} />
+              <Text fontSize="sm">
+                Klik icon Refresh jika live chat tidak muncul
+              </Text>
+            </VStack>
+          </Center>
         )}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
