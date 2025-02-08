@@ -34,7 +34,7 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
       {!hideButton && (
         <TouchableOpacity onPress={toggleModal}>
           <HStack space={1} just alignItems="center">
-            <History size={24} />
+            <History size={23} />
             <Text ml="1" color="white">
               Check Change Log
             </Text>
@@ -53,13 +53,13 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
           </Modal.Header>
           <Modal.Body bg="secondary">
             <VStack space={3}>
-              <Text>- Add IDN Live chat tab</Text>
-              <Text>- Show Top Member Streaming on home</Text>
-              <Text>- Add Leaderboard Top Member feature</Text>
-              <Text>- Update header livestream with menu bar</Text>
-              <Text>- Top Live Streaming Members for Showroom and IDN </Text>
-              <Text>- Update header color jadwal theater</Text>
-              <Text>- Add youtube membership link JKT48 TV on Ticket</Text>
+              <Text>- Added IDN Live Chat tab</Text>
+              <Text>- Added Top Members Leaderboard</Text>
+              <Text>- Revamp Livestream Header with menu bar</Text>
+              <Text>- Show Top Live Members Showroom & IDN</Text>
+              <Text>- Update Theater Schedule Header Color</Text>
+              <Text>- Added JKT48 TV Membership Link on Ticket</Text>
+              <Text>- Added Loading Animation in Member List</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">

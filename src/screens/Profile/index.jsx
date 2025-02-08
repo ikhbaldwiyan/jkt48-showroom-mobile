@@ -101,15 +101,15 @@ const Profile = () => {
               </TouchableOpacity>
             </Button>
             <Button
-              bgColor="teal"
               variant="solid"
+              bgColor="cyan.700"
               borderRadius="lg"
               onPress={handleAbout}
             >
               <TouchableOpacity onPress={handleAbout}>
                 <HStack alignItems="center" space={1}>
                   <Info color="white" />
-                  <Text fontWeight="semibold">About App</Text>
+                  <Text fontWeight="semibold">About Application</Text>
                 </HStack>
               </TouchableOpacity>
             </Button>
