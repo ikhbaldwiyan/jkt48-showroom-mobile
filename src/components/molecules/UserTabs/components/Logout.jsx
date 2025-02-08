@@ -31,7 +31,7 @@ const Logout = () => {
   return (
     <View mt="2" mb="8">
       <Button
-        bg="gray.500"
+        bg="blueGray.600"
         borderRadius="10"
         variant="solid"
         onPress={handleModal}
@@ -46,7 +46,7 @@ const Logout = () => {
         </TouchableOpacity>
       </Button>
       <ModalConfirmation
-        title="Logout"
+        title="Konfirmasi Logout"
         modal={modalLogout}
         onClose={handleModal}
         confrimAction={handleLogout}

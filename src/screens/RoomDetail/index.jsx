@@ -19,6 +19,7 @@ import {
   LiveIcon,
   UserAdd,
   UserCheck,
+  WatchIcon,
 } from "../../assets/icon";
 import moment from "moment";
 import useUser from "../../utils/hooks/useUser";
@@ -147,9 +148,9 @@ const RoomDetail = () => {
               borderBottomRightRadius="6"
               width="100%"
             >
-              <HStack space={2}>
-                <LiveIcon />
-                <Text fontWeight="semibold">Last Live:</Text>
+              <HStack space={2} alignItems="center">
+                <LiveIcon size={18} />
+                <Text fontWeight="semibold">Live Terakhir:</Text>
                 <Text fontWeight="semibold">
                   {historyLive ? (
                     moment(historyLive[0]?.live_info?.date?.end).format(
@@ -169,7 +170,7 @@ const RoomDetail = () => {
                 </HStack>
                 {session ? (
                   <HStack space={2} alignItems="center">
-                    <Followers />
+                    <WatchIcon color="white" size="18" />
                     <Text fontWeight="semibold">
                       Total Watching: {profile?.visit_count}x
                     </Text>

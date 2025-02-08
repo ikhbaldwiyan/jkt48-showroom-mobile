@@ -130,16 +130,16 @@ const Profile = () => {
       <Box flex={1} p="3">
         <UserTabs />
         <Button
-          bgColor="teal"
           variant="solid"
+          bgColor="cyan.700"
           borderRadius="10"
           onPress={handleAbout}
         >
           <TouchableOpacity onPress={handleAbout}>
-            <HStack alignItems="center" space={2}>
+            <HStack alignItems="center" space={1.5}>
               <Info color="white" />
               <Text fontSize="15" fontWeight="semibold">
-                About App
+                About Application
               </Text>
             </HStack>
           </TouchableOpacity>

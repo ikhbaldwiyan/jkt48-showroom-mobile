@@ -26,8 +26,8 @@ const Theme = ({ isButton }) => {
       borderRadius="lg"
     >
       <TouchableOpacity onPress={handleChangeTheme}>
-        <HStack>
-          <Box mr="2">{mode === "dark" ? <Moon /> : <Sun />}</Box>
+        <HStack space={2}>
+          <Box>{mode === "dark" ? <Moon /> : <Sun />}</Box>
           <Text fontWeight="bold">{mode === "dark" ? "Dark" : "Light"}</Text>
         </HStack>
       </TouchableOpacity>

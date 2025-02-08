@@ -40,7 +40,7 @@ export const Profile = () => {
             </HStack>
             <HStack space={2}>
               <Horoscope />
-              <Text fontWeight="semibold">Horoscope :</Text>
+              <Text fontWeight="semibold">Zodiac :</Text>
               <Text>{description?.["Zodiac signs"] ?? "-"}</Text>
             </HStack>
             <HStack space={2}>

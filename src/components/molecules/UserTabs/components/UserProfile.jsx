@@ -3,9 +3,9 @@ import { HStack, ScrollView, Text, VStack } from "native-base";
 import {
   Cloud,
   IDCard,
-  LiveIcon,
   Star,
-  UserIcon
+  UserIcon,
+  WatchIcon
 } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
 import CardGradient from "../../../atoms/CardGradient";
@@ -41,7 +41,7 @@ export const UserProfile = () => {
             <Text fontSize="14">{profile?.fan_level}</Text>
           </HStack>
           <HStack space={2} alignItems="center">
-            <LiveIcon />
+            <WatchIcon color="white" size={20} />
             <Text fontSize="14" fontWeight="semibold">
               Total Watch Live:
             </Text>

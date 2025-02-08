@@ -24,7 +24,7 @@ const RatingModal = ({ isVisible, onOpen, onClose }) => {
         await AsyncStorage.setItem("appOpenCount", currentCount.toString());
 
         // Show modal at specific count
-        const triggerCounts = [20, 50, 100, 250, 330, 500, 800];
+        const triggerCounts = [30, 60, 100, 250, 330, 500, 800];
         if (triggerCounts.includes(currentCount)) {
           onOpen(); // Trigger the modal to be shown
         }

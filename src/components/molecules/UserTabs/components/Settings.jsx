@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Button, HStack, ScrollView, Text, VStack } from "native-base";
+import {
+  Button,
+  DeleteIcon,
+  HStack,
+  ScrollView,
+  Text,
+  VStack,
+} from "native-base";
 import { Linking, TouchableOpacity } from "react-native";
 import { AndroidIcon, Donate, GithubIcon } from "../../../../assets/icon";
 import CardGradient from "../../../atoms/CardGradient";
@@ -21,13 +28,7 @@ export const Settings = () => {
   return (
     <CardGradient halfCard>
       <ScrollView mt="2">
-        <VStack space={3}>
-          <HStack space={2} alignItems="center">
-            <AndroidIcon />
-            <Text fontSize={14}>
-              APK Version <Text fontWeight="semibold">{APK_VERSION}</Text>
-            </Text>
-          </HStack>
+        <VStack space={4}>
           <ChangeLog modal={modal} toggleModal={toggleModal} />
           <TouchableOpacity
             onPress={() => {
@@ -38,7 +39,7 @@ export const Settings = () => {
             }}
           >
             <HStack space={2} alignItems="center">
-              <GithubIcon size={24} />
+              <GithubIcon size={22} />
               <Text fontSize={14}>GitHub Source Code</Text>
             </HStack>
           </TouchableOpacity>
@@ -49,26 +50,37 @@ export const Settings = () => {
             }}
           >
             <HStack space={2} alignItems="center">
-              <Donate size={24} />
-              <Text fontSize={14}>Donate Project</Text>
+              <Donate size={22} />
+              <Text fontSize={14}>Support Project</Text>
             </HStack>
           </TouchableOpacity>
           <HStack space={2} alignItems="center">
+            <AndroidIcon />
+            <Text fontSize={14}>
+              APK Version <Text fontWeight="semibold">{APK_VERSION}</Text>
+            </Text>
+          </HStack>
+          <VStack space={2}>
             <Text fontSize={14} fontWeight="semibold">
               Delete Account:
             </Text>
-          </HStack>
-          <Button
-            onPress={handleRemoveAccount}
-            variant="solid"
-            size="sm"
-            background="red"
-            borderRadius="10"
-          >
-            <TouchableOpacity onPress={handleRemoveAccount} activeOpacity={0.6}>
-              <Text>Delete showroom account</Text>
-            </TouchableOpacity>
-          </Button>
+            <Button
+              onPress={handleRemoveAccount}
+              variant="solid"
+              background="red"
+              borderRadius="10"
+            >
+              <TouchableOpacity
+                onPress={handleRemoveAccount}
+                activeOpacity={0.6}
+              >
+                <HStack space={1.5} alignItems="center">
+                  <DeleteIcon size="4" color="white" />
+                  <Text fontWeight="semibold">Delete showroom account</Text>
+                </HStack>
+              </TouchableOpacity>
+            </Button>
+          </VStack>
         </VStack>
       </ScrollView>
     </CardGradient>

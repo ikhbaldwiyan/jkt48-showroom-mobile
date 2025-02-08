@@ -1,7 +1,7 @@
 import React from "react";
 import { SvgXml } from "react-native-svg";
 
-const RefreshIcon = ({ size = 20 }) => {
+const RefreshIcon = ({ size = 22 }) => {
   return (
     <SvgXml
       xml={`

@@ -11,13 +11,13 @@ import {
   ShowroomLive,
   PremiumLive,
   RecentLives,
-  Schedule
+  Schedule,
+  TopMember,
 } from "../../components/organisms";
 import Layout from "../../components/templates/Layout";
 import RatingApp from "../../components/templates/RatingApp";
 import UpdateApp from "../../components/templates/UpdateApp";
 import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
-import TopMember from "../../components/organisms/TopMember";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();

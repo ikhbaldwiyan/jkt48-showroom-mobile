@@ -3,7 +3,6 @@ import { Linking } from "react-native";
 import { Button, Text, Center, Box, Modal } from "native-base";
 import { PLAY_STORE_URL } from "@env";
 import { LogoNormal } from "../../../assets/icon";
-import { activityLog } from "../../../utils/activityLog";
 import trackAnalytics from "../../../utils/trackAnalytics";
 import useUser from "../../../utils/hooks/useUser";
 import { getCurrentVersion } from "../../../services/versions";
@@ -35,26 +34,18 @@ const UpdateApp = () => {
   }, [latestVersion]);
 
   const handleUpdateApp = () => {
-    activityLog({
-      logName: "Update",
-      description: `Update App to v${latestVersion}`,
-      userId: "id"
-    });
-    trackAnalytics("rate_app", {
-      username: profile?.name
+    trackAnalytics("update_apk", {
+      username: profile?.name,
+      version: latestVersion
     });
     Linking.openURL(PLAY_STORE_URL);
     setUpdateApp(false);
   };
 
   const closeUpdateApp = () => {
-    activityLog({
-      logName: "Update",
-      description: "Close Update App",
-      userId: "id"
-    });
-    trackAnalytics("update_app", {
-      username: profile?.name
+    trackAnalytics("close_update_apk", {
+      username: profile?.name,
+      version: latestVersion
     });
     setUpdateApp(false);
   };
