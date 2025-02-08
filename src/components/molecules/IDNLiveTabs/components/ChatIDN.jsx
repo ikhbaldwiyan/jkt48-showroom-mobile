@@ -7,9 +7,10 @@ import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import useIDNLiveStore from "../../../../store/idnLiveStore";
 import { STREAM } from "../../../../services";
 import { RefreshIcon } from "../../../../assets/icon";
+import Loading from "../../../atoms/Loading";
 
 const ChatIDN = () => {
-  const { profile } = useIDNLiveStore();
+  const { profile, url } = useIDNLiveStore();
   const { refreshing, onRefresh } = useRefresh();
   const [messages, setMessages] = useState([]);
   const wsRef = useRef(null);
@@ -159,21 +160,27 @@ const ChatIDN = () => {
             <Divider mb="1" />
           </Box>
         )}
-        ListEmptyComponent={() => (
-          <Center p="10">
-            <VStack
-              flex={1}
-              space={4}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <RefreshIcon size={24} />
-              <Text fontSize="sm">
-                Klik icon Refresh jika live chat tidak muncul
-              </Text>
-            </VStack>
-          </Center>
-        )}
+        ListEmptyComponent={() =>
+          !url ? (
+            <Center p="10">
+              <Loading color="white" />
+            </Center>
+          ) : (
+            <Center p="10">
+              <VStack
+                flex={1}
+                space={4}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <RefreshIcon size={24} />
+                <Text textAlign="center" fontSize="sm">
+                  Klik icon refresh jika live chat tidak muncul
+                </Text>
+              </VStack>
+            </Center>
+          )
+        }
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
