@@ -1,14 +1,16 @@
-import { Center, HStack, Image, ScrollView, Text, VStack } from "native-base";
 import { useEffect, useState } from "react";
-import { RefreshControl } from "react-native";
+import { RefreshControl, TouchableOpacity } from "react-native";
+import { Center, HStack, Image, ScrollView, Text, VStack } from "native-base";
 import { STREAM } from "../../../../services";
 import useIDNLiveStore from "../../../../store/idnLiveStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
+import UserModal from "../../../atoms/UserModal";
 
 export const PodiumIDN = () => {
   const [podium, setPodium] = useState([]);
   const [views, setViews] = useState(0);
+  const [selectedUser, setSelectedUser] = useState(null);
   const { refreshing, onRefresh } = useRefresh();
   const { profile } = useIDNLiveStore();
   const displayedNames = new Set();
@@ -21,7 +23,7 @@ export const PodiumIDN = () => {
 
   useEffect(() => {
     try {
-     getIDNPodiumList();
+      getIDNPodiumList();
     } catch (error) {
       console.log(error);
     }
@@ -62,24 +64,37 @@ export const PodiumIDN = () => {
             }
             displayedNames.add(item.user.name);
             return (
-              <VStack my="4" key={idx} alignItems="center" width="20%">
-                <Image
-                  alt={item.user.name}
-                  style={{ width: 50, height: 50 }}
-                  source={{
-                    uri:
-                      item?.user?.avatar ??
-                      "https://static.showroom-live.com/image/avatar/1028686.png?v=100",
-                  }}
-                />
-                <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
-                  {item.user.name}
-                </Text>
+              <VStack my="4" key={idx} width="20%">
+                <TouchableOpacity onPress={() => setSelectedUser(item.user)}>
+                  <Center>
+                    <Image
+                      alt={item.user.name}
+                      style={{ width: 50, height: 50 }}
+                      source={{
+                        uri:
+                          item?.user?.avatar ??
+                          "https://static.showroom-live.com/image/avatar/1028686.png?v=100"
+                      }}
+                    />
+                    <Text
+                      mt="2"
+                      fontSize="sm"
+                      fontWeight="semibold"
+                      isTruncated
+                    >
+                      {item.user.name}
+                    </Text>
+                  </Center>
+                </TouchableOpacity>
               </VStack>
             );
           })}
         </HStack>
       </ScrollView>
+      <UserModal
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
+      />
     </CardGradient>
   );
 };
