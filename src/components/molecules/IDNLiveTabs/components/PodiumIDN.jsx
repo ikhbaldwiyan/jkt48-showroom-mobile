@@ -6,6 +6,7 @@ import useIDNLiveStore from "../../../../store/idnLiveStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 import UserModal from "../../../atoms/UserModal";
+import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
 
 export const PodiumIDN = () => {
   const [podium, setPodium] = useState([]);
@@ -14,20 +15,17 @@ export const PodiumIDN = () => {
   const { refreshing, onRefresh } = useRefresh();
   const { profile } = useIDNLiveStore();
   const displayedNames = new Set();
+  const { data: mostWatch } = useMostWatchIDN(selectedUser?._id);
 
   async function getIDNPodiumList() {
-    const response = await STREAM.getIDNLivePodium(profile?.slug);
-    setPodium(response?.data?.activityLog?.watch?.reverse());
-    setViews(response?.data?.liveData?.users);
-  }
-
-  useEffect(() => {
     try {
-      getIDNPodiumList();
+      const response = await STREAM.getIDNLivePodium(profile?.slug);
+      setPodium(response?.data?.activityLog?.watch?.reverse() || []);
+      setViews(response?.data?.liveData?.users || 0);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching podium list:", error);
     }
-  }, [profile]);
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -92,6 +90,8 @@ export const PodiumIDN = () => {
         </HStack>
       </ScrollView>
       <UserModal
+        favMember={mostWatch?.data[0]}
+        userInfo={mostWatch?.user}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
       />

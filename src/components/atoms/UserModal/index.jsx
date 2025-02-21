@@ -11,8 +11,10 @@ import {
   VStack
 } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
+import { formatViews } from "../../../utils/helpers";
+import Loading from "../../atoms/Loading";
 
-const UserModal = ({ selectedUser, setSelectedUser }) => {
+const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
   const isDonator = false;
 
   return (
@@ -63,7 +65,7 @@ const UserModal = ({ selectedUser, setSelectedUser }) => {
                     px="3"
                     space={2}
                     alignItems="center"
-                    bgColor="#EBC840"
+                    bgColor="amber.400"
                     borderRadius="10"
                   >
                     <StarIcon size={16} color="#434A52" />
@@ -72,90 +74,98 @@ const UserModal = ({ selectedUser, setSelectedUser }) => {
                     </Text>
                   </HStack>
                 )}
-                <LinearGradient
-                  colors={["#495057", "#282C34"]}
-                  style={{
-                    flex: 1,
-                    borderRadius: 10,
-                    width: "100%"
-                  }}
-                >
-                  <Box p="3.5" py="3">
-                    <HStack
-                      space={2.5}
-                      alignItems="center"
-                      justifyContent="center"
+                {userInfo ? (
+                  <>
+                    <LinearGradient
+                      colors={["#495057", "#282C34"]}
+                      style={{
+                        flex: 1,
+                        borderRadius: 10,
+                        width: "100%"
+                      }}
                     >
-                      <IDCard size={16} />
-                      <Text
-                        textAlign="center"
-                        fontSize={15}
-                        fontWeight="semibold"
-                      >
-                        Favorite Member 
-                      </Text>
-                    </HStack>
-                    <Divider my="2" mb="3" />
-                    <HStack space={4} alignItems="center">
-                      <Image
-                        style={{ width: 110, height: 65, borderRadius: 8 }}
-                        source={{
-                          uri: "https://static.showroom-live.com/image/room/cover/58f3d939319e28956fd771e0f587a347ea0fec6b5c3415067e122f4794fd3514_m.jpeg?v=1716898519"
-                        }}
-                      />
-                      <VStack>
-                        <Text fontSize="16" fontWeight="semibold">
-                          Indah JKT48
+                      <Box p="3.5" py="3">
+                        <HStack
+                          space={2.5}
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <IDCard size={16} />
+                          <Text
+                            textAlign="center"
+                            fontSize={15}
+                            fontWeight="semibold"
+                          >
+                            Favorite Member
+                          </Text>
+                        </HStack>
+                        <Divider my="2" mb="3" />
+                        <HStack space={4} alignItems="center">
+                          <Image
+                            style={{ width: 70, height: 70, borderRadius: 8 }}
+                            source={{
+                              uri: favMember?.member?.image
+                            }}
+                          />
+                          <VStack>
+                            <Text fontSize="16" fontWeight="semibold">
+                              {favMember?.member?.name}
+                            </Text>
+                            <Text>{favMember?.watch}x Watch</Text>
+                          </VStack>
+                        </HStack>
+                      </Box>
+                    </LinearGradient>
+                    <HStack space={8}>
+                      <VStack alignItems="center" space={2}>
+                        <Text color="blueLight" fontWeight="semibold">
+                          Watch Showroom
                         </Text>
-                        <Text>48x Watch</Text>
+                        <Box
+                          bgColor="blueLight"
+                          p="2"
+                          py="1"
+                          width="60"
+                          borderRadius={8}
+                        >
+                          <Text
+                            color="primary"
+                            fontWeight="extrabold"
+                            textAlign="center"
+                            fontSize="15"
+                          >
+                            {formatViews(userInfo?.watchShowroomMember)}x
+                          </Text>
+                        </Box>
+                      </VStack>
+                      <VStack alignItems="center" space={2}>
+                        <Text color="blueLight" fontWeight="semibold">
+                          Watch IDN Live
+                        </Text>
+                        <Box
+                          bgColor="blueLight"
+                          p="2"
+                          py="1"
+                          width="60"
+                          borderRadius={8}
+                        >
+                          <Text
+                            color="primary"
+                            fontWeight="extrabold"
+                            textAlign="center"
+                            fontSize="15"
+                          >
+                            {formatViews(userInfo?.watchLiveIDN)}x
+                          </Text>
+                        </Box>
                       </VStack>
                     </HStack>
+                  </>
+                ) : (
+                  <Box mt="8" flex={1} justifyContent="center" alignItems="center">
+                    <Loading size={30} />
                   </Box>
-                </LinearGradient>
-                <HStack space={8}>
-                  <VStack alignItems="center" space={2}>
-                    <Text color="blueLight" fontWeight="semibold">
-                      Watch Showroom
-                    </Text>
-                    <Box
-                      bgColor="blueLight"
-                      p="2"
-                      py="1"
-                      width="60"
-                      borderRadius={8}
-                    >
-                      <Text
-                        color="primary"
-                        fontWeight="extrabold"
-                        textAlign="center"
-                        fontSize="15"
-                      >
-                        200x
-                      </Text>
-                    </Box>
-                  </VStack>
-                  <VStack alignItems="center" space={2}>
-                    <Text color="blueLight" fontWeight="semibold">
-                      Watch IDN Live
-                    </Text>
-                    <Box
-                      bgColor="blueLight"
-                      p="2"
-                      py="1"
-                      width="60"
-                      borderRadius={8}
-                    >
-                      <Text
-                        color="primary"
-                        fontWeight="extrabold"
-                        textAlign="center"
-                        fontSize="15"
-                      >
-                        200x
-                      </Text>
-                    </Box>
-                  </VStack>
-                </HStack>
+                )}
               </VStack>
             </Modal.Body>
             <Modal.Footer py="2" bg="transparent">

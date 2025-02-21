@@ -14,6 +14,7 @@ export default {
     ACTIVIY_LOG: "/activity/", //required user id
     CREATE_USER: "/users/",
     DONATOR: "/discord/role?type=donator",
+    MOST_WATCH_IDN: "/activity/most-watch-idn/"
   },
   ROOM: {
     LIST: "/rooms",
