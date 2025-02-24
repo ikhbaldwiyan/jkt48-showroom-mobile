@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Center, Image, Text, VStack } from "native-base";
-import { RefreshControl } from "react-native";
+import { RefreshControl, TouchableOpacity } from "react-native";
 import { STREAM } from "../../../../services";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 import { FlashList } from "@shopify/flash-list";
+import UserModal from "../../../atoms/UserModal";
+import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
 
 export const Podium = () => {
   const { profile } = useLiveStreamStore();
@@ -13,6 +15,11 @@ export const Podium = () => {
   const [views, setViews] = useState(0);
   const { refreshing, onRefresh } = useRefresh();
   const displayedNames = new Set();
+  const [selectedUser, setSelectedUser] = useState(null);
+  const { data: mostWatch } = useMostWatchIDN(selectedUser?._id);
+  const favMember = Array.isArray(mostWatch?.data)
+    ? mostWatch.data.filter((item) => item?.member?.name !== "JKT48")
+    : [];
 
   async function getPodiumList() {
     const response = await STREAM.getLivePodium(profile?.live_id);
@@ -48,18 +55,25 @@ export const Podium = () => {
 
     return (
       <VStack my="4" alignItems="center" width="100%">
-        <Image
-          alt={item.user.name}
-          style={{ width: 50, height: 50 }}
-          source={{
-            uri:
-              item?.user?.avatar ??
-              "https://static.showroom-live.com/image/avatar/1028686.png?v=100"
-          }}
-        />
-        <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
-          {item.user.name}
-        </Text>
+        <TouchableOpacity
+          activeOpacity={0.4}
+          onPress={() => setSelectedUser(item.user)}
+        >
+          <Center>
+            <Image
+              alt={item.user.name}
+              style={{ width: 50, height: 50 }}
+              source={{
+                uri:
+                  item?.user?.avatar ??
+                  "https://static.showroom-live.com/image/avatar/1028686.png?v=100"
+              }}
+            />
+            <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
+              {item.user.name}
+            </Text>
+          </Center>
+        </TouchableOpacity>
       </VStack>
     );
   };
@@ -80,6 +94,12 @@ export const Podium = () => {
             <Text fontWeight="bold">{views} Orang sedang menonton</Text>
           </Center>
         }
+      />
+      <UserModal
+        favMember={favMember[0]}
+        userInfo={mostWatch?.user}
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
       />
     </CardGradient>
   );

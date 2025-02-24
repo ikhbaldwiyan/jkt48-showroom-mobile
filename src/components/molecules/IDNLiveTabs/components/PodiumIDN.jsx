@@ -16,6 +16,9 @@ export const PodiumIDN = () => {
   const { profile } = useIDNLiveStore();
   const displayedNames = new Set();
   const { data: mostWatch } = useMostWatchIDN(selectedUser?._id);
+  const favMember = Array.isArray(mostWatch?.data)
+    ? mostWatch.data.filter((item) => item?.member?.name !== "JKT48")
+    : [];
 
   async function getIDNPodiumList() {
     try {
@@ -63,7 +66,10 @@ export const PodiumIDN = () => {
             displayedNames.add(item.user.name);
             return (
               <VStack my="4" key={idx} width="20%">
-                <TouchableOpacity onPress={() => setSelectedUser(item.user)}>
+                <TouchableOpacity
+                  activeOpacity={0.4}
+                  onPress={() => setSelectedUser(item.user)}
+                >
                   <Center>
                     <Image
                       alt={item.user.name}
@@ -90,7 +96,7 @@ export const PodiumIDN = () => {
         </HStack>
       </ScrollView>
       <UserModal
-        favMember={mostWatch?.data[0]}
+        favMember={favMember[0]}
         userInfo={mostWatch?.user}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
