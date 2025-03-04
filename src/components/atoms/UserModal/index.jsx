@@ -16,6 +16,8 @@ import Loading from "../../atoms/Loading";
 
 const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
   const isDonator = false;
+  const isMostWatch =
+    userInfo?.watchShowroomMember > 1000 || userInfo?.watchLiveIDN > 1000;
 
   return (
     selectedUser && (
@@ -76,47 +78,45 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                 )}
                 {userInfo ? (
                   <>
-                    <LinearGradient
-                      colors={["#495057", "#282C34"]}
-                      style={{
-                        flex: 1,
-                        borderRadius: 10,
-                        width: "100%"
-                      }}
-                    >
-                      <Box p="3.5" py="3">
-                        <HStack
-                          space={2.5}
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          <IDCard size={16} />
-                          <Text
-                            textAlign="center"
-                            fontSize={15}
-                            fontWeight="semibold"
-                          >
-                            Favorite Member
-                          </Text>
-                        </HStack>
-                        <Divider my="2" mb="3" />
-                        <HStack space={4} alignItems="center">
-                          <Image
-                            style={{ width: 70, height: 70, borderRadius: 8 }}
-                            source={{
-                              uri: favMember?.member?.image
-                            }}
-                          />
-                          <VStack>
-                            <Text fontSize="16" fontWeight="semibold">
-                              {favMember?.member?.name}
+                    {favMember && (
+                      <LinearGradient
+                        colors={["#495057", "#282C34"]}
+                        style={{
+                          flex: 1,
+                          borderRadius: 10,
+                          width: "100%"
+                        }}
+                      >
+                        <Box p="3.5" py="3">
+                          <HStack space={2.5} alignItems="center">
+                            <IDCard size={16} />
+                            <Text
+                              textAlign="center"
+                              fontSize={15}
+                              fontWeight="semibold"
+                            >
+                              Favorite Member
                             </Text>
-                            <Text>{favMember?.watch}x Watch</Text>
-                          </VStack>
-                        </HStack>
-                      </Box>
-                    </LinearGradient>
-                    <HStack space={8}>
+                          </HStack>
+                          <Divider my="2" mb="3" />
+                          <HStack space={4} alignItems="center">
+                            <Image
+                              style={{ width: 70, height: 70, borderRadius: 8 }}
+                              source={{
+                                uri: favMember?.member?.image
+                              }}
+                            />
+                            <VStack>
+                              <Text fontSize="16" fontWeight="semibold">
+                                {favMember?.member?.name}
+                              </Text>
+                              <Text>{favMember?.watch}x Watch</Text>
+                            </VStack>
+                          </HStack>
+                        </Box>
+                      </LinearGradient>
+                    )}
+                    <HStack space={isMostWatch ? 4 : 8}>
                       <VStack alignItems="center" space={2}>
                         <Text color="blueLight" fontWeight="semibold">
                           Watch Showroom
@@ -162,7 +162,12 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                     </HStack>
                   </>
                 ) : (
-                  <Box mt="8" flex={1} justifyContent="center" alignItems="center">
+                  <Box
+                    mt="8"
+                    flex={1}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
                     <Loading size={30} />
                   </Box>
                 )}
