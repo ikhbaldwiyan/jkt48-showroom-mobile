@@ -26,6 +26,7 @@ import {
   MemberList,
   HistoryLiveDetail,
   LeaderboardMember,
+  SupportProject
 } from "../../../screens";
 import {
   HomeIcon,
@@ -207,6 +208,11 @@ const Navigation = () => {
         options={showHeader}
       />
       <Stack.Screen name="About" component={About} options={showHeader} />
+      <Stack.Screen
+        name="SupportProject"
+        component={SupportProject}
+        options={showHeader}
+      />
     </Stack.Navigator>
   );
 };

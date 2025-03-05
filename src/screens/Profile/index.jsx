@@ -3,7 +3,7 @@ import { Box, Button, HStack, InfoIcon, Text, VStack } from "native-base";
 import UserTabs from "../../components/molecules/UserTabs";
 import useUser from "../../utils/hooks/useUser";
 import { Image, TouchableOpacity } from "react-native";
-import { Info, LoginIcon, PencilIcon } from "../../assets/icon";
+import { Donate, Info, LoginIcon, PencilIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
@@ -24,6 +24,13 @@ const Profile = () => {
   const handleAbout = () => {
     navigation.navigate("About");
     trackAnalytics("about_app_click", {
+      username: userProfile?.name ?? "Guest"
+    });
+  };
+
+  const handleSupport = () => {
+    navigation.navigate("SupportProject");
+    trackAnalytics("support_project_btn_click", {
       username: userProfile?.name ?? "Guest"
     });
   };
@@ -130,6 +137,22 @@ const Profile = () => {
       <Box flex={1} p="3">
         <UserTabs />
         <Button
+          variant="solid"
+          bgColor="teal"
+          borderRadius="10"
+          onPress={handleSupport}
+        >
+          <TouchableOpacity onPress={handleSupport}>
+            <HStack alignItems="center" space={2}>
+              <Donate size={20} />
+              <Text fontSize="15" fontWeight="semibold">
+                Support Project
+              </Text>
+            </HStack>
+          </TouchableOpacity>
+        </Button>
+        <Button
+          mt="2"
           variant="solid"
           bgColor="cyan.700"
           borderRadius="10"

@@ -15,7 +15,7 @@ const About = () => {
   const [donator, setDonator] = useState();
 
   const donateClick = () => {
-    Linking.openURL("https://saweria.co/Inzoid");
+    Linking.openURL("https://saweria.co/JKT48Showroom48");
     activityLog({
       userId: userProfile?._id,
       logName: "Donate",
@@ -153,8 +153,8 @@ const About = () => {
           melalui link Saweria berikut.{" "}
         </Text>
         <TouchableOpacity activeOpacity={0.6} onPress={donateClick}>
-          <Box bg="#E49C20" p="3" borderRadius="xl">
-            <HStack alignItems="center" space={3}>
+          <Box bg="#E49C20" p="3" py="2" borderRadius="xl">
+            <HStack justifyContent="center" alignItems="center" space={3}>
               <Donate />
               <Text fontSize={16} fontWeight="semibold" color="white">
                 Support Project via Saweria

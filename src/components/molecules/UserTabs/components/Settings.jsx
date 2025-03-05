@@ -5,7 +5,7 @@ import {
   HStack,
   ScrollView,
   Text,
-  VStack,
+  VStack
 } from "native-base";
 import { Linking, TouchableOpacity } from "react-native";
 import { AndroidIcon, Donate, GithubIcon } from "../../../../assets/icon";
@@ -13,9 +13,11 @@ import CardGradient from "../../../atoms/CardGradient";
 import ChangeLog from "./ChangeLog";
 import { APK_VERSION } from "@env";
 import trackAnalytics from "../../../../utils/trackAnalytics";
+import { useNavigation } from "@react-navigation/native";
 
 export const Settings = () => {
   const [modal, setModal] = useState(false);
+  const navigation = useNavigation();
 
   const toggleModal = () => {
     setModal(!modal);
@@ -45,8 +47,8 @@ export const Settings = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              Linking.openURL("https://saweria.co/Inzoid"),
-                trackAnalytics("github_link_click");
+              navigation.navigate("SupportProject"),
+                trackAnalytics("support_project_click");
             }}
           >
             <HStack space={2} alignItems="center">

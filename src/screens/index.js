@@ -16,6 +16,7 @@ import EditAvatar from "./EditAvatar";
 import HistoryLive from "./HistoryLive";
 import HistoryLiveDetail from "./HistoryLiveDetail";
 import LeaderboardMember from "./LeaderboardMember";
+import SupportProject from "./SupportProject";
 
 export {
   SplashScreen,
@@ -37,4 +38,5 @@ export {
   HistoryLive,
   HistoryLiveDetail,
   LeaderboardMember,
+  SupportProject,
 };
