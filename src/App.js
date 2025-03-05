@@ -8,6 +8,7 @@ import messaging, { firebase } from "@react-native-firebase/messaging";
 import { PermissionsAndroid } from "react-native";
 import { useEffect, useRef } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import fetchApiConfig from "./utils/fetchApiConfig";
 
 const App = () => {
   async function requestUserPermission() {
@@ -32,6 +33,7 @@ const App = () => {
   useEffect(() => {
     requestUserPermission();
     subscribeNotif();
+    fetchApiConfig()
   }, []);
 
   const routeNameRef = useRef();

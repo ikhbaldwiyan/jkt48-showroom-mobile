@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "native-base";
+import { Box, Text, View } from "native-base";
 
 import { AUTH } from "../../services";
 import { useRefresh } from "../../utils/hooks/useRefresh";
