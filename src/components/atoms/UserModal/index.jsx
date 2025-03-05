@@ -125,7 +125,7 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                           bgColor="blueLight"
                           p="2"
                           py="1"
-                          width="60"
+                          width={userInfo?.watchShowroomMember > 1000 ? "70" : "60"}
                           borderRadius={8}
                         >
                           <Text
@@ -146,7 +146,7 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                           bgColor="blueLight"
                           p="2"
                           py="1"
-                          width="60"
+                          width={userInfo?.watchLiveIDN > 1000 ? "70" : "60"}
                           borderRadius={8}
                         >
                           <Text
