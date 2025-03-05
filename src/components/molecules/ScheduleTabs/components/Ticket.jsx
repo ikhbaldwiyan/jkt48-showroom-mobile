@@ -3,6 +3,8 @@ import { Linking, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
 export const Ticket = ({ ticket }) => {
+  const isIdnTicket = ticket?.ticketShowroom?.includes("www.idn.app");
+
   return (
     <LinearGradient
       colors={["#0082A6", "#004A66"]}
@@ -13,7 +15,9 @@ export const Ticket = ({ ticket }) => {
           <VStack space={3}>
             {ticket?.ticketShowroom && (
               <>
-                <Text>Live Stream Showroom:</Text>
+                <Text>
+                  Live Streaming:
+                </Text>
                 <Button
                   variant="solid"
                   bg="secondary"
@@ -21,7 +25,7 @@ export const Ticket = ({ ticket }) => {
                   onPress={() => Linking.openURL(ticket?.ticketShowroom)}
                 >
                   <Text fontWeight="semibold">
-                    Buy at Showroom Official Web
+                    Buy at {isIdnTicket ? "IDN App" : "Showroom"}
                   </Text>
                 </Button>
               </>
@@ -44,7 +48,9 @@ export const Ticket = ({ ticket }) => {
               variant="solid"
               bg="secondary"
               borderRadius="12"
-              onPress={() => Linking.openURL("https://jkt48.com/theater/schedule")}
+              onPress={() =>
+                Linking.openURL("https://jkt48.com/theater/schedule")
+              }
             >
               <Text fontWeight="semibold">Buy at JKT48 Official Web</Text>
             </Button>
