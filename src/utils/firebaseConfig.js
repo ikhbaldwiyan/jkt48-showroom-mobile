@@ -1,7 +1,7 @@
-import {AppRegistry} from 'react-native';
-import App from './src/App';
-import {name as appName} from './app.json';
-import { firebase } from '@react-native-firebase/app';
+import App from "../App";
+import { name as appName } from "../../app.json";
+import { firebase } from "@react-native-firebase/app";
+import { AppRegistry } from "react-native";
 import {
   FIREBASE_API_KEY,
   FIREBASE_AUTH_DOMAIN,

@@ -1,22 +1,16 @@
 import axios from "axios";
-import { SHOWROOM_API, USER_API, AUTH_API, HISTORY_API, JKT48_SHOWROOM_API } from "@env";
+import useApiConfig from "../store/useApiConfig";
 
-export const apiShowroom = axios.create({
-  baseURL: SHOWROOM_API
-});
+const getBaseURL = (key) => useApiConfig.getState()[key];
 
-export const apiUser = axios.create({
-  baseURL: USER_API
-});
+const createApiInstance = (key) =>
+  axios.create({
+    baseURL: getBaseURL(key),
+  });
 
-export const apiAuth = axios.create({
-  baseURL: AUTH_API
-});
-
-export const apiHistory = axios.create({
-  baseURL: HISTORY_API
-});
-
-export const apiAdmin = axios.create({
-  baseURL: JKT48_SHOWROOM_API
-});
+// Exporting API instances
+export const apiShowroom = createApiInstance("SHOWROOM_API");
+export const apiUser = createApiInstance("USER_API");
+export const apiAuth = createApiInstance("AUTH_API");
+export const apiHistory = createApiInstance("HISTORY_API");
+export const apiAdmin = createApiInstance("JKT48_SHOWROOM_API");
