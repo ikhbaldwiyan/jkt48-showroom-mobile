@@ -8,6 +8,7 @@ export const theme = extendTheme({
     red: "#DC3545",
     teal: "#008080",
     disabled: "#495057",
+    blueLight: "#ECFAFC",
   },
   components: {
     Text: {

@@ -1,4 +1,4 @@
-import { apiUser, apiAuth, ENDPOINTS } from "../config";
+import { apiUser, apiAuth, ENDPOINTS, apiAdmin } from "../config";
 
 export const postActivityLog = (params) => {
   return apiUser.post(ENDPOINTS.USER.ACTIVIY_LOG, params);
@@ -18,4 +18,8 @@ export const getAvatarList = (params) => {
 
 export const updateAvatar = (params) => {
   return apiAuth.post(ENDPOINTS.USER.UPDATE_AVATAR, params);
+};
+
+export const getMostWatchIDN = (userId) => {
+  return apiAdmin.get(ENDPOINTS.USER.MOST_WATCH_IDN + userId);
 };
