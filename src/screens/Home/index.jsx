@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Text, View } from "native-base";
+import { Box } from "native-base";
 
 import { AUTH } from "../../services";
 import { useRefresh } from "../../utils/hooks/useRefresh";
@@ -18,12 +18,14 @@ import Layout from "../../components/templates/Layout";
 import RatingApp from "../../components/templates/RatingApp";
 import UpdateApp from "../../components/templates/UpdateApp";
 import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
+import SupportApp from "../../components/templates/SupportApp";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
   const { showChangeLog, setCloseModal } = useChangeLogStore();
   const { userProfile, session, user, setUserProfile } = useAuthStore();
   const [ratingApp, setRatingApp] = useState(false);
+  const [supportApp, setSupportApp] = useState(false);
 
   const setRegisterProfile = async (userId) => {
     await AUTH.detailUserApi(userId)
@@ -61,6 +63,11 @@ const Home = ({ navigation }) => {
         isVisible={ratingApp}
         onOpen={() => setRatingApp(true)}
         onClose={() => setRatingApp(false)}
+      />
+      <SupportApp
+        isVisible={supportApp}
+        onOpen={() => setSupportApp(true)}
+        onClose={() => setSupportApp(false)}
       />
     </Layout>
   );

@@ -109,7 +109,7 @@ const ScheduleDetail = ({ navigation }) => {
           />
           <Box
             p="3"
-            background="teal"
+            background="blueGray.700"
             borderBottomLeftRadius="6"
             borderBottomRightRadius="6"
           >
