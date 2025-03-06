@@ -1,21 +1,30 @@
 import axios from "axios";
 import { JKT48_SHOWROOM_API } from "@env";
-import { ENDPOINTS, apiShowroom, apiUser, apiAuth, apiHistory } from "../config";
+import {
+  ENDPOINTS,
+  apiShowroom,
+  apiUser,
+  apiAuth,
+  apiHistory,
+  apiPodium,
+} from "../config";
 
 export const getStreamUrl = (roomId, cookies) => {
-  return apiShowroom.get(ENDPOINTS.STREAM.URL + roomId + "/" + cookies );
+  return apiShowroom.get(ENDPOINTS.STREAM.URL + roomId + "/" + cookies);
 };
 
 export const getStreamUrlOptions = (roomId, cookies) => {
-  return apiShowroom.get(ENDPOINTS.STREAM.URL + roomId + "&abr_available=1" + "/" + cookies );
+  return apiShowroom.get(
+    ENDPOINTS.STREAM.URL + roomId + "&abr_available=1" + "/" + cookies
+  );
 };
 
 export const getStreamInfo = (roomId, cookies) => {
-  return apiShowroom.get(ENDPOINTS.STREAM.INFO + roomId + "/" + cookies );
+  return apiShowroom.get(ENDPOINTS.STREAM.INFO + roomId + "/" + cookies);
 };
 
 export const getStreamComments = (roomId, cookies) => {
-  return apiShowroom.get(ENDPOINTS.STREAM.COMMENTS + roomId + "/" + cookies );
+  return apiShowroom.get(ENDPOINTS.STREAM.COMMENTS + roomId + "/" + cookies);
 };
 
 export const getTodaySchedule = () => {
@@ -23,11 +32,11 @@ export const getTodaySchedule = () => {
 };
 
 export const getLivePodium = (roomId) => {
-  return apiUser.get(ENDPOINTS.STREAM.PODIUM + roomId);
+  return apiPodium.get(ENDPOINTS.STREAM.PODIUM + roomId);
 };
 
 export const getIDNLivePodium = (roomId) => {
-  return apiUser.get(ENDPOINTS.IDN_LIVE.PODIUM + roomId);
+  return apiPodium.get(ENDPOINTS.IDN_LIVE.PODIUM + roomId);
 };
 
 export const getIDNLiveDetail = (username) => {
@@ -35,21 +44,23 @@ export const getIDNLiveDetail = (username) => {
 };
 
 export const sendCommentStream = (params) => {
-  return apiAuth.post(ENDPOINTS.STREAM.SEND_COMMENT, params)
-}
+  return apiAuth.post(ENDPOINTS.STREAM.SEND_COMMENT, params);
+};
 
 export const visitRoom = (params) => {
-  return apiAuth.post(ENDPOINTS.STREAM.VISIT, params)
-}
+  return apiAuth.post(ENDPOINTS.STREAM.VISIT, params);
+};
 
 export const getPremiumLiveToday = () => {
-  return apiUser.get(ENDPOINTS.STREAM.PREMIUM_LIVE)
-}
+  return apiUser.get(ENDPOINTS.STREAM.PREMIUM_LIVE);
+};
 
 export const getRankShowroom = (roomId) => {
-  return apiShowroom.get(ENDPOINTS.STREAM.RANK + roomId + "/rank" )
-}
+  return apiShowroom.get(ENDPOINTS.STREAM.RANK + roomId + "/rank");
+};
 
 export const getChatIDN = (username, slug) => {
-  return axios.get(`${JKT48_SHOWROOM_API}/scrapper/channel-id?username=${username}&slug=${slug}`)
-}
+  return axios.get(
+    `${JKT48_SHOWROOM_API}/scrapper/channel-id?username=${username}&slug=${slug}`
+  );
+};
