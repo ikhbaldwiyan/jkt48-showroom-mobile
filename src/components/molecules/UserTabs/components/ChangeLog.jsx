@@ -53,13 +53,14 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
           </Modal.Header>
           <Modal.Body bg="secondary">
             <VStack space={3}>
+              <Text>- Added User Detail podium info</Text>
+              <Text>- Show Total Watch SR or IDN on podium user</Text>
+              <Text>- Show Favorite member on podium user modal</Text>
+              <Text>- Added support project page and modal</Text>
               <Text>- Added IDN Live Chat tab</Text>
-              <Text>- Added Top Members Leaderboard</Text>
-              <Text>- Revamp Livestream Header with menu bar</Text>
               <Text>- Show Top Live Members Showroom & IDN</Text>
-              <Text>- Update Theater Schedule Header Color</Text>
-              <Text>- Added JKT48 TV Membership Link on Ticket</Text>
-              <Text>- Added Loading Animation in Member List</Text>
+              <Text>- Added IDN App Link on Ticket</Text>
+              <Text>- Show info maintenance app if server down</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
