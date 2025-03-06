@@ -147,7 +147,7 @@ const ChatIDN = () => {
                   fontSize="md"
                   fontWeight="bold"
                   color={
-                    item?.user?.color_code === "#ED2227"
+                    item?.user?.color_code === "#ED2227" || item?.user.color_code === null
                       ? "primary"
                       : item?.user?.color_code
                   }

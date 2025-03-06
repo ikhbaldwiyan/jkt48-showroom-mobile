@@ -1,5 +1,5 @@
 import React from "react";
-import { IDCard, StarIcon } from "../../../assets/icon";
+import { AndroidIcon, Donate, IDCard, StarIcon } from "../../../assets/icon";
 import {
   Box,
   Button,
@@ -15,16 +15,20 @@ import { formatViews } from "../../../utils/helpers";
 import Loading from "../../atoms/Loading";
 
 const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
-  const isDonator = false;
   const isMostWatch =
     userInfo?.watchShowroomMember > 1000 || userInfo?.watchLiveIDN > 1000;
+  const isDonator = false;
+  const isDeveloper =
+    selectedUser?.user_id === "inzoid" ||
+    selectedUser?.name === "ahmad-mughni" ||
+    selectedUser?.name === "Lowly";
 
   return (
     selectedUser && (
       <Modal isOpen={!!selectedUser} onClose={() => setSelectedUser(null)}>
         <Modal.Content
           width="85%"
-          height={isDonator ? "65%" : "60%"}
+          height={isDonator || isDeveloper ? "65%" : "60%"}
           borderRadius="10"
         >
           <LinearGradient
@@ -70,9 +74,26 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                     bgColor="amber.400"
                     borderRadius="10"
                   >
-                    <StarIcon size={16} color="#434A52" />
+                    <Donate size={18} color="#434A52" />
                     <Text fontSize="15" fontWeight="bold" color="#434A52">
                       Donator
+                    </Text>
+                  </HStack>
+                )}
+                {isDeveloper && (
+                  <HStack
+                    py="1.5"
+                    px="3"
+                    space={2}
+                    alignItems="center"
+                    bgColor="teal"
+                    borderWidth="1"
+                    borderColor="gray.300"
+                    borderRadius="10"
+                  >
+                    <AndroidIcon size={16} color="white" />
+                    <Text fontSize="15" fontWeight="bold" color="white">
+                      Developer
                     </Text>
                   </HStack>
                 )}
@@ -125,7 +146,9 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                           bgColor="blueLight"
                           p="2"
                           py="1"
-                          width={userInfo?.watchShowroomMember > 1000 ? "70" : "60"}
+                          width={
+                            userInfo?.watchShowroomMember > 1000 ? "70" : "60"
+                          }
                           borderRadius={8}
                         >
                           <Text
