@@ -19,6 +19,7 @@ import RatingApp from "../../components/templates/RatingApp";
 import UpdateApp from "../../components/templates/UpdateApp";
 import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
 import SupportApp from "../../components/templates/SupportApp";
+import MaintenanceInfo from "../../components/templates/MaintenanceInfo";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
@@ -69,6 +70,7 @@ const Home = ({ navigation }) => {
         onOpen={() => setSupportApp(true)}
         onClose={() => setSupportApp(false)}
       />
+      <MaintenanceInfo />
     </Layout>
   );
 };
