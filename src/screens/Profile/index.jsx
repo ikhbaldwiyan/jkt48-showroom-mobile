@@ -136,37 +136,40 @@ const Profile = () => {
       </VStack>
       <Box flex={1} p="3">
         <UserTabs />
-        <Button
-          variant="solid"
-          bgColor="teal"
-          borderRadius="10"
-          onPress={handleSupport}
-        >
-          <TouchableOpacity onPress={handleSupport}>
-            <HStack alignItems="center" space={2}>
-              <Donate size={20} />
-              <Text fontSize="15" fontWeight="semibold">
-                Support Project
-              </Text>
-            </HStack>
-          </TouchableOpacity>
-        </Button>
-        <Button
-          mt="2"
-          variant="solid"
-          bgColor="cyan.700"
-          borderRadius="10"
-          onPress={handleAbout}
-        >
-          <TouchableOpacity onPress={handleAbout}>
-            <HStack alignItems="center" space={1.5}>
-              <Info color="white" />
-              <Text fontSize="15" fontWeight="semibold">
-                About Application
-              </Text>
-            </HStack>
-          </TouchableOpacity>
-        </Button>
+        <HStack mb="4"space={3}>
+          <Button
+            flex={1}
+            variant="solid"
+            bgColor="teal"
+            borderRadius="10"
+            onPress={handleSupport}
+          >
+            <TouchableOpacity onPress={handleSupport}>
+              <HStack alignItems="center" space={2}>
+                <Donate size={20} />
+                <Text fontSize="15" fontWeight="semibold">
+                  Support Project
+                </Text>
+              </HStack>
+            </TouchableOpacity>
+          </Button>
+          <Button
+            flex={1}
+            variant="solid"
+            bgColor="cyan.700"
+            borderRadius="10"
+            onPress={handleAbout}
+          >
+            <TouchableOpacity onPress={handleAbout}>
+              <HStack alignItems="center" space={1.5}>
+                <Info color="white" />
+                <Text fontSize="15" fontWeight="semibold">
+                  About Apps
+                </Text>
+              </HStack>
+            </TouchableOpacity>
+          </Button>
+        </HStack>
         <Logout />
       </Box>
     </Box>
