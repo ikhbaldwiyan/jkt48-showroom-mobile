@@ -5,7 +5,7 @@ import Navigation from "./components/templates/Navigation";
 
 import analytics from "@react-native-firebase/analytics";
 import messaging, { firebase } from "@react-native-firebase/messaging";
-import { PermissionsAndroid } from "react-native";
+import { LogBox, PermissionsAndroid } from "react-native";
 import { useEffect, useRef } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import fetchApiConfig from "./utils/fetchApiConfig";
@@ -34,6 +34,7 @@ const App = () => {
     requestUserPermission();
     subscribeNotif();
     fetchApiConfig()
+    LogBox.ignoreLogs(['In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.']);
   }, []);
 
   const routeNameRef = useRef();
