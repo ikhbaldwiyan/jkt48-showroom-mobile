@@ -41,7 +41,7 @@ export const Ticket = ({ ticket }) => {
                 )
               }
             >
-              <Text fontWeight="semibold">Buy membership JKT48 TV</Text>
+              <Text fontWeight="semibold">Buy Membership JKT48 TV</Text>
             </Button>
             <Text>JKT48 Theater Ticket:</Text>
             <Button

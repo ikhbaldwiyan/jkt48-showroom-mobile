@@ -17,11 +17,11 @@ import Loading from "../../atoms/Loading";
 const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
   const isMostWatch =
     userInfo?.watchShowroomMember > 1000 || userInfo?.watchLiveIDN > 1000;
-  const isDonator = false;
+  const isDonator = selectedUser?.is_donator || selectedUser?.can_farming_page;
   const isDeveloper =
     selectedUser?.user_id === "inzoid" ||
-    selectedUser?.name === "ahmad-mughni" ||
-    selectedUser?.name === "Lowly";
+    selectedUser?.user_id === "ahmad-mughni" ||
+    selectedUser?.user_id === "Lowly";
 
   return (
     selectedUser && (
