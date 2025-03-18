@@ -7,6 +7,7 @@ import { ROOMS } from "../../../services";
 import Views from "../../atoms/Views";
 import { RightArrow } from "../../../assets/icon";
 import { useAppStateChange } from "../../../utils/hooks";
+import { getIDNLiveTime } from "../../../utils/helpers";
 
 const IDNLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
@@ -68,7 +69,12 @@ const IDNLive = ({ refreshing }) => {
                   borderTopRightRadius="8"
                   maxWidth={200}
                 >
-                  <Text isTruncated>{item?.title}</Text>
+                  <HStack justifyContent="space-between">
+                    <Text isTruncated>{item?.title}</Text>
+                    <Text fontWeight="medium">
+                      {getIDNLiveTime(item.live_at)}
+                    </Text>
+                  </HStack>
                 </Box>
                 <Box>
                   <Image

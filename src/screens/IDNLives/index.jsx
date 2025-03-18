@@ -4,8 +4,8 @@ import { useNavigation } from "@react-navigation/native";
 import { Linking, TouchableOpacity } from "react-native";
 import { ROOMS } from "../../services";
 import Layout from "../../components/templates/Layout";
-import { formatViews } from "../../utils/helpers";
-import { LiveIcon, UserIcon } from "../../assets/icon";
+import { formatViews, getIDNLiveTime } from "../../utils/helpers";
+import { UserIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { FlashList } from "@shopify/flash-list";
 
@@ -40,11 +40,15 @@ const IDNLives = ({ navigation }) => {
         }}
       >
         <HStack space={2}>
-          <Box px="3" width="70%" mb="3" bg="primary" borderRadius="8" p="2">
-            <HStack space={2} alignItems="center">
-              <LiveIcon size={20} />
-              <Text fontSize="16" fontWeight="semibold">
-                {item?.title}
+          <Box px="3" width="70%" mb="3" bg="cyan.700" borderRadius="8" p="2">
+            <HStack
+              space={2}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Text fontSize="16">{item?.title}</Text>
+              <Text fontSize="15" fontWeight="medium">
+                {getIDNLiveTime(item.live_at)}
               </Text>
             </HStack>
           </Box>
@@ -57,7 +61,7 @@ const IDNLives = ({ navigation }) => {
               borderRadius={8}
               space="2"
             >
-              <UserIcon size={18} />
+              <UserIcon size={16} />
               <Text fontSize="16" fontWeight="semibold">
                 {formatViews(item?.view_count)}
               </Text>

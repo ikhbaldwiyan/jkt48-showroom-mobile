@@ -5,7 +5,6 @@ import { FlashList } from "@shopify/flash-list";
 import { RefreshControl } from "react-native";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import useIDNLiveStore from "../../../../store/idnLiveStore";
-import { STREAM } from "../../../../services";
 import { RefreshIcon } from "../../../../assets/icon";
 import Loading from "../../../atoms/Loading";
 
@@ -22,23 +21,9 @@ const ChatIDN = () => {
 
   const nickname = generateRandomUsername();
 
-  const getChannelId = async () => {
-    try {
-      const response = await STREAM.getChatIDN(
-        profile?.user?.username,
-        profile?.slug
-      );
-
-      return response.data.chatId;
-    } catch (error) {
-      console.log("Failed to get channel ID:", error);
-      throw error;
-    }
-  };
-
   const setupWebSocket = async () => {
     try {
-      const id = await getChannelId();
+      const id = profile?.chat_room_id;
 
       const ws = new WebSocket(`wss://chat.idn.app`);
       wsRef.current = ws;
@@ -165,7 +150,7 @@ const ChatIDN = () => {
             <Center p="10">
               <Loading color="white" />
             </Center>
-          ) : (
+          ) : !profile?.chat_room_id ? (
             <Center p="10">
               <VStack
                 flex={1}
@@ -179,7 +164,7 @@ const ChatIDN = () => {
                 </Text>
               </VStack>
             </Center>
-          )
+          ) : null
         }
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
