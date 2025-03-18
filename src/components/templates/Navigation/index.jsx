@@ -26,7 +26,8 @@ import {
   MemberList,
   HistoryLiveDetail,
   LeaderboardMember,
-  SupportProject
+  SupportProject,
+  LeaderboardUser,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -39,7 +40,8 @@ import {
   ChevronBack,
   HistoryFill,
   HistoryOutline,
-  UserIconOutline
+  UserIconOutline,
+  ThropyIcon
 } from "../../../assets/icon";
 
 const Navigation = () => {
@@ -48,31 +50,39 @@ const Navigation = () => {
   const navigation = useNavigation();
 
   const navigationIcon = (route, isActive) => {
-    let icon;
+    const iconConfig = {
+      Home: {
+        active: <HomeIcon />,
+        inactive: <HomeIconOutline />
+      },
+      Login: {
+        active: <UsersIcon />,
+        inactive: <UsersIconOutline />
+      },
+      Theater: {
+        active: <TheaterIcon />,
+        inactive: <TheaterIconOutline />
+      },
+      Member: {
+        active: <UsersIcon />,
+        inactive: <UsersIconOutline />
+      },
+      Profile: {
+        active: <UserIcon color="#24A2B7" size={22} />,
+        inactive: <UserIconOutline />
+      },
+      History: {
+        active: <HistoryFill color="#24A2B7" size={22} />,
+        inactive: <HistoryOutline />
+      },
+      Leaderboard: {
+        active: <ThropyIcon color="#24A2B7" size={22} />,
+        inactive: <ThropyIcon />
+      }
+    };
 
-    if (route.name === "Home") {
-      icon = isActive ? <HomeIcon /> : <HomeIconOutline />;
-    } else if (route.name === "Login") {
-      icon = isActive ? <UsersIcon /> : <UsersIconOutline />;
-    } else if (route.name === "Theater") {
-      icon = isActive ? <TheaterIcon /> : <TheaterIconOutline />;
-    } else if (route.name === "Member") {
-      icon = isActive ? <UsersIcon /> : <UsersIconOutline />;
-    } else if (route.name === "Profile") {
-      icon = isActive ? (
-        <UserIcon color="#24A2B7" size={22} />
-      ) : (
-        <UserIconOutline />
-      );
-    } else if (route.name === "History") {
-      icon = isActive ? (
-        <HistoryFill color="#24A2B7" size={22} />
-      ) : (
-        <HistoryOutline />
-      );
-    }
-
-    return icon;
+    const routeConfig = iconConfig[route.name];
+    return routeConfig ? (isActive ? routeConfig.active : routeConfig.inactive) : null;
   };
 
   const BasicHeader = {
@@ -134,6 +144,11 @@ const Navigation = () => {
         options={BasicHeader}
       />
       <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen
+        name="Leaderboard"
+        component={LeaderboardUser}
+        options={BasicHeader}
+      />
     </Tab.Navigator>
   );
 
