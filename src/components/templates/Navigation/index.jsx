@@ -76,8 +76,8 @@ const Navigation = () => {
         inactive: <HistoryOutline />
       },
       Leaderboard: {
-        active: <ThropyIcon color="#24A2B7" size={22} />,
-        inactive: <ThropyIcon />
+        active: <ThropyIcon color="#24A2B7" size={24} />,
+        inactive: <ThropyIcon size={24} />
       }
     };
 
@@ -139,16 +139,11 @@ const Navigation = () => {
         options={BasicHeader}
       />
       <Tab.Screen
-        name="Theater"
-        component={ScheduleList}
-        options={BasicHeader}
-      />
-      <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen
         name="Leaderboard"
         component={LeaderboardUser}
         options={BasicHeader}
       />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 
@@ -180,6 +175,7 @@ const Navigation = () => {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="Theater" component={ScheduleList} options={showHeader} />
       <Stack.Screen
         name="RoomLives"
         component={RoomLives}

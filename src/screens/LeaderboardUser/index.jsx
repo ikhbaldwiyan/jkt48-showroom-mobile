@@ -15,10 +15,15 @@ import {
   Badge,
   Spinner,
   CheckCircleIcon,
+  Button,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "native-base";
 import { getLeaderboardUser } from "../../services/leaderboard";
 import moment from "moment";
-import Loading from "../../components/atoms/Loading";
+import { TouchableOpacity } from "react-native";
+import { formatViews } from "../../utils/helpers";
+import { ThropyIcon } from "../../assets/icon";
 
 const LeaderboardUser = ({ navigation }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
@@ -27,6 +32,7 @@ const LeaderboardUser = ({ navigation }) => {
   const [month, setMonth] = useState(moment().format("MM-YYYY"));
   const [page, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   const monthNames = [
     { name: "January", short: "01" },
@@ -52,29 +58,33 @@ const LeaderboardUser = ({ navigation }) => {
     });
   }, []);
 
-  const fetchLeaderboardData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const {
-        data: { data },
-      } = await getLeaderboardUser({
-        page,
-        month,
-        platform,
-        filterBy: month !== "" ? "month" : "",
-      });
-      console.log(data);
-      setLeaderboardData(data.data);
-      setTotalData(data.pagination.totalData);
-      setPage(data.pagination.currentPage);
-    } catch (error) {
-      console.error("Error fetching leaderboard:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [month, platform, page]);
-
   useEffect(() => {
+    const fetchLeaderboardData = async () => {
+      try {
+        setLoading(true);
+        const response = await getLeaderboardUser({
+          page,
+          month,
+          platform,
+          filterBy: month !== "" ? "month" : "",
+        });
+
+        if (response?.data?.data) {
+          const { data } = response.data;
+          setLeaderboardData(data?.data || []);
+          setTotalData(data?.pagination?.totalData || 0);
+          setTotalPages(data?.pagination?.totalPage || 1);
+        }
+      } catch (error) {
+        console.log("Error fetching leaderboard:", error);
+        setLeaderboardData([]);
+        setTotalData(0);
+        setTotalPages(1);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchLeaderboardData();
   }, [month, platform, page]);
 
@@ -102,7 +112,7 @@ const LeaderboardUser = ({ navigation }) => {
       <HStack space={4} alignItems="center">
         <Box w={8} alignItems="center">
           <Text fontSize="sm" color="white" fontWeight="bold">
-            Rank
+            <ThropyIcon size={20} />
           </Text>
         </Box>
 
@@ -114,7 +124,7 @@ const LeaderboardUser = ({ navigation }) => {
 
         <Box flex={1}>
           <Text fontSize="sm" color="white" fontWeight="bold">
-            Username
+            User ID
           </Text>
         </Box>
 
@@ -127,27 +137,42 @@ const LeaderboardUser = ({ navigation }) => {
     </Box>
   );
 
+  const handlePrevPage = () => {
+    setPage(Math.max(1, page - 1));
+  };
+
+  const handleNextPage = () => {
+    setPage(Math.min(totalPages, page + 1));
+  };
+
   const renderItem = ({ item, index }) => {
+    const watchCount = platform === "Showroom"
+      ? item.watchShowroomMember
+      : platform === "IDN"
+        ? item.watchLiveIDN
+        : item.watchShowroomMember + item.watchLiveIDN;
+
     return (
       <Box mb={2} p={3} shadow={1} rounded="lg" key={item.rank} bg="cyan.700">
         <HStack space={4} alignItems="center">
           <Box w={8} alignItems="center">
             <Text
-              fontSize="lg"
+              fontSize="md"
               fontWeight="bold"
-              color={index < 3 ? "amber.400" : "gray.200"}
+              color={item.rank <= 3 ? "amber.400" : "gray.200"}
             >
               {item.rank}
             </Text>
           </Box>
 
-          <Avatar size="md" source={{ uri: item.avatar }} />
+          <Avatar size="md" source={item?.avatar ? { uri: item.avatar } : require("../../assets/image/ava.png")} />
+
 
           <VStack flex={1}>
             <Text
               color="blueLight"
-              fontSize="md"
-              fontWeight="semibold"
+              fontSize="14"
+              fontWeight="medium"
               isTruncated
             >
               {item.user_id.length > 13
@@ -160,12 +185,7 @@ const LeaderboardUser = ({ navigation }) => {
             <VStack alignItems="center">
               <Badge colorScheme="info" rounded="full" width={"auto"}>
                 <Text fontWeight="bold" color="primary">
-                  {platform === "Showroom"
-                    ? item.watchShowroomMember
-                    : platform === "IDN"
-                    ? item.watchLiveIDN
-                    : item.watchShowroomMember + item.watchLiveIDN}
-                  x
+                  {formatViews(watchCount)}x
                 </Text>
               </Badge>
             </VStack>
@@ -177,7 +197,7 @@ const LeaderboardUser = ({ navigation }) => {
 
   return (
     <Box flex={1} bg="secondary" safeAreaBottom>
-      <VStack space={4} p={4} pb="32">
+      <VStack space={4} p={4} pb="64">
         <HStack space={4} justifyContent="space-between">
           <Select
             flex={1}
@@ -280,24 +300,56 @@ const LeaderboardUser = ({ navigation }) => {
             <FlatList
               data={leaderboardData}
               renderItem={renderItem}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item?.rank?.toString()}
               showsVerticalScrollIndicator={false}
-              onEndReachedThreshold={0.5}
               ListHeaderComponent={ListHeader}
               stickyHeaderIndices={[0]}
-              ListFooterComponent={() =>
-                loading && page > 1 ? (
-                  <Box
-                    flex={1}
-                    justifyContent="center"
-                    alignItems="center"
-                    h="full"
-                  >
-                    <Loading size="30" />
-                  </Box>
-                ) : null
-              }
             />
+
+            <HStack alignItems="center" justifyContent="space-between" mt={4}>
+              {page !== 1 ? (
+                <Button
+                  onPress={handlePrevPage}
+                  disabled={page === 1}
+                  borderRadius="lg"
+                  bg="blueGray.600"
+                >
+                  <TouchableOpacity opacity="0.8" onPress={handlePrevPage}>
+                    <HStack alignItems="center" space="1">
+                      <ChevronLeftIcon color="white" />
+                      <Text>Prev</Text>
+                    </HStack>
+                  </TouchableOpacity>
+                </Button>
+              ) : (
+                <Button opacity={0.7} borderRadius="lg" bg="gray.500">
+                  <HStack alignItems="center" space="1">
+                    <ChevronLeftIcon color="white" />
+                    <Text>Prev</Text>
+                  </HStack>
+                </Button>
+              )}
+              <Text fontSize="15" fontWeight="bold">
+                {page} / {totalPages}
+              </Text>
+              {page !== totalPages ? (
+                <Button onPress={handleNextPage} borderRadius="lg" bg="blueGray.600">
+                  <TouchableOpacity opacity="0.8" onPress={handleNextPage}>
+                    <HStack alignItems="center" space="1">
+                      <Text>Next</Text>
+                      <ChevronRightIcon color="white" />
+                    </HStack>
+                  </TouchableOpacity>
+                </Button>
+              ) : (
+                <Button opacity={0.7} borderRadius="lg" bg="gray.500">
+                  <HStack alignItems="center" space="1">
+                    <Text>Next</Text>
+                    <ChevronRightIcon color="white" />
+                  </HStack>
+                </Button>
+              )}
+            </HStack>
           </Box>
         )}
       </VStack>
