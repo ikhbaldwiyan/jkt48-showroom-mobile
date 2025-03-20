@@ -33,6 +33,7 @@ const LeaderboardUser = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [monthName, setMonthName] = useState(moment().format("MMMM"));
 
   const monthNames = [
     { name: "January", short: "01" },
@@ -54,9 +55,9 @@ const LeaderboardUser = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Top Leaderboard User",
+      headerTitle: "Top Leaderboard User " + monthName
     });
-  }, []);
+  }, [monthName]);
 
   useEffect(() => {
     const fetchLeaderboardData = async () => {
@@ -96,6 +97,13 @@ const LeaderboardUser = ({ navigation }) => {
   const handleMonthChange = (value) => {
     setMonth(value);
     setPage(1);
+    if (value) {
+      const [month] = value.split('-');
+      const monthName = monthNames.find(m => m.short === month)?.name || 'All Time';
+      setMonthName(monthName);
+    } else {
+      setMonthName("All Time");
+    }
   };
 
   const ListHeader = () => (
