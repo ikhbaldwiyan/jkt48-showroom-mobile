@@ -1,29 +1,27 @@
+import moment from "moment";
 import React, {
-  useState,
-  useCallback,
   useEffect,
   useLayoutEffect,
+  useState
 } from "react";
 import {
   Box,
-  FlatList,
-  HStack,
-  VStack,
-  Text,
-  Select,
-  Avatar,
-  Badge,
-  Spinner,
-  CheckCircleIcon,
   Button,
+  CheckCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  FlatList,
+  HStack,
+  Select,
+  Spinner,
+  Text,
+  VStack
 } from "native-base";
+import { Medal } from '../../assets/icon';
 import { getLeaderboardUser } from "../../services/leaderboard";
-import moment from "moment";
-import { TouchableOpacity } from "react-native";
-import { formatViews } from "../../utils/helpers";
-import { ThropyIcon } from "../../assets/icon";
+import useAuthStore from "../../store/authStore";
+import { monthNames } from "../../utils/helpers";
+import AvatarList from "./components/AvatarList";
 
 const LeaderboardUser = ({ navigation }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
@@ -35,27 +33,13 @@ const LeaderboardUser = ({ navigation }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [monthName, setMonthName] = useState(moment().format("MMMM"));
 
-  const monthNames = [
-    { name: "January", short: "01" },
-    { name: "February", short: "02" },
-    { name: "Maret", short: "03" },
-    { name: "April", short: "04" },
-    { name: "Mei", short: "05" },
-    { name: "June", short: "06" },
-    { name: "July", short: "07" },
-    { name: "August", short: "08" },
-    { name: "September", short: "09" },
-    { name: "October", short: "10" },
-    { name: "November", short: "11" },
-    { name: "December", short: "12" },
-  ];
-
   const currentYear = moment().year();
   const previousYear = currentYear - 1;
+  const { userProfile } = useAuthStore();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Top Leaderboard User " + monthName
+      headerTitle: "Top Leaderboard " + monthName
     });
   }, [monthName]);
 
@@ -106,6 +90,14 @@ const LeaderboardUser = ({ navigation }) => {
     }
   };
 
+  const handlePrevPage = () => {
+    setPage(Math.max(1, page - 1));
+  };
+
+  const handleNextPage = () => {
+    setPage(Math.min(totalPages, page + 1));
+  };
+
   const ListHeader = () => (
     <Box
       p={3}
@@ -120,7 +112,7 @@ const LeaderboardUser = ({ navigation }) => {
       <HStack space={4} alignItems="center">
         <Box w={8} alignItems="center">
           <Text fontSize="sm" color="white" fontWeight="bold">
-            <ThropyIcon size={20} />
+            <Medal size={20} />
           </Text>
         </Box>
 
@@ -145,61 +137,16 @@ const LeaderboardUser = ({ navigation }) => {
     </Box>
   );
 
-  const handlePrevPage = () => {
-    setPage(Math.max(1, page - 1));
-  };
-
-  const handleNextPage = () => {
-    setPage(Math.min(totalPages, page + 1));
-  };
-
-  const renderItem = ({ item, index }) => {
-    const watchCount = platform === "Showroom"
-      ? item.watchShowroomMember
-      : platform === "IDN"
-        ? item.watchLiveIDN
-        : item.watchShowroomMember + item.watchLiveIDN;
-
+  const renderItem = ({ item }) => {
+    const isYou = userProfile?.user_id === item.user_id;
+    
     return (
-      <Box mb={2} p={3} shadow={1} rounded="lg" key={item.rank} bg="cyan.700">
-        <HStack space={4} alignItems="center">
-          <Box w={8} alignItems="center">
-            <Text
-              fontSize="md"
-              fontWeight="bold"
-              color={item.rank <= 3 ? "amber.400" : "gray.200"}
-            >
-              {item.rank}
-            </Text>
-          </Box>
-
-          <Avatar size="md" source={item?.avatar ? { uri: item.avatar } : require("../../assets/image/ava.png")} />
-
-
-          <VStack flex={1}>
-            <Text
-              color="blueLight"
-              fontSize="14"
-              fontWeight="medium"
-              isTruncated
-            >
-              {item.user_id.length > 13
-                ? `${item.user_id.slice(0, 13)}...`
-                : item?.user_id}
-            </Text>
-          </VStack>
-
-          <HStack space={2} alignItems="center">
-            <VStack alignItems="center">
-              <Badge colorScheme="info" rounded="full" width={"auto"}>
-                <Text fontWeight="bold" color="primary">
-                  {formatViews(watchCount)}x
-                </Text>
-              </Badge>
-            </VStack>
-          </HStack>
-        </HStack>
-      </Box>
+      <AvatarList 
+        key={item.rank}
+        item={item}
+        isYou={isYou}
+        platform={platform}
+      />
     );
   };
 
@@ -315,48 +262,35 @@ const LeaderboardUser = ({ navigation }) => {
             />
 
             <HStack alignItems="center" justifyContent="space-between" mt={4}>
-              {page !== 1 ? (
-                <Button
-                  onPress={handlePrevPage}
-                  disabled={page === 1}
-                  borderRadius="lg"
-                  bg="blueGray.600"
-                >
-                  <TouchableOpacity opacity="0.8" onPress={handlePrevPage}>
-                    <HStack alignItems="center" space="1">
-                      <ChevronLeftIcon color="white" />
-                      <Text>Prev</Text>
-                    </HStack>
-                  </TouchableOpacity>
-                </Button>
-              ) : (
-                <Button opacity={0.7} borderRadius="lg" bg="gray.500">
-                  <HStack alignItems="center" space="1">
-                    <ChevronLeftIcon color="white" />
-                    <Text>Prev</Text>
-                  </HStack>
-                </Button>
-              )}
+              <Button
+                borderRadius="lg"
+                onPress={handlePrevPage}
+                disabled={page === 1}
+                bg={page === 1 ? "gray.500" : "blueGray.600"}
+                opacity={page === 1 ? 0.7 : 1}
+              >
+                <HStack alignItems="center" space="1">
+                  <ChevronLeftIcon color="white" />
+                  <Text>Prev</Text>
+                </HStack>
+              </Button>
+
               <Text fontSize="15" fontWeight="bold">
                 {page} / {totalPages}
               </Text>
-              {page !== totalPages ? (
-                <Button onPress={handleNextPage} borderRadius="lg" bg="blueGray.600">
-                  <TouchableOpacity opacity="0.8" onPress={handleNextPage}>
-                    <HStack alignItems="center" space="1">
-                      <Text>Next</Text>
-                      <ChevronRightIcon color="white" />
-                    </HStack>
-                  </TouchableOpacity>
-                </Button>
-              ) : (
-                <Button opacity={0.7} borderRadius="lg" bg="gray.500">
-                  <HStack alignItems="center" space="1">
-                    <Text>Next</Text>
-                    <ChevronRightIcon color="white" />
-                  </HStack>
-                </Button>
-              )}
+
+              <Button
+                borderRadius="lg"
+                onPress={handleNextPage}
+                disabled={page === totalPages}
+                bg={page === totalPages ? "gray.500" : "blueGray.600"}
+                opacity={page === totalPages ? 0.7 : 1}
+              >
+                <HStack alignItems="center" space="1">
+                  <Text>Next</Text>
+                  <ChevronRightIcon color="white" />
+                </HStack>
+              </Button>
             </HStack>
           </Box>
         )}

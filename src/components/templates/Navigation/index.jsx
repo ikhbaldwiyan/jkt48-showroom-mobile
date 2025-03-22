@@ -41,7 +41,8 @@ import {
   HistoryFill,
   HistoryOutline,
   UserIconOutline,
-  ThropyIcon
+  ThropyIcon,
+  ThropyIconOutline,
 } from "../../../assets/icon";
 
 const Navigation = () => {
@@ -76,8 +77,8 @@ const Navigation = () => {
         inactive: <HistoryOutline />
       },
       Leaderboard: {
-        active: <ThropyIcon color="#24A2B7" size={24} />,
-        inactive: <ThropyIcon size={24} />
+        active: <ThropyIcon color="#24A2B7" size={23} />,
+        inactive: <ThropyIconOutline size={23} />
       }
     };
 
