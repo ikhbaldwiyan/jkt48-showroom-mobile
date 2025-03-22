@@ -14,7 +14,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { formatViews } from "../../../utils/helpers";
 import Loading from "../../atoms/Loading";
 
-const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
+const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo, showID = false }) => {
   const isMostWatch =
     userInfo?.watchShowroomMember > 1000 || userInfo?.watchLiveIDN > 1000;
   const isDonator = selectedUser?.is_donator || selectedUser?.can_farming_page;
@@ -28,7 +28,7 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
       <Modal isOpen={!!selectedUser} onClose={() => setSelectedUser(null)}>
         <Modal.Content
           width="85%"
-          height={isDonator || isDeveloper ? "65%" : "60%"}
+          height={isDonator || isDeveloper ? "70%" : showID ? "65%" : "60%"}
           borderRadius="10"
         >
           <LinearGradient
@@ -46,6 +46,16 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
               >
                 {selectedUser?.name}
               </Text>
+              {showID && (
+                <Text
+                  mt="1"
+                  textAlign="center"
+                  fontSize="sm"
+                  color="white"
+                >
+                  ID: {selectedUser?.user_id}
+                </Text>
+              )}
             </Box>
             <Modal.Body>
               <VStack space={4} alignItems="center">
@@ -63,6 +73,7 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                     style={{ width: 70, height: 70 }}
                     source={{ uri: selectedUser.avatar }}
                     alt="avatar"
+                    defaultSource={require("../../../assets/image/ava.png")}
                   />
                 </Box>
                 {isDonator && (
@@ -126,6 +137,7 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                               source={{
                                 uri: favMember?.member?.image
                               }}
+                              alt="member fav"
                             />
                             <VStack>
                               <Text fontSize="16" fontWeight="semibold">

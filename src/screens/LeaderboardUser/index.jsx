@@ -124,7 +124,7 @@ const LeaderboardUser = ({ navigation }) => {
 
         <Box flex={1}>
           <Text fontSize="sm" color="white" fontWeight="bold">
-            User ID
+            Username
           </Text>
         </Box>
 
@@ -256,7 +256,7 @@ const LeaderboardUser = ({ navigation }) => {
               data={leaderboardData}
               renderItem={renderItem}
               keyExtractor={(item) => item?.rank?.toString()}
-              showsVerticalScrollIndicator={false}
+              showsVerticalScrollIndicator={true}
               ListHeaderComponent={ListHeader}
               stickyHeaderIndices={[0]}
             />

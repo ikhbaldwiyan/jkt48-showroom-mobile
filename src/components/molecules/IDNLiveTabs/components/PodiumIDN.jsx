@@ -7,6 +7,7 @@ import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 import UserModal from "../../../atoms/UserModal";
 import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
+import trackAnalytics from "../../../../utils/trackAnalytics";
 
 export const PodiumIDN = () => {
   const [podium, setPodium] = useState([]);
@@ -68,7 +69,12 @@ export const PodiumIDN = () => {
               <VStack my="4" key={idx} width="20%">
                 <TouchableOpacity
                   activeOpacity={0.4}
-                  onPress={() => setSelectedUser(item.user)}
+                  onPress={() => {
+                    setSelectedUser(item.user); trackAnalytics("podium_user_click", {
+                      name: item.user.name,
+                      user_id: item.user.user_id
+                    });
+                  }}
                 >
                   <Center>
                     <Image
@@ -96,7 +102,7 @@ export const PodiumIDN = () => {
         </HStack>
       </ScrollView>
       <UserModal
-        favMember={favMember[0]}
+        favMember={favMember[0]?.member?.name ? favMember[0] : favMember[1]}
         userInfo={mostWatch?.user}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
