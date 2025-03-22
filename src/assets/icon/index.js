@@ -58,8 +58,10 @@ import PipIcon from "./PipIcon";
 import SearchMember from "./SearchMember";
 import CloseIcon from "./CloseIcon";
 import ThropyIcon from "./ThropyIcon";
+import ThropyIconOutline from "./ThropyIconOutline";
 import KebabMenu from "./KebabMenu";
 import WatchIcon from "./WatchIcon";
+import Medal from './Medal';
 
 export {
   LogoIcon,
@@ -124,4 +126,6 @@ export {
   KebabMenu,
   ThropyIcon,
   WatchIcon,
+  ThropyIconOutline,
+  Medal,
 };

@@ -58,5 +58,6 @@ export default {
   LEADERBOARD: {
     SHOWROOM: "/leaderboard-member/showroom",
     IDN: "/leaderboard-member/idn",
+    USER: "/leaderboard"
   }
 };

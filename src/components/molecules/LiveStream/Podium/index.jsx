@@ -96,7 +96,7 @@ export const Podium = () => {
         }
       />
       <UserModal
-        favMember={favMember[0]}
+        favMember={favMember[0]?.member?.name ? favMember[0] : favMember[1]}
         userInfo={mostWatch?.user}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}

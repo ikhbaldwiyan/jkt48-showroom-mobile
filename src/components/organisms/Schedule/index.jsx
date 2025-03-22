@@ -69,7 +69,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
               Jadwal Theater
             </Text>
             <TouchableOpacity
-              onPress={() => navigation.replace("Main", { screen: "Theater" })}
+              onPress={() => navigation.navigate("Theater")}
             >
               <HStack alignItems="center" space={2}>
                 <Text fontSize="sm">Lihat semua</Text>
