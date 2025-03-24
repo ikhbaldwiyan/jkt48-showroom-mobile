@@ -8,6 +8,7 @@ import CardGradient from "../../../atoms/CardGradient";
 import { FlashList } from "@shopify/flash-list";
 import UserModal from "../../../atoms/UserModal";
 import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
+import trackAnalytics from "../../../../utils/trackAnalytics";
 
 export const Podium = () => {
   const { profile } = useLiveStreamStore();
@@ -57,7 +58,12 @@ export const Podium = () => {
       <VStack my="4" alignItems="center" width="100%">
         <TouchableOpacity
           activeOpacity={0.4}
-          onPress={() => setSelectedUser(item.user)}
+          onPress={() => {
+            setSelectedUser(item.user); trackAnalytics("podium_user_click", {
+              name: item.user.name,
+              user_id: item.user.user_id
+            });
+          }}
         >
           <Center>
             <Image

@@ -22,6 +22,7 @@ import { getLeaderboardUser } from "../../services/leaderboard";
 import useAuthStore from "../../store/authStore";
 import { monthNames } from "../../utils/helpers";
 import AvatarList from "./components/AvatarList";
+import SkeletonAvatarList from "./components/AvatarList/SkeletonAvatarList";
 
 const LeaderboardUser = ({ navigation }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
@@ -139,9 +140,11 @@ const LeaderboardUser = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
     const isYou = userProfile?.user_id === item.user_id;
-    
-    return (
-      <AvatarList 
+
+    return loading ? (
+      <SkeletonAvatarList />
+    ) : (
+      <AvatarList
         key={item.rank}
         item={item}
         isYou={isYou}
@@ -149,6 +152,10 @@ const LeaderboardUser = ({ navigation }) => {
       />
     );
   };
+
+  const renderSkeletonItem = () => (
+    <SkeletonAvatarList />
+  );
 
   return (
     <Box flex={1} bg="secondary" safeAreaBottom>
@@ -248,52 +255,48 @@ const LeaderboardUser = ({ navigation }) => {
           </Select>
         </HStack>
 
-        {loading && page === 1 ? (
-          <Spinner mt={60} color="white" size="lg" />
-        ) : (
-          <Box>
-            <FlatList
-              data={leaderboardData}
-              renderItem={renderItem}
-              keyExtractor={(item) => item?.rank?.toString()}
-              showsVerticalScrollIndicator={true}
-              ListHeaderComponent={ListHeader}
-              stickyHeaderIndices={[0]}
-            />
+        <Box>
+          <FlatList
+            data={leaderboardData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item?.rank?.toString()}
+            showsVerticalScrollIndicator={true}
+            ListHeaderComponent={ListHeader}
+            stickyHeaderIndices={[0]}
+          />
 
-            <HStack alignItems="center" justifyContent="space-between" mt={4}>
-              <Button
-                borderRadius="lg"
-                onPress={handlePrevPage}
-                disabled={page === 1}
-                bg={page === 1 ? "gray.500" : "blueGray.600"}
-                opacity={page === 1 ? 0.7 : 1}
-              >
-                <HStack alignItems="center" space="1">
-                  <ChevronLeftIcon color="white" />
-                  <Text>Prev</Text>
-                </HStack>
-              </Button>
+          <HStack alignItems="center" justifyContent="space-between" mt={4}>
+            <Button
+              borderRadius="lg"
+              onPress={handlePrevPage}
+              disabled={page === 1}
+              bg={page === 1 ? "gray.500" : "blueGray.600"}
+              opacity={page === 1 ? 0.7 : 1}
+            >
+              <HStack alignItems="center" space="1">
+                <ChevronLeftIcon color="white" />
+                <Text>Prev</Text>
+              </HStack>
+            </Button>
 
-              <Text fontSize="15" fontWeight="bold">
-                {page} / {totalPages}
-              </Text>
+            <Text fontSize="15" fontWeight="bold">
+              {page} / {totalPages}
+            </Text>
 
-              <Button
-                borderRadius="lg"
-                onPress={handleNextPage}
-                disabled={page === totalPages}
-                bg={page === totalPages ? "gray.500" : "blueGray.600"}
-                opacity={page === totalPages ? 0.7 : 1}
-              >
-                <HStack alignItems="center" space="1">
-                  <Text>Next</Text>
-                  <ChevronRightIcon color="white" />
-                </HStack>
-              </Button>
-            </HStack>
-          </Box>
-        )}
+            <Button
+              borderRadius="lg"
+              onPress={handleNextPage}
+              disabled={page === totalPages}
+              bg={page === totalPages ? "gray.500" : "blueGray.600"}
+              opacity={page === totalPages ? 0.7 : 1}
+            >
+              <HStack alignItems="center" space="1">
+                <Text>Next</Text>
+                <ChevronRightIcon color="white" />
+              </HStack>
+            </Button>
+          </HStack>
+        </Box>
       </VStack>
     </Box>
   );

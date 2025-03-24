@@ -116,7 +116,7 @@ const UserAvatar = ({ avatar }) => (
 
 const UserInfo = ({ userId, isYou }) => (
   <VStack flex={1}>
-    <HStack justifyContent={isYou ? "space-around" : "flex-start"}>
+    <HStack justifyContent={isYou ? "space-between" : "flex-start"}>
       <Text
         color="blueLight"
         fontSize="14"
@@ -128,7 +128,7 @@ const UserInfo = ({ userId, isYou }) => (
           : userId}
       </Text>
       {isYou && userId.length < 9 && (
-        <Box bgColor="blueGray.700" rounded="full" px={2} py={1}>
+        <Box bgColor="blueGray.700" rounded="full" px={2} py={1} mr="2">
           <Text color="gray.200" fontSize="11" fontWeight="medium">You</Text>
         </Box>
       )}
