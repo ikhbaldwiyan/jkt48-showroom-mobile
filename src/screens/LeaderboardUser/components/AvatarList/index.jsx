@@ -25,12 +25,7 @@ const AvatarList = ({ item, isYou, platform }) => {
       name: item.name,
       user_id: item.user_id
     });
-    setSelectedUser({
-      _id: item._id,
-      name: item.name,
-      avatar: item.avatar,
-      user_id: item.user_id
-    });
+    setSelectedUser(item);
   };
 
   const ListContent = () => (

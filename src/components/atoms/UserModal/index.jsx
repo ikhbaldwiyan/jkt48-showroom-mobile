@@ -17,18 +17,28 @@ import Loading from "../../atoms/Loading";
 const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo, showID = false }) => {
   const isMostWatch =
     userInfo?.watchShowroomMember > 1000 || userInfo?.watchLiveIDN > 1000;
-  const isDonator = selectedUser?.is_donator || selectedUser?.can_farming_page;
-  const isDeveloper =
-    selectedUser?.user_id === "inzoid" ||
-    selectedUser?.user_id === "ahmad-mughni" ||
-    selectedUser?.user_id === "Lowly";
+  const isDonator = userInfo?.is_donator;
+  const isDeveloper = userInfo?.is_developer;
+  const topLeaderboard = userInfo?.top_leaderboard;
 
   return (
     selectedUser && (
       <Modal isOpen={!!selectedUser} onClose={() => setSelectedUser(null)}>
         <Modal.Content
           width="85%"
-          height={isDonator || isDeveloper ? "70%" : showID ? "65%" : "60%"}
+          height={(() => {
+            const MODAL_HEIGHT = {
+              DONATOR_WITH_TOP: "72%",
+              SPECIAL_USER: "66%",
+              WITH_ID: "62%",
+              DEFAULT: "58%"
+            };
+
+            if (isDonator && topLeaderboard) return MODAL_HEIGHT.DONATOR_WITH_TOP;
+            if (isDonator || isDeveloper || topLeaderboard) return MODAL_HEIGHT.SPECIAL_USER;
+            if (showID) return MODAL_HEIGHT.WITH_ID;
+            return MODAL_HEIGHT.DEFAULT;
+          })()}
           borderRadius="10"
         >
           <LinearGradient
@@ -82,12 +92,12 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo, showID 
                     px="3"
                     space={2}
                     alignItems="center"
-                    bgColor="amber.400"
+                    bg="#E49C20"
                     borderRadius="10"
                     shadow={4}
                   >
-                    <Donate size={18} color="#434A52" />
-                    <Text fontSize="15" fontWeight="bold" color="#434A52">
+                    <Donate size={18} color="white" />
+                    <Text fontSize="15" fontWeight="bold" color="white">
                       Donator
                     </Text>
                   </HStack>
@@ -110,7 +120,7 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo, showID 
                     </Text>
                   </HStack>
                 )}
-                {selectedUser?.top_leaderboard && (
+                {topLeaderboard && (
                   <HStack
                     py="1.5"
                     px="3"
