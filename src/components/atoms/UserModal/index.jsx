@@ -1,5 +1,5 @@
 import React from "react";
-import { AndroidIcon, Donate, IDCard, StarIcon } from "../../../assets/icon";
+import { AndroidIcon, Donate, IDCard, ThropyIcon } from "../../../assets/icon";
 import {
   Box,
   Button,
@@ -84,6 +84,7 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo, showID 
                     alignItems="center"
                     bgColor="amber.400"
                     borderRadius="10"
+                    shadow={4}
                   >
                     <Donate size={18} color="#434A52" />
                     <Text fontSize="15" fontWeight="bold" color="#434A52">
@@ -101,10 +102,27 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo, showID 
                     borderWidth="1"
                     borderColor="gray.300"
                     borderRadius="10"
+                    shadow={4}
                   >
                     <AndroidIcon size={16} color="white" />
                     <Text fontSize="15" fontWeight="bold" color="white">
                       Developer
+                    </Text>
+                  </HStack>
+                )}
+                {selectedUser?.top_leaderboard && (
+                  <HStack
+                    py="1.5"
+                    px="3"
+                    space={2}
+                    alignItems="center"
+                    bgColor="blueLight"
+                    borderRadius="10"
+                    shadow={4}
+                  >
+                    <ThropyIcon size={16} color="#24A2B7" />
+                    <Text fontSize="15" fontWeight="bold" color="primary">
+                      Top Leaderboard
                     </Text>
                   </HStack>
                 )}

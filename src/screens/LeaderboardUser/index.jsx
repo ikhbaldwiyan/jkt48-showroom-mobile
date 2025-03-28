@@ -12,6 +12,8 @@ import {
   ChevronRightIcon,
   FlatList,
   HStack,
+  InfoIcon,
+  Popover,
   Select,
   Text,
   VStack
@@ -32,7 +34,7 @@ const LeaderboardUser = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [monthName, setMonthName] = useState(moment().format("MMMM"));
+  const [monthName, setMonthName] = useState(moment().locale('en').format("MMMM"));
 
   const currentYear = moment().year();
   const previousYear = currentYear - 1;
@@ -40,7 +42,25 @@ const LeaderboardUser = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Top Leaderboard " + monthName
+      headerTitle: "Top Leaderboard " + monthName,
+      headerRight: () => (
+        <Box mr="5">
+          <Popover
+            trigger={(triggerProps) => (
+              <TouchableOpacity {...triggerProps} activeOpacity={0.7}>
+                <InfoIcon size="5" color="white" />
+              </TouchableOpacity>
+            )}
+          >
+            <Popover.Content shadow="4" rounded="lg" bg="white" mx="3">
+              <Popover.Header px="3" py={2.5} fontWeight="bold">Info Leaderboard</Popover.Header>
+              <Popover.Body>
+                <Text color="gray.700">Top Leaderboard di hitung berdasarkan total banyak kamu menonton live streaming Showroom atau IDN Live di platform <Text fontWeight="semibold">JKT48 Showroom Fanmade</Text>, Jika kamu masuk ke Top 10 maka akan mendapatkan badge <Text fontWeight="semibold">"Top Leaderboard"</Text> yang akan di tampilkan di profil kamu.</Text>
+              </Popover.Body>
+            </Popover.Content>
+          </Popover>
+        </Box>
+      )
     });
   }, [monthName]);
 
@@ -153,8 +173,12 @@ const LeaderboardUser = ({ navigation }) => {
     );
   };
 
-  const renderSkeletonItem = () => (
-    <SkeletonAvatarList />
+  const renderSkeletonLoading = (
+    <>
+      {[...Array(6)].map((_, index) => (
+        <SkeletonAvatarList key={index} />
+      ))}
+    </>
   );
 
   return (
@@ -263,6 +287,7 @@ const LeaderboardUser = ({ navigation }) => {
             showsVerticalScrollIndicator={true}
             ListHeaderComponent={ListHeader}
             stickyHeaderIndices={[0]}
+            ListEmptyComponent={renderSkeletonLoading}
           />
 
           <HStack alignItems="center" justifyContent="space-between" mt={4}>
