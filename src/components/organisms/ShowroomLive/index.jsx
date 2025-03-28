@@ -13,8 +13,12 @@ const ShowroomLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
 
   const fetchRoomLive = async () => {
-    const response = await ROOMS.getRoomLive();
-    return response?.data.data;
+    try {
+      const response = await ROOMS.getRoomLive();
+      return response?.data.data;
+    } catch (error) {
+      console.log("Error fetching room live:", error);
+    }
   };
 
   // Use the new React Query v5 signature
@@ -99,7 +103,7 @@ const ShowroomLive = ({ refreshing }) => {
                     color="white"
                     py="2"
                   >
-                    {formatName(item?.room_url_key)}
+                    {item?.room_url_key === "officialJKT48" ? "JKT48 Offical" : formatName(item?.room_url_key)}
                   </Text>
                   <Views number={item?.view_num} />
                 </HStack>

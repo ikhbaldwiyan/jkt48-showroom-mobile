@@ -158,7 +158,7 @@ const RecentLives = ({ refreshing }) => {
                     >
                       <Text fontWeight="bold">
                         {member.url === "jkt48"
-                          ? "JKT48 Ofiicial"
+                          ? "JKT48 Official"
                           : member?.nickname + " JKT48"}
                       </Text>
                     </TouchableOpacity>

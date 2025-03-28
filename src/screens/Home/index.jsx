@@ -9,7 +9,6 @@ import useChangeLogStore from "../../store/changeLogStore";
 import {
   IDNLIve,
   ShowroomLive,
-  PremiumLive,
   RecentLives,
   Schedule,
   TopMember,
@@ -47,7 +46,6 @@ const Home = ({ navigation }) => {
   return (
     <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
-        <PremiumLive refreshing={refreshing} />
         <ShowroomLive refreshing={refreshing} />
         <IDNLIve refreshing={refreshing} />
         <RecentLives refreshing={refreshing} />
