@@ -13,7 +13,6 @@ import {
   FlatList,
   HStack,
   Select,
-  Spinner,
   Text,
   VStack
 } from "native-base";
@@ -23,6 +22,7 @@ import useAuthStore from "../../store/authStore";
 import { monthNames } from "../../utils/helpers";
 import AvatarList from "./components/AvatarList";
 import SkeletonAvatarList from "./components/AvatarList/SkeletonAvatarList";
+import { TouchableOpacity } from "react-native";
 
 const LeaderboardUser = ({ navigation }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
@@ -268,32 +268,41 @@ const LeaderboardUser = ({ navigation }) => {
           <HStack alignItems="center" justifyContent="space-between" mt={4}>
             <Button
               borderRadius="lg"
-              onPress={handlePrevPage}
               disabled={page === 1}
               bg={page === 1 ? "gray.500" : "blueGray.600"}
               opacity={page === 1 ? 0.7 : 1}
             >
-              <HStack alignItems="center" space="1">
-                <ChevronLeftIcon color="white" />
-                <Text>Prev</Text>
-              </HStack>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={handlePrevPage}
+                disabled={page === 1}
+              >
+                <HStack alignItems="center" space="1">
+                  <ChevronLeftIcon color="white" />
+                  <Text>Prev</Text>
+                </HStack>
+              </TouchableOpacity>
             </Button>
 
             <Text fontSize="15" fontWeight="bold">
               {page} / {totalPages}
             </Text>
-
             <Button
               borderRadius="lg"
-              onPress={handleNextPage}
               disabled={page === totalPages}
               bg={page === totalPages ? "gray.500" : "blueGray.600"}
               opacity={page === totalPages ? 0.7 : 1}
             >
-              <HStack alignItems="center" space="1">
-                <Text>Next</Text>
-                <ChevronRightIcon color="white" />
-              </HStack>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={handleNextPage}
+                disabled={page === totalPages}
+              >
+                <HStack alignItems="center" space="1">
+                  <Text>Next</Text>
+                  <ChevronRightIcon color="white" />
+                </HStack>
+              </TouchableOpacity>
             </Button>
           </HStack>
         </Box>
