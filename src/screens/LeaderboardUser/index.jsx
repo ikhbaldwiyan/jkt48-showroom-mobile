@@ -1,9 +1,5 @@
 import moment from "moment";
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useState
-} from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -18,13 +14,14 @@ import {
   Text,
   VStack
 } from "native-base";
-import { Medal } from '../../assets/icon';
+import { Medal } from "../../assets/icon";
 import { getLeaderboardUser } from "../../services/leaderboard";
 import useAuthStore from "../../store/authStore";
 import { monthNames } from "../../utils/helpers";
 import AvatarList from "./components/AvatarList";
 import SkeletonAvatarList from "./components/AvatarList/SkeletonAvatarList";
-import { TouchableOpacity } from "react-native";
+import { RefreshControl, TouchableOpacity } from "react-native";
+import { useRefresh } from "../../utils/hooks/useRefresh";
 
 const LeaderboardUser = ({ navigation }) => {
   const [leaderboardData, setLeaderboardData] = useState([]);
@@ -34,11 +31,14 @@ const LeaderboardUser = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [monthName, setMonthName] = useState(moment().locale('en').format("MMMM"));
+  const [monthName, setMonthName] = useState(
+    moment().locale("en").format("MMMM")
+  );
 
   const currentYear = moment().year();
   const previousYear = currentYear - 1;
   const { userProfile } = useAuthStore();
+  const { refreshing, onRefresh } = useRefresh();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -53,9 +53,20 @@ const LeaderboardUser = ({ navigation }) => {
             )}
           >
             <Popover.Content shadow="4" rounded="lg" bg="white" mx="3">
-              <Popover.Header px="3" py={2.5} fontWeight="bold">Info Leaderboard</Popover.Header>
+              <Popover.Header px="3" py={2.5} fontWeight="bold">
+                <Text color="black" fontWeight="bold" fontSize="15">
+                  Info Leaderboard
+                </Text>
+              </Popover.Header>
               <Popover.Body>
-                <Text color="gray.700">Top Leaderboard di hitung berdasarkan total banyak kamu menonton live streaming Showroom atau IDN Live di platform <Text fontWeight="semibold">JKT48 Showroom Fanmade</Text>, Jika kamu masuk ke Top 10 maka akan mendapatkan badge <Text fontWeight="semibold">"Top Leaderboard"</Text> yang akan di tampilkan di profil kamu.</Text>
+                <Text color="gray.700">
+                  Top Leaderboard di hitung berdasarkan total banyak kamu
+                  menonton live streaming Showroom atau IDN Live di platform{" "}
+                  <Text fontWeight="semibold">JKT48 Showroom Fanmade</Text>,
+                  Jika kamu masuk ke Top 10 maka akan mendapatkan badge{" "}
+                  <Text fontWeight="semibold">"Top Leaderboard"</Text> yang akan
+                  di tampilkan di profil kamu.
+                </Text>
               </Popover.Body>
             </Popover.Content>
           </Popover>
@@ -92,7 +103,7 @@ const LeaderboardUser = ({ navigation }) => {
     };
 
     fetchLeaderboardData();
-  }, [month, platform, page]);
+  }, [month, platform, page, refreshing]);
 
   const handlePlatformChange = (value) => {
     setPlatform(value);
@@ -103,8 +114,9 @@ const LeaderboardUser = ({ navigation }) => {
     setMonth(value);
     setPage(1);
     if (value) {
-      const [month] = value.split('-');
-      const monthName = monthNames.find(m => m.short === month)?.name || 'All Time';
+      const [month] = value.split("-");
+      const monthName =
+        monthNames.find((m) => m.short === month)?.name || "All Time";
       setMonthName(monthName);
     } else {
       setMonthName("All Time");
@@ -288,6 +300,9 @@ const LeaderboardUser = ({ navigation }) => {
             ListHeaderComponent={ListHeader}
             stickyHeaderIndices={[0]}
             ListEmptyComponent={renderSkeletonLoading}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
           />
 
           <HStack alignItems="center" justifyContent="space-between" mt={4}>
