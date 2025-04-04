@@ -8,6 +8,8 @@ import CardGradient from "../../../atoms/CardGradient";
 import UserModal from "../../../atoms/UserModal";
 import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
 import trackAnalytics from "../../../../utils/trackAnalytics";
+import InfoPodium from "../../../atoms/InfoPodium";
+import BadgeUser from "../../../atoms/BadgeUser";
 
 export const PodiumIDN = () => {
   const [podium, setPodium] = useState([]);
@@ -36,10 +38,10 @@ export const PodiumIDN = () => {
       getIDNPodiumList();
     }, 1000);
 
-    // Set interval to fetch data every 2 minutes
+    // refresh data every 2 minutes
     const interval = setInterval(() => {
       getIDNPodiumList();
-    }, 2 * 60 * 1000); // 2 minutes in milliseconds
+    }, 2 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [profile, refreshing]);
@@ -51,10 +53,12 @@ export const PodiumIDN = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <Center>
-          <Text fontWeight="bold">{views} Orang sedang menonton</Text>
-        </Center>
+        <HStack justifyContent="center" alignItems="center" space={3}>
+          <Text fontWeight="medium">{views} Orang sedang menonton</Text>
+          <InfoPodium />
+        </HStack>
         <HStack
+          mt="2"
           space={3}
           flexWrap="wrap"
           alignItems="center"
@@ -86,14 +90,7 @@ export const PodiumIDN = () => {
                           "https://static.showroom-live.com/image/avatar/1028686.png?v=100"
                       }}
                     />
-                    <Text
-                      mt="2"
-                      fontSize="sm"
-                      fontWeight="semibold"
-                      isTruncated
-                    >
-                      {item.user.name}
-                    </Text>
+                    <BadgeUser user={item.user} />
                   </Center>
                 </TouchableOpacity>
               </VStack>
