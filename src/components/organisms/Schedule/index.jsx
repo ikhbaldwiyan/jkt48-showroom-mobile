@@ -212,7 +212,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
             <HStack alignItems="center" space={2}>
               <LoadingIcon />
               <Text fontWeight="bold" fontSize="14">
-                Load More Schedules
+                Lihat jadwal lainnya
               </Text>
             </HStack>
           </Button>

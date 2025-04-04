@@ -69,9 +69,9 @@ const IDNLive = ({ refreshing }) => {
                   borderTopRightRadius="8"
                   maxWidth={200}
                 >
-                  <HStack justifyContent="space-between">
+                  <HStack alignItems="center" justifyContent="space-between">
                     <Text isTruncated>{item?.title}</Text>
-                    <Text fontWeight="medium">
+                    <Text fontSize="xs" fontWeight="medium">
                       {getIDNLiveTime(item.live_at)}
                     </Text>
                   </HStack>

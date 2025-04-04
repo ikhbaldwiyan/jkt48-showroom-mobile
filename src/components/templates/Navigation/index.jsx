@@ -145,7 +145,10 @@ const Navigation = () => {
           <ChevronBack />
         </TouchableOpacity>
       </Box>
-    )
+    ),
+    headerTitleStyle: {
+      fontSize: 18,
+    }
   };
 
   useEffect(() => {

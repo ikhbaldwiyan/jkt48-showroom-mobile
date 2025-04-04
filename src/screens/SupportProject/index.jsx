@@ -17,7 +17,10 @@ const SupportProject = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Support Project JKT48 Showroom"
+      headerTitle: "Support Project JKT48 Showroom",
+      headerTitleStyle: {
+        fontSize: 16,
+      }
     });
   }, []);
 
@@ -52,7 +55,7 @@ const SupportProject = ({ navigation }) => {
         <Text mt="1">
           Halo guys terima kasih telah menggunakan aplikasi JKT48 Showroom
           Fanmade dan mendukung project hingga saat ini. Berkat dukungan kalian,
-          aplikasi ini sudah di download oleh lebih dari 30.000 users! 🥳
+          aplikasi ini sudah di download oleh lebih dari 50.000 users! 🥳
         </Text>
 
         <Text my="3">
