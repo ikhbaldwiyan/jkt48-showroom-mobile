@@ -1,23 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, HStack, InfoIcon, Text, VStack } from "native-base";
+import { Box, Button, HStack, Popover, Text, VStack } from "native-base";
 import UserTabs from "../../components/molecules/UserTabs";
 import useUser from "../../utils/hooks/useUser";
 import { Image, TouchableOpacity } from "react-native";
-import { Donate, Info, LoginIcon, PencilIcon } from "../../assets/icon";
+import {
+  AndroidIcon,
+  Donate,
+  Info,
+  LoginIcon,
+  PencilIcon,
+  ThropyIcon
+} from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
 import trackAnalytics from "../../utils/trackAnalytics";
+import { AUTH } from "../../services";
+import useAuthStore from "../../store/authStore";
+import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 const Profile = () => {
   const { userProfile, profile, session } = useUser();
+  const { setUserProfile } = useAuthStore();
   const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState();
   const isFocused = useIsFocused();
 
+  const setRegisterProfile = async () => {
+    await AUTH.detailUserApi(userProfile?.user_id)
+      .then((res) => {
+        setUserProfile(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     if (session) {
       setIsLogin(true);
+      setRegisterProfile();
     }
   }, [session]);
 
@@ -126,17 +148,76 @@ const Profile = () => {
     );
   }
 
+  const badgeUser = [
+    {
+      condition: userProfile?.top_leaderboard,
+      icon: <ThropyIcon size={16} color="#24A2B7" />,
+      bg: "blueLight",
+      label: "Top Leaderboard",
+      desc: "Badge special karena kamu masuk Top 10 Leaderboard bulanan"
+    },
+    {
+      condition: userProfile?.is_donator,
+      icon: <Donate size={16} color="white" />,
+      bg: "#E49C20",
+      label: "Donator",
+      desc: "Badge special Donator karena sudah support project JKT48 Showroom Fanmade"
+    },
+    {
+      condition: userProfile?.is_developer,
+      icon: <AndroidIcon size={16} color="white" />,
+      bg: "teal",
+      label: "Developer",
+      desc: "Badge khusus Developer Aplikasi JKT48 Showroom Fanmade"
+    }
+  ];
+
+  const badge = badgeUser.find((b) => b.condition);
+
   return (
     <Box flex={1} bg="secondary">
       <VStack mt="4" space={3} alignItems="center">
         <Avatar />
-        <Text mt="1" fontWeight="bold" fontSize="2xl">
-          {profile?.name}
-        </Text>
+        <HStack space={2} alignItems="center">
+          <Text mt="1" fontWeight="bold" fontSize="2xl">
+            {profile?.name}
+          </Text>
+          {badge && (
+            <Popover
+              trigger={(triggerProps) => {
+                return (
+                  <Pressable {...triggerProps}>
+                    <Box
+                      w={7}
+                      h={7}
+                      mt="2"
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      borderRadius="full"
+                      bg={badge.bg}
+                    >
+                      {badge.icon}
+                    </Box>
+                  </Pressable>
+                );
+              }}
+            >
+              <Popover.Content accessibilityLabel="Badge Info" maxW="220">
+                <Popover.Arrow />
+                <Popover.Body>
+                  <Text fontSize="12" color="black">
+                    {badge.desc}
+                  </Text>
+                </Popover.Body>
+              </Popover.Content>
+            </Popover>
+          )}
+        </HStack>
       </VStack>
       <Box flex={1} p="3">
         <UserTabs />
-        <HStack mb="4"space={3}>
+        <HStack mb="4" space={3}>
           <Button
             flex={1}
             variant="solid"
