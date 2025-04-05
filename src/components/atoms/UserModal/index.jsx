@@ -1,5 +1,11 @@
 import React from "react";
-import { AndroidIcon, Donate, IDCard, ThropyIcon } from "../../../assets/icon";
+import {
+  AndroidIcon,
+  Donate,
+  IDCard,
+  PencilIcon,
+  ThropyIcon
+} from "../../../assets/icon";
 import {
   Box,
   Button,
@@ -15,19 +21,32 @@ import LinearGradient from "react-native-linear-gradient";
 import { formatViews } from "../../../utils/helpers";
 import Loading from "../../atoms/Loading";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import { useMostWatchIDN } from "../../../services/hooks/useMostWatchIDN";
+import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import useUser from "../../../utils/hooks/useUser";
 
 const UserModal = ({
   selectedUser,
   setSelectedUser,
-  favMember,
-  userInfo,
-  showID = false
+  showID = false,
+  isEdit = false
 }) => {
+  const { profile } = useUser();
+  const navigation = useNavigation();
+  const { data: mostWatch } = useMostWatchIDN(selectedUser?._id);
+  const favorite = Array.isArray(mostWatch?.data)
+    ? mostWatch.data.filter((item) => item?.member?.name !== "JKT48")
+    : [];
+  const favMember = favorite[0]?.member?.name ? favorite[0] : favorite[1];
+  const userInfo = mostWatch?.user;
+
   const isMostWatch =
     userInfo?.watchShowroomMember > 1000 || userInfo?.watchLiveIDN > 1000;
   const isDonator = userInfo?.is_donator;
   const isDeveloper = userInfo?.is_developer;
   const topLeaderboard = userInfo?.top_leaderboard;
+  
 
   const badgeList = [
     {
@@ -117,10 +136,35 @@ const UserModal = ({
                 >
                   <Image
                     style={{ width: 70, height: 70 }}
-                    source={{ uri: selectedUser.avatar }}
+                    source={{
+                      uri: isEdit ? profile?.avatar_url : selectedUser.avatar
+                    }}
                     alt="avatar"
                     defaultSource={require("../../../assets/image/ava.png")}
                   />
+                  {isEdit && (
+                    <Button
+                      top="88"
+                      bg="white"
+                      borderColor="primary"
+                      borderWidth="2"
+                      position="absolute"
+                      w="8"
+                      h="8"
+                      borderRadius="50"
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      onPress={() => navigation.navigate("Avatar")}
+                    >
+                      <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={() => navigation.navigate("Avatar")}
+                      >
+                        <PencilIcon size="14" />
+                      </TouchableOpacity>
+                    </Button>
+                  )}
                 </Box>
                 {badgeList.map(
                   (badge, index) =>
@@ -130,6 +174,7 @@ const UserModal = ({
                         trigger={(triggerProps) => (
                           <Pressable {...triggerProps}>
                             <HStack
+                              mt={isEdit ? "2" : "0"}
                               py="1.5"
                               px="3"
                               space={2}
@@ -152,7 +197,11 @@ const UserModal = ({
                           </Pressable>
                         )}
                       >
-                        <Popover.Content shadow={3} accessibilityLabel="Badge Info" w="64">
+                        <Popover.Content
+                          shadow={3}
+                          accessibilityLabel="Badge Info"
+                          w="64"
+                        >
                           <Popover.Arrow />
                           <Popover.Body>
                             <Text

@@ -6,7 +6,6 @@ import useIDNLiveStore from "../../../../store/idnLiveStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 import UserModal from "../../../atoms/UserModal";
-import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
 import trackAnalytics from "../../../../utils/trackAnalytics";
 import InfoPodium from "../../../atoms/InfoPodium";
 import BadgeUser from "../../../atoms/BadgeUser";
@@ -18,10 +17,6 @@ export const PodiumIDN = () => {
   const { refreshing, onRefresh } = useRefresh();
   const { profile } = useIDNLiveStore();
   const displayedNames = new Set();
-  const { data: mostWatch } = useMostWatchIDN(selectedUser?._id);
-  const favMember = Array.isArray(mostWatch?.data)
-    ? mostWatch.data.filter((item) => item?.member?.name !== "JKT48")
-    : [];
 
   async function getIDNPodiumList() {
     try {
@@ -74,7 +69,8 @@ export const PodiumIDN = () => {
                 <TouchableOpacity
                   activeOpacity={0.4}
                   onPress={() => {
-                    setSelectedUser(item.user); trackAnalytics("podium_user_click", {
+                    setSelectedUser(item.user);
+                    trackAnalytics("podium_user_click", {
                       name: item.user.name,
                       user_id: item.user.user_id
                     });
@@ -99,8 +95,6 @@ export const PodiumIDN = () => {
         </HStack>
       </ScrollView>
       <UserModal
-        favMember={favMember[0]?.member?.name ? favMember[0] : favMember[1]}
-        userInfo={mostWatch?.user}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
       />

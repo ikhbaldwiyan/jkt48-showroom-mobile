@@ -1,17 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, HStack, Image, Text } from "native-base";
 import Logo from "../../atoms/Logo";
+import UserModal from "../../atoms/UserModal";
 import useUser from "../../../utils/hooks/useUser";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LoginIcon } from "../../../assets/icon";
+import trackAnalytics from "../../../utils/trackAnalytics";
 
 const Header = () => {
-  const { profile } = useUser();
   const navigation = useNavigation();
+  const { profile, userProfile } = useUser();
+  const [selectedUser, setSelectedUser] = useState("");
 
   const handleLogin = () => {
     navigation.replace("Login");
+  };
+
+  const handleUserDetail = (data) => {
+    setSelectedUser(data);
+    trackAnalytics("open_profile_header", {
+      name: profile?.name,
+      user_id: profile?.user_id
+    });
   };
 
   return (
@@ -24,7 +35,7 @@ const Header = () => {
     >
       <Logo isHeader />
       <TouchableOpacity
-        onPress={profile ? () => navigation.navigate("Avatar") : handleLogin}
+        onPress={profile ? () => handleUserDetail(userProfile) : handleLogin}
       >
         <Box maxW="100">
           {profile ? (
@@ -52,6 +63,12 @@ const Header = () => {
           )}
         </Box>
       </TouchableOpacity>
+      <UserModal
+        showID
+        isEdit
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
+      />
     </Box>
   );
 };

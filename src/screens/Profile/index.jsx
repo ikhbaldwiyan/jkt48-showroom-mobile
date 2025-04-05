@@ -83,13 +83,13 @@ const Profile = () => {
       </Box>
       {session && (
         <Button
-          top="95"
+          top="99"
           bg="white"
           borderColor="primary"
           borderWidth="2"
           position="absolute"
-          w="10"
-          h="10"
+          w="8"
+          h="8"
           borderRadius="50"
           display="flex"
           justifyContent="center"
@@ -100,7 +100,7 @@ const Profile = () => {
             activeOpacity={0.7}
             onPress={() => navigation.navigate("Avatar")}
           >
-            <PencilIcon />
+            <PencilIcon size="15" />
           </TouchableOpacity>
         </Button>
       )}

@@ -7,7 +7,6 @@ import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 import { FlashList } from "@shopify/flash-list";
 import UserModal from "../../../atoms/UserModal";
-import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
 import trackAnalytics from "../../../../utils/trackAnalytics";
 import InfoPodium from "../../../atoms/InfoPodium";
 import BadgeUser from "../../../atoms/BadgeUser";
@@ -19,10 +18,6 @@ export const Podium = () => {
   const { refreshing, onRefresh } = useRefresh();
   const displayedNames = new Set();
   const [selectedUser, setSelectedUser] = useState(null);
-  const { data: mostWatch } = useMostWatchIDN(selectedUser?._id);
-  const favMember = Array.isArray(mostWatch?.data)
-    ? mostWatch.data.filter((item) => item?.member?.name !== "JKT48")
-    : [];
 
   async function getPodiumList() {
     const response = await STREAM.getLivePodium(profile?.live_id);
@@ -105,8 +100,6 @@ export const Podium = () => {
         }
       />
       <UserModal
-        favMember={favMember[0]?.member?.name ? favMember[0] : favMember[1]}
-        userInfo={mostWatch?.user}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}
       />
