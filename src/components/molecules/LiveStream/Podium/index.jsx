@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Center, Image, Text, VStack } from "native-base";
+import { Center, HStack, Image, Text, VStack } from "native-base";
 import { RefreshControl, TouchableOpacity } from "react-native";
 import { STREAM } from "../../../../services";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
@@ -8,6 +8,9 @@ import CardGradient from "../../../atoms/CardGradient";
 import { FlashList } from "@shopify/flash-list";
 import UserModal from "../../../atoms/UserModal";
 import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
+import trackAnalytics from "../../../../utils/trackAnalytics";
+import InfoPodium from "../../../atoms/InfoPodium";
+import BadgeUser from "../../../atoms/BadgeUser";
 
 export const Podium = () => {
   const { profile } = useLiveStreamStore();
@@ -57,7 +60,13 @@ export const Podium = () => {
       <VStack my="4" alignItems="center" width="100%">
         <TouchableOpacity
           activeOpacity={0.4}
-          onPress={() => setSelectedUser(item.user)}
+          onPress={() => {
+            setSelectedUser(item.user);
+            trackAnalytics("podium_user_click", {
+              name: item.user.name,
+              user_id: item.user.user_id
+            });
+          }}
         >
           <Center>
             <Image
@@ -69,9 +78,7 @@ export const Podium = () => {
                   "https://static.showroom-live.com/image/avatar/1028686.png?v=100"
               }}
             />
-            <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
-              {item.user.name}
-            </Text>
+            <BadgeUser user={item?.user} />
           </Center>
         </TouchableOpacity>
       </VStack>
@@ -89,14 +96,16 @@ export const Podium = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        estimatedItemSize={100}
         ListHeaderComponent={
-          <Center>
-            <Text fontWeight="bold">{views} Orang sedang menonton</Text>
-          </Center>
+          <HStack mb="2" justifyContent="center" alignItems="center" space={3}>
+            <Text fontWeight="medium">{views} Orang sedang menonton</Text>
+            <InfoPodium />
+          </HStack>
         }
       />
       <UserModal
-        favMember={favMember[0]}
+        favMember={favMember[0]?.member?.name ? favMember[0] : favMember[1]}
         userInfo={mostWatch?.user}
         selectedUser={selectedUser}
         setSelectedUser={setSelectedUser}

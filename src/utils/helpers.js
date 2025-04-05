@@ -110,3 +110,18 @@ export const getIDNLiveTime = (value) => {
     format_two_digits(dt.getHours()) + ":" + format_two_digits(dt.getMinutes());
   return time;
 };
+
+export const monthNames = [
+  { name: "January", short: "01" },
+  { name: "February", short: "02" },
+  { name: "March", short: "03" },
+  { name: "April", short: "04" },
+  { name: "May", short: "05" },
+  { name: "June", short: "06" },
+  { name: "July", short: "07" },
+  { name: "August", short: "08" },
+  { name: "September", short: "09" },
+  { name: "October", short: "10" },
+  { name: "November", short: "11" },
+  { name: "December", short: "12" }
+];

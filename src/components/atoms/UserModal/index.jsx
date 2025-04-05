@@ -1,5 +1,5 @@
 import React from "react";
-import { AndroidIcon, Donate, IDCard, StarIcon } from "../../../assets/icon";
+import { AndroidIcon, Donate, IDCard, ThropyIcon } from "../../../assets/icon";
 import {
   Box,
   Button,
@@ -7,28 +7,79 @@ import {
   HStack,
   Image,
   Modal,
+  Popover,
   Text,
   VStack
 } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { formatViews } from "../../../utils/helpers";
 import Loading from "../../atoms/Loading";
+import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
-const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
+const UserModal = ({
+  selectedUser,
+  setSelectedUser,
+  favMember,
+  userInfo,
+  showID = false
+}) => {
   const isMostWatch =
     userInfo?.watchShowroomMember > 1000 || userInfo?.watchLiveIDN > 1000;
-  const isDonator = selectedUser?.is_donator || selectedUser?.can_farming_page;
-  const isDeveloper =
-    selectedUser?.user_id === "inzoid" ||
-    selectedUser?.user_id === "ahmad-mughni" ||
-    selectedUser?.user_id === "Lowly";
+  const isDonator = userInfo?.is_donator;
+  const isDeveloper = userInfo?.is_developer;
+  const topLeaderboard = userInfo?.top_leaderboard;
+
+  const badgeList = [
+    {
+      condition: topLeaderboard,
+      icon: <ThropyIcon size={16} color="#24A2B7" />,
+      label: "Top Leaderboard",
+      desc: "Badge special karena masuk Top 10 Leaderboard bulanan",
+      bg: "blueLight",
+      textColor: "primary"
+    },
+    {
+      condition: isDonator,
+      icon: <Donate size={18} color="white" />,
+      label: "Donator",
+      desc: "Badge special Donator karena sudah support project JKT48 Showroom Fanmade",
+      bg: "#E49C20",
+      textColor: "white"
+    },
+    {
+      condition: isDeveloper,
+      icon: <AndroidIcon size={16} color="white" />,
+      label: "Developer",
+      desc: "Badge khusus Developer Aplikasi JKT48 Showroom Fanmade",
+      bg: "teal",
+      textColor: "white",
+      border: {
+        width: 1,
+        color: "gray.300"
+      }
+    }
+  ];
 
   return (
     selectedUser && (
       <Modal isOpen={!!selectedUser} onClose={() => setSelectedUser(null)}>
         <Modal.Content
           width="85%"
-          height={isDonator || isDeveloper ? "65%" : "60%"}
+          height={(() => {
+            const MODAL_HEIGHT = {
+              DONATOR_WITH_TOP: "72%",
+              SPECIAL_USER: "70%",
+              WITH_ID: "62%",
+              DEFAULT: "60%"
+            };
+
+            if (isDonator && topLeaderboard)
+              return MODAL_HEIGHT.DONATOR_WITH_TOP;
+            if (isDonator || isDeveloper || topLeaderboard)
+              return MODAL_HEIGHT.SPECIAL_USER;
+            if (showID) return MODAL_HEIGHT.WITH_ID;
+            return MODAL_HEIGHT.DEFAULT;
+          })()}
           borderRadius="10"
         >
           <LinearGradient
@@ -46,6 +97,11 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
               >
                 {selectedUser?.name}
               </Text>
+              {showID && (
+                <Text mt="1" textAlign="center" fontSize="sm" color="white">
+                  ID: {selectedUser?.user_id}
+                </Text>
+              )}
             </Box>
             <Modal.Body>
               <VStack space={4} alignItems="center">
@@ -63,40 +119,55 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                     style={{ width: 70, height: 70 }}
                     source={{ uri: selectedUser.avatar }}
                     alt="avatar"
+                    defaultSource={require("../../../assets/image/ava.png")}
                   />
                 </Box>
-                {isDonator && (
-                  <HStack
-                    py="1.5"
-                    px="3"
-                    space={2}
-                    alignItems="center"
-                    bgColor="amber.400"
-                    borderRadius="10"
-                  >
-                    <Donate size={18} color="#434A52" />
-                    <Text fontSize="15" fontWeight="bold" color="#434A52">
-                      Donator
-                    </Text>
-                  </HStack>
+                {badgeList.map(
+                  (badge, index) =>
+                    badge.condition && (
+                      <Popover
+                        key={index}
+                        trigger={(triggerProps) => (
+                          <Pressable {...triggerProps}>
+                            <HStack
+                              py="1.5"
+                              px="3"
+                              space={2}
+                              alignItems="center"
+                              bg={badge.bg}
+                              borderRadius="10"
+                              shadow={4}
+                              borderWidth={badge.border?.width}
+                              borderColor={badge.border?.color}
+                            >
+                              {badge.icon}
+                              <Text
+                                fontSize="15"
+                                fontWeight="bold"
+                                color={badge.textColor}
+                              >
+                                {badge.label}
+                              </Text>
+                            </HStack>
+                          </Pressable>
+                        )}
+                      >
+                        <Popover.Content shadow={3} accessibilityLabel="Badge Info" w="64">
+                          <Popover.Arrow />
+                          <Popover.Body>
+                            <Text
+                              textAlign="center"
+                              fontSize="xs"
+                              color="gray.800"
+                            >
+                              {badge.desc}
+                            </Text>
+                          </Popover.Body>
+                        </Popover.Content>
+                      </Popover>
+                    )
                 )}
-                {isDeveloper && (
-                  <HStack
-                    py="1.5"
-                    px="3"
-                    space={2}
-                    alignItems="center"
-                    bgColor="teal"
-                    borderWidth="1"
-                    borderColor="gray.300"
-                    borderRadius="10"
-                  >
-                    <AndroidIcon size={16} color="white" />
-                    <Text fontSize="15" fontWeight="bold" color="white">
-                      Developer
-                    </Text>
-                  </HStack>
-                )}
+
                 {userInfo ? (
                   <>
                     {favMember && (
@@ -126,6 +197,7 @@ const UserModal = ({ selectedUser, setSelectedUser, favMember, userInfo }) => {
                               source={{
                                 uri: favMember?.member?.image
                               }}
+                              alt="member fav"
                             />
                             <VStack>
                               <Text fontSize="16" fontWeight="semibold">
