@@ -165,7 +165,7 @@ const Register = ({ navigation }) => {
             w="100%"
             fontSize="md"
             name="id"
-            placeholder="Ex : Marsha"
+            placeholder="Ex : Indah"
             value={formData.name}
             onChangeText={(value) => handleChange("name", value)}
             isInvalid={formData?.error_message}
@@ -239,7 +239,10 @@ const Register = ({ navigation }) => {
           )}
 
           <Text onPress={handleLoginRedirect} color="white" mt="3">
-            Sudah punya akun? <Text color="primary">Login Disini</Text>
+            Sudah punya akun?{" "}
+            <Text fontWeight="semibold" color="primary">
+              Login Disini
+            </Text>
           </Text>
 
           <Button

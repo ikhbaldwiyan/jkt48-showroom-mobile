@@ -53,10 +53,28 @@ const Login = ({ navigation }) => {
         }));
       }
 
-      if (response.data.user.error) {
+      const error = response?.data?.user?.error;
+
+      if (error) {
         setFormData((prevState) => ({
           ...prevState,
-          error_message: response.data.user.error
+          error_message:
+            error === "An error occured. Please go back and try again."
+              ? "Login error, silakan coba beberapa saat lagi"
+              : error === "Incorrect authentication code"
+              ? "Kode captcha salah, tolong cek lagi"
+              : error.includes("Your account ID/password is incorrect")
+              ? "ID Akun atau password salah. password bisa mengandung huruf besar/kecil dan harus sesuai."
+              : error === "Please fill in all required fields."
+              ? "Tolong Isi ID Akun dan Password"
+              : error
+        }));
+      }
+
+      if (error === "Incorrect authentication code") {
+        setFormData((prevState) => ({
+          ...prevState,
+          captcha_word: ""
         }));
       }
 
@@ -163,7 +181,7 @@ const Login = ({ navigation }) => {
             w="100%"
             fontSize="md"
             name="id"
-            placeholder="Ex: sorum48"
+            placeholder="Ex: inzoid48"
             value={formData.account_id}
             onChangeText={(value) => handleChange("account_id", value)}
             isInvalid={formData?.error_message}
@@ -219,14 +237,17 @@ const Login = ({ navigation }) => {
                 w="100%"
                 fontSize="md"
                 name="id"
-                placeholder="Ketik captcha diatas"
+                placeholder="Ketik kode captcha diatas"
                 value={formData.captcha_word}
                 onChangeText={(value) => handleChange("captcha_word", value)}
               />
             </Box>
           )}
           <Text onPress={handleRegister} color="white" my="1">
-            Belum Punya Akun? <Text color="primary">Daftar Disini</Text>
+            Belum Punya Akun?{" "}
+            <Text fontWeight="semibold" color="primary">
+              Daftar Disini
+            </Text>
           </Text>
 
           <Button
