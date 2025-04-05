@@ -34,7 +34,7 @@ const SupportApp = ({ isVisible, onOpen, onClose }) => {
 
         // Show modal at specific counts
         const triggerCounts = [
-          5, 13, 34, 55, 89, 144, 233, 377, 610, 987, 1200, 1500, 1800, 2100,
+          16, 34, 55, 89, 144, 233, 300, 377, 610, 987, 1200, 1500, 1800, 2100,
           2400, 2700, 3000,
         ];
         if (triggerCounts.includes(currentCount)) {

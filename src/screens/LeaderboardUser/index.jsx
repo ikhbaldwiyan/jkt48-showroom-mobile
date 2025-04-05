@@ -205,7 +205,7 @@ const LeaderboardUser = ({ navigation }) => {
             color="white"
           >
             <Select.Item
-              label="All Platform Live"
+              label="All Platform"
               value=""
               endIcon={
                 platform === "" ? (

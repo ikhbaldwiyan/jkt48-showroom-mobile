@@ -13,6 +13,7 @@ const useApiConfig = create(
       HISTORY_API,
       JKT48_SHOWROOM_API,
       PODIUM_API,
+      DONATION_IMG: "",
 
       // Method to update the API configuration
       setApiConfig: (config) => set(config),

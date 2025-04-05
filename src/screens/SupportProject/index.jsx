@@ -10,16 +10,18 @@ import { Donate } from "../../assets/icon";
 import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
 import trackAnalytics from "../../utils/trackAnalytics";
+import useApiConfig from "../../store/useApiConfig";
 
 const SupportProject = ({ navigation }) => {
   const { userProfile } = useUser();
   const [donator, setDonator] = useState();
+  const { DONATION_IMG } = useApiConfig();
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Support Project JKT48 Showroom",
       headerTitleStyle: {
-        fontSize: 16,
+        fontSize: 16
       }
     });
   }, []);
@@ -84,27 +86,55 @@ const SupportProject = ({ navigation }) => {
         </TouchableOpacity>
         <Divider mt="4" mb="2" />
 
-        <Text mb="2" fontSize="2xl" fontWeight="bold">
+        <Text mb="2" fontSize="2xl" fontWeight="semibold">
           Donator
         </Text>
         <VStack space={3}>
           <Text>Dengan mendukung project ini, kalian akan mendapatkan:</Text>
+          <Image
+            width="100%"
+            height="280"
+            borderRadius="md"
+            alt="Donation Image"
+            source={{
+              uri: "https://res.cloudinary.com/dkkagbzl4/image/upload/v1743871040/zg6mjjisj1vkkxeipvng.jpg"
+            }}
+          />
 
           <VStack space={2} pl="3">
+            <Text>
+              - <Text fontWeight="bold">Special Badge Donator</Text> akan
+              ditampilkan di profile dan detail akun showroom kamu.
+            </Text>
             <Text>
               - <Text fontWeight="bold">Role Donator eksklusif</Text> di server
               Discord kami.
             </Text>
             <Text>
-              - <Text fontWeight="bold">Foto profil dan username kalian</Text>{" "}
-              akan ditampilkan di page ini sebagai bentuk apresiasi kami.
+              -{" "}
+              <Text fontWeight="bold">
+                Foto profil dan username discord kalian
+              </Text>{" "}
+              akan ditampilkan di halaman support project ini.
             </Text>
           </VStack>
-
-          <Text mb="4">
-            Terima kasih banyak atas dukungan dan kontribusinya!
-          </Text>
+          <Text>Terima kasih banyak atas dukungannya guys!</Text>
         </VStack>
+        <Divider my="3" />
+        <Text fontWeight="semibold" fontSize="xl">
+          Top Donation Saweria
+        </Text>
+        <Image
+          my="3"
+          width="100%"
+          height="81"
+          borderRadius="md"
+          alt="Donation Image"
+          source={{ uri: DONATION_IMG }}
+        />
+        <Text mb="3" fontWeight="semibold" fontSize="xl">
+          Donator Discord Role
+        </Text>
         <CardGradient color="light" isRounded>
           <HStack
             space="3"
