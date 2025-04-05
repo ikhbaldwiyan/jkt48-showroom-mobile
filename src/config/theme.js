@@ -15,6 +15,13 @@ export const theme = extendTheme({
       baseStyle: {
         color: "white"
       }
+    },
+    Input: {
+      baseStyle: {
+        _input: {
+          fontSize: 14
+        }
+      },
     }
   }
 });

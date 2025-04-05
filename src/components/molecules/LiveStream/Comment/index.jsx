@@ -10,7 +10,7 @@ import {
   useToast,
   Input,
   Button,
-  Spinner,
+  Spinner
 } from "native-base";
 import { FlatList, RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
@@ -39,6 +39,7 @@ export const Comment = () => {
   const { refreshing, onRefresh } = useRefresh();
   const roomId = profile?.room_id;
   const { mode } = useThemeStore();
+  const isLightMode = mode === "light";
 
   useEffect(() => {
     async function getComments() {
@@ -237,9 +238,9 @@ export const Comment = () => {
             w="90%"
             fontSize="md"
             name="comment"
-            bgColor={mode === "light" ? "white" : "#282C34"}
-            color={mode === "light" ? "black" : "white"}
-            borderColor={mode === "light" ? "black" : "primary"}
+            bgColor={isLightMode ? "white" : "#282C34"}
+            color={isLightMode ? "black" : "white"}
+            borderColor={isLightMode ? "black" : "primary"}
             borderRightWidth={0}
             borderRadius="md"
             borderTopRightRadius="0"
@@ -257,12 +258,54 @@ export const Comment = () => {
             borderTopLeftRadius="0"
             borderLeftWidth={0}
             borderBottomLeftRadius="0"
-            borderWidth={mode === "light" ? "0" : "1"}
-            background={mode === "light" ? "secondary" : "primary"}
+            borderWidth={isLightMode ? "0" : "1"}
+            background={isLightMode ? "secondary" : "primary"}
             onPress={sendComment}
             disabled={textComment.length === 0 || buttonLoading}
           >
             {buttonLoading ? <Spinner color="white" /> : <SendIcon />}
+          </Button>
+        </HStack>
+      )}
+
+      {!session && (
+        <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
+          <Input
+            variant="filled"
+            w="85%"
+            fontSize="md"
+            name="comment"
+            bgColor={isLightMode ? "white" : "#282C34"}
+            color={isLightMode ? "black" : "white"}
+            borderColor={isLightMode ? "black" : "primary"}
+            borderRightWidth={0}
+            borderRadius="md"
+            borderTopRightRadius="0"
+            borderBottomRightRadius="0"
+            placeholder="Silakan login untuk kirim komentar"
+            _input={{
+              textAlign: "left",
+            }}
+            _disabled={{
+              opacity: 1
+            }}
+            onChangeText={handleComment}
+            value={textComment}
+            isDisabled
+          />
+          <Button
+            w="20%"
+            borderColor="primary"
+            borderTopLeftRadius="0"
+            borderLeftWidth={0}
+            borderBottomLeftRadius="0"
+            borderWidth={isLightMode ? "0" : "1"}
+            background={isLightMode ? "secondary" : "primary"}
+            onPress={() => {
+              navigation.replace("Login")
+            }}
+          >
+            <Text fontSize="xs">Login</Text>
           </Button>
         </HStack>
       )}
