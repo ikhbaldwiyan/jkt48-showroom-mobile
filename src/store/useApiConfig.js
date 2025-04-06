@@ -2,7 +2,7 @@
 import create from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SHOWROOM_API, USER_API, AUTH_API, HISTORY_API, JKT48_SHOWROOM_API, PODIUM_API } from "@env";
+import { SHOWROOM_API, USER_API, AUTH_API, HISTORY_API, JKT48_SHOWROOM_API, PODIUM_API, ROOM_LIST_API } from "@env";
 
 const useApiConfig = create(
   persist(
@@ -13,6 +13,7 @@ const useApiConfig = create(
       HISTORY_API,
       JKT48_SHOWROOM_API,
       PODIUM_API,
+      ROOM_LIST_API,
       DONATION_IMG: "",
 
       // Method to update the API configuration

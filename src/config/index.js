@@ -7,6 +7,7 @@ import {
   apiHistory,
   apiAdmin,
   apiPodium,
+  apiRoomList,
 } from "./interceptors";
 
 export {
@@ -18,4 +19,5 @@ export {
   apiHistory,
   apiAdmin,
   apiPodium,
+  apiRoomList,
 };

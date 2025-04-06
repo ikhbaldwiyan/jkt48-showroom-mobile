@@ -1,5 +1,4 @@
 import { apiAdmin, ENDPOINTS } from "../config";
-import moment from 'moment';
 
 export const getLeaderboardShowroom = (params) => {
   return apiAdmin.get(`${ENDPOINTS.LEADERBOARD.SHOWROOM}`, {
