@@ -60,7 +60,7 @@ const Login = ({ navigation }) => {
           ...prevState,
           error_message:
             error === "An error occured. Please go back and try again."
-              ? "Login error, silakan coba beberapa saat lagi"
+              ? "Login gagal, silakan coba lagi"
               : error === "Incorrect authentication code"
                 ? "Kode captcha salah, tolong cek lagi"
                 : error.includes("Your account ID/password is incorrect")
