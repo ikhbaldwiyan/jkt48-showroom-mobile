@@ -53,14 +53,14 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
           </Modal.Header>
           <Modal.Body bg="secondary">
             <VStack space={3}>
-              <Text>- Added User Detail podium info</Text>
-              <Text>- Show Total Watch SR or IDN on podium user</Text>
-              <Text>- Show Favorite member on podium user modal</Text>
-              <Text>- Added support project page and modal</Text>
-              <Text>- Added IDN Live Chat tab</Text>
-              <Text>- Show Top Live Members Showroom & IDN</Text>
-              <Text>- Added IDN App Link on Ticket</Text>
-              <Text>- Show info maintenance app if server down</Text>
+              <Text>- Added room profile gen 13 member</Text>
+              <Text>- New menu Leaderboard User</Text>
+              <Text>- Added user info modal in home header</Text>
+              <Text>- Added Top Leaderboard user badge</Text>
+              <Text>- Show special donator badge in user profile</Text>
+              <Text>- Adjust wording login error message</Text>
+              <Text>- Show info podium tab popover</Text>
+              <Text>- Add top donation saweria image</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
