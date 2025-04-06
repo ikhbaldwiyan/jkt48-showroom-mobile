@@ -5,6 +5,7 @@ import { AUTH } from "../../services";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import useAuthStore from "../../store/authStore";
 import useChangeLogStore from "../../store/changeLogStore";
+import { handleFcmTokenUpdate } from "../../utils/fcmHelper";
 
 import {
   IDNLIve,
@@ -42,6 +43,12 @@ const Home = ({ navigation }) => {
       setRegisterProfile(user?.account_id);
     }
   }, [userProfile]);
+
+  useEffect(() => {
+    if (userProfile) {
+      handleFcmTokenUpdate();
+    }
+  }, [session])
 
   return (
     <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
