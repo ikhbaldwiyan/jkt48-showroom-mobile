@@ -44,7 +44,7 @@ export async function handleFcmTokenUpdate() {
   }
 
   // Check if the FCM token is missing or has changed
-  if (!userProfile?.fcm_token || currentFcmToken !== userProfile?.fcm_token) {
+  if (!userProfile?.fcm_token || userProfile?.fcm_token !== "" || currentFcmToken !== userProfile?.fcm_token) {
     console.log('Updating FCM token...');
     await updateFcmToken(userProfile.user_id, currentFcmToken);
   } else {

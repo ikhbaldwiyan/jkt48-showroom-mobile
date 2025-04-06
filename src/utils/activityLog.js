@@ -1,5 +1,6 @@
 import useAuthStore from "../store/authStore";
 import { postActivityLog, postRegisterUser } from "../services/user";
+import messaging from "@react-native-firebase/messaging";
 
 export const activityLog = async ({ userId, logName, description, liveId }) => {
   const { profile, user, userProfile, setUserProfile } = useAuthStore.getState();
@@ -8,7 +9,8 @@ export const activityLog = async ({ userId, logName, description, liveId }) => {
     postRegisterUser({
       user_id: user?.account_id,
       name: profile?.name,
-      avatar: profile?.avatar_url
+      avatar: profile?.avatar_url,
+      fcm_token: await messaging().getToken()
     })
       .then((res) => {
         if (logName !== "Register") {
