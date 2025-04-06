@@ -25,6 +25,7 @@ import { useMostWatchIDN } from "../../../services/hooks/useMostWatchIDN";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useUser from "../../../utils/hooks/useUser";
+import Logout from "../../molecules/UserTabs/components/Logout";
 
 const UserModal = ({
   selectedUser,
@@ -46,7 +47,6 @@ const UserModal = ({
   const isDonator = userInfo?.is_donator;
   const isDeveloper = userInfo?.is_developer;
   const topLeaderboard = userInfo?.top_leaderboard;
-  
 
   const badgeList = [
     {
@@ -87,8 +87,8 @@ const UserModal = ({
           height={(() => {
             const MODAL_HEIGHT = {
               DONATOR_WITH_TOP: "72%",
-              SPECIAL_USER: "70%",
-              WITH_ID: "62%",
+              SPECIAL_USER: "71%",
+              WITH_ID: "66%",
               DEFAULT: "60%"
             };
 
@@ -219,27 +219,28 @@ const UserModal = ({
 
                 {userInfo ? (
                   <>
-                    {favMember && (
-                      <LinearGradient
-                        colors={["#495057", "#282C34"]}
-                        style={{
-                          flex: 1,
-                          borderRadius: 10,
-                          width: "100%"
-                        }}
-                      >
-                        <Box p="3.5" py="3">
-                          <HStack space={2.5} alignItems="center">
-                            <IDCard size={16} />
-                            <Text
-                              textAlign="center"
-                              fontSize={15}
-                              fontWeight="semibold"
-                            >
-                              Favorite Member
-                            </Text>
-                          </HStack>
-                          <Divider my="2" mb="3" />
+                    <LinearGradient
+                      colors={["#495057", "#282C34"]}
+                      style={{
+                        flex: 1,
+                        borderRadius: 10,
+                        width: "100%",
+                        marginTop: 6
+                      }}
+                    >
+                      <Box p="3.5" py="3">
+                        <HStack space={2.5} alignItems="center">
+                          <IDCard size={16} />
+                          <Text
+                            textAlign="center"
+                            fontSize={15}
+                            fontWeight="semibold"
+                          >
+                            Favorite Member
+                          </Text>
+                        </HStack>
+                        <Divider my="2" mb="3" />
+                        {favMember ? (
                           <HStack space={4} alignItems="center">
                             <Image
                               style={{ width: 70, height: 70, borderRadius: 8 }}
@@ -255,9 +256,11 @@ const UserModal = ({
                               <Text>{favMember?.watch}x Watch</Text>
                             </VStack>
                           </HStack>
-                        </Box>
-                      </LinearGradient>
-                    )}
+                        ) : (
+                          <Text fontSize="sm">Favorit member tidak ditemukan. Silakan tonton live streaming untuk menampilkan favorit member.</Text>
+                        )}
+                      </Box>
+                    </LinearGradient>
                     <HStack space={isMostWatch ? 4 : 8}>
                       <VStack alignItems="center" space={2}>
                         <Text color="blueLight" fontWeight="semibold">
@@ -317,8 +320,11 @@ const UserModal = ({
                 )}
               </VStack>
             </Modal.Body>
-            <Modal.Footer py="2" bg="transparent">
-              <Button onPress={() => setSelectedUser(null)}>
+            <Modal.Footer justifyContent="space-around" py="2" bg="transparent">
+              {isEdit && (
+                <Logout />
+              )}
+              <Button variant="ghost" onPress={() => setSelectedUser(null)}>
                 <Text fontWeight="semibold">Close</Text>
               </Button>
             </Modal.Footer>

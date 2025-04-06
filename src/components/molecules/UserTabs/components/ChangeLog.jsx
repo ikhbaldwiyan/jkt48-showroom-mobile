@@ -61,6 +61,7 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Adjust wording login error message</Text>
               <Text>- Show info podium tab popover</Text>
               <Text>- Add top donation saweria image</Text>
+              <Text>- Show Favorite Member on profile modal</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">

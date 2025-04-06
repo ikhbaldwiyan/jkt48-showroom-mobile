@@ -62,16 +62,16 @@ const Login = ({ navigation }) => {
             error === "An error occured. Please go back and try again."
               ? "Login error, silakan coba beberapa saat lagi"
               : error === "Incorrect authentication code"
-              ? "Kode captcha salah, tolong cek lagi"
-              : error.includes("Your account ID/password is incorrect")
-              ? "ID Akun atau password salah. password bisa mengandung huruf besar/kecil dan harus sesuai."
-              : error === "Please fill in all required fields."
-              ? "Tolong Isi ID Akun dan Password"
-              : error
+                ? "Kode captcha salah, tolong cek lagi"
+                : error.includes("Your account ID/password is incorrect")
+                  ? "ID Akun atau password salah. password bisa mengandung huruf besar/kecil dan harus sesuai."
+                  : error === "Please fill in all required fields."
+                    ? "Tolong Isi ID Akun dan Password"
+                    : error
         }));
       }
 
-      if (error === "Incorrect authentication code") {
+      if (error === "Incorrect authentication code" || error?.includes("Your account ID/password is incorrect")) {
         setFormData((prevState) => ({
           ...prevState,
           captcha_word: ""

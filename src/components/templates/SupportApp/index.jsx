@@ -104,7 +104,7 @@ const SupportApp = ({ isVisible, onOpen, onClose }) => {
         >
           <HStack space={2} alignItems="center">
             <Donate size={20} />
-            <Text fontWeight="bold" fontSize="lg">
+            <Text fontWeight="bold" fontSize="md">
               Dukung Project
             </Text>
           </HStack>

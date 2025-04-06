@@ -251,7 +251,7 @@ const Profile = () => {
             </TouchableOpacity>
           </Button>
         </HStack>
-        <Logout />
+        <Logout isProfile />
       </Box>
     </Box>
   );

@@ -8,7 +8,7 @@ import useUser from "../../../../utils/hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../../../store/authStore";
 
-const Logout = () => {
+const Logout = ({ isProfile = false }) => {
   const { profile } = useUser();
   const { logout } = useAuthStore();
   const [modalLogout, setModalLogout] = useState(false);
@@ -29,17 +29,18 @@ const Logout = () => {
   };
 
   return (
-    <View mt="2" mb="8">
+    <View mt={isProfile ? "2" : 0} mb={isProfile ? "8" : 0}>
       <Button
-        bg="blueGray.600"
+        bg={isProfile ? "blueGray.600" : "none"}
         borderRadius="10"
-        variant="solid"
+        size={isProfile ? "md" : "sm"}
+        variant={isProfile ? "solid" : "ghost"}
         onPress={handleModal}
       >
         <TouchableOpacity onPress={handleModal}>
-          <HStack space={2}>
+          <HStack space={2} alignItems="center">
             <LoginIcon size={24} />
-            <Text fontSize={16} fontWeight="semibold">
+            <Text fontSize={isProfile ? 16 : 14} fontWeight="semibold">
               Logout
             </Text>
           </HStack>
