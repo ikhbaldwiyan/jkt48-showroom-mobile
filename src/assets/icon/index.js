@@ -62,6 +62,7 @@ import ThropyIconOutline from "./ThropyIconOutline";
 import KebabMenu from "./KebabMenu";
 import WatchIcon from "./WatchIcon";
 import Medal from './Medal';
+import MultiLiveIcon from "./MultiLive";
 
 export {
   LogoIcon,
@@ -128,4 +129,5 @@ export {
   WatchIcon,
   ThropyIconOutline,
   Medal,
+  MultiLiveIcon,
 };
