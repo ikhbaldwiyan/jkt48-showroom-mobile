@@ -7,6 +7,7 @@ import Views from "../../components/atoms/Views";
 import { ROOMS } from "../../services";
 import Layout from "../../components/templates/Layout";
 import { useRefresh } from "../../utils/hooks/useRefresh";
+import { TopMember, HistoryLive, EmptyLive } from "../../components/organisms";
 
 const RoomLives = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
@@ -24,7 +25,7 @@ const RoomLives = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Showroom Live",
+      headerTitle: "Showroom Live"
     });
   }, []);
 
@@ -39,7 +40,7 @@ const RoomLives = ({ navigation }) => {
         <Image
           borderRadius={8}
           source={{
-            uri: cleanImage(item.image_square),
+            uri: cleanImage(item.image_square)
           }}
           alt={item.main_name}
           size="xl"
@@ -96,7 +97,11 @@ const RoomLives = ({ navigation }) => {
     </Layout>
   ) : (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
-      <Box mb="4"></Box>
+      <VStack space={2} mb="4">
+        <EmptyLive />
+        <TopMember liveType="showroom" />
+        <HistoryLive />
+      </VStack>
     </Layout>
   );
 };

@@ -63,6 +63,7 @@ import KebabMenu from "./KebabMenu";
 import WatchIcon from "./WatchIcon";
 import Medal from './Medal';
 import MultiLiveIcon from "./MultiLive";
+import NoLive from "./NoLive";
 
 export {
   LogoIcon,
@@ -130,4 +131,5 @@ export {
   ThropyIconOutline,
   Medal,
   MultiLiveIcon,
+  NoLive,
 };
