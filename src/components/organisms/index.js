@@ -6,6 +6,7 @@ import RecentLives from "./RecentLives";
 import TopMember from "./TopMember";
 import EmptyLive from "./EmptyLive";
 import HistoryLive from "./HistoryLive";
+import ScheduleHome from "./ScheduleHome";
 
 export {
   RoomList,
@@ -16,4 +17,5 @@ export {
   TopMember,
   EmptyLive,
   HistoryLive,
+  ScheduleHome,
 }

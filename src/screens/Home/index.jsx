@@ -11,8 +11,7 @@ import {
   IDNLIve,
   ShowroomLive,
   RecentLives,
-  Schedule,
-  TopMember,
+  ScheduleHome,
 } from "../../components/organisms";
 import Layout from "../../components/templates/Layout";
 import RatingApp from "../../components/templates/RatingApp";
@@ -49,7 +48,7 @@ const Home = ({ navigation }) => {
     if (userProfile) {
       handleFcmTokenUpdate();
     }
-  }, [session])
+  }, [session]);
 
   return (
     <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
@@ -58,8 +57,7 @@ const Home = ({ navigation }) => {
         <ShowroomLive refreshing={refreshing} />
         <IDNLIve refreshing={refreshing} />
         <RecentLives refreshing={refreshing} />
-        <TopMember refreshing={refreshing} />
-        <Schedule refreshing={refreshing} navigation={navigation} isWeek />
+        <ScheduleHome refreshing={refreshing} navigation={navigation} isWeek />
       </Box>
       <UpdateApp />
       <ChangeLog
