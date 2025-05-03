@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Box, HStack, Image, Text, VStack } from "native-base";
+import { Box, Divider, HStack, Image, Text, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { cleanImage, formatName } from "../../utils/helpers";
 import Views from "../../components/atoms/Views";
@@ -8,26 +8,49 @@ import { ROOMS } from "../../services";
 import Layout from "../../components/templates/Layout";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { TopMember, HistoryLive, EmptyLive } from "../../components/organisms";
+import { LiveIcon, RefreshIcon } from "../../assets/icon";
 
 const RoomLives = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
   const { refreshing, onRefresh } = useRefresh();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    async function getRoomLive() {
-      const room = await ROOMS.getRoomLive();
-      const roomLiveFilter = room?.data.data;
-      setRooms(roomLiveFilter);
-    }
+    const getRoomLive = async () => {
+      setIsLoading(true);
+      try {
+        const room = await ROOMS.getRoomLive();
+        const roomLiveFilter = room?.data.data;
+        setRooms(roomLiveFilter);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      }
+    };
     getRoomLive();
   }, [refreshing]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Showroom Live"
+      headerTitle: "Showroom Live",
+      headerRight: () =>
+        rooms.length > 0 ? (
+          <HStack space={2} justifyContent="center" alignItems="center">
+            <LiveIcon size={18} />
+            <Text>{rooms?.length} Member Live</Text>
+          </HStack>
+        ) : (
+          <TouchableOpacity activeOpacity={0.7} onPress={onRefresh}>
+            <HStack space={2} justifyContent="center" alignItems="center">
+              <RefreshIcon />
+              <Text>Refresh</Text>
+            </HStack>
+          </TouchableOpacity>
+        )
     });
-  }, []);
+  }, [rooms]);
 
   const renderRoomItem = (item, idx) => (
     <Box key={idx} mr="4">
@@ -89,16 +112,17 @@ const RoomLives = ({ navigation }) => {
     return columns;
   };
 
-  return rooms?.length > 0 ? (
+  return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
-      <Box mb="4">
-        <HStack width="50%">{renderRoomList()}</HStack>
-      </Box>
-    </Layout>
-  ) : (
-    <Layout refreshing={refreshing} onRefresh={onRefresh}>
-      <VStack space={2} mb="4">
-        <EmptyLive />
+      <VStack space="4">
+        {rooms?.length > 0 ? (
+          <>
+            <HStack width="50%">{renderRoomList()}</HStack>
+            <Divider />
+          </>
+        ) : (
+          <EmptyLive isLoading={isLoading} />
+        )}
         <TopMember liveType="showroom" />
         <HistoryLive />
       </VStack>
