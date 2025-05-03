@@ -5,9 +5,9 @@ import { TouchableOpacity, Pressable } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { ROOMS } from "../../../services";
 import Views from "../../atoms/Views";
-import { RightArrow } from "../../../assets/icon";
+import { IDNLiveIcon, RightArrow } from "../../../assets/icon";
 import { useAppStateChange } from "../../../utils/hooks";
-import { getIDNLiveTime } from "../../../utils/helpers";
+import { formatName, getIDNLiveTime } from "../../../utils/helpers";
 
 const IDNLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
@@ -61,33 +61,44 @@ const IDNLive = ({ refreshing }) => {
                   navigate("IDNStream", { item });
                 }}
               >
-                <Box
-                  p="2"
-                  bg="cyan.700"
-                  borderRightRadius="0"
-                  borderTopLeftRadius="8"
-                  borderTopRightRadius="8"
-                  maxWidth={200}
-                >
-                  <HStack alignItems="center" justifyContent="space-between">
-                    <Text isTruncated>{item?.title}</Text>
-                    <Text fontSize="xs" fontWeight="medium">
-                      {getIDNLiveTime(item.live_at)}
-                    </Text>
-                  </HStack>
+                <Box position="absolute" top="1" left="2" zIndex="99">
+                  <Text fontSize="13" fontWeight="semibold">
+                    {getIDNLiveTime(item.live_at)}
+                  </Text>
+                </Box>
+                <Box position="absolute" top="2" right="2" zIndex="99">
+                  <IDNLiveIcon />
                 </Box>
                 <Box>
                   <Image
                     size="xl"
-                    borderRadius="8"
-                    borderTopLeftRadius="0"
-                    borderTopRightRadius="0"
+                    borderRadius="10"
+                    borderTopLeftRadius="10"
+                    borderTopRightRadius="10"
+                    borderBottomLeftRadius="0"
+                    borderBottomRightRadius="0"
                     source={{ uri: item?.image ?? item.user.avatar }}
                     alt={item?.user?.name}
-                    height={230}
-                    width={200}
+                    height={200}
+                    width={175}
                     resizeMode="cover"
                   />
+                </Box>
+                <Box
+                  p="2"
+                  bg="cyan.700"
+                  borderRightRadius="0"
+                  borderBottomLeftRadius="10"
+                  borderBottomRightRadius="10"
+                  maxWidth={175}
+                >
+                  <HStack alignItems="center" justifyContent="space-between">
+                    <Text isTruncated>
+                      {item?.title.length > 19
+                        ? item?.title?.slice(0, 18) + "..."
+                        : item?.title}
+                    </Text>
+                  </HStack>
                 </Box>
                 <TouchableOpacity
                   activeOpacity={0.6}
@@ -103,7 +114,7 @@ const IDNLive = ({ refreshing }) => {
                       color="white"
                       py="2"
                     >
-                      {item?.user?.name}
+                      {formatName(item?.user?.name, true)}
                     </Text>
                     <Views number={item?.view_count} />
                   </HStack>
