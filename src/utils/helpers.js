@@ -9,6 +9,11 @@ export const formatName = (name, hideGroup) => {
   if (name === "JKT48_OlineM") {
     return "Oline";
   }
+
+  if (name === "officialJKT48") {
+    return "JKT48"
+  }
+
   !hideGroup
     ? (memberName = name ? name?.replace("JKT48_", "") + " JKT48" : "Loading")
     : (memberName = name?.includes("JKT48_")

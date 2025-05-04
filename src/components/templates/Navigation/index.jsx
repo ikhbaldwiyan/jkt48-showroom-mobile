@@ -13,7 +13,7 @@ import {
   Login,
   Register,
   RoomDetail,
-  RoomLives,
+  ShowroomLive,
   ScheduleDetail,
   SplashScreen,
   ScheduleList,
@@ -28,6 +28,7 @@ import {
   LeaderboardMember,
   SupportProject,
   LeaderboardUser,
+  MultiIDN,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -181,8 +182,8 @@ const Navigation = () => {
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="Theater" component={ScheduleList} options={showHeader} />
       <Stack.Screen
-        name="RoomLives"
-        component={RoomLives}
+        name="ShowroomLive"
+        component={ShowroomLive}
         options={showHeader}
       />
       <Stack.Screen name="IDNLives" component={IDNLives} options={showHeader} />
@@ -215,6 +216,11 @@ const Navigation = () => {
       <Stack.Screen
         name="HistoryDetail"
         component={HistoryLiveDetail}
+        options={showHeader}
+      />
+      <Stack.Screen
+        name="MultiIDN"
+        component={MultiIDN}
         options={showHeader}
       />
       <Stack.Screen

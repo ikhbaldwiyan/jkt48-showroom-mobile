@@ -2,25 +2,16 @@ import React, { useCallback, useEffect } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
 import { TouchableOpacity, Pressable } from "react-native";
-import { useQuery } from "@tanstack/react-query";
-import { ROOMS } from "../../../services";
 import Views from "../../atoms/Views";
-import { RightArrow } from "../../../assets/icon";
+import { IDNLiveIcon, RightArrow } from "../../../assets/icon";
 import { useAppStateChange } from "../../../utils/hooks";
-import { getIDNLiveTime } from "../../../utils/helpers";
+import { formatName, getIDNLiveTime } from "../../../utils/helpers";
+import CardGradient from "../../atoms/CardGradient";
+import { useIDNLive } from "../../../services/hooks/useIDNLive";
 
 const IDNLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
-
-  const fetchIDNLiveRoom = async () => {
-    const response = await ROOMS.getIDNLIveRoom();
-    return response?.data;
-  };
-
-  const { data: rooms = [], refetch } = useQuery({
-    queryKey: ["idnLiveRoom"],
-    queryFn: fetchIDNLiveRoom
-  });
+  const { data: rooms = [], refetch } = useIDNLive();
 
   useFocusEffect(
     useCallback(() => {
@@ -32,7 +23,6 @@ const IDNLive = ({ refreshing }) => {
     refetch();
   }, [refreshing]);
 
-  // Handle app state changes (background -> foreground)
   useAppStateChange(refetch);
 
   return (
@@ -62,33 +52,53 @@ const IDNLive = ({ refreshing }) => {
                 }}
               >
                 <Box
-                  p="2"
-                  bg="cyan.700"
-                  borderRightRadius="0"
-                  borderTopLeftRadius="8"
-                  borderTopRightRadius="8"
-                  maxWidth={200}
+                  px="1"
+                  top="1.5"
+                  left="2"
+                  zIndex="99"
+                  position="absolute"
+                  bg="rgba(0,0,0,0.3)"
+                  borderRadius="sm"
+                  shadow={6}
                 >
-                  <HStack alignItems="center" justifyContent="space-between">
-                    <Text isTruncated>{item?.title}</Text>
-                    <Text fontSize="xs" fontWeight="medium">
-                      {getIDNLiveTime(item.live_at)}
-                    </Text>
-                  </HStack>
+                  <Text fontSize="12" fontWeight="semibold" color="muted.200">
+                    {getIDNLiveTime(item.live_at)}
+                  </Text>
+                </Box>
+                <Box
+                  px="1"
+                  top="1.5"
+                  py="0.5"
+                  right="2"
+                  zIndex="99"
+                  bg="rgba(0,0,0,0.2)"
+                  borderRadius="sm"
+                  position="absolute"
+                >
+                  <IDNLiveIcon />
                 </Box>
                 <Box>
                   <Image
                     size="xl"
-                    borderRadius="8"
-                    borderTopLeftRadius="0"
-                    borderTopRightRadius="0"
+                    borderRadius="10"
+                    borderTopLeftRadius="10"
+                    borderTopRightRadius="10"
+                    borderBottomLeftRadius="0"
+                    borderBottomRightRadius="0"
                     source={{ uri: item?.image ?? item.user.avatar }}
                     alt={item?.user?.name}
-                    height={230}
-                    width={200}
+                    height={200}
+                    width={175}
                     resizeMode="cover"
                   />
                 </Box>
+                <CardGradient color="lightDark">
+                  <Text fontWeight="medium" fontSize={13} isTruncated>
+                    {item?.title.length > 19
+                      ? item?.title?.slice(0, 18) + "..."
+                      : item?.title}
+                  </Text>
+                </CardGradient>
                 <TouchableOpacity
                   activeOpacity={0.6}
                   onPress={() => {
@@ -103,7 +113,7 @@ const IDNLive = ({ refreshing }) => {
                       color="white"
                       py="2"
                     >
-                      {item?.user?.name}
+                      {formatName(item?.user?.name, true)}
                     </Text>
                     <Views number={item?.view_count} />
                   </HStack>
