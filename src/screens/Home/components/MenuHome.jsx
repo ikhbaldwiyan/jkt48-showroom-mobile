@@ -27,19 +27,19 @@ const MenuHome = () => {
       screen: "Theater"
     },
     {
-      name: "Multi Live",
-      icon: <MultiLiveIcon size="24" color="white" />,
-      screen: "MultiIDN"
-    },
-    {
       name: "Showroom",
       icon: <LiveIcon size="24" color="white" />,
-      screen: "RoomLives"
+      screen: "ShowroomLive"
     },
     {
       name: "IDN Live",
       icon: <PlayIcon size="6" color="white" />,
       screen: "IDNLives"
+    },
+    {
+      name: "Multi Live",
+      icon: <MultiLiveIcon size="25" color="white" />,
+      screen: "MultiIDN"
     },
     {
       name: "Top Member",

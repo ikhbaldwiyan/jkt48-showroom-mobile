@@ -49,7 +49,7 @@ const ShowroomLive = ({ refreshing }) => {
             Showroom Live
           </Text>
           {rooms.length > 2 && (
-            <TouchableOpacity onPress={() => navigate("RoomLives")}>
+            <TouchableOpacity onPress={() => navigate("ShowroomLive")}>
               <HStack space={2} alignItems="center">
                 <Text color="white" fontSize="sm">
                   Semua live

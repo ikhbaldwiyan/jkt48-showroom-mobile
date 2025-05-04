@@ -9,8 +9,9 @@ import Layout from "../../components/templates/Layout";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { TopMember, HistoryLive, EmptyLive } from "../../components/organisms";
 import { LiveIcon, RefreshIcon } from "../../assets/icon";
+import { FlashList } from "@shopify/flash-list";
 
-const RoomLives = ({ navigation }) => {
+const ShowroomLive = ({ navigation }) => {
   const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
   const { refreshing, onRefresh } = useRefresh();
@@ -52,64 +53,48 @@ const RoomLives = ({ navigation }) => {
     });
   }, [rooms]);
 
-  const renderRoomItem = (item, idx) => (
-    <Box key={idx} mr="4">
-      <TouchableOpacity
-        activeOpacity={0.6}
-        onPress={() => {
-          navigate("LiveStream", { item });
-        }}
-      >
-        <Image
-          borderRadius={8}
-          source={{
-            uri: cleanImage(item.image_square)
-          }}
-          alt={item.main_name}
-          size="xl"
-          width={150}
-        />
+  const renderRoomItem = ({ item, index }) => {
+    const isLastRow = index >= rooms.length - (rooms.length % 2 === 0 ? 2 : 1);
+
+    return (
+      <Box flex={1} key={index} mr="3" mb={isLastRow ? "0" : "3"}>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={() => {
             navigate("LiveStream", { item });
           }}
         >
-          <HStack alignItems="center" mt="1">
-            <Text
-              fontSize="md"
-              mr="2"
-              fontWeight="semibold"
-              color="white"
-              py="2"
-            >
-              {formatName(item?.room_url_key, true)}
-            </Text>
-            <Views number={item?.view_num} />
-          </HStack>
+          <Image
+            borderRadius={8}
+            source={{
+              uri: cleanImage(item.image_square)
+            }}
+            alt={item.main_name}
+            size="xl"
+            width="100%"
+          />
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => {
+              navigate("LiveStream", { item });
+            }}
+          >
+            <HStack alignItems="center" mt="1">
+              <Text
+                fontSize="md"
+                mr="2"
+                fontWeight="semibold"
+                color="white"
+                py="2"
+              >
+                {formatName(item?.room_url_key, true)}
+              </Text>
+              <Views number={item?.view_num} />
+            </HStack>
+          </TouchableOpacity>
         </TouchableOpacity>
-      </TouchableOpacity>
-    </Box>
-  );
-
-  const renderColumn = (columnRooms, idx) => (
-    <VStack key={idx} space={4}>
-      {columnRooms.map((room, idx) => renderRoomItem(room, idx))}
-    </VStack>
-  );
-
-  const renderRoomList = () => {
-    const columns = [];
-    const columnCount = 2; // Limiting to 2 columns
-    const itemsPerColumn = Math.ceil(rooms.length / columnCount);
-    for (let i = 0; i < columnCount; i++) {
-      const columnRooms = rooms.slice(
-        i * itemsPerColumn,
-        (i + 1) * itemsPerColumn
-      );
-      columns.push(renderColumn(columnRooms, i));
-    }
-    return columns;
+      </Box>
+    );
   };
 
   return (
@@ -117,7 +102,13 @@ const RoomLives = ({ navigation }) => {
       <VStack space="4">
         {rooms?.length > 0 ? (
           <>
-            <HStack width="50%">{renderRoomList()}</HStack>
+            <FlashList
+              numColumns={2}
+              data={rooms}
+              renderItem={renderRoomItem}
+              keyExtractor={(item, idx) => idx.toString()}
+              estimatedItemSize={10}
+            />
             <Divider />
           </>
         ) : (
@@ -130,4 +121,4 @@ const RoomLives = ({ navigation }) => {
   );
 };
 
-export default RoomLives;
+export default ShowroomLive;
