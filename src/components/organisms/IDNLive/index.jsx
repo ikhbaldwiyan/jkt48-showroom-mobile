@@ -53,7 +53,7 @@ const IDNLive = ({ refreshing }) => {
               >
                 <Box
                   px="1"
-                  top="2"
+                  top="1.5"
                   left="2"
                   zIndex="99"
                   position="absolute"
@@ -65,7 +65,16 @@ const IDNLive = ({ refreshing }) => {
                     {getIDNLiveTime(item.live_at)}
                   </Text>
                 </Box>
-                <Box position="absolute" top="2" right="2" zIndex="99">
+                <Box
+                  px="1"
+                  top="1.5"
+                  py="0.5"
+                  right="2"
+                  zIndex="99"
+                  bg="rgba(0,0,0,0.2)"
+                  borderRadius="sm"
+                  position="absolute"
+                >
                   <IDNLiveIcon />
                 </Box>
                 <Box>

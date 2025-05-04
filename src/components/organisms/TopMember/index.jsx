@@ -25,6 +25,7 @@ const TopMember = ({ refreshing, liveType = "showroom" }) => {
     data: topMember,
     isFetched,
     isLoading,
+    isSuccess,
     refetch,
     error
   } = useLeaderboardMember({
@@ -39,14 +40,11 @@ const TopMember = ({ refreshing, liveType = "showroom" }) => {
     }
   }, [refreshing]);
 
-  const { startDate, endDate } = topMember?.filterDate || {};
-  const isSameMonth = startDate?.slice(3, 6) === endDate?.slice(3, 6);
-
   if (error) {
     return null;
   }
 
-  return (
+  return isSuccess && (
     <View>
       <HStack alignItems="center" justifyContent="space-between">
         <Text fontSize="20" mb="2" fontWeight="semibold">

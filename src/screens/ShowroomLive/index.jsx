@@ -86,7 +86,7 @@ const ShowroomLive = ({ navigation }) => {
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
-      <VStack space="4">
+      <VStack space="2">
         <FlashList
           numColumns={2}
           data={rooms}
@@ -95,7 +95,7 @@ const ShowroomLive = ({ navigation }) => {
           ListEmptyComponent={<EmptyLive isLoading={isLoading} />}
           estimatedItemSize={100}
         />
-        <Divider mt={isLoading ? "16" : "0"} />
+        <Divider mt={isLoading ? "16" : "2"} />
         <TopMember liveType="showroom" />
         <HistoryLive />
       </VStack>

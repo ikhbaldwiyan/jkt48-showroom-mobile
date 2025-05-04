@@ -13,7 +13,6 @@ const EmptyLive = ({ isLoading }) => {
         <VStack mt="5" space={5} justifyContent="center" alignItems="center">
           <NoLive />
           <Text>Tidak ada member yang sedang live huhu</Text>
-          <Divider />
         </VStack>
       )}
     </View>

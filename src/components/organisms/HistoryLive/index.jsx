@@ -93,7 +93,7 @@ const HistoryLive = ({ liveType = "showroom" }) => {
 
   return (
     <>
-      <Text fontSize="20" mb="3" fontWeight="semibold">
+      <Text fontSize="20" mb="4" fontWeight="semibold">
         {liveType === "idn" ? "History IDN Live" : "History Live Showroom"}
       </Text>
 

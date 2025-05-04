@@ -52,7 +52,7 @@ const IDNLives = ({ navigation }) => {
   }, [rooms]);
 
   const renderItem = ({ item, index }) => (
-    <Box flex={1} mb="3" mr={index % 2 === 0 ? "3" : 0}>
+    <Box flex={1} mb="4" mr={index % 2 === 0 ? "3" : 0}>
       <Pressable
         onPress={() => {
           navigate("IDNStream", { item });
@@ -60,7 +60,7 @@ const IDNLives = ({ navigation }) => {
       >
         <Box
           px="1"
-          top="2"
+          top="1.5"
           left="2"
           zIndex="99"
           position="absolute"
@@ -74,13 +74,14 @@ const IDNLives = ({ navigation }) => {
         </Box>
 
         <Box
-          position="absolute"
-          top="2"
+          px="1"
+          top="1.5"
+          py="0.5"
           right="2"
           zIndex="99"
           bg="rgba(0,0,0,0.2)"
-          px="1"
           borderRadius="sm"
+          position="absolute"
           shadow={4}
         >
           <IDNLiveIcon />
