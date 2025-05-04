@@ -74,17 +74,39 @@ const IDNLives = ({ navigation }) => {
           navigate("IDNStream", { item });
         }}
       >
-        <Box position="absolute" top={1} left="2" zIndex="99">
-          <Text fontSize="13" fontWeight="semibold">
+        <Box
+          px="1"
+          top="2"
+          left="2"
+          zIndex="99"
+          position="absolute"
+          bg="rgba(0,0,0,0.3)"
+          borderRadius="sm"
+          shadow={6}
+        >
+          <Text fontSize="12" fontWeight="semibold" color="muted.200">
             {getIDNLiveTime(item.live_at)}
           </Text>
         </Box>
-        <Box position="absolute" top={2} right="2" zIndex="99">
+
+        <Box
+          position="absolute"
+          top="2"
+          right="2"
+          zIndex="99"
+          bg="rgba(0,0,0,0.2)"
+          px="1"
+          borderRadius="sm"
+          shadow={4}
+        >
           <IDNLiveIcon />
         </Box>
-        <Box>
+
+        <Box borderRadius={8} overflow="hidden" shadow={9} bg="coolGray.900">
           <Image
             size="xl"
+            shadow={9}
+            bg="coolGray.900"
             borderRadius={8}
             borderBottomLeftRadius="0"
             borderBottomRightRadius="0"
@@ -96,8 +118,9 @@ const IDNLives = ({ navigation }) => {
             opacity={0.9}
           />
         </Box>
+
         <CardGradient color="lightDark">
-          <Text isTruncated>
+          <Text fontWeight="medium" fontSize={13} isTruncated>
             {item?.title.length > 19
               ? item?.title?.slice(0, 18) + "..."
               : item?.title}
@@ -138,7 +161,7 @@ const IDNLives = ({ navigation }) => {
               renderItem={renderItem}
               keyExtractor={(item, idx) => idx.toString()}
             />
-            <Divider mb="3" />
+            <Divider mb="1" />
           </>
         ) : (
           <EmptyLive isLoading={isLoading} />

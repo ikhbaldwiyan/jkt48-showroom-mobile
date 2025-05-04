@@ -65,13 +65,12 @@ const HistoryLive = ({ liveType = "showroom" }) => {
     }
   };
 
-  // Reset the lives data when the `type` changes
   useEffect(() => {
     const resetLives = async () => {
       try {
         setPage(1);
         setAllLoaded(false);
-        const response = await ROOMS.getHistoryLives(type, debouncedSearch, 1);
+        const response = await ROOMS.getHistoryLives(type, "", 1);
         setRecentLives(response.data.recents);
       } catch (error) {
         console.log(error);
@@ -79,7 +78,7 @@ const HistoryLive = ({ liveType = "showroom" }) => {
     };
 
     resetLives();
-  }, [type, refreshing]);
+  }, [refreshing]);
 
   const handleDetail = (member, live_info, log) => {
     navigate("HistoryDetail", {

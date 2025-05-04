@@ -24,7 +24,7 @@ const CardGradient = ({ children, color, halfCard, isRounded = false }) => {
   const styles = StyleSheet.create({
     linearGradient: {
       flex: halfCard ? 0 : 1,
-      padding: color === "lightDark" ? 8 : 12,
+      padding: color === "lightDark" ? 7 : 12,
       borderRadius: isRounded ? 6 : 0,
       borderBottomLeftRadius: 6,
       borderBottomRightRadius: 6,
@@ -40,7 +40,12 @@ const CardGradient = ({ children, color, halfCard, isRounded = false }) => {
   });
 
   return (
-    <LinearGradient colors={colors()} style={styles.linearGradient}>
+    <LinearGradient
+      start={{ x: -0, y: 0 }}
+      end={{ x: 1, y: 2 }}
+      colors={colors()}
+      style={styles.linearGradient}
+    >
       {children}
     </LinearGradient>
   );

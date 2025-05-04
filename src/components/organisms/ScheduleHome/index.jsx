@@ -79,19 +79,19 @@ const ScheduleHome = ({ refreshing, isWeek, navigation }) => {
               onPress={() => navigation.navigate("ScheduleDetail", { item })}
             >
               <VStack space={2} mb="4">
-                <Box p="3" bg="teal" borderRadius={10}>
-                  <HStack space={3}>
-                    <TheaterIcon color="white" />
-                    <Text fontSize={15} fontWeight="bold">
+                <Box p="2.5" bg="teal" borderRadius={10}>
+                  <HStack space={2} alignItems="center">
+                    <TheaterIcon size="22" color="white" />
+                    <Text fontSize="md" fontWeight="bold">
                       {item?.setlist?.name}
                     </Text>
                   </HStack>
                 </Box>
-                <Box p="3" bg="#865CD6" borderRadius={10}>
+                <Box p="2.5" bg="#865CD6" borderRadius={10}>
                   <HStack space={4}>
-                    <HStack space={3}>
+                    <HStack space={2} alignItems="center">
                       <Calendar size={18} color="white" />
-                      <Text fontSize={15} fontWeight="bold">
+                      <Text fontWeight="bold">
                         {moment(item.showDate)
                           .locale("id")
                           .format("dddd, DD MMM YYYY")}
@@ -99,9 +99,7 @@ const ScheduleHome = ({ refreshing, isWeek, navigation }) => {
                     </HStack>
                     <HStack alignItems="center" space={2}>
                       <TimesIcon />
-                      <Text fontSize={15} fontWeight="bold">
-                        {item?.showTime} WIB
-                      </Text>
+                      <Text fontWeight="bold">{item?.showTime} WIB</Text>
                     </HStack>
                   </HStack>
                 </Box>
@@ -122,7 +120,7 @@ const ScheduleHome = ({ refreshing, isWeek, navigation }) => {
                     borderRadius="8"
                     bg="cyan.600"
                   >
-                    <Text fontSize="14" fontWeight="semibold">
+                    <Text fontSize="14" fontWeight="medium">
                       {item.setlist.description.slice(0, 200)}...
                     </Text>
                   </Box>
