@@ -197,7 +197,7 @@ const HistoryLive = ({ liveType = "showroom" }) => {
           <HStack alignItems="center" space={2}>
             <LoadingIcon />
             <Text fontWeight="bold" fontSize="14">
-              Load More History
+              Lihat History Live Lainnya
             </Text>
           </HStack>
         </Button>
@@ -217,6 +217,6 @@ export default HistoryLive;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    borderRadius: 6
-  }
+    borderRadius: 6,
+  },
 });

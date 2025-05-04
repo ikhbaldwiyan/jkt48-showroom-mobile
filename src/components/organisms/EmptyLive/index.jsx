@@ -8,7 +8,6 @@ const EmptyLive = ({ isLoading }) => {
       {isLoading ? (
         <Box pt="12">
           <Spinner size="lg" color="white" />
-          <Divider mt="16" />
         </Box>
       ) : (
         <VStack mt="5" space={5} justifyContent="center" alignItems="center">

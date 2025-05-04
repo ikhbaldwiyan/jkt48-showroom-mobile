@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, HStack, Image, Text, Button, Spinner, VStack } from "native-base";
+import { Box, HStack, Image, Text, Spinner, VStack } from "native-base";
 import moment from "moment";
 import "moment/locale/id";
 import SkeletonSchedule from "../../atoms/Skeleteon";
@@ -8,11 +8,9 @@ import {
   BirthdayIcon,
   Calendar,
   GraduateIcon,
-  LoadingIcon,
   RightArrow,
   TheaterIcon,
-  TimesFill,
-  TimesIcon
+  TimesIcon,
 } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
 
@@ -103,6 +101,26 @@ const ScheduleHome = ({ refreshing, isWeek, navigation }) => {
                     </HStack>
                   </HStack>
                 </Box>
+                {item?.isBirthdayShow && (
+                  <Box background="cyan.700" p="2.5" borderRadius="lg">
+                    <HStack alignItems="center" space={2}>
+                      <BirthdayIcon size={18} />
+                      <Text fontWeight="bold">
+                        Birthday {item?.birthdayMember?.name}
+                      </Text>
+                    </HStack>
+                  </Box>
+                )}
+                {item?.isGraduationShow && (
+                  <Box background="cyan.700" p="2.5" borderRadius="lg">
+                    <HStack alignItems="center" space={2}>
+                      <GraduateIcon size={18} />
+                      <Text fontWeight="bold">
+                        Graduation {item?.graduateMember?.name}
+                      </Text>
+                    </HStack>
+                  </Box>
+                )}
                 <Box mt="2">
                   <Image
                     width="100%"

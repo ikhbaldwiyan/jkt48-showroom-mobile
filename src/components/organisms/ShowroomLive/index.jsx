@@ -2,32 +2,16 @@ import React, { useCallback, useEffect } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
 import { TouchableOpacity } from "react-native";
-import { useQuery } from "@tanstack/react-query";
-import { ROOMS } from "../../../services";
 import { cleanImage, formatName, getTimes } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
 import { RightArrow, TimesFill } from "../../../assets/icon";
 import { useAppStateChange } from "../../../utils/hooks";
+import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
 
 const ShowroomLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
+  const { data: rooms = [], refetch } = useShowroomLive();
 
-  const fetchRoomLive = async () => {
-    try {
-      const response = await ROOMS.getRoomLive();
-      return response?.data.data;
-    } catch (error) {
-      console.log("Error fetching room live:", error);
-    }
-  };
-
-  // Use the new React Query v5 signature
-  const { data: rooms = [], refetch } = useQuery({
-    queryKey: ["roomLive"],
-    queryFn: fetchRoomLive
-  });
-
-  // Refetch when the screen comes into focus
   useFocusEffect(
     useCallback(() => {
       refetch();
@@ -38,7 +22,6 @@ const ShowroomLive = ({ refreshing }) => {
     refetch();
   }, [refreshing]);
 
-  // Handle app state changes (background -> foreground)
   useAppStateChange(refetch);
 
   return (
@@ -103,7 +86,9 @@ const ShowroomLive = ({ refreshing }) => {
                     color="white"
                     py="2"
                   >
-                    {item?.room_url_key === "officialJKT48" ? "JKT48 Offical" : formatName(item?.room_url_key)}
+                    {item?.room_url_key === "officialJKT48"
+                      ? "JKT48 Offical"
+                      : formatName(item?.room_url_key)}
                   </Text>
                   <Views number={item?.view_num} />
                 </HStack>

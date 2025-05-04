@@ -2,25 +2,16 @@ import React, { useCallback, useEffect } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
 import { TouchableOpacity, Pressable } from "react-native";
-import { useQuery } from "@tanstack/react-query";
-import { ROOMS } from "../../../services";
 import Views from "../../atoms/Views";
 import { IDNLiveIcon, RightArrow } from "../../../assets/icon";
 import { useAppStateChange } from "../../../utils/hooks";
 import { formatName, getIDNLiveTime } from "../../../utils/helpers";
+import CardGradient from "../../atoms/CardGradient";
+import { useIDNLive } from "../../../services/hooks/useIDNLive";
 
 const IDNLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
-
-  const fetchIDNLiveRoom = async () => {
-    const response = await ROOMS.getIDNLIveRoom();
-    return response?.data;
-  };
-
-  const { data: rooms = [], refetch } = useQuery({
-    queryKey: ["idnLiveRoom"],
-    queryFn: fetchIDNLiveRoom
-  });
+  const { data: rooms = [], refetch } = useIDNLive();
 
   useFocusEffect(
     useCallback(() => {
@@ -32,7 +23,6 @@ const IDNLive = ({ refreshing }) => {
     refetch();
   }, [refreshing]);
 
-  // Handle app state changes (background -> foreground)
   useAppStateChange(refetch);
 
   return (
@@ -61,8 +51,17 @@ const IDNLive = ({ refreshing }) => {
                   navigate("IDNStream", { item });
                 }}
               >
-                <Box position="absolute" top="1" left="2" zIndex="99">
-                  <Text fontSize="13" fontWeight="semibold">
+                <Box
+                  px="1"
+                  top="2"
+                  left="2"
+                  zIndex="99"
+                  position="absolute"
+                  bg="rgba(0,0,0,0.3)"
+                  borderRadius="sm"
+                  shadow={6}
+                >
+                  <Text fontSize="12" fontWeight="semibold" color="muted.200">
                     {getIDNLiveTime(item.live_at)}
                   </Text>
                 </Box>
@@ -84,22 +83,13 @@ const IDNLive = ({ refreshing }) => {
                     resizeMode="cover"
                   />
                 </Box>
-                <Box
-                  p="2"
-                  bg="cyan.700"
-                  borderRightRadius="0"
-                  borderBottomLeftRadius="10"
-                  borderBottomRightRadius="10"
-                  maxWidth={175}
-                >
-                  <HStack alignItems="center" justifyContent="space-between">
-                    <Text isTruncated>
-                      {item?.title.length > 19
-                        ? item?.title?.slice(0, 18) + "..."
-                        : item?.title}
-                    </Text>
-                  </HStack>
-                </Box>
+                <CardGradient color="lightDark">
+                  <Text fontWeight="medium" fontSize={13} isTruncated>
+                    {item?.title.length > 19
+                      ? item?.title?.slice(0, 18) + "..."
+                      : item?.title}
+                  </Text>
+                </CardGradient>
                 <TouchableOpacity
                   activeOpacity={0.6}
                   onPress={() => {

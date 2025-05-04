@@ -7,44 +7,28 @@ import {
   Image,
   Pressable,
   Text,
-  VStack
+  View,
+  VStack,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { Linking, TouchableOpacity } from "react-native";
-import { ROOMS } from "../../services";
+import { TouchableOpacity } from "react-native";
 import Layout from "../../components/templates/Layout";
 import { formatName, formatViews, getIDNLiveTime } from "../../utils/helpers";
-import {
-  IDNLiveIcon,
-  LiveIcon,
-  RefreshIcon,
-  UserIcon
-} from "../../assets/icon";
+import { IDNLiveIcon, LiveIcon, RefreshIcon } from "../../assets/icon";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { FlashList } from "@shopify/flash-list";
 import { EmptyLive, HistoryLive, TopMember } from "../../components/organisms";
 import Views from "../../components/atoms/Views";
 import CardGradient from "../../components/atoms/CardGradient";
+import { useIDNLive } from "../../services/hooks/useIDNLive";
 
 const IDNLives = ({ navigation }) => {
-  const [rooms, setRooms] = useState([]);
   const { navigate } = useNavigation();
   const { refreshing, onRefresh } = useRefresh();
-  const [isLoading, setIsLoading] = useState(false);
+  const { data: rooms = [], refetch, isLoading } = useIDNLive();
 
   useEffect(() => {
-    async function getIDNLive() {
-      setIsLoading(true);
-      try {
-        const response = await ROOMS.getIDNLIveRoom();
-        setRooms(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        setIsLoading(false);
-      }
-    }
-    getIDNLive();
+    refetch();
   }, [refreshing]);
 
   useLayoutEffect(() => {
@@ -63,7 +47,7 @@ const IDNLives = ({ navigation }) => {
               <Text>Refresh</Text>
             </HStack>
           </TouchableOpacity>
-        )
+        ),
     });
   }, [rooms]);
 
@@ -101,15 +85,18 @@ const IDNLives = ({ navigation }) => {
         >
           <IDNLiveIcon />
         </Box>
-
-        <Box borderRadius={8} overflow="hidden" shadow={9} bg="coolGray.900">
+        <Box
+          borderRadius={8}
+          borderBottomLeftRadius="0"
+          borderBottomRightRadius="0"
+          overflow="hidden"
+          shadow={9}
+          bg="coolGray.900"
+        >
           <Image
             size="xl"
             shadow={9}
             bg="coolGray.900"
-            borderRadius={8}
-            borderBottomLeftRadius="0"
-            borderBottomRightRadius="0"
             source={{ uri: item.image ?? item.user.avatar }}
             alt={item?.user?.name}
             height={200}
@@ -153,19 +140,15 @@ const IDNLives = ({ navigation }) => {
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <VStack space={2}>
-        {rooms.length > 0 ? (
-          <>
-            <FlashList
-              numColumns={2}
-              data={rooms}
-              renderItem={renderItem}
-              keyExtractor={(item, idx) => idx.toString()}
-            />
-            <Divider mb="1" />
-          </>
-        ) : (
-          <EmptyLive isLoading={isLoading} />
-        )}
+        <FlashList
+          numColumns={2}
+          data={rooms}
+          renderItem={renderItem}
+          keyExtractor={(item) => item?.user?.name}
+          ListEmptyComponent={<EmptyLive isLoading={isLoading} />}
+          estimatedItemSize={100}
+        />
+        <Divider mt={isLoading ? "16" : "0"} />
         <TopMember liveType="idn" />
         <HistoryLive liveType="idn" />
       </VStack>
