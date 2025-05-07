@@ -95,7 +95,7 @@ const ShowroomLive = ({ navigation }) => {
           ListEmptyComponent={<EmptyLive isLoading={isLoading} />}
           estimatedItemSize={100}
         />
-        <Divider mt={isLoading ? "16" : "2"} />
+        <Divider mt={isLoading ? "16" : "3"} />
         <TopMember liveType="showroom" />
         <HistoryLive />
       </VStack>
