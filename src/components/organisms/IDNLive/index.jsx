@@ -1,15 +1,13 @@
 import React, { useCallback, useEffect } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
-import { TouchableOpacity, Pressable } from "react-native";
-import Views from "../../atoms/Views";
-import { IDNLiveIcon, RightArrow } from "../../../assets/icon";
+import { Box, Divider, HStack, Text, ScrollView, Button } from "native-base";
+import { TouchableOpacity } from "react-native";
+import { LiveIcon, MultiLiveIcon, RightArrow } from "../../../assets/icon";
 import { useAppStateChange } from "../../../utils/hooks";
-import { formatName, getIDNLiveTime } from "../../../utils/helpers";
-import CardGradient from "../../atoms/CardGradient";
 import { useIDNLive } from "../../../services/hooks/useIDNLive";
+import IDNLiveCard from "../../atoms/IDNLiveCard";
 
-const IDNLive = ({ refreshing }) => {
+const IDNLive = ({ refreshing, isMultiLive }) => {
   const { navigate } = useNavigation();
   const { data: rooms = [], refetch } = useIDNLive();
 
@@ -29,10 +27,14 @@ const IDNLive = ({ refreshing }) => {
     rooms.length > 0 && (
       <Box mb="4">
         <HStack alignItems="center" justifyContent="space-between">
-          <Text color="white" fontSize="2xl" fontWeight="semibold">
+          <Text
+            color="white"
+            fontSize={isMultiLive ? "18" : "2xl"}
+            fontWeight="semibold"
+          >
             IDN Live
           </Text>
-          {rooms.length > 2 && (
+          {rooms.length > 2 && !isMultiLive && (
             <TouchableOpacity onPress={() => navigate("IDNLives")}>
               <HStack space={2} alignItems="center">
                 <Text color="white" fontSize="sm">
@@ -42,87 +44,36 @@ const IDNLive = ({ refreshing }) => {
               </HStack>
             </TouchableOpacity>
           )}
+
+          {isMultiLive && (
+            <HStack space={2} justifyContent="center" alignItems="center">
+              <LiveIcon size={18} />
+              <Text>{rooms?.length} Member Live</Text>
+            </HStack>
+          )}
         </HStack>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {rooms?.map((item, idx) => (
-            <Box key={idx} mt={4} mr="3">
-              <Pressable
-                onPress={() => {
-                  navigate("IDNStream", { item });
-                }}
-              >
-                <Box
-                  px="1"
-                  top="1.5"
-                  left="2"
-                  zIndex="99"
-                  position="absolute"
-                  bg="rgba(0,0,0,0.3)"
-                  borderRadius="sm"
-                  shadow={6}
-                >
-                  <Text fontSize="12" fontWeight="semibold" color="muted.200">
-                    {getIDNLiveTime(item.live_at)}
-                  </Text>
-                </Box>
-                <Box
-                  px="1"
-                  top="1.5"
-                  py="0.5"
-                  right="2"
-                  zIndex="99"
-                  bg="rgba(0,0,0,0.2)"
-                  borderRadius="sm"
-                  position="absolute"
-                >
-                  <IDNLiveIcon />
-                </Box>
-                <Box>
-                  <Image
-                    size="xl"
-                    borderRadius="10"
-                    borderTopLeftRadius="10"
-                    borderTopRightRadius="10"
-                    borderBottomLeftRadius="0"
-                    borderBottomRightRadius="0"
-                    source={{ uri: item?.image ?? item.user.avatar }}
-                    alt={item?.user?.name}
-                    height={200}
-                    width={175}
-                    resizeMode="cover"
-                  />
-                </Box>
-                <CardGradient color="lightDark">
-                  <Text fontWeight="medium" fontSize={13} isTruncated>
-                    {item?.title.length > 19
-                      ? item?.title?.slice(0, 18) + "..."
-                      : item?.title}
-                  </Text>
-                </CardGradient>
-                <TouchableOpacity
-                  activeOpacity={0.6}
-                  onPress={() => {
-                    navigate("IDNStream", { item });
-                  }}
-                >
-                  <HStack mt="1" alignItems="center">
-                    <Text
-                      fontSize="md"
-                      mr="2"
-                      fontWeight="semibold"
-                      color="white"
-                      py="2"
-                    >
-                      {formatName(item?.user?.name, true)}
-                    </Text>
-                    <Views number={item?.view_count} />
-                  </HStack>
-                </TouchableOpacity>
-              </Pressable>
+            <Box key={idx} mt={4} mr="2">
+              <IDNLiveCard data={item} isHome />
             </Box>
           ))}
         </ScrollView>
-        <Divider mt="3" />
+        {isMultiLive && (
+          <Button
+            size="sm"
+            bg="teal"
+            mt="3"
+            borderRadius="lg"
+            onPress={() => navigate("MultiIDN")}
+          >
+            <HStack space={3}>
+              <MultiLiveIcon />
+              <Text fontWeight="bold">Buka Multi IDN Live</Text>
+            </HStack>
+          </Button>
+        )}
+        {!isMultiLive && <Divider mt="3" />}
       </Box>
     )
   );
