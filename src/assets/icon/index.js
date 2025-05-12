@@ -65,6 +65,8 @@ import Medal from './Medal';
 import MultiLiveIcon from "./MultiLive";
 import NoLive from "./NoLive";
 import IDNLiveIcon from "./IDNLiveIcon";
+import GridFill from "./GridFill";
+import GridOutline from "./GridOutline";
 
 export {
   LogoIcon,
@@ -134,4 +136,6 @@ export {
   MultiLiveIcon,
   NoLive,
   IDNLiveIcon,
+  GridFill,
+  GridOutline,
 };

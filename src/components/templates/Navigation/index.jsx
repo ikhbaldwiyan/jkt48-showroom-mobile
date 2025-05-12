@@ -29,6 +29,8 @@ import {
   SupportProject,
   LeaderboardUser,
   MultiIDN,
+  MultiLive,
+  MultiShowroom
 } from "../../../screens";
 import {
   HomeIcon,
@@ -44,6 +46,8 @@ import {
   UserIconOutline,
   ThropyIcon,
   ThropyIconOutline,
+  GridFill,
+  GridOutline
 } from "../../../assets/icon";
 
 const Navigation = () => {
@@ -80,11 +84,19 @@ const Navigation = () => {
       Leaderboard: {
         active: <ThropyIcon color="#24A2B7" size={23} />,
         inactive: <ThropyIconOutline size={23} />
+      },
+      ["Multi Live"]: {
+        active: <GridFill color="#24A2B7" size={24} />,
+        inactive: <GridOutline size={23} />
       }
     };
 
     const routeConfig = iconConfig[route.name];
-    return routeConfig ? (isActive ? routeConfig.active : routeConfig.inactive) : null;
+    return routeConfig
+      ? isActive
+        ? routeConfig.active
+        : routeConfig.inactive
+      : null;
   };
 
   const BasicHeader = {
@@ -136,13 +148,13 @@ const Navigation = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Member" component={MemberList} options={BasicHeader} />
       <Tab.Screen
-        name="History"
-        component={HistoryLive}
+        name="Multi Live"
+        component={MultiLive}
         options={BasicHeader}
       />
       <Tab.Screen
-        name="Leaderboard"
-        component={LeaderboardUser}
+        name="History"
+        component={HistoryLive}
         options={BasicHeader}
       />
       <Tab.Screen name="Profile" component={Profile} />
@@ -159,7 +171,7 @@ const Navigation = () => {
       </Box>
     ),
     headerTitleStyle: {
-      fontSize: 18,
+      fontSize: 18
     }
   };
 
@@ -180,7 +192,11 @@ const Navigation = () => {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="Theater" component={ScheduleList} options={showHeader} />
+      <Stack.Screen
+        name="Theater"
+        component={ScheduleList}
+        options={showHeader}
+      />
       <Stack.Screen
         name="ShowroomLive"
         component={ShowroomLive}
@@ -218,14 +234,20 @@ const Navigation = () => {
         component={HistoryLiveDetail}
         options={showHeader}
       />
+      <Stack.Screen name="MultiIDN" component={MultiIDN} options={showHeader} />
       <Stack.Screen
-        name="MultiIDN"
-        component={MultiIDN}
+        name="MultiShowroom"
+        component={MultiShowroom}
         options={showHeader}
       />
       <Stack.Screen
         name="LeaderboardMember"
         component={LeaderboardMember}
+        options={showHeader}
+      />
+      <Stack.Screen
+        name="LeaderboardUser"
+        component={LeaderboardUser}
         options={showHeader}
       />
       <Stack.Screen name="About" component={About} options={showHeader} />

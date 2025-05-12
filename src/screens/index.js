@@ -19,6 +19,8 @@ import LeaderboardMember from "./LeaderboardMember";
 import SupportProject from "./SupportProject";
 import LeaderboardUser from './LeaderboardUser';
 import MultiIDN from "./MultiIDN";
+import MultiLive from "./MultiLive";
+import MultiShowroom from "./MultiShowroom";
 
 export {
   SplashScreen,
@@ -43,4 +45,6 @@ export {
   SupportProject,
   LeaderboardUser,
   MultiIDN,
+  MultiShowroom,
+  MultiLive,
 };

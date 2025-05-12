@@ -11,8 +11,8 @@ import {
 import {
   LiveIcon,
   Medal,
-  MultiLiveIcon,
-  TheaterIcon
+  TheaterIcon,
+  ThropyIcon
 } from "../../../assets/icon";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
@@ -37,9 +37,9 @@ const MenuHome = () => {
       screen: "IDNLives"
     },
     {
-      name: "Multi Live",
-      icon: <MultiLiveIcon size="25" color="white" />,
-      screen: "MultiIDN"
+      name: "Leaderboard",
+      icon: <ThropyIcon size="25" color="white" />,
+      screen: "LeaderboardUser"
     },
     {
       name: "Top Member",

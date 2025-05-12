@@ -92,7 +92,7 @@ const ShowroomLive = ({ navigation }) => {
           data={rooms}
           renderItem={renderRoomItem}
           keyExtractor={(item) => item?.room_url_key}
-          ListEmptyComponent={<EmptyLive isLoading={isLoading} />}
+          ListEmptyComponent={<EmptyLive isLoading={isLoading} type="sorum" />}
           estimatedItemSize={100}
         />
         <Divider mt={isLoading ? "16" : "3"} />
