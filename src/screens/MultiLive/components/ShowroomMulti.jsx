@@ -8,7 +8,7 @@ import {
   ScrollView,
   Text,
   View,
-  VStack
+  VStack,
 } from "native-base";
 import { TouchableOpacity } from "react-native";
 import Views from "../../../components/atoms/Views";
@@ -17,7 +17,7 @@ import { cleanImage, formatName } from "../../../utils/helpers";
 import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
 import { EmptyLive } from "../../../components/organisms";
 
-const ShowroomMulti = () => {
+const ShowroomMulti = ({ handleOpenMultiRoom }) => {
   const { navigate } = useNavigation();
   const { data, isLoading, isSuccess } = useShowroomLive();
 
@@ -48,7 +48,7 @@ const ShowroomMulti = () => {
                   <Box position="relative" w="130px" h="110px">
                     <Image
                       source={{
-                        uri: cleanImage(item?.image_square)
+                        uri: cleanImage(item?.image_square),
                       }}
                       alt={item?.profile?.room_url_key ?? item?.room_url_key}
                       w="130px"
@@ -72,14 +72,14 @@ const ShowroomMulti = () => {
           <EmptyLive type="sorum" isLoading={isLoading} />
         </Box>
       )}
-      
+
       {isSuccess && (
         <Button
           mb="3"
           size="sm"
           bg="primary"
           borderRadius="lg"
-          onPress={() => navigate("MultiShowroom")}
+          onPress={handleOpenMultiRoom}
         >
           <HStack space={3}>
             <MultiLiveIcon />

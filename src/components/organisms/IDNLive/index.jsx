@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect } from "react";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { Box, Divider, HStack, Text, ScrollView, Button } from "native-base";
+import { useCallback, useEffect } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { Box, Divider, HStack, ScrollView, Text } from "native-base";
 import { TouchableOpacity } from "react-native";
-import { LiveIcon, MultiLiveIcon, RightArrow } from "../../../assets/icon";
-import { useAppStateChange } from "../../../utils/hooks";
+
+import { RightArrow } from "../../../assets/icon";
 import { useIDNLive } from "../../../services/hooks/useIDNLive";
+import { useAppStateChange } from "../../../utils/hooks";
 import IDNLiveCard from "../../atoms/IDNLiveCard";
 
-const IDNLive = ({ refreshing, isMultiLive }) => {
+const IDNLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
   const { data: rooms = [], refetch } = useIDNLive();
 
@@ -25,16 +26,12 @@ const IDNLive = ({ refreshing, isMultiLive }) => {
 
   return (
     rooms.length > 0 && (
-      <Box mb="4">
+      <Box mb="2">
         <HStack alignItems="center" justifyContent="space-between">
-          <Text
-            color="white"
-            fontSize={isMultiLive ? "18" : "2xl"}
-            fontWeight="semibold"
-          >
+          <Text color="white" fontSize="2xl" fontWeight="semibold">
             IDN Live
           </Text>
-          {rooms.length > 2 && !isMultiLive && (
+          {rooms.length > 2 && (
             <TouchableOpacity onPress={() => navigate("IDNLives")}>
               <HStack space={2} alignItems="center">
                 <Text color="white" fontSize="sm">
@@ -44,13 +41,6 @@ const IDNLive = ({ refreshing, isMultiLive }) => {
               </HStack>
             </TouchableOpacity>
           )}
-
-          {isMultiLive && (
-            <HStack space={2} justifyContent="center" alignItems="center">
-              <LiveIcon size={18} />
-              <Text>{rooms?.length} Member Live</Text>
-            </HStack>
-          )}
         </HStack>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {rooms?.map((item, idx) => (
@@ -59,21 +49,7 @@ const IDNLive = ({ refreshing, isMultiLive }) => {
             </Box>
           ))}
         </ScrollView>
-        {isMultiLive && (
-          <Button
-            size="sm"
-            bg="teal"
-            mt="3"
-            borderRadius="lg"
-            onPress={() => navigate("MultiIDN")}
-          >
-            <HStack space={3}>
-              <MultiLiveIcon />
-              <Text fontWeight="bold">Buka Multi IDN Live</Text>
-            </HStack>
-          </Button>
-        )}
-        {!isMultiLive && <Divider mt="3" />}
+        <Divider mt="4" />
       </Box>
     )
   );
