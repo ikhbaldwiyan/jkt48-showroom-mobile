@@ -57,7 +57,8 @@ const Home = ({ navigation }) => {
         <ShowroomLive refreshing={refreshing} />
         <IDNLIve refreshing={refreshing} />
         <RecentLives refreshing={refreshing} />
-        <ScheduleHome refreshing={refreshing} navigation={navigation} isWeek />
+        <ScheduleHome isToday refreshing={refreshing} navigation={navigation} />
+        <ScheduleHome refreshing={refreshing} navigation={navigation} />
       </Box>
       <UpdateApp />
       <ChangeLog
