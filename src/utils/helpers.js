@@ -6,14 +6,24 @@ export const cleanImage = (image, isDetail) => {
 
 export const formatName = (name, hideGroup) => {
   let memberName;
+
+  if (name === "JKT48") {
+    return "JKT48";
+  }
+
   if (name === "JKT48_OlineM") {
     return "Oline";
   }
+
+  if (name === "officialJKT48") {
+    return "JKT48"
+  }
+
   !hideGroup
     ? (memberName = name ? name?.replace("JKT48_", "") + " JKT48" : "Loading")
     : (memberName = name?.includes("JKT48_")
-        ? name?.replace("JKT48_", "")
-        : name?.replace("JKT48", ""));
+      ? name?.replace("JKT48_", "")
+      : name?.replace("JKT48", ""));
   return memberName;
 };
 

@@ -22,7 +22,7 @@ export const Members = ({ members }) => {
           Array.from(
             { length: Math.ceil(members.length / 4) },
             (_, rowIndex) => (
-              <HStack key={rowIndex} space="2" alignItems="center">
+              <HStack key={rowIndex} space="2" alignItems="center" justifyContent="center">
                 {members
                   .slice(rowIndex * 4, rowIndex * 4 + 4)
                   .map((member, idx) => (
