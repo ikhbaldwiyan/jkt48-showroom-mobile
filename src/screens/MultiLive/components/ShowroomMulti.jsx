@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useCallback, useEffect } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   Box,
   Button,
@@ -8,7 +8,7 @@ import {
   ScrollView,
   Text,
   View,
-  VStack,
+  VStack
 } from "native-base";
 import { TouchableOpacity } from "react-native";
 import Views from "../../../components/atoms/Views";
@@ -16,10 +16,23 @@ import { LiveIcon, MultiLiveIcon } from "../../../assets/icon";
 import { cleanImage, formatName } from "../../../utils/helpers";
 import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
 import { EmptyLive } from "../../../components/organisms";
+import { useAppStateChange } from "../../../utils/hooks";
 
-const ShowroomMulti = ({ handleOpenMultiRoom }) => {
+const ShowroomMulti = ({ refreshing, handleOpenMultiRoom }) => {
   const { navigate } = useNavigation();
-  const { data, isLoading, isSuccess } = useShowroomLive();
+  const { data, isLoading, isSuccess, refetch } = useShowroomLive();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
+
+  useEffect(() => {
+    refetch();
+  }, [refreshing]);
+
+  useAppStateChange(refetch);
 
   return (
     <View>
@@ -27,12 +40,10 @@ const ShowroomMulti = ({ handleOpenMultiRoom }) => {
         <Text color="white" fontSize="18" fontWeight="semibold">
           Showroom Live
         </Text>
-        {data?.length > 0 && (
-          <HStack space={2} justifyContent="center" alignItems="center">
-            <LiveIcon size={18} />
-            <Text fontSize="sm">{data?.length} Member Live</Text>
-          </HStack>
-        )}
+        <HStack space={2} justifyContent="center" alignItems="center">
+          <LiveIcon size={18} />
+          <Text fontSize="sm">{data?.length} Member Live</Text>
+        </HStack>
       </HStack>
       {data?.length > 0 ? (
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -48,7 +59,7 @@ const ShowroomMulti = ({ handleOpenMultiRoom }) => {
                   <Box position="relative" w="130px" h="110px">
                     <Image
                       source={{
-                        uri: cleanImage(item?.image_square),
+                        uri: cleanImage(item?.image_square)
                       }}
                       alt={item?.profile?.room_url_key ?? item?.room_url_key}
                       w="130px"
@@ -77,7 +88,7 @@ const ShowroomMulti = ({ handleOpenMultiRoom }) => {
         <Button
           mb="3"
           size="sm"
-          bg="primary"
+          bg="teal"
           borderRadius="lg"
           onPress={handleOpenMultiRoom}
         >

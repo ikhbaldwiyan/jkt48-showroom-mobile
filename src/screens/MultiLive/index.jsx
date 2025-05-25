@@ -26,13 +26,13 @@ const MultiLive = () => {
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
-      <ShowroomMulti
-        refreshing={refreshing}
-        handleOpenMultiRoom={() => handleOpenMultiRoom("showroom")}
-      />
       <IDNLiveMulti
         refreshing={refreshing}
         handleOpenMultiRoom={() => handleOpenMultiRoom("idn")}
+      />
+      <ShowroomMulti
+        refreshing={refreshing}
+        handleOpenMultiRoom={() => handleOpenMultiRoom("showroom")}
       />
       <ModalInfoMulti
         isOpen={infoModal}

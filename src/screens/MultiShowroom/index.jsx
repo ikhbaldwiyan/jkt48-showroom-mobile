@@ -4,10 +4,14 @@ import { Box } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../components/atoms/Loading";
 import { JKT48_SHOWROOM_WEB } from "@env";
+import { useUser } from "../../utils/hooks";
+import { useProfile } from "../../services/hooks/useProfile";
 
 const MultiShowroom = () => {
   const { setOptions } = useNavigation();
+  const { userProfile } = useUser();
   const [isLoading, setIsLoading] = useState(true);
+  const { data: profile } = useProfile(userProfile?.user_id);
 
   useLayoutEffect(() => {
     setOptions({
@@ -27,7 +31,7 @@ const MultiShowroom = () => {
   return (
     <Box flex={1}>
       <WebView
-        source={{ uri: `${JKT48_SHOWROOM_WEB}/multi-room?view_type=android` }}
+        source={{ uri: `${JKT48_SHOWROOM_WEB}/multi-room-sr-mobile?view_type=android&threeRoom=${profile?.can_3_room}&fourRoom=${profile?.can_4_room}` }}
         style={{ flex: 1, backgroundColor: "#282C34" }}
       />
       {isLoading && (

@@ -24,7 +24,6 @@ const IDNLiveMulti = ({ refreshing, handleOpenMultiRoom }) => {
 
   return (
     <Box mb="4">
-      {rooms.length === 0 && <Divider my="4" />}
       <HStack alignItems="center" justifyContent="space-between">
         <Text color="white" fontSize={"18"} fontWeight="semibold">
           IDN Live
@@ -61,6 +60,7 @@ const IDNLiveMulti = ({ refreshing, handleOpenMultiRoom }) => {
           <Text fontWeight="bold">Buka Multi IDN Live</Text>
         </HStack>
       </Button>
+      {rooms.length === 0 && <Divider mt="4" />}
     </Box>
   );
 };
