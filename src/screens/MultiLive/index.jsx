@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useRefresh, useUser } from "../../utils/hooks";
+import { useNavigation } from "@react-navigation/native";
 
 import Layout from "../../components/templates/Layout";
 import ShowroomMulti from "./components/ShowroomMulti";
 import IDNLiveMulti from "./components/IDNLiveMulti";
 import ModalInfoMulti from "./components/ModalInfoMulti";
-import { useNavigation } from "@react-navigation/native";
+import { RefreshIcon } from "../../assets/icon";
+import { TouchableOpacity } from "react-native";
+import { HStack, Text } from "native-base";
 
-const MultiLive = () => {
+const MultiLive = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
   const [infoModal, setInfoModal] = useState(false);
   const { userProfile } = useUser();
@@ -23,6 +26,19 @@ const MultiLive = () => {
       navigate(type === "showroom" ? "MultiShowroom" : "MultiIDN");
     }
   };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity activeOpacity={0.7} onPress={onRefresh}>
+          <HStack mr="4" space={2} justifyContent="center" alignItems="center">
+            <RefreshIcon />
+            <Text>Refresh</Text>
+          </HStack>
+        </TouchableOpacity>
+      )
+    });
+  }, [refreshing]);
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>

@@ -59,16 +59,18 @@ const ShowroomLive = ({ refreshing }) => {
                   width={200}
                 />
                 <Box
-                  borderTopLeftRadius="8"
-                  borderBottomRightRadius="8"
+                  px="1"
+                  top="1.5"
+                  left="2"
+                  zIndex="99"
                   position="absolute"
-                  background="primary"
-                  py="1"
-                  px="2"
+                  bg="blueGray.600"
+                  borderRadius="sm"
+                  shadow={6}
                 >
                   <HStack space={1} alignItems="center">
-                    <TimesFill />
-                    <Text>{getTimes(item?.started_at)}</Text>
+                    <TimesFill size={15} />
+                    <Text fontSize={12}>{getTimes(item?.started_at)}</Text>
                   </HStack>
                 </Box>
               </TouchableOpacity>

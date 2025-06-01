@@ -46,8 +46,7 @@ import {
   UserIconOutline,
   ThropyIcon,
   ThropyIconOutline,
-  GridFill,
-  GridOutline
+  LiveIcon,
 } from "../../../assets/icon";
 
 const Navigation = () => {
@@ -85,9 +84,9 @@ const Navigation = () => {
         active: <ThropyIcon color="#24A2B7" size={23} />,
         inactive: <ThropyIconOutline size={23} />
       },
-      ["Multi Live"]: {
-        active: <GridFill color="#24A2B7" size={24} />,
-        inactive: <GridOutline size={23} />
+      ["Live Stream"]: {
+        active: <LiveIcon color="#24A2B7" size={23} />,
+        inactive: <LiveIcon size={23} />
       }
     };
 
@@ -148,7 +147,7 @@ const Navigation = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Member" component={MemberList} options={BasicHeader} />
       <Tab.Screen
-        name="Multi Live"
+        name="Live Stream"
         component={MultiLive}
         options={BasicHeader}
       />

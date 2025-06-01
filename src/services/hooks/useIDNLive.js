@@ -6,7 +6,10 @@ export const useIDNLive = () => {
     queryKey: ["idnLives"],
     queryFn: async () => {
       const response = await ROOMS.getIDNLIveRoom();
-      return response?.data;
+      const data = response?.data || [];
+
+      // Sort by highest viewers
+      return data.sort((a, b) => b.view_count - a.view_count);
     },
   });
 };

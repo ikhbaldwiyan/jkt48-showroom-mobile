@@ -4,6 +4,10 @@ import { STREAM } from "../services";
 const useIDNLiveStore = create((set) => ({
   profile: {},
   url: null,
+  gifts: [],
+  setGifts: (newGift) => set((state) => ({
+    gifts: Array.isArray(state.gifts) ? [newGift, ...state.gifts] : [newGift],
+  })),
   setProfile: (newProfile) => set({ profile: newProfile }),
   getLiveProfile: async (username) => {
     try {
@@ -28,7 +32,8 @@ const useIDNLiveStore = create((set) => ({
   clearLiveStream: () =>
     set({
       profile: {},
-      url: null
+      url: null,
+      gifts: [],
     }),
   clearUrl: () => set({ url: null })
 }));

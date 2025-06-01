@@ -17,10 +17,12 @@ import { cleanImage, formatName } from "../../../utils/helpers";
 import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
 import { EmptyLive } from "../../../components/organisms";
 import { useAppStateChange } from "../../../utils/hooks";
+import useAuthStore from "../../../store/authStore";
 
 const ShowroomMulti = ({ refreshing, handleOpenMultiRoom }) => {
   const { navigate } = useNavigation();
   const { data, isLoading, isSuccess, refetch } = useShowroomLive();
+  const { userProfile: profile } = useAuthStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -84,7 +86,9 @@ const ShowroomMulti = ({ refreshing, handleOpenMultiRoom }) => {
         </Box>
       )}
 
-      {isSuccess && (
+      {isSuccess &&
+      data?.length > 0 &&
+      (profile?.is_donator || profile?.is_developer) ? (
         <Button
           mb="3"
           size="sm"
@@ -97,6 +101,8 @@ const ShowroomMulti = ({ refreshing, handleOpenMultiRoom }) => {
             <Text fontWeight="bold">Buka Multi Live Showroom</Text>
           </HStack>
         </Button>
+      ) : (
+        <Box mb="4"></Box>
       )}
     </View>
   );
