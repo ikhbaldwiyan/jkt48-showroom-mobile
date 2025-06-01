@@ -5,9 +5,21 @@ const useIDNLiveStore = create((set) => ({
   profile: {},
   url: null,
   gifts: [],
-  setGifts: (newGift) => set((state) => ({
-    gifts: Array.isArray(state.gifts) ? [newGift, ...state.gifts] : [newGift],
-  })),
+  setGifts: (newGift) =>
+    set((state) => {
+      if (Array.isArray(newGift)) {
+        // Resetting the gift array (e.g., setGifts([]))
+        return { gifts: newGift };
+      }
+
+      // Otherwise, prepend new gift to the array
+      return {
+        gifts: Array.isArray(state.gifts)
+          ? [newGift, ...state.gifts]
+          : [newGift],
+      };
+    }),
+
   setProfile: (newProfile) => set({ profile: newProfile }),
   getLiveProfile: async (username) => {
     try {
