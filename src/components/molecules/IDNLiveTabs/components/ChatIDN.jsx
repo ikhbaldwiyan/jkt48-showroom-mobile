@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import CardGradient from "../../../atoms/CardGradient";
-import { Box, Center, Divider, HStack, Text, View, VStack } from "native-base";
+import {
+  Center,
+  Divider,
+  HStack,
+  Image,
+  Text,
+  View,
+  VStack
+} from "native-base";
 import { FlashList } from "@shopify/flash-list";
 import { RefreshControl } from "react-native";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
@@ -9,7 +17,7 @@ import { RefreshIcon } from "../../../../assets/icon";
 import Loading from "../../../atoms/Loading";
 
 const ChatIDN = () => {
-  const { profile, url } = useIDNLiveStore();
+  const { profile, url, setGifts } = useIDNLiveStore();
   const { refreshing, onRefresh } = useRefresh();
   const [messages, setMessages] = useState([]);
   const wsRef = useRef(null);
@@ -63,6 +71,10 @@ const ChatIDN = () => {
           if (jsonMatch) {
             try {
               const data = JSON.parse(jsonMatch[1]);
+
+              if (data?.gift) {
+                setGifts(data);
+              }
 
               if (data?.chat) {
                 const mappedMessage = {
@@ -124,26 +136,37 @@ const ChatIDN = () => {
         data={messages?.length > 0 ? messages?.slice(0, 45) : []}
         keyExtractor={(item, index) => index.toString()}
         estimatedItemSize={50}
-        renderItem={({ item }) => (
-          <Box>
-            <HStack alignItems="center" p="2">
-              <View flexShrink="1">
+        renderItem={({ item, index }) => (
+          <>
+            <HStack alignItems="center" space={1} flexWrap="wrap">
+              <Image
+                borderRadius="lg"
+                alt={item?.user?.name}
+                style={{ width: 45, height: 45 }}
+                source={{ uri: item?.user?.avatar_url }}
+              />
+              <View flex={1} pt={index === 0 ? "0" : "2"} p="2">
                 <Text
                   fontSize="md"
                   fontWeight="bold"
                   color={
-                    item?.user?.color_code === "#ED2227" || item?.user.color_code === null
+                    item?.user?.color_code === "#ED2227" ||
+                    item?.user?.color_code === null
                       ? "primary"
                       : item?.user?.color_code
                   }
+                  flexShrink={1}
+                  flexWrap="wrap"
                 >
                   {item?.user?.name ?? "User"}
                 </Text>
-                <Text mt="1">{item?.comment}</Text>
+                <Text mt="1" flexShrink={1} flexWrap="wrap">
+                  {item?.comment}
+                </Text>
               </View>
             </HStack>
             <Divider mb="1" />
-          </Box>
+          </>
         )}
         ListEmptyComponent={() =>
           !url ? (

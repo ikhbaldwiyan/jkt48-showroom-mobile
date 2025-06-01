@@ -157,7 +157,7 @@ const HistoryLive = ({ liveType = "showroom" }) => {
                           <HStack alignItems="center" space={2}>
                             <UsersFill size={20} />
                             <Text fontSize="15">
-                              {formatViews(live_info?.viewers?.num)} views
+                              {formatViews(live_info?.viewers?.num ?? 0)} views
                             </Text>
                           </HStack>
                           <HStack alignItems="center" space={2}>
