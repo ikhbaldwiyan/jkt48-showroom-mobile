@@ -38,12 +38,12 @@ const ModalInfoMulti = ({ isOpen, toggleModal }) => {
         <Modal.Footer bg="black">
           <Button.Group space={2}>
             <Button
-              variant="outline"
-              backgroundColor="#E49C20"
+              size="sm"
+              backgroundColor="primary"
               onPress={() => navigate("SupportProject")}
             >
               <HStack alignItems="center" space={2}>
-                <Donate color="white" size={24} />
+                <Donate color="white" size={20} />
                 <Text fontWeight="bold" color="white">
                   Support Project
                 </Text>
