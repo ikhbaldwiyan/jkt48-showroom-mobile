@@ -1,37 +1,23 @@
 import React, { useCallback, useEffect } from "react";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useAppStateChange } from "../../../utils/hooks";
-import useAuthStore from "../../../store/authStore";
+import { useFocusEffect } from "@react-navigation/native";
 import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
-import {
-  cleanImage,
-  formatName,
-  hasMultiRoomAccess
-} from "../../../utils/helpers";
+import useAuthStore from "../../../store/authStore";
+import { hasMultiRoomAccess } from "../../../utils/helpers";
+import { useAppStateChange } from "../../../utils/hooks";
 
-import {
-  Box,
-  Button,
-  HStack,
-  Image,
-  ScrollView,
-  Text,
-  View,
-  VStack
-} from "native-base";
-import Views from "../../../components/atoms/Views";
-import { TouchableOpacity } from "react-native";
+import { Box, Button, HStack, Text, View } from "native-base";
 import { LiveIcon, MultiLiveIcon } from "../../../assets/icon";
-import { EmptyLive } from "../../../components/organisms";
+import { ShowroomLiveCard } from "../../../components/organisms";
+import { useProfile } from "../../../services/hooks/useProfile";
 
 const ShowroomMulti = ({
   refreshing,
   handleOpenMultiRoom,
   isMultiLiveScreen
 }) => {
-  const { navigate } = useNavigation();
+  const { user } = useAuthStore();
+  const { data: profile } = useProfile(user?.user_id);
   const { data, isLoading, isSuccess, refetch } = useShowroomLive();
-  const { userProfile: profile } = useAuthStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -47,7 +33,7 @@ const ShowroomMulti = ({
 
   return (
     <View>
-      <HStack mb="2" alignItems="center" justifyContent="space-between">
+      <HStack mb="3" alignItems="center" justifyContent="space-between">
         <Text color="white" fontSize="18" fontWeight="semibold">
           Showroom Live
         </Text>
@@ -56,49 +42,17 @@ const ShowroomMulti = ({
           <Text fontSize="sm">{data?.length} Member Live</Text>
         </HStack>
       </HStack>
-      {data?.length > 0 ? (
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <HStack mt="2" space={3}>
-            {data?.map((item, idx) => (
-              <VStack key={idx} space={2} mb={4}>
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  onPress={() => {
-                    navigate("LiveStream", { item });
-                  }}
-                >
-                  <Box position="relative" w="130px" h="110px">
-                    <Image
-                      source={{
-                        uri: cleanImage(item?.image_square)
-                      }}
-                      alt={item?.profile?.room_url_key ?? item?.room_url_key}
-                      w="130px"
-                      h="110px"
-                      borderRadius="md"
-                    />
-                  </Box>
-                  <HStack mt="2" space={2} alignItems="center">
-                    <Text fontSize={14} fontWeight="semibold">
-                      {formatName(item?.room_url_key, true)}
-                    </Text>
-                    <Views number={item?.view_num} />
-                  </HStack>
-                </TouchableOpacity>
-              </VStack>
-            ))}
-          </HStack>
-        </ScrollView>
-      ) : (
-        <Box mb="3">
-          <EmptyLive type="sorum" isLoading={isLoading} />
-        </Box>
-      )}
+      <ShowroomLiveCard
+        rooms={data}
+        isLiveStream={!isMultiLiveScreen}
+        isLoading={isLoading}
+      />
 
       {isSuccess &&
       (data.length > 0 || isMultiLiveScreen) &&
       hasMultiRoomAccess(profile) ? (
         <Button
+          mt="2"
           mb="8"
           size="sm"
           bg="teal"

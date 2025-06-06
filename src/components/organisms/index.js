@@ -7,6 +7,7 @@ import TopMember from "./TopMember";
 import EmptyLive from "./EmptyLive";
 import HistoryLive from "./HistoryLive";
 import ScheduleHome from "./ScheduleHome";
+import ShowroomLiveCard from "./ShowroomLiveCard";
 
 export {
   RoomList,
@@ -18,4 +19,5 @@ export {
   EmptyLive,
   HistoryLive,
   ScheduleHome,
+  ShowroomLiveCard,
 }
