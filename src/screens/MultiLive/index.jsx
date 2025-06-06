@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
 import { useRefresh, useUser } from "../../utils/hooks";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import Layout from "../../components/templates/Layout";
 import ShowroomMulti from "./components/ShowroomMulti";
@@ -11,10 +11,13 @@ import { TouchableOpacity } from "react-native";
 import { HStack, Text } from "native-base";
 
 const MultiLive = ({ navigation }) => {
+  const route = useRoute();
+  const { navigate } = useNavigation();
+  const { userProfile } = useUser();
+  const isMultiLiveScreen = route?.name === "Multi Live";
+
   const { refreshing, onRefresh } = useRefresh();
   const [infoModal, setInfoModal] = useState(false);
-  const { userProfile } = useUser();
-  const { navigate } = useNavigation();
 
   const handleOpenMultiRoom = (type) => {
     if (
@@ -31,7 +34,12 @@ const MultiLive = ({ navigation }) => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity activeOpacity={0.7} onPress={onRefresh}>
-          <HStack mr="4" space={2} justifyContent="center" alignItems="center">
+          <HStack
+            mr={isMultiLiveScreen ? "0" : "4"}
+            space={2}
+            justifyContent="center"
+            alignItems="center"
+          >
             <RefreshIcon />
             <Text>Refresh</Text>
           </HStack>
@@ -44,10 +52,12 @@ const MultiLive = ({ navigation }) => {
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <IDNLiveMulti
         refreshing={refreshing}
+        isMultiLiveScreen={isMultiLiveScreen}
         handleOpenMultiRoom={() => handleOpenMultiRoom("idn")}
       />
       <ShowroomMulti
         refreshing={refreshing}
+        isMultiLiveScreen={isMultiLiveScreen}
         handleOpenMultiRoom={() => handleOpenMultiRoom("showroom")}
       />
       <ModalInfoMulti

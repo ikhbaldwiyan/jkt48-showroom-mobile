@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useAppStateChange } from "../../../utils/hooks";
+import useAuthStore from "../../../store/authStore";
+import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
+import {
+  cleanImage,
+  formatName,
+  hasMultiRoomAccess
+} from "../../../utils/helpers";
+
 import {
   Box,
   Button,
@@ -10,16 +19,16 @@ import {
   View,
   VStack
 } from "native-base";
-import { TouchableOpacity } from "react-native";
 import Views from "../../../components/atoms/Views";
+import { TouchableOpacity } from "react-native";
 import { LiveIcon, MultiLiveIcon } from "../../../assets/icon";
-import { cleanImage, formatName } from "../../../utils/helpers";
-import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
 import { EmptyLive } from "../../../components/organisms";
-import { useAppStateChange } from "../../../utils/hooks";
-import useAuthStore from "../../../store/authStore";
 
-const ShowroomMulti = ({ refreshing, handleOpenMultiRoom }) => {
+const ShowroomMulti = ({
+  refreshing,
+  handleOpenMultiRoom,
+  isMultiLiveScreen
+}) => {
   const { navigate } = useNavigation();
   const { data, isLoading, isSuccess, refetch } = useShowroomLive();
   const { userProfile: profile } = useAuthStore();
@@ -87,10 +96,10 @@ const ShowroomMulti = ({ refreshing, handleOpenMultiRoom }) => {
       )}
 
       {isSuccess &&
-      data?.length > 0 &&
-      (profile?.is_donator || profile?.is_developer) ? (
+      (data.length > 0 || isMultiLiveScreen) &&
+      hasMultiRoomAccess(profile) ? (
         <Button
-          mb="3"
+          mb="8"
           size="sm"
           bg="teal"
           borderRadius="lg"

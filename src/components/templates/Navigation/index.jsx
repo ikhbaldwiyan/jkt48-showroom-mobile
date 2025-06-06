@@ -30,7 +30,7 @@ import {
   LeaderboardUser,
   MultiIDN,
   MultiLive,
-  MultiShowroom
+  MultiShowroom,
 } from "../../../screens";
 import {
   HomeIcon,
@@ -231,6 +231,11 @@ const Navigation = () => {
       <Stack.Screen
         name="HistoryDetail"
         component={HistoryLiveDetail}
+        options={showHeader}
+      />
+      <Stack.Screen
+        name="Multi Live"
+        component={MultiLive}
         options={showHeader}
       />
       <Stack.Screen name="MultiIDN" component={MultiIDN} options={showHeader} />

@@ -1,12 +1,21 @@
 import React from "react";
 import { Linking } from "react-native";
-import { KebabMenu, PipIcon, UsersIconFill, WatchIcon } from "../../../assets/icon";
-import { HStack, Menu, Pressable, Text } from "native-base";
 import { usePipMode } from "../../../utils/hooks";
 import useIDNLiveStore from "../../../store/idnLiveStore";
 import { useNavigation } from "@react-navigation/native";
+import useAuthStore from "../../../store/authStore";
+import { hasMultiRoomAccess } from "../../../utils/helpers";
+
+import { HStack, Menu, Pressable, Text } from "native-base";
+import {
+  KebabMenu,
+  PipIcon,
+  UsersIconFill,
+  WatchIcon
+} from "../../../assets/icon";
 
 const MenuIDN = () => {
+  const { userProfile } = useAuthStore();
   const { profile } = useIDNLiveStore();
   const { enterPipMode } = usePipMode();
   const navigation = useNavigation();
@@ -30,11 +39,15 @@ const MenuIDN = () => {
       title: "Watch In IDN App",
       icon: <WatchIcon />
     },
-    {
-      key: "multi-live",
-      title: "Open Multi Live IDN",
-      icon: <UsersIconFill color="#21252B" />
-    }
+    ...(hasMultiRoomAccess(userProfile)
+      ? [
+          {
+            key: "multi-live",
+            title: "Open Multi Live IDN",
+            icon: <UsersIconFill color="#21252B" />
+          }
+        ]
+      : [])
   ];
 
   const handleMenu = (key) => {

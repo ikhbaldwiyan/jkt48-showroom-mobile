@@ -1,15 +1,16 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { Box, Divider, FlatList, HStack, Image, Text, View, VStack } from "native-base";
+import React, { useEffect, useLayoutEffect } from "react";
 import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useRefresh } from "../../utils/hooks/useRefresh";
+import { useShowroomLive } from "../../services/hooks/useShowroomLive";
 import { cleanImage, formatName } from "../../utils/helpers";
+
+import { Box, Divider, HStack, Image, Text, VStack } from "native-base";
 import Views from "../../components/atoms/Views";
 import Layout from "../../components/templates/Layout";
-import { useRefresh } from "../../utils/hooks/useRefresh";
 import { TopMember, HistoryLive, EmptyLive } from "../../components/organisms";
 import { LiveIcon, RefreshIcon } from "../../assets/icon";
 import { FlashList } from "@shopify/flash-list";
-import { useShowroomLive } from "../../services/hooks/useShowroomLive";
 
 const ShowroomLive = ({ navigation }) => {
   const { navigate } = useNavigation();

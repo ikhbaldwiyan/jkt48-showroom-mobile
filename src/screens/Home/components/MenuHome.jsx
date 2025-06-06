@@ -1,4 +1,8 @@
 import React from "react";
+import useAuthStore from "../../../store/authStore";
+import { useNavigation } from "@react-navigation/native";
+import { hasMultiRoomAccess } from "../../../utils/helpers";
+
 import {
   Box,
   Divider,
@@ -11,14 +15,15 @@ import {
 import {
   LiveIcon,
   Medal,
+  MultiLiveIcon,
   TheaterIcon,
   ThropyIcon
 } from "../../../assets/icon";
-import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 
 const MenuHome = () => {
   const { navigate } = useNavigation();
+  const { userProfile: profile } = useAuthStore();
 
   const menus = [
     {
@@ -26,6 +31,15 @@ const MenuHome = () => {
       icon: <TheaterIcon size="24" color="white" />,
       screen: "Theater"
     },
+    ...(hasMultiRoomAccess(profile)
+      ? [
+          {
+            name: "Multi Live",
+            icon: <MultiLiveIcon size="25" color="white" />,
+            screen: "Multi Live"
+          }
+        ]
+      : []),
     {
       name: "Showroom",
       icon: <LiveIcon size="24" color="white" />,

@@ -135,3 +135,14 @@ export const monthNames = [
   { name: "November", short: "11" },
   { name: "December", short: "12" }
 ];
+
+export const hasMultiRoomAccess = (profile) => {
+  if (profile?.is_donator ||
+    profile?.is_developer ||
+    profile?.top_leaderboard ||
+    profile?.is_multi_live) {
+    return true;
+  } else {
+    return false;
+  }
+}

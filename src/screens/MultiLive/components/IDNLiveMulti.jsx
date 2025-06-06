@@ -1,16 +1,22 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { Box, Button, Divider, HStack, Text } from "native-base";
-import { useCallback, useEffect } from "react";
-import IDNLiveCard from "../../../components/atoms/IDNLiveCard";
 import { useIDNLive } from "../../../services/hooks/useIDNLive";
+import { useCallback, useEffect } from "react";
 import { useAppStateChange } from "../../../utils/hooks";
+import useAuthStore from "../../../store/authStore";
+import { hasMultiRoomAccess } from "../../../utils/helpers";
+
+import { Box, Button, Divider, HStack, ScrollView, Text } from "native-base";
+import IDNLiveCard from "../../../components/atoms/IDNLiveCard";
 import { LiveIcon, MultiLiveIcon } from "../../../assets/icon";
 import { EmptyLive } from "../../../components/organisms";
 import { FlashList } from "@shopify/flash-list";
-import useAuthStore from "../../../store/authStore";
 
-const IDNLiveMulti = ({ refreshing, handleOpenMultiRoom }) => {
-  const { data: rooms = [], refetch } = useIDNLive();
+const IDNLiveMulti = ({
+  refreshing,
+  handleOpenMultiRoom,
+  isMultiLiveScreen
+}) => {
+  const { data: rooms = [], refetch, isSuccess } = useIDNLive();
   const { userProfile: profile } = useAuthStore();
 
   useFocusEffect(
@@ -53,34 +59,52 @@ const IDNLiveMulti = ({ refreshing, handleOpenMultiRoom }) => {
         </HStack>
       </HStack>
 
-      <FlashList
-        numColumns={2}
-        data={rooms}
-        renderItem={renderItem}
-        keyExtractor={(item) => item?.user?.name}
-        ListEmptyComponent={
+      {isMultiLiveScreen ? (
+        rooms.length > 0 ? (
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {rooms?.map((item, idx) => (
+              <Box key={idx} mr="2">
+                <IDNLiveCard data={item} isHome />
+              </Box>
+            ))}
+          </ScrollView>
+        ) : (
           <Box mb="3">
             <EmptyLive type="idn" />
           </Box>
-        }
-        estimatedItemSize={100}
-      />
-
-      {(profile?.is_donator || profile?.is_developer) && (
-        <Button
-          size="sm"
-          bg="teal"
-          mt="3"
-          mb="2"
-          borderRadius="lg"
-          onPress={handleOpenMultiRoom}
-        >
-          <HStack space={3}>
-            <MultiLiveIcon />
-            <Text fontWeight="bold">Buka Multi IDN Live</Text>
-          </HStack>
-        </Button>
+        )
+      ) : (
+        <FlashList
+          numColumns={2}
+          data={rooms}
+          renderItem={renderItem}
+          keyExtractor={(item) => item?.user?.name}
+          ListEmptyComponent={
+            <Box mb="3">
+              <EmptyLive type="idn" />
+            </Box>
+          }
+          estimatedItemSize={100}
+        />
       )}
+
+      {isSuccess &&
+        (rooms.length > 0 || isMultiLiveScreen) &&
+        hasMultiRoomAccess(profile) && (
+          <Button
+            size="sm"
+            bg="teal"
+            mt="3"
+            mb="2"
+            borderRadius="lg"
+            onPress={handleOpenMultiRoom}
+          >
+            <HStack space={3}>
+              <MultiLiveIcon />
+              <Text fontWeight="bold">Buka Multi IDN Live</Text>
+            </HStack>
+          </Button>
+        )}
       <Divider mt="3" />
     </Box>
   );
