@@ -130,6 +130,10 @@ const ChatIDN = () => {
     };
   }, [profile, refreshing]);
 
+  useEffect(() => {
+    setGifts([])
+  }, [profile]);
+
   return (
     <CardGradient>
       <FlashList

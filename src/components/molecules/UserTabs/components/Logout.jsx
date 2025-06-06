@@ -21,7 +21,7 @@ const Logout = ({ isProfile = false }) => {
   const handleLogout = () => {
     handleModal();
     logout();
-    navigation.replace("Login");
+    navigation.replace("SplashScreen");
 
     trackAnalytics("logout", {
       username: profile?.name
