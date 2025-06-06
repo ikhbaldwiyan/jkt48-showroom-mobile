@@ -10,6 +10,7 @@ import IDNLiveCard from "../../../components/atoms/IDNLiveCard";
 import { LiveIcon, MultiLiveIcon } from "../../../assets/icon";
 import { EmptyLive } from "../../../components/organisms";
 import { FlashList } from "@shopify/flash-list";
+import { useProfile } from "../../../services/hooks/useProfile";
 
 const IDNLiveMulti = ({
   refreshing,
@@ -17,7 +18,8 @@ const IDNLiveMulti = ({
   isMultiLiveScreen
 }) => {
   const { data: rooms = [], refetch, isSuccess } = useIDNLive();
-  const { userProfile: profile } = useAuthStore();
+  const { user } = useAuthStore();
+  const { data: profile } = useProfile(user?.user_id);
 
   useFocusEffect(
     useCallback(() => {

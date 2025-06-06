@@ -1,6 +1,7 @@
 import React from "react";
 import useAuthStore from "../../../store/authStore";
 import { useNavigation } from "@react-navigation/native";
+import { useProfile } from "../../../services/hooks/useProfile";
 import { hasMultiRoomAccess } from "../../../utils/helpers";
 
 import {
@@ -23,7 +24,8 @@ import { TouchableOpacity } from "react-native";
 
 const MenuHome = () => {
   const { navigate } = useNavigation();
-  const { userProfile: profile } = useAuthStore();
+  const { user } = useAuthStore();
+  const { data: profile } = useProfile(user?.user_id);
 
   const menus = [
     {

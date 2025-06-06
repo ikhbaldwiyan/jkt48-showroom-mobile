@@ -5,19 +5,25 @@ import {
   KebabMenu,
   PipIcon,
   SettingsIcon,
+  UsersIconFill,
   WatchIcon,
 } from "../../../assets/icon";
 import { usePipMode } from "../../../utils/hooks";
 import QualitySettings from "../../../components/atoms/QualitySettings";
 import useLiveStreamStore from "../../../store/liveStreamStore";
+import { hasMultiRoomAccess } from "../../../utils/helpers";
+import useAuthStore from "../../../store/authStore";
+import { useNavigation } from "@react-navigation/native";
 
 const MenuList = ({ refreshing }) => {
+  const navigation = useNavigation();
   const { enterPipMode } = usePipMode();
   const { liveInfo } = useLiveStreamStore();
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const { userProfile } = useAuthStore();
   const closeMenu = () => setIsOpen(false);
-
+  
   const menu = [
     {
       key: "stream-quality",
@@ -33,7 +39,16 @@ const MenuList = ({ refreshing }) => {
       key: "showroom",
       title: "Watch in Showroom",
       icon: <WatchIcon />
-    }
+    },
+    ...(hasMultiRoomAccess(userProfile)
+      ? [
+          {
+            key: "multi-live",
+            title: "Open Multi Showroom",
+            icon: <UsersIconFill color="#21252B" />
+          }
+        ]
+      : [])
   ];
 
   const handleMenu = (key) => {
@@ -46,6 +61,9 @@ const MenuList = ({ refreshing }) => {
         break;
       case "showroom":
         Linking.openURL(liveInfo?.share_url_live);
+        break;
+      case "multi-live":
+        navigation.replace("MultiShowroom");
         break;
       default:
         break;

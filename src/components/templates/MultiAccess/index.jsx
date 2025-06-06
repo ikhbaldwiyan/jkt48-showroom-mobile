@@ -39,14 +39,15 @@ const MultiAccess = ({ isVisible, onClose }) => {
     >
       <Box bg="secondary" p={5} rounded="xl" shadow={3} width="85%">
         <Text fontWeight="bold" textAlign="center" fontSize="18" mb={4}>
-          Fitur Multi Live Terbuka
+          Fitur Multi Live Terbuka 🥳
         </Text>
         <Center>
           <LogoNormal width={100} height={100} />
         </Center>
         <Text mt="4" textAlign="center" mb={2}>
-          Selamat akun kamu mendapatkan early akses untuk mencoba fitur baru
-          Multi Live Showroom dan Multi IDN Live
+          Selamat akun kamu mendapatkan early akses untuk mencoba fitur{" "}
+          <Text fontWeight="semibold">Multi Live Showroom</Text> dan{" "}
+          <Text fontWeight="semibold">Multi Live IDN</Text>
         </Text>
         <Button
           mt="2"
