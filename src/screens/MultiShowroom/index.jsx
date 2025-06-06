@@ -12,6 +12,9 @@ const MultiShowroom = () => {
   const { userProfile } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const { data: profile } = useProfile(userProfile?.user_id);
+  const [url, setUrl] = useState(
+    `${JKT48_SHOWROOM_WEB}/multi-room-sr-mobile?view_type=android&threeRoom=${profile?.can_3_room}&fourRoom=${profile?.can_4_room}`
+  );
 
   useLayoutEffect(() => {
     setOptions({
@@ -28,10 +31,21 @@ const MultiShowroom = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (
+      profile?.is_donator ||
+      (profile?.top_leaderboard && profile?.totalWatchLive > 400)
+    ) {
+      setUrl(
+        `${JKT48_SHOWROOM_WEB}/multi-room-sr-mobile?view_type=android&threeRoom=true&fourRoom=true`
+      );
+    }
+  }, [profile]);
+
   return (
     <Box flex={1}>
       <WebView
-        source={{ uri: `${JKT48_SHOWROOM_WEB}/multi-room-sr-mobile?view_type=android&threeRoom=${profile?.can_3_room}&fourRoom=${profile?.can_4_room}` }}
+        source={{ uri: url }}
         style={{ flex: 1, backgroundColor: "#282C34" }}
       />
       {isLoading && (

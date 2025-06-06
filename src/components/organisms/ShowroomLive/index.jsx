@@ -4,7 +4,7 @@ import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { cleanImage, formatName, getTimes } from "../../../utils/helpers";
 import Views from "../../atoms/Views";
-import { RightArrow, TimesFill } from "../../../assets/icon";
+import { RightArrow } from "../../../assets/icon";
 import { useAppStateChange } from "../../../utils/hooks";
 import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
 
@@ -69,7 +69,6 @@ const ShowroomLive = ({ refreshing }) => {
                   shadow={6}
                 >
                   <HStack space={1} alignItems="center">
-                    <TimesFill size={15} />
                     <Text fontSize={12}>{getTimes(item?.started_at)}</Text>
                   </HStack>
                 </Box>

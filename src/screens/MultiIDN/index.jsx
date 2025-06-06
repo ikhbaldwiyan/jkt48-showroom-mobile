@@ -13,6 +13,21 @@ const MultiIDN = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { data: profile } = useProfile(userProfile?.user_id);
 
+  const [url, setUrl] = useState(
+    `${JKT48_SHOWROOM_WEB}/multi-room-idn-mobile?view_type=android&threeRoom=${profile?.can_3_room}&fourRoom=${profile?.can_4_room}`
+  );
+
+  useEffect(() => {
+    if (
+      profile?.is_donator ||
+      (profile?.top_leaderboard && profile?.totalWatchLive > 400)
+    ) {
+      setUrl(
+        `${JKT48_SHOWROOM_WEB}/multi-room-idn-mobile?view_type=android&threeRoom=true&fourRoom=true`
+      );
+    }
+  }, [profile]);
+
   useLayoutEffect(() => {
     setOptions({
       headerTitle: "Multi Live IDN"
@@ -31,7 +46,7 @@ const MultiIDN = () => {
   return (
     <Box flex={1}>
       <WebView
-        source={{ uri: `${JKT48_SHOWROOM_WEB}/multi-room-idn-mobile?view_type=android&threeRoom=${profile?.can_3_room}&fourRoom=${profile?.can_4_room}` }}
+        source={{ uri: url }}
         style={{ flex: 1, backgroundColor: "#282C34" }}
       />
       {isLoading && (

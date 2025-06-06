@@ -58,7 +58,7 @@ const MultiAccess = ({ isVisible, onClose }) => {
           colorScheme="cyan"
         >
           <HStack space={2} alignItems="center">
-            <MultiLiveIcon size={20} />
+            <MultiLiveIcon size={23} />
             <Text fontWeight="bold" fontSize="md">
               Buka Multi Live
             </Text>

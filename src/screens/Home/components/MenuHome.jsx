@@ -37,7 +37,7 @@ const MenuHome = () => {
       ? [
           {
             name: "Multi Live",
-            icon: <MultiLiveIcon size="25" color="white" />,
+            icon: <MultiLiveIcon size="24" color="white" />,
             screen: "Multi Live"
           }
         ]

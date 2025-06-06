@@ -68,8 +68,8 @@ const IDNLiveCard = ({ data, isHome }) => {
 
       <CardGradient color="lightDark">
         <Text fontWeight="medium" fontSize={13} isTruncated>
-          {data?.title.length > 19
-            ? data?.title?.slice(0, 18) + "..."
+          {data?.title.length > 20
+            ? data?.title?.slice(0, 19) + "..."
             : data?.title}
         </Text>
       </CardGradient>

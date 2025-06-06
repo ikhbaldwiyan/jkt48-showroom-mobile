@@ -103,7 +103,7 @@ const IDNLiveMulti = ({
           >
             <HStack space={3}>
               <MultiLiveIcon />
-              <Text fontWeight="bold">Buka Multi IDN Live</Text>
+              <Text fontWeight="bold">Buka Multi Live IDN</Text>
             </HStack>
           </Button>
         )}
