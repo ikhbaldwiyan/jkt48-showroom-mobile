@@ -122,7 +122,7 @@ const IDNStream = () => {
   }, [params.item, profile, userProfile, url]);
 
   const handleEndLive = () => {
-    navigation.navigate("IDNLives");
+    navigation.replace("IDNLives");
     toast.show({
       render: () => {
         return (

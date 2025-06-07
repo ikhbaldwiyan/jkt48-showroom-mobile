@@ -65,7 +65,7 @@ const ShowroomMulti = ({
           </HStack>
         </Button>
       ) : (
-        <Box mb="4"></Box>
+        <Box mb="8"></Box>
       )}
     </View>
   );

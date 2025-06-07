@@ -1,19 +1,18 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useRefresh } from "../../utils/hooks/useRefresh";
 import { useShowroomLive } from "../../services/hooks/useShowroomLive";
-import { cleanImage, formatName } from "../../utils/helpers";
+import { useRefresh } from "../../utils/hooks/useRefresh";
 
-import { Box, Divider, HStack, Image, Text, VStack } from "native-base";
-import Views from "../../components/atoms/Views";
-import Layout from "../../components/templates/Layout";
-import { TopMember, HistoryLive, EmptyLive } from "../../components/organisms";
+import { Divider, HStack, Text, VStack } from "native-base";
 import { LiveIcon, RefreshIcon } from "../../assets/icon";
-import { FlashList } from "@shopify/flash-list";
+import {
+  HistoryLive,
+  ShowroomLiveCard,
+  TopMember,
+} from "../../components/organisms";
+import Layout from "../../components/templates/Layout";
 
 const ShowroomLive = ({ navigation }) => {
-  const { navigate } = useNavigation();
   const { refreshing, onRefresh } = useRefresh();
   const { data: rooms = [], refetch, isLoading } = useShowroomLive();
 
@@ -37,65 +36,14 @@ const ShowroomLive = ({ navigation }) => {
               <Text>Refresh</Text>
             </HStack>
           </TouchableOpacity>
-        ),
+        )
     });
   }, [rooms]);
-
-  const renderRoomItem = ({ item, index }) => {
-    const isLastRow = index >= rooms.length - (rooms.length % 2 === 0 ? 2 : 1);
-
-    return (
-      <Box flex={1} key={index} mr="3" mb={isLastRow ? "0" : "3"}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={() => {
-            navigate("LiveStream", { item });
-          }}
-        >
-          <Image
-            borderRadius={8}
-            source={{
-              uri: cleanImage(item.image_square),
-            }}
-            alt={item.main_name}
-            size="xl"
-            width="100%"
-          />
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => {
-              navigate("LiveStream", { item });
-            }}
-          >
-            <HStack alignItems="center" mt="1">
-              <Text
-                fontSize="md"
-                mr="2"
-                fontWeight="semibold"
-                color="white"
-                py="2"
-              >
-                {formatName(item?.room_url_key, true)}
-              </Text>
-              <Views number={item?.view_num} />
-            </HStack>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Box>
-    );
-  };
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <VStack space="2">
-        <FlashList
-          numColumns={2}
-          data={rooms}
-          renderItem={renderRoomItem}
-          keyExtractor={(item) => item?.room_url_key}
-          ListEmptyComponent={<EmptyLive isLoading={isLoading} type="sorum" />}
-          estimatedItemSize={100}
-        />
+        <ShowroomLiveCard rooms={rooms} isLiveStream />
         <Divider mt={isLoading ? "16" : "3"} />
         <TopMember liveType="showroom" />
         <HistoryLive />
