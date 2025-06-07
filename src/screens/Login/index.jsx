@@ -84,7 +84,7 @@ const Login = ({ navigation }) => {
         setSession(data.session);
         setProfile(data.profile);
         getSessionUser(data);
-        navigation.replace("Main");
+        navigation.replace("SplashScreen");
 
         toast.show({
           render: () => {

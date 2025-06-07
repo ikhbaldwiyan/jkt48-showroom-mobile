@@ -187,7 +187,7 @@ const LeaderboardUser = ({ navigation }) => {
 
   const renderSkeletonLoading = (
     <>
-      {[...Array(6)].map((_, index) => (
+      {[...Array(7)].map((_, index) => (
         <SkeletonAvatarList key={index} />
       ))}
     </>

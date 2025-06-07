@@ -78,22 +78,10 @@ const SupportApp = ({ isVisible, onOpen, onClose }) => {
           <LogoNormal width={100} height={100} />
         </Center>
         <Text mt="4" textAlign="center" mb={2}>
-          Jika kamu menikmati aplikasi ini, bantu kami terus berkembang dengan
+          Jika kamu menyukai aplikasi ini, bantu kami terus berkembang dengan
           dukunganmu, kalian bisa donasi ke project ini untuk biaya server dan
-          pengembangan fitur baru!
+          pengembangan fitur baru.
         </Text>
-        <HStack
-          mt="2"
-          space={3}
-          alignItems="center"
-          justifyContent="center"
-          mb="4"
-        >
-          <FavouriteIcon size="19" color="red" />
-          <FavouriteIcon size="19" color="red" />
-          <FavouriteIcon size="19" color="red" />
-          <FavouriteIcon size="19" color="red" />
-        </HStack>
         <Button
           mt="2"
           borderRadius="xl"

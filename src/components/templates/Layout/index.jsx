@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { Box, HStack, ScrollView, Text, useToast } from "native-base";
 import { RefreshControl } from "react-native";
-import Header from "../Header";
 import messaging from "@react-native-firebase/messaging";
-import { LiveIcon } from "../../../assets/icon";
 import { useNavigation } from "@react-navigation/native";
+
+import Header from "../Header";
+import { Box, ScrollView, useToast } from "native-base";
+import FloatingNotif from "../../atoms/FloatingNotif";
 
 const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
   const toast = useToast();
@@ -60,24 +61,11 @@ const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
         toast.show({
           render: () => {
             return (
-              <Box
-                px="2"
-                mt="10"
-                m="3"
-                py="2"
-                mb="5"
-                bg="purple.600"
-                rounded="sm"
-              >
-                <HStack alignItems="center" space="2">
-                  <LiveIcon size={14} />
-                  <Text>
-                    {data?.type === "IDN"
-                      ? `${data.name} lagi ${data.type} Live cuy`
-                      : `${data.name} lagi live ${data.type} cuy`}
-                  </Text>
-                </HStack>
-              </Box>
+              <FloatingNotif
+                name={data?.name}
+                image={data?.image}
+                type={data?.type}
+              />
             );
           },
           placement: "top-right",
