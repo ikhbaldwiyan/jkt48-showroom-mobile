@@ -1,6 +1,8 @@
 import React, { useLayoutEffect, useState } from "react";
 import { useRefresh, useUser } from "../../utils/hooks";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useIDNLive } from "../../services/hooks/useIDNLive";
+import { useShowroomLive } from "../../services/hooks/useShowroomLive";
 
 import Layout from "../../components/templates/Layout";
 import ShowroomMulti from "./components/ShowroomMulti";
@@ -9,11 +11,14 @@ import ModalInfoMulti from "./components/ModalInfoMulti";
 import { RefreshIcon } from "../../assets/icon";
 import { TouchableOpacity } from "react-native";
 import { HStack, Text } from "native-base";
+import { HistoryLive } from "../../components/organisms";
 
 const MultiLive = ({ navigation }) => {
   const route = useRoute();
   const { navigate } = useNavigation();
   const { userProfile } = useUser();
+  const { data: idnLive } = useIDNLive();
+  const { data: showroomLive } = useShowroomLive();
   const isMultiLiveScreen = route?.name === "Multi Live";
 
   const { refreshing, onRefresh } = useRefresh();
@@ -50,16 +55,36 @@ const MultiLive = ({ navigation }) => {
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
-      <IDNLiveMulti
-        refreshing={refreshing}
-        isMultiLiveScreen={isMultiLiveScreen}
-        handleOpenMultiRoom={() => handleOpenMultiRoom("idn")}
-      />
-      <ShowroomMulti
-        refreshing={refreshing}
-        isMultiLiveScreen={isMultiLiveScreen}
-        handleOpenMultiRoom={() => handleOpenMultiRoom("showroom")}
-      />
+      {idnLive?.length > showroomLive?.length ? (
+        <>
+          <IDNLiveMulti
+            refreshing={refreshing}
+            isMultiLiveScreen={isMultiLiveScreen}
+            handleOpenMultiRoom={() => handleOpenMultiRoom("idn")}
+          />
+          <ShowroomMulti
+            refreshing={refreshing}
+            isMultiLiveScreen={isMultiLiveScreen}
+            handleOpenMultiRoom={() => handleOpenMultiRoom("showroom")}
+          />
+        </>
+      ) : (
+        <>
+          <ShowroomMulti
+            refreshing={refreshing}
+            isMultiLiveScreen={isMultiLiveScreen}
+            handleOpenMultiRoom={() => handleOpenMultiRoom("showroom")}
+          />
+          <IDNLiveMulti
+            refreshing={refreshing}
+            isMultiLiveScreen={isMultiLiveScreen}
+            handleOpenMultiRoom={() => handleOpenMultiRoom("idn")}
+          />
+        </>
+      )}
+      {showroomLive.length === 0 && idnLive?.length === 0 && (
+        <HistoryLive liveType="all" />
+      )}
       <ModalInfoMulti
         isOpen={infoModal}
         toggleModal={() => setInfoModal(!infoModal)}

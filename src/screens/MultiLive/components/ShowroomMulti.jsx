@@ -5,7 +5,7 @@ import useAuthStore from "../../../store/authStore";
 import { hasMultiRoomAccess } from "../../../utils/helpers";
 import { useAppStateChange } from "../../../utils/hooks";
 
-import { Box, Button, HStack, Text, View } from "native-base";
+import { Box, Button, Divider, HStack, Text, View } from "native-base";
 import { LiveIcon, MultiLiveIcon } from "../../../assets/icon";
 import { ShowroomLiveCard } from "../../../components/organisms";
 import { useProfile } from "../../../services/hooks/useProfile";
@@ -33,7 +33,7 @@ const ShowroomMulti = ({
 
   return (
     <View>
-      <HStack mb="3" alignItems="center" justifyContent="space-between">
+      <HStack mb="4" alignItems="center" justifyContent="space-between">
         <Text color="white" fontSize="18" fontWeight="semibold">
           Showroom Live
         </Text>
@@ -47,10 +47,10 @@ const ShowroomMulti = ({
         isLiveStream={!isMultiLiveScreen}
         isLoading={isLoading}
       />
-
+      <Divider mt={data?.length > 0 ? "3" : "5"} />
       {isSuccess &&
-      (data.length > 0 || isMultiLiveScreen) &&
-      hasMultiRoomAccess(profile) ? (
+        (data.length > 0 || isMultiLiveScreen) &&
+        hasMultiRoomAccess(profile) ? (
         <Button
           mt="2"
           mb="8"
@@ -65,7 +65,7 @@ const ShowroomMulti = ({
           </HStack>
         </Button>
       ) : (
-        <Box mb="8"></Box>
+        <Box mb="4"></Box>
       )}
     </View>
   );
