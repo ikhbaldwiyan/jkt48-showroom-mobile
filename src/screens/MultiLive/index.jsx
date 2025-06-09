@@ -83,7 +83,7 @@ const MultiLive = ({ navigation }) => {
         </>
       )}
       {showroomLive.length === 0 && idnLive?.length === 0 && (
-        <HistoryLive liveType="all" />
+        <HistoryLive />
       )}
       <ModalInfoMulti
         isOpen={infoModal}

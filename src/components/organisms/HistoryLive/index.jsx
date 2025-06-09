@@ -1,5 +1,10 @@
 import moment from "moment";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useRefresh } from "../../../utils/hooks";
+import { useHistoryLive } from "../../../services/hooks/useHistoryLive";
+import { formatViews, getLiveDurationMinutes } from "../../../utils/helpers";
+
 import {
   Box,
   Button,
@@ -21,64 +26,44 @@ import {
   UsersFill
 } from "../../../assets/icon";
 import TimeAgo from "react-native-timeago";
-import { useNavigation } from "@react-navigation/native";
-import { useRefresh } from "../../../utils/hooks";
-import { ROOMS } from "../../../services";
-import { formatViews, getLiveDurationMinutes } from "../../../utils/helpers";
 
-const HistoryLive = ({ liveType = "showroom" }) => {
-  const [recentLives, setRecentLives] = useState([]);
+
+const HistoryLive = ({ liveType = "all" }) => {
   const { navigate } = useNavigation();
   const { refreshing } = useRefresh();
-  const [type] = useState(liveType);
   const [page, setPage] = useState(1);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [allLoaded, setAllLoaded] = useState(false);
+  const [allLives, setAllLives] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  const { data: historyData, isLoading } = useHistoryLive(liveType, "", page);
 
   useEffect(() => {
-    loadLives();
-  }, [refreshing, type, page]);
-
-  const loadLives = async () => {
-    try {
-      if (loadingMore || allLoaded) return;
-
-      setLoadingMore(true);
-      const response = await ROOMS.getHistoryLives(type, "", page);
-
-      if (response.data.recents.length > 0) {
-        setRecentLives((prevLives) => [...prevLives, ...response.data.recents]);
+    if (historyData?.recents) {
+      if (page === 1) {
+        setAllLives(historyData.recents);
       } else {
-        setAllLoaded(true); // No more items to load
+        setAllLives(prev => [...prev, ...historyData.recents]);
       }
-
-      setLoadingMore(false);
-    } catch (error) {
-      console.log(error);
-      setLoadingMore(false);
+      setHasMore(historyData.recents.length > 0);
     }
-  };
+  }, [historyData]);
+
+  useEffect(() => {
+    if (refreshing) {
+      setPage(1);
+      setAllLives([]);
+      setHasMore(true);
+    }
+  }, [refreshing]);
 
   const handleLoadMore = () => {
-    if (!loadingMore && !allLoaded) {
-      setPage((prevPage) => prevPage + 1);
+    if (hasMore && !isLoadingMore) {
+      setIsLoadingMore(true);
+      setPage(prev => prev + 1);
+      setIsLoadingMore(false);
     }
   };
-
-  useEffect(() => {
-    const resetLives = async () => {
-      try {
-        setPage(1);
-        setAllLoaded(false);
-        const response = await ROOMS.getHistoryLives(type, "", 1);
-        setRecentLives(response.data.recents);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    resetLives();
-  }, [refreshing]);
 
   const handleDetail = (member, live_info, log) => {
     navigate("HistoryDetail", {
@@ -86,20 +71,24 @@ const HistoryLive = ({ liveType = "showroom" }) => {
       title: member.is_official
         ? "JKT48 Official"
         : member.nickname +
-          " - " +
-          moment(live_info.date.start).format("DD MMMM YYYY")
+        " - " +
+        moment(live_info.date.start).format("DD MMMM YYYY")
     });
   };
 
   return (
     <>
       <Text fontSize="20" mb="4" fontWeight="semibold">
-        {liveType === "idn" ? "History IDN Live" : "History Live Showroom"}
+        {liveType === "idn"
+          ? "History IDN Live"
+          : liveType === "all"
+            ? "Live Stream Terakhir"
+            : "History Live Showroom"}
       </Text>
 
-      {recentLives.length > 0 && (
+      {allLives?.length > 0 && (
         <VStack space={3}>
-          {recentLives?.map((log, idx) => {
+          {allLives?.map((log, idx) => {
             const { member, live_info } = log;
             return (
               <TouchableOpacity
@@ -115,6 +104,41 @@ const HistoryLive = ({ liveType = "showroom" }) => {
                     style={styles.linearGradient}
                   >
                     <HStack>
+                      {liveType === "all" && log.type === "showroom" && !member.is_official ? (
+                        <Image
+                          size="md"
+                          alt="showroom"
+                          source={{
+                            uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k"
+                          }}
+                          width="50"
+                          height="50"
+                          position="absolute"
+                          zIndex="99"
+                          bottom={0}
+                          borderRightRadius={6}
+                          borderBottomRightRadius={0}
+                          borderBottomLeftRadius={6}
+                        />
+                      ) : liveType === "all" && log.type === "idn" ? (
+                        <Image
+                          size="md"
+                          alt="idn live"
+                          source={{
+                            uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/IDN_Live.svg/2560px-IDN_Live.svg.png"
+                          }}
+                          width="120"
+                          left={2}
+                          height="35"
+                          position="absolute"
+                          bg="rgba(0, 0, 0, 0.1)"
+                          zIndex="99"
+                          bottom={1}
+                          borderRightRadius={6}
+                          borderBottomRightRadius={0}
+                          shadow="4"
+                        />
+                      ) : null}
                       <Image
                         source={{ uri: member.img_alt }}
                         size="md"
@@ -186,7 +210,13 @@ const HistoryLive = ({ liveType = "showroom" }) => {
         </VStack>
       )}
 
-      {!allLoaded && !loadingMore && recentLives.length > 0 && (
+      {isLoading && (
+        <HStack justifyContent="center" mt="5" my="4">
+          <Spinner color="white" size="lg" />
+        </HStack>
+      )}
+
+      {hasMore && !isLoading && allLives?.length > 0 && (
         <Button
           mt="4"
           variant="filled"
@@ -201,12 +231,6 @@ const HistoryLive = ({ liveType = "showroom" }) => {
             </Text>
           </HStack>
         </Button>
-      )}
-
-      {loadingMore && (
-        <HStack justifyContent="center" mt="5" my="4">
-          <Spinner color="white" size="lg" />
-        </HStack>
       )}
       <Box my="4" />
     </>

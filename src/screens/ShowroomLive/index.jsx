@@ -46,7 +46,7 @@ const ShowroomLive = ({ navigation }) => {
         <ShowroomLiveCard rooms={rooms} isLiveStream />
         <Divider mt={isLoading ? "16" : "3"} />
         <TopMember liveType="showroom" />
-        <HistoryLive />
+        <HistoryLive liveType="showroom" />
       </VStack>
     </Layout>
   );
