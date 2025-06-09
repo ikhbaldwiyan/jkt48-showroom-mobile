@@ -47,25 +47,27 @@ const ShowroomMulti = ({
         isLiveStream={!isMultiLiveScreen}
         isLoading={isLoading}
       />
-      <Divider mt={data?.length > 0 ? "3" : "5"} />
       {isSuccess &&
         (data.length > 0 || isMultiLiveScreen) &&
         hasMultiRoomAccess(profile) ? (
-        <Button
-          mt="2"
-          mb="8"
-          size="sm"
-          bg="teal"
-          borderRadius="lg"
-          onPress={handleOpenMultiRoom}
-        >
-          <HStack space={3}>
-            <MultiLiveIcon />
-            <Text fontWeight="bold">Buka Multi Live Showroom</Text>
-          </HStack>
-        </Button>
+        <>
+          <Button
+            mt="2"
+            mb="4"
+            size="sm"
+            bg="teal"
+            borderRadius="lg"
+            onPress={handleOpenMultiRoom}
+          >
+            <HStack space={3}>
+              <MultiLiveIcon />
+              <Text fontWeight="bold">Buka Multi Live Showroom</Text>
+            </HStack>
+          </Button>
+          <Divider mt="1" mb="4" />
+        </>
       ) : (
-        <Box mb="4"></Box>
+        <Divider mt="5" mb="4" />
       )}
     </View>
   );
