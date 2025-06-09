@@ -110,17 +110,11 @@ const MemberList = () => {
             </HStack>
           </Button>
         </HStack>
-        {searchQuery !== "" ? (
-          <>
-            <RoomRegular searchQuery={searchQuery} refreshing={refreshing} />
-            <RoomTrainee searchQuery={searchQuery} refreshing={refreshing} />
-          </>
-        ) : activeTab === "regular" ? (
-          <RoomRegular searchQuery={searchQuery} refreshing={refreshing} />
-        ) : activeTab === "trainee" ? (
-          <RoomTrainee searchQuery={searchQuery} refreshing={refreshing} />
+
+        {activeTab === "regular" ? (
+          <RoomRegular refreshing={refreshing} searchQuery={searchQuery} />
         ) : (
-          <Text>Members Not found</Text>
+          <RoomTrainee refreshing={refreshing} searchQuery={searchQuery} />
         )}
       </Box>
     </Layout>
