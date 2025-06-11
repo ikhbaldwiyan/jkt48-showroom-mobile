@@ -140,7 +140,7 @@ export const hasMultiRoomAccess = (profile) => {
   if (profile?.is_donator ||
     profile?.is_developer ||
     profile?.top_leaderboard ||
-    profile?.is_multi_live || profile?.can_3_room) {
+    profile?.is_multi_live || profile?.can_3_room || profile?.totalWatchLive >= 150) {
     return true;
   } else {
     return false;

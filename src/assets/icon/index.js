@@ -67,6 +67,7 @@ import NoLive from "./NoLive";
 import IDNLiveIcon from "./IDNLiveIcon";
 import GridFill from "./GridFill";
 import GridOutline from "./GridOutline";
+import UnlockIcon from "./UnlockIcon";
 
 export {
   LogoIcon,
@@ -138,4 +139,5 @@ export {
   IDNLiveIcon,
   GridFill,
   GridOutline,
+  UnlockIcon,
 };

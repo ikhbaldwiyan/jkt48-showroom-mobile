@@ -1,45 +1,57 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, HStack, Modal, Text, Progress, VStack } from "native-base";
-import { Donate, Info } from "../../../assets/icon";
+import { Donate, UnlockIcon } from "../../../assets/icon";
 import { useNavigation } from "@react-navigation/native";
-import { useUser } from "../../../utils/hooks";
+import { useProfile } from "../../../services/hooks/useProfile";
+import useAuthStore from "../../../store/authStore";
 
 const ModalInfoMulti = ({ isOpen, toggleModal }) => {
   const { navigate } = useNavigation();
-  const { userProfile } = useUser();
+  const { user } = useAuthStore();
+  const { data: profile, refetch } = useProfile(user?.account_id);
+
+  useEffect(() => {
+    if (isOpen) {
+      refetch();
+    }
+  }, [isOpen, refetch]);
 
   return (
     <Modal isOpen={isOpen} size="xl" onClose={toggleModal}>
       <Modal.Content maxH="500">
-        <Modal.Header bg="primary">
+        <Modal.Header p={3} bg="primary">
           <HStack space={2} alignItems="center">
-            <Info color="white" size={24} />
+            <UnlockIcon color="white" size={18} />
             <Text fontWeight="bold" fontSize="16">
-              Fitur Multi Room Terkunci
+              Fitur Multi Live Terkunci
             </Text>
           </HStack>
         </Modal.Header>
         <Modal.Body bg="secondary">
           <VStack space={4}>
             <Text>
-              Buka fitur multi room jika kamu sudah menonton live streaming
-              sebanyak 100x atau support project kami dengan cara donasi
-              berapapun
+              Buka fitur Multi Live jika kamu sudah menonton live streaming
+              sebanyak 150x atau dapatkan badge donator dengan cara support project JKT48 Showroom Fanmade
             </Text>
             <Progress
               colorScheme="emerald"
-              value={userProfile?.totalWatchLive}
+              value={(profile?.totalWatchLive ?? 0) / 150 * 100}
             />
-            <Text fontWeight="semibold" fontSize="lg">
-              Total Nonton {userProfile?.totalWatchLive ?? 0}x dari 100x
-            </Text>
+            <HStack justifyContent="space-between" alignItems="center">
+              <Text fontWeight="semibold" fontSize="md">
+                Total Nonton {profile?.totalWatchLive ?? 0}x dari 150x
+              </Text>
+              <Text fontWeight="bold" fontSize="lg" color="emerald.500">
+                {Math.round((profile?.totalWatchLive ?? 0) / 150 * 100)}%
+              </Text>
+            </HStack>
           </VStack>
         </Modal.Body>
         <Modal.Footer bg="black">
           <Button.Group space={2}>
             <Button
               size="sm"
-              backgroundColor="primary"
+              backgroundColor="#E49C20"
               onPress={() => navigate("SupportProject")}
             >
               <HStack alignItems="center" space={2}>

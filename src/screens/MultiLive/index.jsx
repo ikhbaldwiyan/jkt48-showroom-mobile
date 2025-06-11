@@ -1,22 +1,26 @@
 import React, { useLayoutEffect, useState } from "react";
-import { useRefresh, useUser } from "../../utils/hooks";
+import { useRefresh } from "../../utils/hooks";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useIDNLive } from "../../services/hooks/useIDNLive";
 import { useShowroomLive } from "../../services/hooks/useShowroomLive";
+import { useProfile } from "../../services/hooks/useProfile";
+import useAuthStore from "../../store/authStore";
+import { hasMultiRoomAccess } from "../../utils/helpers";
 
 import Layout from "../../components/templates/Layout";
 import ShowroomMulti from "./components/ShowroomMulti";
 import IDNLiveMulti from "./components/IDNLiveMulti";
 import ModalInfoMulti from "./components/ModalInfoMulti";
-import { RefreshIcon } from "../../assets/icon";
+import { Info, RefreshIcon } from "../../assets/icon";
 import { TouchableOpacity } from "react-native";
-import { HStack, Text } from "native-base";
+import { Box, HStack, Text } from "native-base";
 import { HistoryLive } from "../../components/organisms";
 
 const MultiLive = ({ navigation }) => {
   const route = useRoute();
   const { navigate } = useNavigation();
-  const { userProfile } = useUser();
+  const { user } = useAuthStore();
+  const { data: profile } = useProfile(user?.account_id);
   const { data: idnLive } = useIDNLive();
   const { data: showroomLive } = useShowroomLive();
   const isMultiLiveScreen = route?.name === "Multi Live";
@@ -26,8 +30,8 @@ const MultiLive = ({ navigation }) => {
 
   const handleOpenMultiRoom = (type) => {
     if (
-      userProfile?.totalWatchLive === undefined ||
-      userProfile?.totalWatchLive < 100
+      profile?.totalWatchLive === undefined ||
+      profile?.totalWatchLive < 100
     ) {
       setInfoModal(true);
     } else {
@@ -55,6 +59,22 @@ const MultiLive = ({ navigation }) => {
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
+      {!isMultiLiveScreen && !hasMultiRoomAccess(profile) && (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => setInfoModal(true)}
+        >
+          <Box p="2" mb="4" borderRadius={10} backgroundColor="purple.600">
+            <HStack alignItems="center" space={1}>
+              <Info size="22" color="white" />
+              <Text fontWeight="medium" fontSize={13}>
+                Buka fitur Multi Live Showroom dan IDN cek disini
+              </Text>
+            </HStack>
+          </Box>
+        </TouchableOpacity>
+      )}
+
       {idnLive?.length > showroomLive?.length ? (
         <>
           <IDNLiveMulti
@@ -82,9 +102,7 @@ const MultiLive = ({ navigation }) => {
           />
         </>
       )}
-      {showroomLive.length === 0 && idnLive?.length === 0 && (
-        <HistoryLive />
-      )}
+      {showroomLive.length === 0 && idnLive?.length === 0 && <HistoryLive />}
       <ModalInfoMulti
         isOpen={infoModal}
         toggleModal={() => setInfoModal(!infoModal)}

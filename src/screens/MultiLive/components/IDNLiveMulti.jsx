@@ -19,7 +19,7 @@ const IDNLiveMulti = ({
 }) => {
   const { data: rooms = [], refetch, isSuccess } = useIDNLive();
   const { user } = useAuthStore();
-  const { data: profile } = useProfile(user?.user_id);
+  const { data: profile } = useProfile(user?.account_id);
 
   useFocusEffect(
     useCallback(() => {
