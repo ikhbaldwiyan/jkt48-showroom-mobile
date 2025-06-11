@@ -11,9 +11,11 @@ import useUser from "../../../../utils/hooks/useUser";
 import CardGradient from "../../../atoms/CardGradient";
 import Theme from "../../../templates/Theme";
 import { formatViews } from "../../../../utils/helpers";
+import { useProfile } from "../../../../services/hooks/useProfile";
 
 export const UserProfile = () => {
-  const { profile, user, userProfile } = useUser();
+  const { user, profile } = useUser();
+  const { data: userProfile } = useProfile(user?.account_id);
 
   return (
     <CardGradient halfCard>

@@ -49,7 +49,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     if (userProfile) {
-      handleFcmTokenUpdate();
+      handleFcmTokenUpdate(userProfile);
     }
   }, [session]);
 

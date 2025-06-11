@@ -65,6 +65,7 @@ const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
                 name={data?.name}
                 image={data?.image}
                 type={data?.type}
+                item={data}
               />
             );
           },

@@ -16,7 +16,7 @@ const ShowroomMulti = ({
   isMultiLiveScreen
 }) => {
   const { user } = useAuthStore();
-  const { data: profile } = useProfile(user?.user_id);
+  const { data: profile } = useProfile(user?.account_id);
   const { data, isLoading, isSuccess, refetch } = useShowroomLive();
 
   useFocusEffect(
