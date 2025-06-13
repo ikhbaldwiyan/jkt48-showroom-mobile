@@ -156,7 +156,7 @@ const Navigation = () => {
         component={HistoryLive}
         options={BasicHeader}
       />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={Profile} options={BasicHeader} />
     </Tab.Navigator>
   );
 

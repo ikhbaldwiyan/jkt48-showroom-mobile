@@ -1,65 +1,80 @@
 import React from "react";
-import { HStack, ScrollView, Text, VStack } from "native-base";
-import {
-  Cloud,
-  IDCard,
-  Star,
-  UserIcon,
-  WatchIcon
-} from "../../../../assets/icon";
+import { Box, HStack, ScrollView, Text, VStack } from "native-base";
+import { EditProfile, IDCard, Star, UserIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
 import CardGradient from "../../../atoms/CardGradient";
-import Theme from "../../../templates/Theme";
-import { formatViews } from "../../../../utils/helpers";
-import { useProfile } from "../../../../services/hooks/useProfile";
+import { TouchableOpacity } from "react-native";
 
-export const UserProfile = () => {
+export const UserProfile = ({ navigation }) => {
   const { user, profile } = useUser();
-  const { data: userProfile } = useProfile(user?.account_id);
 
   return (
-    <CardGradient halfCard>
-      <ScrollView mt="2">
-        <VStack space={4}>
+    <CardGradient halfCard isRounded>
+      <HStack alignItems="center" justifyContent="space-between">
+        <Text fontSize="16" fontWeight="semibold">
+          Account
+        </Text>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate("Avatar")}
+        >
+          <HStack
+            bgColor="blueGray.500"
+            px="2"
+            p="1.5"
+            borderRadius="sm"
+            space={1}
+          >
+            <EditProfile color="white" size="18" />
+            <Text fontWeight="bold" fontSize={12}>
+              Edit{" "}
+            </Text>
+          </HStack>
+        </TouchableOpacity>
+      </HStack>
+      <ScrollView mt="3">
+        <VStack space={3}>
           <HStack space={2} alignItems="center">
             <UserIcon size="16" />
-            <Text fontSize="14" fontWeight="semibold">
-              Name:
-            </Text>
-            <Text fontSize="14">{profile?.name}</Text>
+            <Box flex={1}>
+              <Text color="gray.300" fontSize="14">
+                Name
+              </Text>
+            </Box>
+            <Box flex={2}>
+              <Text fontSize="14" fontWeight="semibold">
+                {profile?.name}
+              </Text>
+            </Box>
           </HStack>
+
           <HStack space={2} alignItems="center">
             <IDCard size="16" />
-            <Text fontSize="14" fontWeight="semibold">
-              ID SR:
-            </Text>
-            <Text fontSize="14">{user?.account_id}</Text>
+            <Box flex={1}>
+              <Text color="gray.300" fontSize="14">
+                ID Showroom
+              </Text>
+            </Box>
+            <Box flex={2}>
+              <Text fontSize="14" fontWeight="semibold">
+                {user?.account_id}
+              </Text>
+            </Box>
           </HStack>
+
           <HStack space={2} alignItems="center">
-            <Star />
-            <Text fontSize="14" fontWeight="semibold">
-              Level:
-            </Text>
-            <Text fontSize="14">{profile?.fan_level}</Text>
+            <Star size={18} />
+            <Box flex={1}>
+              <Text color="gray.300" fontSize="14">
+                Fav Member
+              </Text>
+            </Box>
+            <Box flex={2}>
+              <Text fontSize="14" fontWeight="semibold">
+                Indah
+              </Text>
+            </Box>
           </HStack>
-          <HStack space={2} alignItems="center">
-            <WatchIcon color="white" size={20} />
-            <Text fontSize="14" fontWeight="semibold">
-              Total Watch Live:
-            </Text>
-            <Text fontSize="14">
-              {userProfile?.totalWatchLive
-                ? formatViews(userProfile?.totalWatchLive) + "x"
-                : "0x"}
-            </Text>
-          </HStack>
-          <HStack space={2} alignItems="center">
-            <Cloud />
-            <Text fontSize={14} fontWeight="semibold">
-              Live Background Theme
-            </Text>
-          </HStack>
-          <Theme isButton />
         </VStack>
       </ScrollView>
     </CardGradient>

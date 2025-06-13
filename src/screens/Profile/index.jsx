@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, HStack, Popover, Text, VStack } from "native-base";
-import UserTabs from "../../components/molecules/UserTabs";
+import { Box, Button, HStack, Popover, Text, VStack, Image } from "native-base";
 import useUser from "../../utils/hooks/useUser";
-import { Image, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import {
   AndroidIcon,
   Donate,
   Info,
   LoginIcon,
-  PencilIcon,
   ThropyIcon
 } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
@@ -18,9 +16,15 @@ import trackAnalytics from "../../utils/trackAnalytics";
 import { AUTH } from "../../services";
 import useAuthStore from "../../store/authStore";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import { UserProfile } from "../../components/molecules/UserTabs/components";
+import { useProfile } from "../../services/hooks/useProfile";
+import { formatViews } from "../../utils/helpers";
+import Theme from "../../components/templates/Theme";
+import { APK_VERSION } from "@env";
 
 const Profile = () => {
-  const { userProfile, profile, session } = useUser();
+  const { profile, session, user } = useUser();
+  const { data: userProfile } = useProfile(user?.account_id);
   const { setUserProfile } = useAuthStore();
   const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState();
@@ -62,11 +66,11 @@ const Profile = () => {
       <Box
         w="120"
         h="120"
-        borderWidth="8px"
+        borderWidth="6px"
         borderColor="white"
         justifyContent="center"
         alignItems="center"
-        backgroundColor="#A9EDF9"
+        backgroundColor="#808DA5"
         borderRadius="full"
       >
         <Image
@@ -79,14 +83,13 @@ const Profile = () => {
               : require("../../assets/image/ava.png")
           }
           alt="avatar"
+          shadow="5"
         />
       </Box>
       {session && (
-        <Button
+        <Box
           top="99"
           bg="white"
-          borderColor="primary"
-          borderWidth="2"
           position="absolute"
           w="8"
           h="8"
@@ -96,20 +99,44 @@ const Profile = () => {
           alignItems="center"
           onPress={() => navigation.navigate("Avatar")}
         >
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate("Avatar")}
-          >
-            <PencilIcon size="15" />
-          </TouchableOpacity>
-        </Button>
+          {badge && (
+            <Popover
+              trigger={(triggerProps) => {
+                return (
+                  <Pressable {...triggerProps}>
+                    <Box
+                      w={7}
+                      h={7}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      borderRadius="full"
+                      bg={badge.bg}
+                    >
+                      {badge.icon}
+                    </Box>
+                  </Pressable>
+                );
+              }}
+            >
+              <Popover.Content accessibilityLabel="Badge Info" maxW="220">
+                <Popover.Arrow />
+                <Popover.Body>
+                  <Text fontSize="12" color="black">
+                    {badge.desc}
+                  </Text>
+                </Popover.Body>
+              </Popover.Content>
+            </Popover>
+          )}
+        </Box>
       )}
     </>
   );
 
   if (!isLogin) {
     return (
-      <Layout isHeader>
+      <Layout>
         <Box py="45" justifyContent="center" alignItems="center">
           <VStack space={5} alignItems="center">
             <Avatar />
@@ -175,60 +202,65 @@ const Profile = () => {
   const badge = badgeUser.find((b) => b.condition);
 
   return (
-    <Box flex={1} bg="secondary">
-      <VStack mt="4" space={3} alignItems="center">
+    <Layout flex={1} bg="secondary">
+      <VStack space={3} alignItems="center">
         <Avatar />
         <HStack space={2} alignItems="center">
-          <Text mt="1" fontWeight="bold" fontSize="2xl">
+          <Text fontWeight="bold" mb="1" fontSize="2xl">
             {profile?.name}
           </Text>
-          {badge && (
-            <Popover
-              trigger={(triggerProps) => {
-                return (
-                  <Pressable {...triggerProps}>
-                    <Box
-                      w={7}
-                      h={7}
-                      mt="2"
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      borderRadius="full"
-                      bg={badge.bg}
-                    >
-                      {badge.icon}
-                    </Box>
-                  </Pressable>
-                );
-              }}
-            >
-              <Popover.Content accessibilityLabel="Badge Info" maxW="220">
-                <Popover.Arrow />
-                <Popover.Body>
-                  <Text fontSize="12" color="black">
-                    {badge.desc}
-                  </Text>
-                </Popover.Body>
-              </Popover.Content>
-            </Popover>
-          )}
         </HStack>
       </VStack>
-      <Box flex={1} p="3">
-        <UserTabs />
+      <Box flex={1}>
+        <HStack space={2.5} mt="2" mb="4">
+          <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
+            <VStack space={1} justifyContent="center" alignItems="center">
+              <Text>Total Watch</Text>
+              <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
+                <Text color="primary" fontWeight="extrabold">
+                  {formatViews(userProfile?.totalWatchLive)}
+                </Text>
+              </Box>
+            </VStack>
+          </Box>
+          <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
+            <VStack space={1} justifyContent="center" alignItems="center">
+              <Text>SR Watched</Text>
+              <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
+                <Text color="primary" fontWeight="extrabold">
+                  {formatViews(userProfile?.watchShowroomMember)}
+                </Text>
+              </Box>
+            </VStack>
+          </Box>
+          <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
+            <VStack space={1} justifyContent="center" alignItems="center">
+              <Text>IDN Watched</Text>
+              <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
+                <Text color="primary" fontWeight="extrabold">
+                  {formatViews(userProfile?.watchLiveIDN)}
+                </Text>
+              </Box>
+            </VStack>
+          </Box>
+        </HStack>
+        <UserProfile navigation={navigation} />
+        <Theme />
+        <Box my="1.5" />
         <HStack mb="4" space={3}>
           <Button
             flex={1}
             variant="solid"
-            bgColor="teal"
+            bg="blueLight"
             borderRadius="10"
             onPress={handleSupport}
+            borderColor="primary"
+            borderWidth={2}
           >
             <TouchableOpacity onPress={handleSupport}>
               <HStack alignItems="center" space={2}>
-                <Donate size={20} />
-                <Text fontSize="15" fontWeight="semibold">
+                <Donate color="#24A2B7" size={20} />
+                <Text color="primary" fontSize="15" fontWeight="semibold">
                   Support Project
                 </Text>
               </HStack>
@@ -237,7 +269,7 @@ const Profile = () => {
           <Button
             flex={1}
             variant="solid"
-            bgColor="cyan.700"
+            bgColor="teal"
             borderRadius="10"
             onPress={handleAbout}
           >
@@ -245,15 +277,21 @@ const Profile = () => {
               <HStack alignItems="center" space={1.5}>
                 <Info color="white" />
                 <Text fontSize="15" fontWeight="semibold">
-                  About Apps
+                  About App
                 </Text>
               </HStack>
             </TouchableOpacity>
           </Button>
         </HStack>
-        <Logout isProfile />
+        <Logout />
+        <HStack mt="4" justifyContent="center" space={2} alignItems="center">
+          <AndroidIcon />
+          <Text fontSize={14}>
+            App Version <Text fontWeight="semibold">{APK_VERSION}</Text>
+          </Text>
+        </HStack>
       </Box>
-    </Box>
+    </Layout>
   );
 };
 
