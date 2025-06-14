@@ -24,7 +24,7 @@ export const UserProfile = ({ navigation }) => {
         </Text>
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => navigation.navigate("Avatar")}
+          onPress={() => navigation.navigate("Edit Profile")}
         >
           <HStack
             bgColor="blueGray.500"
@@ -35,7 +35,7 @@ export const UserProfile = ({ navigation }) => {
           >
             <EditProfile color="white" size="18" />
             <Text fontWeight="bold" fontSize={12}>
-              Edit{" "}
+              Edit
             </Text>
           </HStack>
         </TouchableOpacity>

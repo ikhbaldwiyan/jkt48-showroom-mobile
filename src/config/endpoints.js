@@ -9,6 +9,8 @@ export default {
   USER: {
     PROFILE: "/profile/room",
     USER_PROFILE: "/profile/user",
+    UPDATE_PROFILE: "/profile/update",
+    UPDATE_USER_PROFILE: "/users/",
     AVATAR: "/profile/get_avatar",
     UPDATE_AVATAR: "/profile/update_avatar",
     ACTIVIY_LOG: "/activity/", //required user id

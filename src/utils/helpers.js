@@ -29,7 +29,7 @@ export const formatName = (name, hideGroup) => {
 
 export const formatViews = (str) => {
   const nf = new Intl.NumberFormat();
-  const formatView = nf.format(str);
+  const formatView = nf.format(str ?? 0);
   const views = formatView.replace(/,/g, ".");
 
   return views;

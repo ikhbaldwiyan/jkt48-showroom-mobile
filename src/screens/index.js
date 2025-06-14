@@ -21,6 +21,7 @@ import LeaderboardUser from './LeaderboardUser';
 import MultiIDN from "./MultiIDN";
 import MultiLive from "./MultiLive";
 import MultiShowroom from "./MultiShowroom";
+import EditProfile from "./EditProfile";
 
 export {
   SplashScreen,
@@ -47,4 +48,5 @@ export {
   MultiIDN,
   MultiShowroom,
   MultiLive,
+  EditProfile,
 };

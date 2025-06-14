@@ -23,6 +23,7 @@ import {
   MultiIDN,
   MultiLive,
   MultiShowroom,
+  EditProfile,
 } from "../screens";
 
 export const tabRoutes = [
@@ -117,6 +118,11 @@ export const stackRoutes = [
   {
     name: "Avatar",
     component: EditAvatar,
+    options: { headerShown: true }
+  },
+  {
+    name: "Edit Profile",
+    component: EditProfile,
     options: { headerShown: true }
   },
   {
