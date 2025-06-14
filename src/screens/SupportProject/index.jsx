@@ -103,6 +103,9 @@ const SupportProject = ({ navigation }) => {
 
           <VStack space={2} pl="3">
             <Text>
+              - <Text fontWeight="bold">Early Akses</Text> Fitur Multi Live IDN dan Showroom.
+            </Text>
+            <Text>
               - <Text fontWeight="bold">Special Badge Donator</Text> akan
               ditampilkan di profile dan detail akun showroom kamu.
             </Text>

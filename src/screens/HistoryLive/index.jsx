@@ -1,4 +1,10 @@
 import moment from "moment";
+import debounce from "lodash/debounce";
+import { useNavigation } from "@react-navigation/native";
+import { useRefresh } from "../../utils/hooks/useRefresh";
+import { useHistoryLiveInfinite } from "../../services/hooks/useHistoryLive";
+import { formatViews, getLiveDurationMinutes } from "../../utils/helpers";
+
 import React, {
   useEffect,
   useLayoutEffect,
@@ -31,26 +37,27 @@ import {
   TimesFill,
   UsersFill
 } from "../../assets/icon";
-import { ROOMS } from "../../services";
-import { formatViews, getLiveDurationMinutes } from "../../utils/helpers";
-import TimeAgo from "react-native-timeago";
-import { useNavigation } from "@react-navigation/native";
 import Layout from "../../components/templates/Layout";
-import { useRefresh } from "../../utils/hooks/useRefresh";
-import debounce from "lodash/debounce";
+import TimeAgo from "react-native-timeago";
 
 const HistoryLive = () => {
-  const [recentLives, setRecentLives] = useState([]);
   const { navigate, setOptions } = useNavigation();
   const { refreshing, onRefresh } = useRefresh();
   const [type, setType] = useState("all");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [allLoaded, setAllLoaded] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const inputRef = useRef(null);
+
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useHistoryLiveInfinite(type, debouncedSearch);
+
+  const recentLives = data?.pages?.flatMap(page => page.recents) || [];
 
   useLayoutEffect(() => {
     setOptions({
@@ -107,66 +114,23 @@ const HistoryLive = () => {
     }
   }, [isSearch]);
 
-  useEffect(() => {
-    loadLives();
-  }, [refreshing, type, debouncedSearch, page]);
-
-  const loadLives = async () => {
-    try {
-      if (loadingMore || allLoaded) return;
-
-      setLoadingMore(true);
-      const response = await ROOMS.getHistoryLives(type, debouncedSearch, page);
-
-      if (response.data.recents.length > 0) {
-        setRecentLives((prevLives) => [...prevLives, ...response.data.recents]);
-      } else {
-        setAllLoaded(true); // No more items to load
-      }
-
-      setLoadingMore(false);
-    } catch (error) {
-      console.log(error);
-      setLoadingMore(false);
-    }
-  };
-
   const debouncedChangeHandler = useCallback(
     debounce((value) => {
       setDebouncedSearch(value);
-    }, 500),
+    }, 400),
     []
   );
 
   const handleSearch = (query) => {
     setSearch(query);
-    setPage(1); // Reset page
-    setRecentLives([]); // Clear current list
-    setAllLoaded(false); // Reset allLoaded status
     debouncedChangeHandler(query);
   };
 
   const handleLoadMore = () => {
-    if (!loadingMore && !allLoaded) {
-      setPage((prevPage) => prevPage + 1);
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   };
-
-  // Reset the lives data when the `type` changes
-  useEffect(() => {
-    const resetLives = async () => {
-      try {
-        setPage(1);
-        setAllLoaded(false);
-        const response = await ROOMS.getHistoryLives(type, debouncedSearch, 1);
-        setRecentLives(response.data.recents);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    resetLives();
-  }, [type, refreshing]);
 
   const handleDetail = (member, live_info, log) => {
     navigate("HistoryDetail", {
@@ -174,8 +138,8 @@ const HistoryLive = () => {
       title: member.is_official
         ? "JKT48 Official"
         : member.nickname +
-          " - " +
-          moment(live_info.date.start).format("DD MMMM YYYY")
+        " - " +
+        moment(live_info.date.start).format("DD MMMM YYYY")
     });
   };
 
@@ -347,7 +311,13 @@ const HistoryLive = () => {
         </VStack>
       )}
 
-      {!allLoaded && !loadingMore && recentLives.length > 0 && (
+      {isLoading && (
+        <HStack justifyContent="center" mt="5" my="4">
+          <Spinner color="white" size="lg" />
+        </HStack>
+      )}
+
+      {hasNextPage && !isFetchingNextPage && recentLives.length > 0 && (
         <Button
           mt="4"
           variant="filled"
@@ -358,13 +328,13 @@ const HistoryLive = () => {
           <HStack alignItems="center" space={2}>
             <LoadingIcon />
             <Text fontWeight="bold" fontSize="14">
-              Load More History
+              Lihat History Live Lainnya
             </Text>
           </HStack>
         </Button>
       )}
 
-      {loadingMore && (
+      {isFetchingNextPage && (
         <HStack justifyContent="center" mt="5" my="4">
           <Spinner color="white" size="lg" />
         </HStack>
