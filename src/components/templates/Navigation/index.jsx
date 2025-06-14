@@ -5,33 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { Box, Text } from "native-base";
 import { StatusBar, TouchableOpacity } from "react-native";
-
-import {
-  Home,
-  IDNStream,
-  LiveStream,
-  Login,
-  Register,
-  RoomDetail,
-  ShowroomLive,
-  ScheduleDetail,
-  SplashScreen,
-  ScheduleList,
-  PremiumLive,
-  About,
-  Profile,
-  IDNLives,
-  EditAvatar,
-  HistoryLive,
-  MemberList,
-  HistoryLiveDetail,
-  LeaderboardMember,
-  SupportProject,
-  LeaderboardUser,
-  MultiIDN,
-  MultiLive,
-  MultiShowroom,
-} from "../../../screens";
+import { tabRoutes, stackRoutes } from "../../../config/routes";
 import {
   HomeIcon,
   HomeIconOutline,
@@ -46,7 +20,7 @@ import {
   UserIconOutline,
   ThropyIcon,
   ThropyIconOutline,
-  LiveIcon,
+  LiveIcon
 } from "../../../assets/icon";
 
 const Navigation = () => {
@@ -144,19 +118,20 @@ const Navigation = () => {
         )
       })}
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Member" component={MemberList} options={BasicHeader} />
-      <Tab.Screen
-        name="Live Stream"
-        component={MultiLive}
-        options={BasicHeader}
-      />
-      <Tab.Screen
-        name="History"
-        component={HistoryLive}
-        options={BasicHeader}
-      />
-      <Tab.Screen name="Profile" component={Profile} options={BasicHeader} />
+      {tabRoutes.map((route) => (
+        <Tab.Screen
+          key={route.name}
+          name={route.name}
+          component={route.component}
+          options={
+            route?.name === "Home"
+              ? {
+                  headerShown: false
+                }
+              : BasicHeader
+          }
+        />
+      ))}
     </Tab.Navigator>
   );
 
@@ -186,80 +161,25 @@ const Navigation = () => {
         headerStyle: { backgroundColor: theme.colors.black }
       }}
     >
-      <Stack.Screen name="SplashScreen" component={SplashScreen} />
-      <Stack.Screen name="Main" component={TabNavigator} />
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen
-        name="Theater"
-        component={ScheduleList}
-        options={showHeader}
-      />
-      <Stack.Screen
-        name="ShowroomLive"
-        component={ShowroomLive}
-        options={showHeader}
-      />
-      <Stack.Screen name="IDNLives" component={IDNLives} options={showHeader} />
-      <Stack.Screen
-        name="RoomDetail"
-        component={RoomDetail}
-        options={showHeader}
-      />
-      <Stack.Screen
-        name="ScheduleDetail"
-        component={ScheduleDetail}
-        options={showHeader}
-      />
-      <Stack.Screen
-        name="LiveStream"
-        component={LiveStream}
-        options={showHeader}
-      />
-      <Stack.Screen
-        name="IDNStream"
-        component={IDNStream}
-        options={showHeader}
-      />
-      <Stack.Screen
-        name="PremiumLive"
-        component={PremiumLive}
-        options={showHeader}
-      />
-      <Stack.Screen name="Avatar" component={EditAvatar} options={showHeader} />
-      <Stack.Screen
-        name="HistoryDetail"
-        component={HistoryLiveDetail}
-        options={showHeader}
-      />
-      <Stack.Screen
-        name="Multi Live"
-        component={MultiLive}
-        options={showHeader}
-      />
-      <Stack.Screen name="MultiIDN" component={MultiIDN} options={showHeader} />
-      <Stack.Screen
-        name="MultiShowroom"
-        component={MultiShowroom}
-        options={showHeader}
-      />
-      <Stack.Screen
-        name="LeaderboardMember"
-        component={LeaderboardMember}
-        options={showHeader}
-      />
-      <Stack.Screen
-        name="LeaderboardUser"
-        component={LeaderboardUser}
-        options={showHeader}
-      />
-      <Stack.Screen name="About" component={About} options={showHeader} />
-      <Stack.Screen
-        name="SupportProject"
-        component={SupportProject}
-        options={showHeader}
-      />
+      {stackRoutes.map((route) => {
+        // Set the TabNavigator component for the Main route
+        const component =
+          route.name === "Main" ? TabNavigator : route.component;
+
+        // Merge the showHeader options with route options if headerShown is true
+        const options = route.options?.headerShown
+          ? { ...showHeader, ...route.options }
+          : route.options;
+
+        return (
+          <Stack.Screen
+            key={route.name}
+            name={route.name}
+            component={component}
+            options={options}
+          />
+        );
+      })}
     </Stack.Navigator>
   );
 };

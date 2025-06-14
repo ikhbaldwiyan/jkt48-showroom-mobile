@@ -1,7 +1,7 @@
 import React from "react";
 import { SvgXml } from "react-native-svg";
 
-const Star = ({ size }) => {
+const Star = ({ size = "20" }) => {
   return (
     <SvgXml
       xml={`
