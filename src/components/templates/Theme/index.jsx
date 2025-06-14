@@ -30,7 +30,7 @@ const Theme = () => {
           size="lg"
           isChecked={isDark}
           onToggle={handleChangeTheme}
-          onTrackColor="teal"
+          onTrackColor="blueGray.500"
           offTrackColor="coolGray.300"
         />
       </HStack>

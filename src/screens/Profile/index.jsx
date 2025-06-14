@@ -17,6 +17,7 @@ import Logout from "../../components/molecules/UserTabs/components/Logout";
 import Theme from "../../components/templates/Theme";
 import AvatarUser from "./components/AvatarUser";
 import NoLogin from "./components/NoLogin";
+import MenuInfo from "./components/MenuInfo";
 
 const Profile = () => {
   const { profile, session, user } = useUser();
@@ -32,6 +33,12 @@ const Profile = () => {
       setUserProfile(userProfile);
     }
   }, [session]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <MenuInfo />
+    });
+  }, [profile]);
 
   const handleAbout = () => {
     navigation.navigate("About");
