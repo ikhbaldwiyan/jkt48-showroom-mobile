@@ -4,9 +4,17 @@ import { EditProfile, IDCard, Star, UserIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
 import CardGradient from "../../../atoms/CardGradient";
 import { TouchableOpacity } from "react-native";
+import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
+import { formatName } from "../../../../utils/helpers";
 
 export const UserProfile = ({ navigation }) => {
-  const { user, profile } = useUser();
+  const { user, profile, userProfile } = useUser();
+  const { data: mostWatch } = useMostWatchIDN(userProfile?._id);
+
+  const favorite = Array.isArray(mostWatch?.data)
+    ? mostWatch.data.filter((item) => item?.member?.name !== "JKT48")
+    : [];
+  const favMember = favorite[0]?.member?.name ? favorite[0] : favorite[1];
 
   return (
     <CardGradient halfCard isRounded>
@@ -71,7 +79,7 @@ export const UserProfile = ({ navigation }) => {
             </Box>
             <Box flex={2}>
               <Text fontSize="14" fontWeight="semibold">
-                Indah
+                {formatName(favMember?.member?.name ?? "-", true)}
               </Text>
             </Box>
           </HStack>
