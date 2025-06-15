@@ -4,7 +4,6 @@ import { SceneMap, TabView } from "react-native-tab-view";
 import { Box, Pressable, Text, useColorModeValue } from "native-base";
 import useThemeStore from "../../../store/themeStore";
 import { UserProfile } from "./UserProfile";
-import { Settings } from "../../../components/molecules/UserTabs/components";
 import EditAvatar from "../../EditAvatar";
 
 const initialLayout = {

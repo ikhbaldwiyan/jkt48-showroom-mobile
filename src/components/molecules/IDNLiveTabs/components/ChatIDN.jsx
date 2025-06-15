@@ -15,10 +15,12 @@ import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import useIDNLiveStore from "../../../../store/idnLiveStore";
 import { RefreshIcon } from "../../../../assets/icon";
 import Loading from "../../../atoms/Loading";
+import useThemeStore from "../../../../store/themeStore";
 
 const ChatIDN = () => {
   const { profile, url, setGifts } = useIDNLiveStore();
   const { refreshing, onRefresh } = useRefresh();
+  const { mode: theme } = useThemeStore();
   const [messages, setMessages] = useState([]);
   const wsRef = useRef(null);
 
@@ -28,6 +30,18 @@ const ChatIDN = () => {
   };
 
   const nickname = generateRandomUsername();
+
+  const getTextColor = (userColorCode, theme) => {
+    if (theme === "light") {
+      return "white";
+    }
+
+    if (userColorCode === "#ED2227" || userColorCode === null) {
+      return "primary";
+    }
+
+    return userColorCode;
+  };
 
   const setupWebSocket = async () => {
     try {
@@ -131,7 +145,7 @@ const ChatIDN = () => {
   }, [profile, refreshing]);
 
   useEffect(() => {
-    setGifts([])
+    setGifts([]);
   }, [profile]);
 
   return (
@@ -153,18 +167,13 @@ const ChatIDN = () => {
                 <Text
                   fontSize="md"
                   fontWeight="bold"
-                  color={
-                    item?.user?.color_code === "#ED2227" ||
-                    item?.user?.color_code === null
-                      ? "primary"
-                      : item?.user?.color_code
-                  }
+                  color={getTextColor(item?.user?.color_code, theme)}
                   flexShrink={1}
                   flexWrap="wrap"
                 >
                   {item?.user?.name ?? "User"}
                 </Text>
-                <Text mt="1" flexShrink={1} flexWrap="wrap">
+                <Text mt="0.5" flexShrink={1} flexWrap="wrap">
                   {item?.comment}
                 </Text>
               </View>

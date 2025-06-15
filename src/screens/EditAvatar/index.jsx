@@ -72,7 +72,7 @@ const PaginationControls = ({ page, totalPages, onPrevPage, onNextPage }) => (
     <Button
       onPress={page !== 1 ? onPrevPage : undefined}
       borderRadius="lg"
-      bg={page !== 1 ? "gray.500" : "blueGray.700"}
+      bg={page !== 1 ? "gray.500" : "blueGray.800"}
       opacity={page === 1 ? 0.7 : 1}
     >
       <HStack alignItems="center" space="1">
@@ -87,7 +87,7 @@ const PaginationControls = ({ page, totalPages, onPrevPage, onNextPage }) => (
     <Button
       onPress={page !== totalPages ? onNextPage : undefined}
       borderRadius="lg"
-      bg={page !== totalPages ? "gray.500" : "blueGray.700"}
+      bg={page !== totalPages ? "gray.500" : "blueGray.800"}
       opacity={page === totalPages ? 0.7 : 1}
     >
       <HStack alignItems="center" space="1">
@@ -107,6 +107,7 @@ const UpdateAvatarButton = ({ isLoading, onPress }) => (
     variant="outline"
     isLoadingText="Updating Avatar"
     disabled={isLoading}
+    opacity={isLoading ? "0.5" : "1"}
     _disabled={{
       bgColor: "gray.600"
     }}
