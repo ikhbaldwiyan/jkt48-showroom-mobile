@@ -22,6 +22,7 @@ import MultiIDN from "./MultiIDN";
 import MultiLive from "./MultiLive";
 import MultiShowroom from "./MultiShowroom";
 import EditProfile from "./EditProfile";
+import MultiLiveAccess from "./MultiLiveAccess";
 
 export {
   SplashScreen,
@@ -49,4 +50,5 @@ export {
   MultiShowroom,
   MultiLive,
   EditProfile,
+  MultiLiveAccess,
 };

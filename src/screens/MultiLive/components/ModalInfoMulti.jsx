@@ -1,14 +1,23 @@
 import React, { useEffect } from "react";
-import { Button, HStack, Modal, Text, Progress, VStack } from "native-base";
-import { Donate, UnlockIcon } from "../../../assets/icon";
+import {
+  Button,
+  HStack,
+  Modal,
+  Text,
+  Progress,
+  VStack,
+} from "native-base";
+import { Donate, MultiLiveIcon, UnlockIcon } from "../../../assets/icon";
 import { useNavigation } from "@react-navigation/native";
 import { useProfile } from "../../../services/hooks/useProfile";
 import useAuthStore from "../../../store/authStore";
+import useApiConfig from "../../../store/useApiConfig";
 
 const ModalInfoMulti = ({ isOpen, toggleModal }) => {
   const { navigate } = useNavigation();
   const { user } = useAuthStore();
   const { data: profile, refetch } = useProfile(user?.account_id);
+  const { IS_MULTI_LIVE_RELEASE } = useApiConfig();
 
   useEffect(() => {
     if (isOpen) {
@@ -31,36 +40,58 @@ const ModalInfoMulti = ({ isOpen, toggleModal }) => {
           <VStack space={4}>
             <Text>
               Buka fitur Multi Live jika kamu sudah menonton live streaming
-              sebanyak 150x atau dapatkan badge donator dengan cara support project JKT48 Showroom Fanmade
+              sebanyak <Text fontWeight="bold">150x</Text> atau dapatkan
+              badge donator dengan cara support project JKT48 Showroom Fanmade
             </Text>
             <Progress
               colorScheme="emerald"
-              value={(profile?.totalWatchLive ?? 0) / 150 * 100}
+              value={((profile?.totalWatchLive ?? 0) / 150) * 100}
             />
             <HStack justifyContent="space-between" alignItems="center">
-              <Text fontWeight="semibold" fontSize="md">
-                Total Nonton {profile?.totalWatchLive ?? 0}x dari 150x
-              </Text>
+              <HStack space="3" alignItems="center">
+                <Text fontSize="md" >
+                  Total Nonton
+                </Text>
+                <Text fontWeight="semibold" fontSize="md">
+                  {profile?.totalWatchLive ?? 0}x dari 150x
+                </Text>
+              </HStack>
               <Text fontWeight="bold" fontSize="lg" color="emerald.500">
-                {Math.round((profile?.totalWatchLive ?? 0) / 150 * 100)}%
+                {Math.round(((profile?.totalWatchLive ?? 0) / 150) * 100)}%
               </Text>
             </HStack>
           </VStack>
         </Modal.Body>
         <Modal.Footer bg="black">
           <Button.Group space={2}>
-            <Button
-              size="sm"
-              backgroundColor="#E49C20"
-              onPress={() => navigate("SupportProject")}
-            >
-              <HStack alignItems="center" space={2}>
-                <Donate color="white" size={20} />
-                <Text fontWeight="bold" color="white">
-                  Support Project
-                </Text>
-              </HStack>
-            </Button>
+            {IS_MULTI_LIVE_RELEASE ? (
+              <Button
+                size="sm"
+                backgroundColor="emerald.600"
+                onPress={() => navigate("MultiLiveAccess")}
+              >
+                <HStack alignItems="center" space={2}>
+                  <MultiLiveIcon color="white" size={20} />
+                  <Text fontWeight="bold" color="white">
+                    Buka Fitur
+                  </Text>
+                </HStack>
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                backgroundColor="emerald.600"
+                onPress={() => navigate("SupportProject")}
+              >
+                <HStack alignItems="center" space={2}>
+                  <Donate color="white" size={20} />
+                  <Text fontWeight="bold" color="white">
+                    Support Project
+                  </Text>
+                </HStack>
+              </Button>
+            )}
+
             <Button
               variant="gray"
               backgroundColor="blueGray.500"

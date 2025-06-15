@@ -24,6 +24,7 @@ import {
   MultiLive,
   MultiShowroom,
   EditProfile,
+  MultiLiveAccess,
 } from "../screens";
 
 export const tabRoutes = [
@@ -143,6 +144,11 @@ export const stackRoutes = [
   {
     name: "MultiShowroom",
     component: MultiShowroom,
+    options: { headerShown: true }
+  },
+  {
+    name: "MultiLiveAccess",
+    component: MultiLiveAccess,
     options: { headerShown: true }
   },
   {
