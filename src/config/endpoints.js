@@ -9,6 +9,8 @@ export default {
   USER: {
     PROFILE: "/profile/room",
     USER_PROFILE: "/profile/user",
+    UPDATE_PROFILE: "/profile/update",
+    UPDATE_USER_PROFILE: "/users/",
     AVATAR: "/profile/get_avatar",
     UPDATE_AVATAR: "/profile/update_avatar",
     ACTIVIY_LOG: "/activity/", //required user id
@@ -24,8 +26,6 @@ export default {
     PREMIUM_LIVE: "/rooms/premium-live",
     PROFILE: "/profile/room/",
     FOLLOW: "/room/follow",
-    RECENT_LIVE:
-      "/recent?sort=date&page=1&filter=all&order=-1&group=jkt48&type=all",
     HISTORY_LIVE: "/recent?sort=date&order=-1&group=jkt48",
     HISTORY_LIVE_PROFILE:
       "/recent?sort=date&page=1&order=-1&perpage=10&group=jkt48&type=all",

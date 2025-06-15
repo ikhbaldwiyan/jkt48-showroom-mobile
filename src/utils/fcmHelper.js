@@ -2,7 +2,6 @@ import messaging from '@react-native-firebase/messaging';
 import useAuthStore from "../store/authStore";
 import { updateDetailUser } from "../services/auth";
 
-const userProfile = useAuthStore.getState().userProfile;
 const setUserProfile = useAuthStore.getState().setUserProfile;
 
 export async function getFcmToken() {
@@ -31,7 +30,7 @@ export async function updateFcmToken(userId, fcmToken) {
   }
 }
 
-export async function handleFcmTokenUpdate() {
+export async function handleFcmTokenUpdate(userProfile) {
   if (!userProfile || !userProfile.user_id) {
     console.log('No user session found');
     return;

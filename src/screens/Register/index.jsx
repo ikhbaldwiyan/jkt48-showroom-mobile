@@ -62,9 +62,11 @@ const Register = ({ navigation }) => {
     await AUTH.detailUserApi(userId)
       .then((res) => {
         setUserProfile(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   };
 
@@ -79,33 +81,23 @@ const Register = ({ navigation }) => {
       if (response.data.status.ok) {
         autoLogin();
 
+        await analytics().logEvent("Register", {
+          username: formData.account_id
+        });
+
         toast.show({
           render: () => {
             return (
-              <Box
-                m="3"
-                py="1"
-                px="2"
-                mt="10"
-                mb={5}
-                bg="green.500"
-                rounded="sm"
-              >
+              <Box m="3" py="1" px="2" mt="10" mb={5} bg="green.500" rounded="sm">
                 <Text>Register Sukses</Text>
               </Box>
             );
           },
           placement: "top-right"
         });
-
-        await analytics().logEvent("Register", {
-          username: formData.account_id
-        });
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -251,6 +243,7 @@ const Register = ({ navigation }) => {
             background="primary"
             onPress={handleRegister}
             isLoading={loading}
+            isLoadingText="Creating Account.."
           >
             <HStack alignItems="center" space="1">
               <Text

@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { Text, Button, HStack, View } from "native-base";
 import { TouchableOpacity } from "react-native";
-import { LoginIcon } from "../../../../assets/icon";
 import trackAnalytics from "../../../../utils/trackAnalytics";
 import { ModalConfirmation } from "../../../atoms/Modal";
 import useUser from "../../../../utils/hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../../../store/authStore";
+import useMultiAccessStore from "../../../../store/multiAccesStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Logout = ({ isProfile = false }) => {
+  const navigation = useNavigation();
   const { profile } = useUser();
   const { logout } = useAuthStore();
   const [modalLogout, setModalLogout] = useState(false);
-  const navigation = useNavigation();
+  const { setOpenMultiModal } = useMultiAccessStore();
+  const queryClient = useQueryClient();
 
   const handleModal = () => {
     setModalLogout(!modalLogout);
@@ -21,7 +24,9 @@ const Logout = ({ isProfile = false }) => {
   const handleLogout = () => {
     handleModal();
     logout();
-    navigation.replace("Login");
+    setOpenMultiModal();
+    navigation.replace("SplashScreen");
+    queryClient.removeQueries(["profile"]);
 
     trackAnalytics("logout", {
       username: profile?.name
@@ -29,18 +34,16 @@ const Logout = ({ isProfile = false }) => {
   };
 
   return (
-    <View mt={isProfile ? "2" : 0} mb={isProfile ? "8" : 0}>
+    <View>
       <Button
-        bg={isProfile ? "blueGray.600" : "none"}
+        size="sm"
         borderRadius="10"
-        size={isProfile ? "md" : "sm"}
-        variant={isProfile ? "solid" : "ghost"}
+        variant="ghost"
         onPress={handleModal}
       >
         <TouchableOpacity onPress={handleModal}>
-          <HStack space={2} alignItems="center">
-            <LoginIcon size={24} />
-            <Text fontSize={isProfile ? 16 : 14} fontWeight="semibold">
+          <HStack space={1.5} alignItems="center">
+            <Text fontSize="14" fontWeight="semibold">
               Logout
             </Text>
           </HStack>

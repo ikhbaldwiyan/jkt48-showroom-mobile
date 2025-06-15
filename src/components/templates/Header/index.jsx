@@ -39,10 +39,10 @@ const Header = () => {
       >
         <Box maxW="100">
           {profile ? (
-            <HStack alignItems="center" space={2}>
+            <HStack alignItems="center" space={1}>
               <Text color="white" fontWeight="semibold" isTruncated>
-                {profile.name.length >= 7
-                  ? profile.name.slice(0, 7) + ".."
+                {profile.name.length >= 9
+                  ? profile.name.slice(0, 8) + ".."
                   : profile.name}
               </Text>
               <Image

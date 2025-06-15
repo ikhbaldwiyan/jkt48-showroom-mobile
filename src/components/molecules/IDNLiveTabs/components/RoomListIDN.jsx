@@ -1,3 +1,8 @@
+import { useEffect } from "react";
+import { useRefresh } from "../../../../utils/hooks/useRefresh";
+import { useIDNLive } from "../../../../services/hooks/useIDNLive";
+import useIDNLiveStore from "../../../../store/idnLiveStore";
+
 import {
   Box,
   Divider,
@@ -8,27 +13,21 @@ import {
   Text,
   View
 } from "native-base";
-import { useEffect, useState } from "react";
-import { RefreshControl, ScrollView } from "react-native";
 import { UserCheck } from "../../../../assets/icon";
-import { ROOMS } from "../../../../services";
-import useIDNLiveStore from "../../../../store/idnLiveStore";
+import { RefreshControl, ScrollView } from "react-native";
 import useThemeStore from "../../../../store/themeStore";
-import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 
 export const RoomListIDN = () => {
   const { profile, setProfile } = useIDNLiveStore();
-  const [roomLives, setRoomLives] = useState([]);
+  const { data: roomLives, refetch } = useIDNLive()
   const { refreshing, onRefresh } = useRefresh();
   const { mode } = useThemeStore();
 
   useEffect(() => {
-    async function getIDNLIve() {
-      const response = await ROOMS.getIDNLIveRoom();
-      setRoomLives(response.data);
+    if (refreshing) {
+      refetch();
     }
-    getIDNLIve();
   }, [refreshing]);
 
   const getTheme = (isActive) => {

@@ -3,16 +3,16 @@ import { Box } from "native-base";
 
 import { AUTH } from "../../services";
 import { useRefresh } from "../../utils/hooks/useRefresh";
+import { handleFcmTokenUpdate } from "../../utils/fcmHelper";
 import useAuthStore from "../../store/authStore";
 import useChangeLogStore from "../../store/changeLogStore";
-import { handleFcmTokenUpdate } from "../../utils/fcmHelper";
+import useMultiAccessStore from "../../store/multiAccesStore";
 
 import {
   IDNLIve,
   ShowroomLive,
   RecentLives,
-  Schedule,
-  TopMember,
+  ScheduleHome
 } from "../../components/organisms";
 import Layout from "../../components/templates/Layout";
 import RatingApp from "../../components/templates/RatingApp";
@@ -20,11 +20,14 @@ import UpdateApp from "../../components/templates/UpdateApp";
 import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
 import SupportApp from "../../components/templates/SupportApp";
 import MaintenanceInfo from "../../components/templates/MaintenanceInfo";
+import MenuHome from "./components/MenuHome";
+import MultiAccess from "../../components/templates/MultiAccess";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
-  const { showChangeLog, setCloseModal } = useChangeLogStore();
   const { userProfile, session, user, setUserProfile } = useAuthStore();
+  const { showChangeLog, setCloseModal } = useChangeLogStore();
+  const { showMultiAccess, setCloseMultiModal } = useMultiAccessStore();
   const [ratingApp, setRatingApp] = useState(false);
   const [supportApp, setSupportApp] = useState(false);
 
@@ -46,18 +49,19 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     if (userProfile) {
-      handleFcmTokenUpdate();
+      handleFcmTokenUpdate(userProfile);
     }
-  }, [session])
+  }, [session]);
 
   return (
     <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
+        <MenuHome />
         <ShowroomLive refreshing={refreshing} />
         <IDNLIve refreshing={refreshing} />
         <RecentLives refreshing={refreshing} />
-        <TopMember refreshing={refreshing} />
-        <Schedule refreshing={refreshing} navigation={navigation} isWeek />
+        <ScheduleHome isToday refreshing={refreshing} navigation={navigation} />
+        <ScheduleHome refreshing={refreshing} navigation={navigation} />
       </Box>
       <UpdateApp />
       <ChangeLog
@@ -76,6 +80,12 @@ const Home = ({ navigation }) => {
         onClose={() => setSupportApp(false)}
       />
       <MaintenanceInfo />
+      <MultiAccess
+        isVisible={showMultiAccess}
+        onClose={() => {
+          setCloseMultiModal();
+        }}
+      />
     </Layout>
   );
 };

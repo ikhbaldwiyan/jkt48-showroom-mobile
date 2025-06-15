@@ -6,6 +6,7 @@ import { PodiumIDN } from "./components/PodiumIDN";
 import { RoomListIDN } from "./components/RoomListIDN";
 import useThemeStore from "../../../store/themeStore";
 import ChatIDN from "./components/ChatIDN";
+import { GiftIDN } from "./components/GiftIDN";
 
 const initialLayout = {
   width: Dimensions.get("window").width
@@ -19,12 +20,14 @@ const IDNLiveTabs = () => {
     room: RoomListIDN,
     chat: ChatIDN,
     podium: PodiumIDN,
+    gift: GiftIDN,
   });
 
   const routes = [
-    { key: "room", title: "Room Live" },
+    { key: "room", title: "Room" },
     { key: "chat", title: "Chat" },
     { key: "podium", title: "Podium" },
+    { key: "gift", title: "Gift" },
   ];
 
   const renderTabBar = ({ navigationState }) => (
