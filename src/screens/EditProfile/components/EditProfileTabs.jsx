@@ -5,6 +5,7 @@ import { Box, Pressable, Text, useColorModeValue } from "native-base";
 import useThemeStore from "../../../store/themeStore";
 import { UserProfile } from "./UserProfile";
 import { Settings } from "../../../components/molecules/UserTabs/components";
+import EditAvatar from "../../EditAvatar";
 
 const initialLayout = {
   width: Dimensions.get("window").width
@@ -14,13 +15,13 @@ const EditProfileTabs = () => {
   const [index, setIndex] = useState(0);
   const routes = [
     { key: "profile", title: "Profile" },
-    // { key: "settings", title: "Avatar" }
+    { key: "avatar", title: "Avatar" }
   ];
   const { header } = useThemeStore();
 
   const renderScene = SceneMap({
     profile: UserProfile,
-    // settings: Settings
+    avatar: EditAvatar
   });
 
   const renderTabBar = ({ navigationState }) => (
@@ -61,7 +62,7 @@ const EditProfileTabs = () => {
       renderTabBar={renderTabBar}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
-      style={{ marginTop: 10 }}
+      style={{ marginTop: 4 }}
     />
   );
 };

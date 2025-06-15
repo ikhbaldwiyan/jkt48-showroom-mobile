@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { APK_VERSION } from "@env";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useProfile } from "../../services/hooks/useProfile";
 import useAuthStore from "../../store/authStore";
 import useUser from "../../utils/hooks/useUser";
@@ -21,7 +21,7 @@ import MenuInfo from "./components/MenuInfo";
 
 const Profile = () => {
   const { profile, session, user } = useUser();
-  const { data: userProfile } = useProfile(user?.account_id);
+  const { data: userProfile, refetch } = useProfile(user?.account_id);
   const { setUserProfile } = useAuthStore();
   const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState();
@@ -36,9 +36,19 @@ const Profile = () => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <MenuInfo />
+      headerRight: () => (
+        <Box mr="2">
+          <MenuInfo />
+        </Box>
+      )
     });
   }, [profile]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   const handleAbout = () => {
     navigation.navigate("About");
@@ -87,7 +97,7 @@ const Profile = () => {
               <Text>Total Watch</Text>
               <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
                 <Text color="primary" fontWeight="extrabold">
-                  {formatViews(userProfile?.totalWatchLive)}
+                  {formatViews(userProfile?.totalWatchLive)}x
                 </Text>
               </Box>
             </VStack>
@@ -97,7 +107,7 @@ const Profile = () => {
               <Text>SR Watched</Text>
               <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
                 <Text color="primary" fontWeight="extrabold">
-                  {formatViews(userProfile?.watchShowroomMember)}
+                  {formatViews(userProfile?.watchShowroomMember)}x
                 </Text>
               </Box>
             </VStack>
@@ -107,7 +117,7 @@ const Profile = () => {
               <Text>IDN Watched</Text>
               <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
                 <Text color="primary" fontWeight="extrabold">
-                  {formatViews(userProfile?.watchLiveIDN)}
+                  {formatViews(userProfile?.watchLiveIDN)}x
                 </Text>
               </Box>
             </VStack>

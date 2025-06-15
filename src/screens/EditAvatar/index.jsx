@@ -1,109 +1,225 @@
+import React, { useEffect, useState } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { EditProfile } from "../../assets/icon";
+import { updateDetailUser } from "../../services/auth";
+import { getAvatarList, updateAvatar } from "../../services/user";
+import useAuthStore from "../../store/authStore";
+import useAvatarStore from "../../store/avatarStore";
+import useUser from "../../utils/hooks/useUser";
+import trackAnalytics from "../../utils/trackAnalytics";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import LinearGradient from "react-native-linear-gradient";
+import CardGradient from "../../components/atoms/CardGradient";
 import {
   Box,
   Button,
+  CheckCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   FlatList,
   HStack,
   Image,
   Pressable,
+  Spinner,
   Text,
   useToast,
-  VStack,
+  VStack
 } from "native-base";
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { PencilIcon } from "../../assets/icon";
-import Layout from "../../components/templates/Layout";
-import { updateDetailUser } from "../../services/auth";
-import { getAvatarList, updateAvatar } from "../../services/user";
-import useAuthStore from "../../store/authStore";
-import useUser from "../../utils/hooks/useUser";
-import trackAnalytics from "../../utils/trackAnalytics";
 
-const EditAvatar = ({ navigation }) => {
-  const { profile, session, userProfile } = useUser();
+const TabButton = ({ type, currentType, onPress, label }) => (
+  <Button
+    onPress={() => onPress(type)}
+    bg={currentType === type ? "primary" : "#ECFAFC"}
+    borderRadius="xl"
+    size="sm"
+  >
+    <HStack alignItems="center" space={1}>
+      {currentType === type && <CheckCircleIcon color="white" />}
+      <Text
+        fontSize="13"
+        fontWeight="semibold"
+        color={currentType === type ? "white" : "primary"}
+      >
+        {label}
+      </Text>
+    </HStack>
+  </Button>
+);
+
+const AvatarItem = ({ item, selectedAvatar, onSelect }) => (
+  <LinearGradient
+    start={{ x: -2, y: 0 }}
+    end={{ x: 1, y: 0 }}
+    colors={["#282C34", "#9FAEBD"]}
+    style={[
+      styles.gradientContainer,
+      selectedAvatar === item.avatar_id && styles.selectedGradient
+    ]}
+  >
+    <Pressable onPress={() => onSelect(item.avatar_id, item.image_url)}>
+      <Image
+        mt="2"
+        source={{ uri: item.image_url }}
+        alt="Avatar"
+        style={styles.image}
+      />
+    </Pressable>
+  </LinearGradient>
+);
+
+const PaginationControls = ({ page, totalPages, onPrevPage, onNextPage }) => (
+  <HStack alignItems="center" justifyContent="space-between">
+    <Button
+      onPress={page !== 1 ? onPrevPage : undefined}
+      borderRadius="lg"
+      bg={page !== 1 ? "gray.500" : "blueGray.700"}
+      opacity={page === 1 ? 0.7 : 1}
+    >
+      <HStack alignItems="center" space="1">
+        <ChevronLeftIcon color="white" />
+      </HStack>
+    </Button>
+
+    <Text fontSize="15" fontWeight="bold">
+      {page} / {totalPages}
+    </Text>
+
+    <Button
+      onPress={page !== totalPages ? onNextPage : undefined}
+      borderRadius="lg"
+      bg={page !== totalPages ? "gray.500" : "blueGray.700"}
+      opacity={page === totalPages ? 0.7 : 1}
+    >
+      <HStack alignItems="center" space="1">
+        <ChevronRightIcon color="white" />
+      </HStack>
+    </Button>
+  </HStack>
+);
+
+const UpdateAvatarButton = ({ isLoading, onPress }) => (
+  <Button
+    mt="1"
+    mb="2"
+    onPress={onPress}
+    borderRadius="lg"
+    w="100%"
+    variant="outline"
+    isLoadingText="Updating Avatar"
+    disabled={isLoading}
+    _disabled={{
+      bgColor: "gray.600"
+    }}
+  >
+    <TouchableOpacity onPress={onPress}>
+      <HStack alignItems="center" space={2}>
+        {isLoading ? (
+          <Spinner color="white" />
+        ) : (
+          <EditProfile color="white" size="18" />
+        )}
+        <Text fontWeight="bold">
+          {isLoading ? "Updating Avatar" : "Update Avatar"}
+        </Text>
+      </HStack>
+    </TouchableOpacity>
+  </Button>
+);
+
+const EditAvatar = () => {
+  const route = useRoute();
+  const toast = useToast();
+  const navigation = useNavigation();
+  const isAvatarScreen = route?.name === "Avatar";
+
   const { setProfile } = useAuthStore();
-  const [selectedAvatar, setSelectedAvatar] = useState(null);
-  const [avatarImage, setAvatarImage] = useState(null);
+  const { profile, session, userProfile } = useUser();
+  const { setAvatarImage, resetAvatar } = useAvatarStore();
+
+  const [limit] = useState(isAvatarScreen ? 20 : 12);
   const [avatars, setAvatars] = useState([]);
-  const [limit] = useState(12);
-  const [totalAvatar, setTotalAvatar] = useState(0);
   const [page, setPage] = useState(1);
   const [type, setType] = useState("all");
-  const [title, setTitle] = useState("Unlocked");
-
+  const [selectedAvatar, setSelectedAvatar] = useState();
+  const [totalAvatar, setTotalAvatar] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const totalPages = Math.ceil(totalAvatar / limit);
-  const toast = useToast();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: "Avatar",
-    });
-  }, []);
 
   useEffect(() => {
-    const fetchAvatar = async () => {
-      try {
-        const response = await getAvatarList({
-          csrf_token: session.csrf_token,
-          cookies_id: session.cookie_login_id,
-          limit,
-          page,
-          type,
-        });
-        const { avatars, current_user_avatar, total_entries } = response.data;
-        setAvatars(avatars);
-        setTotalAvatar(total_entries);
-        setSelectedAvatar(current_user_avatar.avatar_id);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAvatar();
+    fetchAvatars();
   }, [page, type]);
 
+  useEffect(() => {
+    return () => {
+      resetAvatar();
+    };
+  }, []);
+
+  const fetchAvatars = async () => {
+    try {
+      const response = await getAvatarList({
+        csrf_token: session.csrf_token,
+        cookies_id: session.cookie_login_id,
+        limit,
+        page,
+        type
+      });
+      const { avatars, current_user_avatar, total_entries } = response.data;
+      setAvatars(avatars);
+      setTotalAvatar(total_entries);
+      setSelectedAvatar(current_user_avatar.avatar_id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const updateUserAvatar = async () => {
+    setIsLoading(true);
     try {
       await updateDetailUser(userProfile.user_id, {
-        avatar: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`,
+        avatar: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
       });
       trackAnalytics("update_user_avatar", {
-        userId: userProfile.user_id,
+        userId: userProfile.user_id
       });
+      showSuccessToast();
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const showSuccessToast = () => {
+    toast.show({
+      render: () => (
+        <Box m="3" py="1" px="2" mt="10" mb={5} bg="green.600" rounded="sm">
+          <Text>Berhasil update avatar</Text>
+        </Box>
+      ),
+      placement: "top-right"
+    });
   };
 
   const updateAvatarImage = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      const response = await updateAvatar({
+      await updateAvatar({
         csrf_token: session.csrf_token,
         cookies_id: session.cookie_login_id,
-        avatar_id: selectedAvatar,
+        avatar_id: selectedAvatar
       });
       setProfile({
         ...profile,
-        avatar_url: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`,
-      });
-      toast.show({
-        render: () => {
-          return (
-            <Box m="3" py="1" px="2" mt="10" mb={5} bg="green.600" rounded="sm">
-              <Text>{response.data.message}</Text>
-            </Box>
-          );
-        },
-        placement: "bottom",
+        avatar_url: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
       });
       await updateUserAvatar();
-
       navigation.navigate("Profile");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,93 +228,39 @@ const EditAvatar = ({ navigation }) => {
     setAvatarImage(image);
   };
 
-  const handlePrevPage = () => {
-    setPage(Math.max(1, page - 1));
-  };
+  const handlePrevPage = () => setPage(Math.max(1, page - 1));
+  const handleNextPage = () => setPage(Math.min(totalPages, page + 1));
 
-  const handleNextPage = () => {
-    setPage(Math.min(totalPages, page + 1));
-  };
-
-  const handleTab = (type, title) => {
+  const handleTab = (newType) => {
     setPage(1);
-    setType(type);
-    setTitle(title);
+    setType(newType);
   };
 
   return (
-    <Layout>
-      <Box py="3">
-        <VStack
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          w="100%"
-          space={4}
-        >
-          <LinearGradient
-            colors={["#24A2B7", "#A9EDF9"]}
-            style={[styles.avatarImage]}
-          >
-            <Image
-              style={{ width: 80, height: 80 }}
-              source={{
-                uri: avatarImage ?? profile?.avatar_url,
-              }}
-              alt="avatar"
-            />
-          </LinearGradient>
-          <Button
-            onPress={updateAvatarImage}
-            borderRadius="full"
-            w="100%"
-            bg="teal"
-          >
-            <TouchableOpacity onPress={updateAvatarImage}>
-              <HStack alignItems="center" space={2}>
-                <PencilIcon color="white" size="16" />
-                <Text fontWeight="bold">Update Avatar</Text>
-              </HStack>
-            </TouchableOpacity>
-          </Button>
-        </VStack>
-      </Box>
+    <CardGradient halfCard={!isAvatarScreen}>
       <VStack mt="2" space={4}>
-        <Text color="white">
-          {title} Avatar: {totalAvatar}
-        </Text>
-
-        <HStack space={2}>
-          <Button
-            onPress={() => handleTab("all", "Unlocked")}
-            bg={type === "all" ? "primary" : "blueGray.500"}
-            borderRadius="xl"
-            size="sm"
-          >
-            <Text fontSize="13" fontWeight="semibold">
-              All
-            </Text>
-          </Button>
-          <Button
-            onPress={() => handleTab("fav", "Favorite")}
-            bg={type === "fav" ? "primary" : "blueGray.500"}
-            borderRadius="xl"
-            size="sm"
-          >
-            <Text fontSize="13" fontWeight="semibold">
-              Favorite
-            </Text>
-          </Button>
-          <Button
-            onPress={() => handleTab("recent_used", "History")}
-            bg={type === "recent_used" ? "primary" : "blueGray.500"}
-            borderRadius="xl"
-            size="sm"
-          >
-            <Text fontSize="13" fontWeight="semibold">
-              History
-            </Text>
-          </Button>
+        <HStack alignItems="center" justifyContent="space-between">
+          <HStack space={2}>
+            <TabButton
+              type="all"
+              currentType={type}
+              onPress={handleTab}
+              label="All"
+            />
+            <TabButton
+              type="fav"
+              currentType={type}
+              onPress={handleTab}
+              label="Favorite"
+            />
+            <TabButton
+              type="recent_used"
+              currentType={type}
+              onPress={handleTab}
+              label="History"
+            />
+          </HStack>
+          <Text color="white">Total: {totalAvatar}</Text>
         </HStack>
 
         {totalAvatar === 0 && <Text mt="3">Avatar Not found</Text>}
@@ -208,108 +270,54 @@ const EditAvatar = ({ navigation }) => {
           numColumns={4}
           columnWrapperStyle={styles.columnWrapper}
           renderItem={({ item }) => (
-            <LinearGradient
-              colors={["#4A5568", "#9FAEBD"]}
-              style={[
-                styles.gradientContainer,
-                selectedAvatar === item.avatar_id && styles.selectedGradient,
-              ]}
-            >
-              <Pressable
-                onPress={() =>
-                  handleChangeAvatar(item.avatar_id, item.image_url)
-                }
-              >
-                <Image
-                  mt="2"
-                  source={{ uri: item.image_url }}
-                  alt="Avatar"
-                  style={styles.image}
-                />
-              </Pressable>
-            </LinearGradient>
+            <AvatarItem
+              item={item}
+              selectedAvatar={selectedAvatar}
+              onSelect={handleChangeAvatar}
+            />
           )}
           keyExtractor={(item) => item.avatar_id.toString()}
         />
 
-        <HStack alignItems="center" justifyContent="space-between" mt={2}>
-          {page !== 1 ? (
-            <Button
-              onPress={handlePrevPage}
-              disabled={page === 1}
-              borderRadius="lg"
-              bg="primary"
-            >
-              <TouchableOpacity opacity="0.8" onPress={handlePrevPage}>
-                <HStack alignItems="center" space="1">
-                  <ChevronLeftIcon color="white" />
-                  <Text>Prev</Text>
-                </HStack>
-              </TouchableOpacity>
-            </Button>
-          ) : (
-            <Button opacity={0.7} borderRadius="lg" bg="cyan.700">
-              <HStack alignItems="center" space="1">
-                <ChevronLeftIcon color="white" />
-                <Text>Prev</Text>
-              </HStack>
-            </Button>
-          )}
-          <Text fontSize="15" fontWeight="bold">
-            {page} / {totalPages}
-          </Text>
-          {page !== totalPages ? (
-            <Button onPress={handleNextPage} borderRadius="lg" bg="primary">
-              <TouchableOpacity opacity="0.8" onPress={handleNextPage}>
-                <HStack alignItems="center" space="1">
-                  <Text>Next</Text>
-                  <ChevronRightIcon color="white" />
-                </HStack>
-              </TouchableOpacity>
-            </Button>
-          ) : (
-            <Button opacity={0.7} borderRadius="lg" bg="cyan.700">
-              <HStack alignItems="center" space="1">
-                <Text>Next</Text>
-                <ChevronRightIcon color="white" />
-              </HStack>
-            </Button>
-          )}
-        </HStack>
+        <PaginationControls
+          page={page}
+          totalPages={totalPages}
+          onPrevPage={handlePrevPage}
+          onNextPage={handleNextPage}
+        />
+
+        <UpdateAvatarButton isLoading={isLoading} onPress={updateAvatarImage} />
       </VStack>
-    </Layout>
+    </CardGradient>
   );
 };
 
 const styles = StyleSheet.create({
   columnWrapper: {
     justifyContent: "space-between",
-    marginBottom: 8, // Equivalent to mb={2} in NativeBase
-  },
-  avatarImage: {
-    padding: 15,
-    borderRadius: 20,
+    marginBottom: 8
   },
   gradientContainer: {
-    width: "23%",
-    borderRadius: 10,
+    width: "24%",
+    height: 70,
+    borderRadius: 16,
     marginBottom: 2,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "transparent",
+    borderColor: "transparent"
   },
   image: {
-    width: 60,
-    height: 60,
-    borderRadius: 8, // Equivalent to rounded="md"
+    width: 48,
+    height: 48,
+    borderRadius: 8,
     marginVertical: 4,
-    marginBottom: 8,
+    marginBottom: 8
   },
   selectedGradient: {
-    borderRadius: 15,
-    borderColor: "cyan",
-  },
+    borderRadius: 20,
+    borderColor: "cyan"
+  }
 });
 
 export default EditAvatar;

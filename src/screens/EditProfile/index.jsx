@@ -11,7 +11,7 @@ const EditProfile = () => {
 
   return (
     <Box flex={1} bg="secondary">
-      <VStack flex={1} space={2}>
+      <VStack mt="2" flex={1} space={2}>
         <VStack space={3} alignItems="center">
           <AvatarUser
             profile={profile}

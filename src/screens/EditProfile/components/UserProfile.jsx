@@ -79,7 +79,7 @@ export const UserProfile = () => {
                 <Text color="white">Update profile success</Text>
               </Box>
             ),
-            placement: "top"
+            placement: "top-right"
           });
 
           navigation.navigate("Profile");
@@ -102,7 +102,7 @@ export const UserProfile = () => {
   };
 
   return (
-    <CardGradient>
+    <CardGradient halfCard>
       <ScrollView mt="3">
         <FormControl>
           <VStack space={3}>
@@ -148,12 +148,13 @@ export const UserProfile = () => {
               />
             </Box>
             <Button
-              mt="3"
+              my="3"
               bg="primary"
               borderRadius="md"
               onPress={handleUpdate}
               isLoading={updateProfileMutation.isPending}
               _pressed={{ bg: "cyan.700" }}
+              isLoadingText="Updating Profile"
             >
               <Text color="white" fontWeight="bold">
                 Update Profile

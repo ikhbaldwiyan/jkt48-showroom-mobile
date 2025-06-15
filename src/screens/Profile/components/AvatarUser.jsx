@@ -1,9 +1,11 @@
 import React from "react";
 import { Box, Image, Popover, Pressable, Text } from "native-base";
 import { AndroidIcon, Donate, ThropyIcon } from "../../../assets/icon";
+import useAvatarStore from "../../../store/avatarStore";
 
 const AvatarUser = ({ userProfile, profile, isLogin }) => {
-  
+  const { avatarImage } = useAvatarStore();
+
   const badgeUser = [
     {
       condition: userProfile?.top_leaderboard,
@@ -47,7 +49,7 @@ const AvatarUser = ({ userProfile, profile, isLogin }) => {
           source={
             isLogin
               ? {
-                  uri: profile?.avatar_url
+                  uri: avatarImage ?? profile?.avatar_url
                 }
               : require("../../../assets/image/ava.png")
           }
