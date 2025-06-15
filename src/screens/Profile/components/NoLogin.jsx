@@ -38,8 +38,8 @@ const NoLogin = ({
             </TouchableOpacity>
           </Button>
           <Button
-            variant="solid"
-            bgColor="cyan.700"
+            mt="1"
+            variant="ghost"
             borderRadius="lg"
             onPress={handleAbout}
           >
