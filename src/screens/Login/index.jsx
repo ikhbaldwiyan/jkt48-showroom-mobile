@@ -255,6 +255,7 @@ const Login = ({ navigation }) => {
             background="primary"
             onPress={handleLogin}
             isLoading={loading}
+            isLoadingText="Logging in"
           >
             <HStack alignItems="center" space="1">
               <LoginIcon size={24} />

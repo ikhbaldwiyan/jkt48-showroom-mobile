@@ -49,12 +49,12 @@ const MenuHome = () => {
     },
     {
       name: "IDN Live",
-      icon: <PlayIcon size="6" color="white" />,
+      icon: <PlayIcon size="24px" color="white" />,
       screen: "IDNLives"
     },
     {
       name: "Leaderboard",
-      icon: <ThropyIcon size="25" color="white" />,
+      icon: <ThropyIcon size="24" color="white" />,
       screen: "LeaderboardUser"
     },
     {
@@ -65,7 +65,7 @@ const MenuHome = () => {
   ];
 
   return (
-    <Box mb="4">
+    <Box mb="3">
       <Text mb="3" fontSize="2xl" fontWeight="semibold">
         Menu
       </Text>

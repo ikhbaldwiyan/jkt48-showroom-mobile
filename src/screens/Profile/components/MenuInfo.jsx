@@ -24,7 +24,7 @@ const MenuInfo = () => {
     },
     {
       key: "donation",
-      title: "Support App",
+      title: "Support Project",
       icon: <Donate size={18} color="black" />
     },
     {
