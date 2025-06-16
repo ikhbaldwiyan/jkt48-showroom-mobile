@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { EditProfile } from "../../assets/icon";
 import { updateDetailUser } from "../../services/auth";
 import { getAvatarList, updateAvatar } from "../../services/user";
 import useAuthStore from "../../store/authStore";
@@ -13,7 +12,7 @@ import CardGradient from "../../components/atoms/CardGradient";
 import {
   Box,
   Button,
-  CheckCircleIcon,
+  CheckIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   FlatList,
@@ -29,16 +28,19 @@ import {
 const TabButton = ({ type, currentType, onPress, label }) => (
   <Button
     onPress={() => onPress(type)}
-    bg={currentType === type ? "primary" : "#ECFAFC"}
-    borderRadius="xl"
+    bg={currentType === type ? "blueLight" : "#4A5568"}
+    borderRadius="full"
+    variant={currentType === type ? "filled" : "outline"}
+    borderColor="primary"
     size="sm"
+    py="1.5"
   >
     <HStack alignItems="center" space={1}>
-      {currentType === type && <CheckCircleIcon color="white" />}
+      {currentType === type && <CheckIcon color="primary" />}
       <Text
         fontSize="13"
         fontWeight="semibold"
-        color={currentType === type ? "white" : "primary"}
+        color={currentType === type ? "primary" : "white"}
       >
         {label}
       </Text>
@@ -104,7 +106,8 @@ const UpdateAvatarButton = ({ isLoading, onPress }) => (
     onPress={onPress}
     borderRadius="lg"
     w="100%"
-    variant="outline"
+    bg="primary"
+    variant="filled"
     isLoadingText="Updating Avatar"
     disabled={isLoading}
     opacity={isLoading ? "0.5" : "1"}
@@ -114,11 +117,7 @@ const UpdateAvatarButton = ({ isLoading, onPress }) => (
   >
     <TouchableOpacity onPress={onPress}>
       <HStack alignItems="center" space={2}>
-        {isLoading ? (
-          <Spinner color="white" />
-        ) : (
-          <EditProfile color="white" size="18" />
-        )}
+        {isLoading && <Spinner color="white" />}
         <Text fontWeight="bold">
           {isLoading ? "Updating Avatar" : "Update Avatar"}
         </Text>
@@ -317,7 +316,7 @@ const styles = StyleSheet.create({
   },
   selectedGradient: {
     borderRadius: 20,
-    borderColor: "cyan"
+    borderColor: "#24A2B7",
   }
 });
 

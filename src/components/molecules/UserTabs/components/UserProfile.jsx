@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, HStack, ScrollView, Text, VStack } from "native-base";
-import { EditProfile, IDCard, Star, UserIcon } from "../../../../assets/icon";
+import { EditProfile } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
 import CardGradient from "../../../atoms/CardGradient";
 import { TouchableOpacity } from "react-native";
@@ -26,24 +26,14 @@ export const UserProfile = ({ navigation }) => {
           activeOpacity={0.7}
           onPress={() => navigation.navigate("Edit Profile")}
         >
-          <HStack
-            bgColor="blueGray.500"
-            px="2"
-            p="1.5"
-            borderRadius="sm"
-            space={1}
-          >
-            <EditProfile color="white" size="18" />
-            <Text fontWeight="bold" fontSize={12}>
-              Edit
-            </Text>
-          </HStack>
+          <Box px="2" p="1.5">
+            <EditProfile color="white" size="22" />
+          </Box>
         </TouchableOpacity>
       </HStack>
-      <ScrollView mt="3">
+      <ScrollView mt="2">
         <VStack space={3}>
           <HStack space={2} alignItems="center">
-            <UserIcon size="16" />
             <Box flex={1}>
               <Text color="gray.300" fontSize="14">
                 Name
@@ -57,7 +47,6 @@ export const UserProfile = ({ navigation }) => {
           </HStack>
 
           <HStack space={2} alignItems="center">
-            <IDCard size="16" />
             <Box flex={1}>
               <Text color="gray.300" fontSize="14">
                 ID Showroom
@@ -71,7 +60,6 @@ export const UserProfile = ({ navigation }) => {
           </HStack>
 
           <HStack space={2} alignItems="center">
-            <Star size={18} />
             <Box flex={1}>
               <Text color="gray.300" fontSize="14">
                 Fav Member

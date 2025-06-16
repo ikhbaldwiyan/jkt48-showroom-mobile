@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { APK_VERSION } from "@env";
-import { useIsFocused, useNavigation, useFocusEffect } from "@react-navigation/native";
+import {
+  useIsFocused,
+  useNavigation,
+  useFocusEffect
+} from "@react-navigation/native";
 import { useProfile } from "../../services/hooks/useProfile";
 import useAuthStore from "../../store/authStore";
 import useUser from "../../utils/hooks/useUser";
@@ -10,7 +13,7 @@ import trackAnalytics from "../../utils/trackAnalytics";
 
 import { TouchableOpacity } from "react-native";
 import { Box, Button, HStack, Text, VStack } from "native-base";
-import { AndroidIcon, Donate, Info } from "../../assets/icon";
+import { Donate, Info } from "../../assets/icon";
 import { UserProfile } from "../../components/molecules/UserTabs/components";
 import Layout from "../../components/templates/Layout";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
@@ -129,46 +132,39 @@ const Profile = () => {
         <HStack mb="4" space={3}>
           <Button
             flex={1}
-            variant="solid"
-            bg="blueLight"
-            borderRadius="10"
+            variant="outline"
+            borderRadius="xl"
             onPress={handleSupport}
             borderColor="primary"
-            borderWidth={2}
+            borderWidth={1}
           >
             <TouchableOpacity onPress={handleSupport}>
               <HStack alignItems="center" space={2}>
-                <Donate color="#24A2B7" size={20} />
-                <Text color="primary" fontSize="15" fontWeight="semibold">
-                  Support Project
+                <Donate size={20} />
+                <Text color="blueGray.100" fontSize="15" fontWeight="medium">
+                  Support
                 </Text>
               </HStack>
             </TouchableOpacity>
           </Button>
           <Button
             flex={1}
-            variant="solid"
-            bgColor="teal"
-            borderRadius="10"
+            variant="outline"
+            borderColor="primary"
+            borderRadius="xl"
             onPress={handleAbout}
           >
             <TouchableOpacity onPress={handleAbout}>
               <HStack alignItems="center" space={1.5}>
                 <Info color="white" />
-                <Text fontSize="15" fontWeight="semibold">
-                  About App
+                <Text color="blueGray.100" fontSize="15" fontWeight="medium">
+                  About
                 </Text>
               </HStack>
             </TouchableOpacity>
           </Button>
         </HStack>
         <Logout />
-        <HStack mt="4" justifyContent="center" space={2} alignItems="center">
-          <AndroidIcon />
-          <Text fontSize={14}>
-            App Version <Text fontWeight="semibold">{APK_VERSION}</Text>
-          </Text>
-        </HStack>
       </Box>
     </Layout>
   );
