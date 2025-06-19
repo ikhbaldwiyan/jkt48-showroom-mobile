@@ -23,7 +23,8 @@ import {
   Text,
   VStack,
   Spinner,
-  IconButton
+  IconButton,
+  CheckIcon
 } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -49,15 +50,10 @@ const HistoryLive = () => {
   const [isSearch, setIsSearch] = useState(false);
   const inputRef = useRef(null);
 
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage
-  } = useHistoryLiveInfinite(type, debouncedSearch);
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useHistoryLiveInfinite(type, debouncedSearch);
 
-  const recentLives = data?.pages?.flatMap(page => page.recents) || [];
+  const recentLives = data?.pages?.flatMap((page) => page.recents) || [];
 
   useLayoutEffect(() => {
     setOptions({
@@ -138,52 +134,40 @@ const HistoryLive = () => {
       title: member.is_official
         ? "JKT48 Official"
         : member.nickname +
-        " - " +
-        moment(live_info.date.start).format("DD MMMM YYYY")
+          " - " +
+          moment(live_info.date.start).format("DD MMMM YYYY")
     });
   };
+
+  const TabButton = ({ type, currentType, label }) => (
+    <Button
+      onPress={() => setType(type)}
+      bg={currentType === type ? "blueLight" : "secondary"}
+      borderRadius="full"
+      variant={currentType === type ? "filled" : "outline"}
+      borderColor="primary"
+      size="md"
+      py="1.5"
+    >
+      <HStack alignItems="center" space={1}>
+        {currentType === type && <CheckIcon size="18px" color="primary" />}
+        <Text
+          fontWeight={currentType === type ? "extrabold" : "medium"}
+          color={currentType === type ? "primary" : "white"}
+        >
+          {label}
+        </Text>
+      </HStack>
+    </Button>
+  );
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="4">
-        <HStack space={1.5} alignItems="center">
-          <Button
-            p="2"
-            flex={1}
-            height="36px"
-            borderRadius={6}
-            bg={type === "all" ? "teal" : "blueGray.500"}
-            onPress={() => setType("all")}
-          >
-            <HStack space={2} alignItems="center" justifyContent="center">
-              <LiveIcon size={18} />
-              <Text fontWeight="semibold">All Live</Text>
-            </HStack>
-          </Button>
-          <Button
-            p="2"
-            flex={1}
-            height="36px"
-            borderRadius={6}
-            bg={type === "showroom" ? "teal" : "blueGray.500"}
-            onPress={() => setType("showroom")}
-          >
-            <HStack space={1} alignItems="center" justifyContent="center">
-              <Text fontWeight="semibold">Showroom</Text>
-            </HStack>
-          </Button>
-          <Button
-            flex={1}
-            p="2"
-            height="36px"
-            borderRadius={6}
-            bg={type === "idn" ? "teal" : "blueGray.500"}
-            onPress={() => setType("idn")}
-          >
-            <HStack space={1} alignItems="center" justifyContent="center">
-              <Text fontWeight="semibold">IDN Live</Text>
-            </HStack>
-          </Button>
+        <HStack space={2} alignItems="center">
+          <TabButton type="all" currentType={type} label="All Platform" />
+          <TabButton type="showroom" currentType={type} label="Showroom" />
+          <TabButton type="idn" currentType={type} label="IDN Live" />
         </HStack>
       </Box>
 

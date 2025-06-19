@@ -133,7 +133,7 @@ const Profile = () => {
           <Button
             flex={1}
             variant="outline"
-            borderRadius="xl"
+            borderRadius="2xl"
             onPress={handleSupport}
             borderColor="primary"
             borderWidth={1}
@@ -151,7 +151,7 @@ const Profile = () => {
             flex={1}
             variant="outline"
             borderColor="primary"
-            borderRadius="xl"
+            borderRadius="2xl"
             onPress={handleAbout}
           >
             <TouchableOpacity onPress={handleAbout}>
