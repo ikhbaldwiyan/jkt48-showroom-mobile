@@ -39,8 +39,8 @@ const TabButton = ({ type, currentType, onPress, label }) => (
       {currentType === type && <CheckIcon color="primary" />}
       <Text
         fontSize="13"
-        fontWeight="semibold"
         color={currentType === type ? "primary" : "white"}
+        fontWeight={currentType === type ? "bold" : "medium"}
       >
         {label}
       </Text>
