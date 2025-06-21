@@ -6,7 +6,7 @@ import useThemeStore from "../../../store/themeStore";
 const CardGradient = ({ children, color, halfCard, isRounded = false }) => {
   const { theme } = useThemeStore();
 
-  const light = ["#004A66", "#009FCB"];
+  const light = ["#24A2B7", "#3B82F6"];
   const dark = ["#4A5568", "#282C34"];
   const lightDark = ["#004A66", "#009FCB"];
 

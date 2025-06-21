@@ -139,27 +139,31 @@ const HistoryLive = () => {
     });
   };
 
-  const TabButton = ({ type, currentType, label }) => (
-    <Button
-      onPress={() => setType(type)}
-      bg={currentType === type ? "blueLight" : "secondary"}
-      borderRadius="full"
-      variant={currentType === type ? "filled" : "outline"}
-      borderColor="primary"
-      size="md"
-      py="1.5"
-    >
-      <HStack alignItems="center" space={1}>
-        {currentType === type && <CheckIcon size="18px" color="primary" />}
-        <Text
-          fontWeight={currentType === type ? "extrabold" : "medium"}
-          color={currentType === type ? "primary" : "white"}
-        >
-          {label}
-        </Text>
-      </HStack>
-    </Button>
-  );
+  const TabButton = ({ type, currentType, label }) => {
+    const isActive = type === currentType;
+
+    return (
+      <Button
+        onPress={() => setType(type)}
+        bg={isActive ? "blueLight" : "secondary"}
+        borderRadius="full"
+        variant={isActive ? "filled" : "outline"}
+        borderColor="primary"
+        size="md"
+        py="1.5"
+      >
+        <HStack alignItems="center" space={1}>
+          {isActive && <CheckIcon size="18px" color="primary" />}
+          <Text
+            fontWeight={isActive ? "bold" : "medium"}
+            color={isActive ? "primary" : "white"}
+          >
+            {label}
+          </Text>
+        </HStack>
+      </Button>
+    );
+  };
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
