@@ -102,7 +102,7 @@ const SupportProject = ({ navigation }) => {
             </Text>
             <Image
               width="100%"
-              height="280"
+              height="240"
               borderRadius="md"
               alt="Donation Image"
               source={{
@@ -122,6 +122,13 @@ const SupportProject = ({ navigation }) => {
               discord jika profile ingin muncul)
             </Text>
           </VStack>
+          <Box flexWrap="wrap" alignItems="center" space={1}>
+            <Text fontSize={12} fontWeight="medium" color="primary">
+              *Jika kamu sudah donasi dan akses fitur belum di berikan, silakan
+              konfirmasi ke admin melalui chat dengan menyertakan ID Showroom
+              kamu untuk mendapatkan badge Donator dan akses fitur Multi Live.
+            </Text>
+          </Box>
           <Text>Terima kasih banyak atas dukungannya guys!</Text>
         </VStack>
         <Divider my="3" />

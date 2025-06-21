@@ -6,6 +6,7 @@ import CardGradient from "../../../atoms/CardGradient";
 import { TouchableOpacity } from "react-native";
 import { useMostWatchIDN } from "../../../../services/hooks/useMostWatchIDN";
 import { formatName } from "../../../../utils/helpers";
+import trackAnalytics from "../../../../utils/trackAnalytics";
 
 export const UserProfile = ({ navigation }) => {
   const { user, profile, userProfile } = useUser();
@@ -26,7 +27,15 @@ export const UserProfile = ({ navigation }) => {
           activeOpacity={0.7}
           onPress={() => navigation.navigate("Edit Profile")}
         >
-          <Box px="2" p="1.5">
+          <Box
+            px="2"
+            onPress={() => {
+              trackAnalytics("edit_profile_click", {
+                username: user?.account_id ?? "Guest"
+              });
+            }}
+            p="1.5"
+          >
             <EditProfile color="white" size="22" />
           </Box>
         </TouchableOpacity>

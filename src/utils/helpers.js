@@ -144,6 +144,7 @@ export const hasMultiRoomAccess = (profile) => {
   if (profile?.is_donator ||
     profile?.is_developer ||
     profile?.top_leaderboard ||
+    profile?.can_farming_multi ||
     profile?.is_multi_live || profile?.can_3_room || profile?.totalWatchLive >= MINIMUM_WATCH_MULTI_lIVE || IS_MULTI_LIVE_RELEASE) {
     return true;
   } else {

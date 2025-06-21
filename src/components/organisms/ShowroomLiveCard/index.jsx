@@ -21,15 +21,31 @@ const ShowroomLiveCard = ({ rooms, isLiveStream, isLoading }) => {
             navigate("LiveStream", { item });
           }}
         >
-          <Image
-            borderRadius={8}
-            source={{
-              uri: cleanImage(item.image_square)
-            }}
-            alt={item.main_name}
-            size="xl"
-            width="100%"
-          />
+          <Box
+            px="1"
+            top="1.5"
+            left="2"
+            zIndex="99"
+            position="absolute"
+            bg="blueGray.600"
+            borderRadius="sm"
+            shadow={6}
+          >
+            <Text fontSize="12" fontWeight="semibold" color="muted.200">
+              {getTimes(item?.started_at)}
+            </Text>
+          </Box>
+          <Box position="relative">
+            <Image
+              source={{
+                uri: cleanImage(item?.image_square)
+              }}
+              alt={item?.profile?.room_url_key ?? item?.room_url_key}
+              size="xl"
+              width="100%"
+              borderRadius="8"
+            />
+          </Box>
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
