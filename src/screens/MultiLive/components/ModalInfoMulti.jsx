@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Button,
-  HStack,
-  Modal,
-  Text,
-  Progress,
-  VStack,
-} from "native-base";
+import { Button, HStack, Modal, Text, Progress, VStack } from "native-base";
 import { Donate, MultiLiveIcon, UnlockIcon } from "../../../assets/icon";
 import { useNavigation } from "@react-navigation/native";
 import { useProfile } from "../../../services/hooks/useProfile";
@@ -17,7 +10,10 @@ const ModalInfoMulti = ({ isOpen, toggleModal }) => {
   const { navigate } = useNavigation();
   const { user } = useAuthStore();
   const { data: profile, refetch } = useProfile(user?.account_id);
-  const { IS_MULTI_LIVE_RELEASE } = useApiConfig();
+  const { IS_MULTI_LIVE_INFO, MINIMUM_WATCH_MULTI_lIVE } = useApiConfig();
+
+  const minimumWatch = MINIMUM_WATCH_MULTI_lIVE;
+  const totalWatchUser = profile?.totalWatchLive ?? 0;
 
   useEffect(() => {
     if (isOpen) {
@@ -40,31 +36,31 @@ const ModalInfoMulti = ({ isOpen, toggleModal }) => {
           <VStack space={4}>
             <Text>
               Buka fitur Multi Live jika kamu sudah menonton live streaming
-              sebanyak <Text fontWeight="bold">150x</Text> atau dapatkan
-              badge donator dengan cara support project JKT48 Showroom Fanmade
+              sebanyak{" "}
+              <Text fontWeight="bold">{MINIMUM_WATCH_MULTI_lIVE}x</Text> atau
+              dapatkan badge donator dengan cara support project JKT48 Showroom
+              Fanmade
             </Text>
             <Progress
               colorScheme="emerald"
-              value={((profile?.totalWatchLive ?? 0) / 150) * 100}
+              value={(totalWatchUser / minimumWatch) * 100}
             />
             <HStack justifyContent="space-between" alignItems="center">
               <HStack space="3" alignItems="center">
-                <Text fontSize="md" >
-                  Total Nonton
-                </Text>
+                <Text fontSize="md">Total Nonton</Text>
                 <Text fontWeight="semibold" fontSize="md">
-                  {profile?.totalWatchLive ?? 0}x dari 150x
+                  {totalWatchUser}x dari {minimumWatch}x
                 </Text>
               </HStack>
               <Text fontWeight="bold" fontSize="lg" color="emerald.500">
-                {Math.round(((profile?.totalWatchLive ?? 0) / 150) * 100)}%
+                {Math.round((totalWatchUser / minimumWatch) * 100)}%
               </Text>
             </HStack>
           </VStack>
         </Modal.Body>
         <Modal.Footer bg="black">
           <Button.Group space={2}>
-            {IS_MULTI_LIVE_RELEASE ? (
+            {IS_MULTI_LIVE_INFO ? (
               <Button
                 size="sm"
                 backgroundColor="emerald.600"

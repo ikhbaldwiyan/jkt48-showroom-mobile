@@ -6,10 +6,12 @@ import DeviceInfo from "react-native-device-info";
 import { TouchableOpacity } from "react-native";
 import { DownloadIcon, History } from "../../../../assets/icon";
 import { getCurrentVersion } from "../../../../services/versions";
+import useApiConfig from "../../../../store/useApiConfig";
 
 const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
   const [latestVersion, setLatestVersion] = useState("");
   const [isNewVersion, setIsNewVersion] = useState(false);
+  const { MINIMUM_WATCH_MULTI_lIVE } = useApiConfig();
 
   const getVersionAndroid = async () => {
     try {
@@ -54,9 +56,10 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
           <Modal.Body bg="secondary">
             <VStack space={3}>
               <Text>- New homepage menu list</Text>
-              <Text>- Add Live Stream SR and IDN Screen</Text>
-              <Text>- Added Multi Live for early acces account</Text>
+              <Text>- Add Live Stream Bottom Menu</Text>
+              <Text>- Added Multi Live for early acces and donator</Text>
               <Text>- Revamp layout for Showroom and IDN Live</Text>
+              <Text>- Redesign Jadwal Theater home card</Text>
               <Text>- Added edit profile screen (Name, Avatar, Bio)</Text>
               <Text>- Show IDN Live Gift list Tab</Text>
               <Text>- Show avatar image on live chat IDN</Text>
@@ -64,10 +67,15 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Redesign user profile layout</Text>
               <Text>- Show All Total Watched SR and IDN on profile</Text>
               <Text>- Update Realtime Floating live stream notif</Text>
-              <Text>- Redesign Jadwal Theater home card</Text>
               <Text>- Show active today theater schedule</Text>
               <Text>- Added Multi Live Showroom and IDN Live</Text>
-              <Text>- Early access Multi Live feature for user reach Total Watch 150x</Text>
+              <Text>
+                - Early access Multi Live feature for user reach Total Watch{" "}
+                {MINIMUM_WATCH_MULTI_lIVE}x
+              </Text>
+              <Text>
+                - Show popup info if internet connection offline
+              </Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">

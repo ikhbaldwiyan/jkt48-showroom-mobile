@@ -15,7 +15,9 @@ const useApiConfig = create(
       PODIUM_API,
       ROOM_LIST_API,
       DONATION_IMG: "",
+      MINIMUM_WATCH_MULTI_lIVE: 150,
       IS_MULTI_LIVE_RELEASE: false,
+      IS_MULTI_LIVE_INFO: false,
 
       // Method to update the API configuration
       setApiConfig: (config) => set(config),

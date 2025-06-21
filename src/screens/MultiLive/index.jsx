@@ -68,7 +68,7 @@ const MultiLive = ({ navigation }) => {
             <HStack alignItems="center" space={1}>
               <Info size="22" color="white" />
               <Text fontWeight="medium" fontSize={13}>
-                Buka fitur Multi Live Showroom dan IDN cek disini
+                Buka fitur Multi Live cek disini
               </Text>
             </HStack>
           </Box>
@@ -102,7 +102,7 @@ const MultiLive = ({ navigation }) => {
           />
         </>
       )}
-      {showroomLive.length === 0 && idnLive?.length === 0 && <HistoryLive />}
+      {showroomLive?.length === 0 && idnLive?.length === 0 && <HistoryLive />}
       <ModalInfoMulti
         isOpen={infoModal}
         toggleModal={() => setInfoModal(!infoModal)}

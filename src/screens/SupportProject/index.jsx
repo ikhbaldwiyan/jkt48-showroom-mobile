@@ -91,24 +91,24 @@ const SupportProject = ({ navigation }) => {
         </Text>
         <VStack space={3}>
           <Text>Dengan mendukung project ini, kalian akan mendapatkan:</Text>
-          <Image
-            width="100%"
-            height="280"
-            borderRadius="md"
-            alt="Donation Image"
-            source={{
-              uri: "https://res.cloudinary.com/dkkagbzl4/image/upload/v1743871040/zg6mjjisj1vkkxeipvng.jpg"
-            }}
-          />
-
           <VStack space={2} pl="3">
             <Text>
-              - <Text fontWeight="bold">Early Akses</Text> Fitur Multi Live IDN dan Showroom.
+              - <Text fontWeight="bold">Early Akses</Text> Fitur Multi Live IDN
+              dan Showroom.
             </Text>
             <Text>
               - <Text fontWeight="bold">Special Badge Donator</Text> akan
               ditampilkan di profile dan detail akun showroom kamu.
             </Text>
+            <Image
+              width="100%"
+              height="280"
+              borderRadius="md"
+              alt="Donation Image"
+              source={{
+                uri: "https://res.cloudinary.com/dkkagbzl4/image/upload/v1750511699/kor9bgv9atjevprvywzo.jpg"
+              }}
+            />
             <Text>
               - <Text fontWeight="bold">Role Donator eksklusif</Text> di server
               Discord kami.
@@ -118,7 +118,8 @@ const SupportProject = ({ navigation }) => {
               <Text fontWeight="bold">
                 Foto profil dan username discord kalian
               </Text>{" "}
-              akan ditampilkan di halaman support project ini.
+              akan ditampilkan di halaman support project ini. (wajib join grup
+              discord jika profile ingin muncul)
             </Text>
           </VStack>
           <Text>Terima kasih banyak atas dukungannya guys!</Text>

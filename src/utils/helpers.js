@@ -1,3 +1,5 @@
+import useApiConfig from "../store/useApiConfig";
+
 export const cleanImage = (image, isDetail) => {
   return isDetail
     ? image?.replace("m.jpeg", "l.jpeg")
@@ -137,10 +139,12 @@ export const monthNames = [
 ];
 
 export const hasMultiRoomAccess = (profile) => {
+  const { MINIMUM_WATCH_MULTI_lIVE, IS_MULTI_LIVE_RELEASE } = useApiConfig.getState();
+
   if (profile?.is_donator ||
     profile?.is_developer ||
     profile?.top_leaderboard ||
-    profile?.is_multi_live || profile?.can_3_room || profile?.totalWatchLive >= 150) {
+    profile?.is_multi_live || profile?.can_3_room || profile?.totalWatchLive >= MINIMUM_WATCH_MULTI_lIVE || IS_MULTI_LIVE_RELEASE) {
     return true;
   } else {
     return false;
