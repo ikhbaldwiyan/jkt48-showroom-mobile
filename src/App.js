@@ -9,6 +9,7 @@ import { LogBox, PermissionsAndroid } from "react-native";
 import { useEffect, useRef } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import fetchApiConfig from "./utils/fetchApiConfig";
+import InternetStatusInfo from "./components/atoms/InternetStatus";
 
 const App = () => {
   async function requestUserPermission() {
@@ -63,6 +64,7 @@ const App = () => {
         }}
       >
         <NativeBaseProvider theme={theme}>
+          <InternetStatusInfo />
           <Navigation />
         </NativeBaseProvider>
       </NavigationContainer>

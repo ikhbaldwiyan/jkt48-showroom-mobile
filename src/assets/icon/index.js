@@ -69,6 +69,7 @@ import GridFill from "./GridFill";
 import GridOutline from "./GridOutline";
 import UnlockIcon from "./UnlockIcon";
 import EditProfile from "./EditProfile";
+import OfflineIcon from "./OfflineIcon";
 
 export {
   LogoIcon,
@@ -142,4 +143,5 @@ export {
   GridOutline,
   UnlockIcon,
   EditProfile,
+  OfflineIcon,
 };
