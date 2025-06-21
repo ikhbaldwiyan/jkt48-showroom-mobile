@@ -20,6 +20,18 @@ export const updateAvatar = (params) => {
   return apiAuth.post(ENDPOINTS.USER.UPDATE_AVATAR, params);
 };
 
+export const updateProfile = (payload) => {
+  return apiAuth.post(ENDPOINTS.USER.UPDATE_PROFILE, payload);
+};
+
+export const updateUserProfile = (payload) => {
+  return apiUser.put(ENDPOINTS.USER.UPDATE_USER_PROFILE + payload?.user_id, payload);
+};
+
+export const getProfile = (payload) => {
+  return apiAuth.post(ENDPOINTS.USER.USER_PROFILE, payload);
+};
+
 export const getMostWatchIDN = (userId) => {
   return apiAdmin.get(ENDPOINTS.USER.MOST_WATCH_IDN + userId);
 };

@@ -1,13 +1,24 @@
 import React from "react";
 import { Linking } from "react-native";
-import { KebabMenu, PipIcon, WatchIcon } from "../../../assets/icon";
-import { HStack, Menu, Pressable, Text } from "native-base";
 import { usePipMode } from "../../../utils/hooks";
 import useIDNLiveStore from "../../../store/idnLiveStore";
+import { useNavigation } from "@react-navigation/native";
+import useAuthStore from "../../../store/authStore";
+import { hasMultiRoomAccess } from "../../../utils/helpers";
+
+import { HStack, Menu, Pressable, Text } from "native-base";
+import {
+  KebabMenu,
+  PipIcon,
+  UsersIconFill,
+  WatchIcon
+} from "../../../assets/icon";
 
 const MenuIDN = () => {
+  const { userProfile } = useAuthStore();
   const { profile } = useIDNLiveStore();
   const { enterPipMode } = usePipMode();
+  const navigation = useNavigation();
 
   const customPipMode = () => {
     if (profile?.user?.name === "JKT48") {
@@ -27,7 +38,16 @@ const MenuIDN = () => {
       key: "idn-live",
       title: "Watch In IDN App",
       icon: <WatchIcon />
-    }
+    },
+    ...(hasMultiRoomAccess(userProfile)
+      ? [
+          {
+            key: "multi-live",
+            title: "Open Multi Live IDN",
+            icon: <UsersIconFill color="#21252B" />
+          }
+        ]
+      : [])
   ];
 
   const handleMenu = (key) => {
@@ -39,6 +59,9 @@ const MenuIDN = () => {
         Linking.openURL(
           `https://www.idn.app/${profile?.user?.username}/live/${profile?.slug}`
         );
+        break;
+      case "multi-live":
+        navigation.replace("MultiIDN");
         break;
       default:
         break;

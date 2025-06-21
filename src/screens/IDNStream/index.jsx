@@ -104,10 +104,7 @@ const IDNStream = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle:
-        profile?.user?.name !== "JKT48"
-          ? formatName(profile?.user?.name, true)
-          : profile?.user?.name,
+      headerTitle: formatName(profile?.user?.name, true),
       headerShown: isPipMode || isFullScreen ? false : true,
     });
   }, [profile, isFullScreen, isPipMode]);
@@ -125,7 +122,7 @@ const IDNStream = () => {
   }, [params.item, profile, userProfile, url]);
 
   const handleEndLive = () => {
-    navigation.navigate("Main");
+    navigation.replace("IDNLives");
     toast.show({
       render: () => {
         return (
@@ -176,8 +173,8 @@ const IDNStream = () => {
           isFullScreen
             ? Dimensions.get("window").height
             : isPipMode
-            ? 180
-            : customHeight
+              ? 180
+              : customHeight
         }
       >
         {url ? (

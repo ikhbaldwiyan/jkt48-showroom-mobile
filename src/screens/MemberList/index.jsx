@@ -79,48 +79,51 @@ const MemberList = () => {
     }
   }, [isSearch]);
 
+  const TabButton = ({ type, currentType, label }) => (
+    <Button
+      onPress={() => setActiveTab(type)}
+      bg={currentType === type ? "blueLight" : "secondary"}
+      borderRadius="2xl"
+      variant={currentType === type ? "filled" : "outline"}
+      borderColor="primary"
+      size="md"
+      py="1.5"
+      flex={1}
+    >
+      <HStack alignItems="center" space={2}>
+        {type === "regular" && (
+          <Dashboard
+            size="18px"
+            color={currentType === type ? "#24A2B7" : "white"}
+          />
+        )}
+        {type === "trainee" && (
+          <GraduateIcon
+            size="16px"
+            color={currentType === type ? "#24A2B7" : "white"}
+          />
+        )}
+        <Text
+          fontWeight={currentType === type ? "extrabold" : "medium"}
+          color={currentType === type ? "primary" : "white"}
+        >
+          {label}
+        </Text>
+      </HStack>
+    </Button>
+  );
+
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
         <HStack space={1.5} mb="4">
-          <Button
-            p="2"
-            height="36px"
-            bg={activeTab === "regular" ? "primary" : "teal"}
-            onPress={() => setActiveTab("regular")}
-            flex={1}
-            borderRadius={6}
-          >
-            <HStack space={2} alignItems="center">
-              <Dashboard />
-              <Text fontWeight="semibold">Regular</Text>
-            </HStack>
-          </Button>
-          <Button
-            p="2"
-            height="36px"
-            bg={activeTab === "trainee" ? "primary" : "teal"}
-            onPress={() => setActiveTab("trainee")}
-            flex={1}
-            borderRadius={6}
-          >
-            <HStack space={2} alignItems="center">
-              <GraduateIcon size={15} />
-              <Text fontWeight="semibold">Trainee</Text>
-            </HStack>
-          </Button>
+          <TabButton label="Regular" type="regular" currentType={activeTab} />
+          <TabButton label="Trainee" type="trainee" currentType={activeTab} />
         </HStack>
-        {searchQuery !== "" ? (
-          <>
-            <RoomRegular searchQuery={searchQuery} refreshing={refreshing} />
-            <RoomTrainee searchQuery={searchQuery} refreshing={refreshing} />
-          </>
-        ) : activeTab === "regular" ? (
-          <RoomRegular searchQuery={searchQuery} refreshing={refreshing} />
-        ) : activeTab === "trainee" ? (
-          <RoomTrainee searchQuery={searchQuery} refreshing={refreshing} />
+        {activeTab === "regular" ? (
+          <RoomRegular refreshing={refreshing} searchQuery={searchQuery} />
         ) : (
-          <Text>Members Not found</Text>
+          <RoomTrainee refreshing={refreshing} searchQuery={searchQuery} />
         )}
       </Box>
     </Layout>

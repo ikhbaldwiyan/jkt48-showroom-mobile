@@ -6,10 +6,12 @@ import DeviceInfo from "react-native-device-info";
 import { TouchableOpacity } from "react-native";
 import { DownloadIcon, History } from "../../../../assets/icon";
 import { getCurrentVersion } from "../../../../services/versions";
+import useApiConfig from "../../../../store/useApiConfig";
 
 const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
   const [latestVersion, setLatestVersion] = useState("");
   const [isNewVersion, setIsNewVersion] = useState(false);
+  const { MINIMUM_WATCH_MULTI_lIVE } = useApiConfig();
 
   const getVersionAndroid = async () => {
     try {
@@ -42,7 +44,7 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
         </TouchableOpacity>
       )}
       <Modal isOpen={modal} size="xl" onClose={toggleModal}>
-        <Modal.Content maxH="500">
+        <Modal.Content borderWidth={1} borderColor="white" maxH="550">
           <Modal.Header bg="primary">
             <HStack space={2} alignItems="center">
               <History size={24} />
@@ -53,15 +55,27 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
           </Modal.Header>
           <Modal.Body bg="secondary">
             <VStack space={3}>
-              <Text>- Added room profile gen 13 member</Text>
-              <Text>- New menu Leaderboard User</Text>
-              <Text>- Added user info modal in home header</Text>
-              <Text>- Added Top Leaderboard user badge</Text>
-              <Text>- Show special donator badge in user profile</Text>
-              <Text>- Adjust wording login error message</Text>
-              <Text>- Show info podium tab popover</Text>
-              <Text>- Add top donation saweria image</Text>
-              <Text>- Show Favorite Member on profile modal</Text>
+              <Text>- New homepage menu list</Text>
+              <Text>- Add Live Stream Bottom Menu</Text>
+              <Text>- Added Multi Live for early acces and donator</Text>
+              <Text>- Revamp layout for Showroom and IDN Live</Text>
+              <Text>- Redesign Jadwal Theater home card</Text>
+              <Text>- Added edit profile screen (Name, Avatar, Bio)</Text>
+              <Text>- Show IDN Live Gift list Tab</Text>
+              <Text>- Show avatar image on live chat IDN</Text>
+              <Text>- Revamp edit avatar showroom</Text>
+              <Text>- Redesign user profile layout</Text>
+              <Text>- Show All Total Watched SR and IDN on profile</Text>
+              <Text>- Update Realtime Floating live stream notif</Text>
+              <Text>- Show active today theater schedule</Text>
+              <Text>- Added Multi Live Showroom and IDN Live</Text>
+              <Text>
+                - Early access Multi Live feature for user reach Total Watch{" "}
+                {MINIMUM_WATCH_MULTI_lIVE}x
+              </Text>
+              <Text>
+                - Show popup info if internet connection offline
+              </Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">

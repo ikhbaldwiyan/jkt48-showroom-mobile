@@ -84,7 +84,7 @@ const Login = ({ navigation }) => {
         setSession(data.session);
         setProfile(data.profile);
         getSessionUser(data);
-        navigation.replace("Main");
+        navigation.replace("SplashScreen");
 
         toast.show({
           render: () => {
@@ -255,6 +255,7 @@ const Login = ({ navigation }) => {
             background="primary"
             onPress={handleLogin}
             isLoading={loading}
+            isLoadingText="Logging in"
           >
             <HStack alignItems="center" space="1">
               <LoginIcon size={24} />

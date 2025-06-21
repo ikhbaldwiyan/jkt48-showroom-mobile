@@ -1,35 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Box, HStack, Image, Text, VStack, Skeleton } from "native-base"; // Import Skeleton from NativeBase
+import React, { useEffect } from "react";
+import { Box, HStack, Image, Text, VStack, Center } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { cleanImage, formatName } from "../../../utils/helpers";
-import { ROOMS } from "../../../services";
-import { LiveIcon } from "../../../assets/icon";
-import { TouchableOpacity, useWindowDimensions } from "react-native";
+import { Info, LiveIcon } from "../../../assets/icon";
+import { TouchableOpacity } from "react-native";
+import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
 import SkeletonRoomList from "../../atoms/Skeleteon/SkeletonRoomList";
+import { useMemberList } from "../../../services/hooks/useMemberList";
 
 const RoomTrainee = ({ refreshing, searchQuery }) => {
-  const [rooms, setRooms] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
   const { navigate } = useNavigation();
   const { width } = useWindowDimensions();
   const columnCount = width > 600 ? 3 : 2;
 
-  useEffect(() => {
-    async function getRoomList() {
-      setLoading(true); // Set loading to true when fetching data
-      try {
-        const response = await ROOMS.getRoomTrainee();
-        setRooms(response.data);
-      } catch (error) {
-        console.error("Error fetching rooms:", error);
-      } finally {
-        setLoading(false); // Set loading to false after data is fetched
-      }
-    }
-    getRoomList();
-  }, [refreshing]);
+  const { data: rooms = [], isLoading } = useMemberList({
+    type: "trainee",
+    searchQuery
+  });
 
-  const filteredRooms = rooms.filter(
+  useEffect(() => {
+    if (refreshing) {
+      refetch()
+    }
+  }, [refreshing])
+
+  const filteredRooms = rooms?.filter(
     (room) =>
       room.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
       room.main_name?.toLowerCase().includes(searchQuery?.toLowerCase())
@@ -54,8 +49,8 @@ const RoomTrainee = ({ refreshing, searchQuery }) => {
             source={{ uri: cleanImage(room.image_square) }}
             alt={room?.main_name ?? room?.name}
             size="md"
-            width={width / columnCount - 20} // Adjust width based on column count and screen width
-            height={(width / columnCount - 16) * 0.85} // Maintain aspect ratio
+            width={width / columnCount - 20}
+            height={(width / columnCount - 16) * 0.85}
           />
           {room?.is_onlive && (
             <Box
@@ -101,11 +96,24 @@ const RoomTrainee = ({ refreshing, searchQuery }) => {
     return columns;
   };
 
-  return (
-    <Box>
-      {loading ? <SkeletonRoomList /> : <HStack>{renderRoomList()}</HStack>}
-    </Box>
-  );
+  if (isLoading) {
+    return <SkeletonRoomList />;
+  }
+
+  if (searchQuery && filteredRooms.length === 0) {
+    return (
+      <Center flex={1} py={10}>
+        <VStack space={4} alignItems="center">
+          <Info size={48} color="#666" />
+          <Text fontSize="lg" textAlign="center">
+            Member tidak ditemukan
+          </Text>
+        </VStack>
+      </Center>
+    );
+  }
+
+  return <HStack>{renderRoomList()}</HStack>;
 };
 
 export default RoomTrainee;

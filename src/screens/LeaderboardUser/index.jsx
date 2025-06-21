@@ -44,7 +44,7 @@ const LeaderboardUser = ({ navigation }) => {
     navigation.setOptions({
       headerTitle: "Top Leaderboard " + monthName,
       headerRight: () => (
-        <Box mr="5">
+        <Box mr="2">
           <Popover
             trigger={(triggerProps) => (
               <TouchableOpacity {...triggerProps} activeOpacity={0.7}>
@@ -65,7 +65,8 @@ const LeaderboardUser = ({ navigation }) => {
                   <Text fontWeight="semibold">JKT48 Showroom Fanmade</Text>,
                   Jika kamu masuk ke Top 10 maka akan mendapatkan badge{" "}
                   <Text fontWeight="semibold">"Top Leaderboard"</Text> yang akan
-                  di tampilkan di profil kamu.
+                  di tampilkan di profil kamu dan juga mendapatkan early akses
+                  ke fitur <Text fontWeight="semibold">Multi Live</Text>.
                 </Text>
               </Popover.Body>
             </Popover.Content>
@@ -187,7 +188,7 @@ const LeaderboardUser = ({ navigation }) => {
 
   const renderSkeletonLoading = (
     <>
-      {[...Array(6)].map((_, index) => (
+      {[...Array(7)].map((_, index) => (
         <SkeletonAvatarList key={index} />
       ))}
     </>

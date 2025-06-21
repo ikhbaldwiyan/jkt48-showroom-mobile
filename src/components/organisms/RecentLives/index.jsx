@@ -11,25 +11,15 @@ import {
   TimesFill,
   UsersFill
 } from "../../../assets/icon";
-import { ROOMS } from "../../../services";
 import { formatViews, getLiveDurationMinutes } from "../../../utils/helpers";
 import TimeAgo from "react-native-timeago";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
 import { useAppStateChange } from "../../../utils/hooks";
+import { useHistoryLive } from "../../../services/hooks/useHistoryLive";
 
 const RecentLives = ({ refreshing }) => {
   const navigation = useNavigation();
-
-  const fetchRecentLive = async () => {
-    const response = await ROOMS.getRecentLives();
-    return response?.data?.recents;
-  };
-
-  const { data: recentLives = [], refetch } = useQuery({
-    queryKey: ["recentLives"],
-    queryFn: fetchRecentLive
-  });
+  const { data: historyLive = [], refetch } = useHistoryLive("all", "", 1);
 
   // Refetch when the screen comes into focus
   useFocusEffect(
@@ -53,7 +43,7 @@ const RecentLives = ({ refreshing }) => {
   useAppStateChange(refetch);
 
   return (
-    recentLives.length > 0 && (
+    historyLive?.recents?.length > 0 && (
       <View>
         <HStack alignItems="center" justifyContent="space-between">
           <Text fontSize="2xl" mb="3" fontWeight="semibold">
@@ -69,7 +59,7 @@ const RecentLives = ({ refreshing }) => {
           </TouchableOpacity>
         </HStack>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {recentLives?.map((log, idx) => {
+          {historyLive?.recents?.map((log, idx) => {
             const { member, live_info } = log;
             return (
               <Box w="265" mr="3" key={idx}>
@@ -81,8 +71,8 @@ const RecentLives = ({ refreshing }) => {
                       title: member?.is_official
                         ? "JKT48 Official"
                         : member?.nickname +
-                          " - " +
-                          moment(live_info?.date.start).format("DD MMMM YYYY")
+                        " - " +
+                        moment(live_info?.date.start).format("DD MMMM YYYY")
                     })
                   }
                 >

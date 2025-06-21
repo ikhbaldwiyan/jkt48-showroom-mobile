@@ -62,6 +62,14 @@ import ThropyIconOutline from "./ThropyIconOutline";
 import KebabMenu from "./KebabMenu";
 import WatchIcon from "./WatchIcon";
 import Medal from './Medal';
+import MultiLiveIcon from "./MultiLive";
+import NoLive from "./NoLive";
+import IDNLiveIcon from "./IDNLiveIcon";
+import GridFill from "./GridFill";
+import GridOutline from "./GridOutline";
+import UnlockIcon from "./UnlockIcon";
+import EditProfile from "./EditProfile";
+import OfflineIcon from "./OfflineIcon";
 
 export {
   LogoIcon,
@@ -128,4 +136,12 @@ export {
   WatchIcon,
   ThropyIconOutline,
   Medal,
+  MultiLiveIcon,
+  NoLive,
+  IDNLiveIcon,
+  GridFill,
+  GridOutline,
+  UnlockIcon,
+  EditProfile,
+  OfflineIcon,
 };

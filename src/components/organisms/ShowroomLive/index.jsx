@@ -1,33 +1,16 @@
 import React, { useCallback, useEffect } from "react";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { Box, Divider, HStack, Image, Text, ScrollView } from "native-base";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { Box, Divider, HStack, Text } from "native-base";
 import { TouchableOpacity } from "react-native";
-import { useQuery } from "@tanstack/react-query";
-import { ROOMS } from "../../../services";
-import { cleanImage, formatName, getTimes } from "../../../utils/helpers";
-import Views from "../../atoms/Views";
-import { RightArrow, TimesFill } from "../../../assets/icon";
+import { RightArrow } from "../../../assets/icon";
+import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
 import { useAppStateChange } from "../../../utils/hooks";
+import ShowroomLiveCard from "../ShowroomLiveCard";
 
 const ShowroomLive = ({ refreshing }) => {
   const { navigate } = useNavigation();
+  const { data: rooms = [], refetch, isLoading } = useShowroomLive();
 
-  const fetchRoomLive = async () => {
-    try {
-      const response = await ROOMS.getRoomLive();
-      return response?.data.data;
-    } catch (error) {
-      console.log("Error fetching room live:", error);
-    }
-  };
-
-  // Use the new React Query v5 signature
-  const { data: rooms = [], refetch } = useQuery({
-    queryKey: ["roomLive"],
-    queryFn: fetchRoomLive
-  });
-
-  // Refetch when the screen comes into focus
   useFocusEffect(
     useCallback(() => {
       refetch();
@@ -38,18 +21,17 @@ const ShowroomLive = ({ refreshing }) => {
     refetch();
   }, [refreshing]);
 
-  // Handle app state changes (background -> foreground)
   useAppStateChange(refetch);
 
   return (
     rooms?.length > 0 && (
-      <Box mb="4">
-        <HStack alignItems="center" justifyContent="space-between">
+      <Box mb="3">
+        <HStack mb="1" alignItems="center" justifyContent="space-between">
           <Text color="white" fontSize="2xl" fontWeight="semibold">
             Showroom Live
           </Text>
           {rooms.length > 2 && (
-            <TouchableOpacity onPress={() => navigate("RoomLives")}>
+            <TouchableOpacity onPress={() => navigate("ShowroomLive")}>
               <HStack space={2} alignItems="center">
                 <Text color="white" fontSize="sm">
                   Semua live
@@ -59,58 +41,11 @@ const ShowroomLive = ({ refreshing }) => {
             </TouchableOpacity>
           )}
         </HStack>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {rooms?.map((item, idx) => (
-            <Box key={idx} mt={4} mr="3">
-              <TouchableOpacity
-                activeOpacity={0.6}
-                onPress={() => {
-                  navigate("LiveStream", { item });
-                }}
-              >
-                <Image
-                  borderRadius={8}
-                  source={{ uri: cleanImage(item.image) }}
-                  alt={item.main_name}
-                  size="xl"
-                  width={200}
-                />
-                <Box
-                  borderTopLeftRadius="8"
-                  borderBottomRightRadius="8"
-                  position="absolute"
-                  background="primary"
-                  py="1"
-                  px="2"
-                >
-                  <HStack space={1} alignItems="center">
-                    <TimesFill />
-                    <Text>{getTimes(item?.started_at)}</Text>
-                  </HStack>
-                </Box>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.6}
-                onPress={() => {
-                  navigate("LiveStream", { item });
-                }}
-              >
-                <HStack alignItems="center" mt="1">
-                  <Text
-                    fontSize="md"
-                    mr="2"
-                    fontWeight="semibold"
-                    color="white"
-                    py="2"
-                  >
-                    {item?.room_url_key === "officialJKT48" ? "JKT48 Offical" : formatName(item?.room_url_key)}
-                  </Text>
-                  <Views number={item?.view_num} />
-                </HStack>
-              </TouchableOpacity>
-            </Box>
-          ))}
-        </ScrollView>
+        <ShowroomLiveCard
+          rooms={rooms}
+          isLiveStream={false}
+          isLoading={isLoading}
+        />
         <Divider mt="3" />
       </Box>
     )

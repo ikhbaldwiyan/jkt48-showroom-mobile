@@ -1,41 +1,40 @@
-import { Box, Button, HStack, Text } from "native-base";
+import { HStack, Switch, Text } from "native-base";
 import React from "react";
-import { TouchableOpacity } from "react-native";
 import { Moon, Sun } from "../../../assets/icon";
 import useThemeStore from "../../../store/themeStore";
 import useUser from "../../../utils/hooks/useUser";
 import trackAnalytics from "../../../utils/trackAnalytics";
 
-const Theme = ({ isButton }) => {
+const Theme = () => {
   const { userProfile } = useUser();
   const { mode, setDarkMode, setLightMode } = useThemeStore();
 
+  const isDark = mode === "dark";
+
   const handleChangeTheme = () => {
-    mode === "light" ? setDarkMode() : setLightMode();
+    isDark ? setLightMode() : setDarkMode();
 
     trackAnalytics("change_theme", {
       username: userProfile?.name ?? "Guest",
-      theme: mode === "light" ? "dark" : "light"
+      theme: isDark ? "light" : "dark"
     });
   };
 
-  return isButton ? (
-    <Button
-      bg={mode == "light" ? "secondary" : "primary"}
-      onPress={handleChangeTheme}
-      borderRadius="lg"
-    >
-      <TouchableOpacity onPress={handleChangeTheme}>
-        <HStack space={2}>
-          <Box>{mode === "dark" ? <Moon /> : <Sun />}</Box>
-          <Text fontWeight="bold">{mode === "dark" ? "Dark" : "Light"}</Text>
-        </HStack>
-      </TouchableOpacity>
-    </Button>
-  ) : (
-    <TouchableOpacity onPress={handleChangeTheme}>
-      <Box mr="2">{mode === "dark" ? <Moon /> : <Sun />}</Box>
-    </TouchableOpacity>
+  return (
+    <HStack mt="2" justifyContent="space-between" alignItems="center">
+      <Text>Live Theme</Text>
+      <HStack space={1.5} alignItems="center">
+        {isDark ? <Moon /> : <Sun />}
+        <Text fontWeight="bold">{isDark ? "Dark" : "Light"}</Text>
+        <Switch
+          size="lg"
+          isChecked={isDark}
+          onToggle={handleChangeTheme}
+          onTrackColor="blueGray.500"
+          offTrackColor="coolGray.300"
+        />
+      </HStack>
+    </HStack>
   );
 };
 

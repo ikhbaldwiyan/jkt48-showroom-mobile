@@ -1,4 +1,10 @@
 import moment from "moment";
+import debounce from "lodash/debounce";
+import { useNavigation } from "@react-navigation/native";
+import { useRefresh } from "../../utils/hooks/useRefresh";
+import { useHistoryLiveInfinite } from "../../services/hooks/useHistoryLive";
+import { formatViews, getLiveDurationMinutes } from "../../utils/helpers";
+
 import React, {
   useEffect,
   useLayoutEffect,
@@ -17,7 +23,8 @@ import {
   Text,
   VStack,
   Spinner,
-  IconButton
+  IconButton,
+  CheckIcon
 } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -31,26 +38,22 @@ import {
   TimesFill,
   UsersFill
 } from "../../assets/icon";
-import { ROOMS } from "../../services";
-import { formatViews, getLiveDurationMinutes } from "../../utils/helpers";
-import TimeAgo from "react-native-timeago";
-import { useNavigation } from "@react-navigation/native";
 import Layout from "../../components/templates/Layout";
-import { useRefresh } from "../../utils/hooks/useRefresh";
-import debounce from "lodash/debounce";
+import TimeAgo from "react-native-timeago";
 
 const HistoryLive = () => {
-  const [recentLives, setRecentLives] = useState([]);
   const { navigate, setOptions } = useNavigation();
   const { refreshing, onRefresh } = useRefresh();
   const [type, setType] = useState("all");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [allLoaded, setAllLoaded] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const inputRef = useRef(null);
+
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useHistoryLiveInfinite(type, debouncedSearch);
+
+  const recentLives = data?.pages?.flatMap((page) => page.recents) || [];
 
   useLayoutEffect(() => {
     setOptions({
@@ -107,66 +110,23 @@ const HistoryLive = () => {
     }
   }, [isSearch]);
 
-  useEffect(() => {
-    loadLives();
-  }, [refreshing, type, debouncedSearch, page]);
-
-  const loadLives = async () => {
-    try {
-      if (loadingMore || allLoaded) return;
-
-      setLoadingMore(true);
-      const response = await ROOMS.getHistoryLives(type, debouncedSearch, page);
-
-      if (response.data.recents.length > 0) {
-        setRecentLives((prevLives) => [...prevLives, ...response.data.recents]);
-      } else {
-        setAllLoaded(true); // No more items to load
-      }
-
-      setLoadingMore(false);
-    } catch (error) {
-      console.log(error);
-      setLoadingMore(false);
-    }
-  };
-
   const debouncedChangeHandler = useCallback(
     debounce((value) => {
       setDebouncedSearch(value);
-    }, 500),
+    }, 400),
     []
   );
 
   const handleSearch = (query) => {
     setSearch(query);
-    setPage(1); // Reset page
-    setRecentLives([]); // Clear current list
-    setAllLoaded(false); // Reset allLoaded status
     debouncedChangeHandler(query);
   };
 
   const handleLoadMore = () => {
-    if (!loadingMore && !allLoaded) {
-      setPage((prevPage) => prevPage + 1);
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   };
-
-  // Reset the lives data when the `type` changes
-  useEffect(() => {
-    const resetLives = async () => {
-      try {
-        setPage(1);
-        setAllLoaded(false);
-        const response = await ROOMS.getHistoryLives(type, debouncedSearch, 1);
-        setRecentLives(response.data.recents);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    resetLives();
-  }, [type, refreshing]);
 
   const handleDetail = (member, live_info, log) => {
     navigate("HistoryDetail", {
@@ -179,47 +139,39 @@ const HistoryLive = () => {
     });
   };
 
+  const TabButton = ({ type, currentType, label }) => {
+    const isActive = type === currentType;
+
+    return (
+      <Button
+        onPress={() => setType(type)}
+        bg={isActive ? "blueLight" : "secondary"}
+        borderRadius="full"
+        variant={isActive ? "filled" : "outline"}
+        borderColor="primary"
+        size="md"
+        py="1.5"
+      >
+        <HStack alignItems="center" space={1}>
+          {isActive && <CheckIcon size="18px" color="primary" />}
+          <Text
+            fontWeight={isActive ? "bold" : "medium"}
+            color={isActive ? "primary" : "white"}
+          >
+            {label}
+          </Text>
+        </HStack>
+      </Button>
+    );
+  };
+
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="4">
-        <HStack space={1.5} alignItems="center">
-          <Button
-            p="2"
-            flex={1}
-            height="36px"
-            borderRadius={6}
-            bg={type === "all" ? "teal" : "blueGray.500"}
-            onPress={() => setType("all")}
-          >
-            <HStack space={2} alignItems="center" justifyContent="center">
-              <LiveIcon size={18} />
-              <Text fontWeight="semibold">All Live</Text>
-            </HStack>
-          </Button>
-          <Button
-            p="2"
-            flex={1}
-            height="36px"
-            borderRadius={6}
-            bg={type === "showroom" ? "teal" : "blueGray.500"}
-            onPress={() => setType("showroom")}
-          >
-            <HStack space={1} alignItems="center" justifyContent="center">
-              <Text fontWeight="semibold">Showroom</Text>
-            </HStack>
-          </Button>
-          <Button
-            flex={1}
-            p="2"
-            height="36px"
-            borderRadius={6}
-            bg={type === "idn" ? "teal" : "blueGray.500"}
-            onPress={() => setType("idn")}
-          >
-            <HStack space={1} alignItems="center" justifyContent="center">
-              <Text fontWeight="semibold">IDN Live</Text>
-            </HStack>
-          </Button>
+        <HStack space={2} alignItems="center">
+          <TabButton type="all" currentType={type} label="All Platform" />
+          <TabButton type="showroom" currentType={type} label="Showroom" />
+          <TabButton type="idn" currentType={type} label="IDN Live" />
         </HStack>
       </Box>
 
@@ -347,7 +299,13 @@ const HistoryLive = () => {
         </VStack>
       )}
 
-      {!allLoaded && !loadingMore && recentLives.length > 0 && (
+      {isLoading && (
+        <HStack justifyContent="center" mt="5" my="4">
+          <Spinner color="white" size="lg" />
+        </HStack>
+      )}
+
+      {hasNextPage && !isFetchingNextPage && recentLives.length > 0 && (
         <Button
           mt="4"
           variant="filled"
@@ -358,13 +316,13 @@ const HistoryLive = () => {
           <HStack alignItems="center" space={2}>
             <LoadingIcon />
             <Text fontWeight="bold" fontSize="14">
-              Load More History
+              Lihat History Live Lainnya
             </Text>
           </HStack>
         </Button>
       )}
 
-      {loadingMore && (
+      {isFetchingNextPage && (
         <HStack justifyContent="center" mt="5" my="4">
           <Spinner color="white" size="lg" />
         </HStack>

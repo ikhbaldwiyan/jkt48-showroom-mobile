@@ -1,3 +1,5 @@
+import useApiConfig from "../store/useApiConfig";
+
 export const cleanImage = (image, isDetail) => {
   return isDetail
     ? image?.replace("m.jpeg", "l.jpeg")
@@ -6,20 +8,30 @@ export const cleanImage = (image, isDetail) => {
 
 export const formatName = (name, hideGroup) => {
   let memberName;
+
+  if (name === "JKT48") {
+    return "JKT48";
+  }
+
   if (name === "JKT48_OlineM") {
     return "Oline";
   }
+
+  if (name === "officialJKT48") {
+    return "JKT48"
+  }
+
   !hideGroup
     ? (memberName = name ? name?.replace("JKT48_", "") + " JKT48" : "Loading")
     : (memberName = name?.includes("JKT48_")
-        ? name?.replace("JKT48_", "")
-        : name?.replace("JKT48", ""));
+      ? name?.replace("JKT48_", "")
+      : name?.replace("JKT48", ""));
   return memberName;
 };
 
 export const formatViews = (str) => {
   const nf = new Intl.NumberFormat();
-  const formatView = nf.format(str);
+  const formatView = nf.format(str ?? 0);
   const views = formatView.replace(/,/g, ".");
 
   return views;
@@ -125,3 +137,17 @@ export const monthNames = [
   { name: "November", short: "11" },
   { name: "December", short: "12" }
 ];
+
+export const hasMultiRoomAccess = (profile) => {
+  const { MINIMUM_WATCH_MULTI_lIVE, IS_MULTI_LIVE_RELEASE } = useApiConfig.getState();
+
+  if (profile?.is_donator ||
+    profile?.is_developer ||
+    profile?.top_leaderboard ||
+    profile?.can_farming_multi ||
+    profile?.is_multi_live || profile?.can_3_room || profile?.totalWatchLive >= MINIMUM_WATCH_MULTI_lIVE || IS_MULTI_LIVE_RELEASE) {
+    return true;
+  } else {
+    return false;
+  }
+}
