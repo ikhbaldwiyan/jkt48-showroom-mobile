@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { AppState, NativeModules } from 'react-native';
 import trackAnalytics from "../trackAnalytics";
 import useUser from "./useUser";
+import usePipStore from "../../store/usePipStore";
 
 const usePipMode = () => {
+  const { user } = useUser();
   const { PipModule } = NativeModules;
-  const [isPipMode, setIsPipMode] = useState(false);
-  const { user} = useUser();
+  const { isPipMode, setIsPipMode } = usePipStore();
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {
