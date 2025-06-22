@@ -18,6 +18,8 @@ const useApiConfig = create(
       MINIMUM_WATCH_MULTI_lIVE: 150,
       IS_MULTI_LIVE_RELEASE: false,
       IS_MULTI_LIVE_INFO: false,
+      IS_MULTI_LIVE_CLOSED: false,
+      SETTING_MULTI_ROOM_GLOBAL: false,
 
       // Method to update the API configuration
       setApiConfig: (config) => set(config),

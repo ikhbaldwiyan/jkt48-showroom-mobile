@@ -16,6 +16,7 @@ import { Info, RefreshIcon } from "../../assets/icon";
 import { TouchableOpacity } from "react-native";
 import { Box, HStack, Text } from "native-base";
 import { HistoryLive } from "../../components/organisms";
+import useApiConfig from "../../store/useApiConfig";
 
 const MultiLive = ({ navigation }) => {
   const route = useRoute();
@@ -25,6 +26,7 @@ const MultiLive = ({ navigation }) => {
   const { data: idnLive } = useIDNLive();
   const { data: showroomLive } = useShowroomLive();
   const isMultiLiveScreen = route?.name === "Multi Live";
+  const { IS_MULTI_LIVE_CLOSED } = useApiConfig();
 
   const { refreshing, onRefresh } = useRefresh();
   const [infoModal, setInfoModal] = useState(false);
@@ -56,7 +58,7 @@ const MultiLive = ({ navigation }) => {
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
-      {!isMultiLiveScreen && !hasMultiRoomAccess(profile) && (
+      {!isMultiLiveScreen && !hasMultiRoomAccess(profile) && !IS_MULTI_LIVE_CLOSED && (
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => setInfoModal(true)}

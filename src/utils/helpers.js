@@ -139,7 +139,11 @@ export const monthNames = [
 ];
 
 export const hasMultiRoomAccess = (profile) => {
-  const { MINIMUM_WATCH_MULTI_lIVE, IS_MULTI_LIVE_RELEASE } = useApiConfig.getState();
+  const { MINIMUM_WATCH_MULTI_lIVE, IS_MULTI_LIVE_RELEASE, IS_MULTI_LIVE_CLOSED } = useApiConfig.getState();
+
+  if (IS_MULTI_LIVE_CLOSED) {
+    return false
+  }
 
   if (profile?.is_donator ||
     profile?.is_developer ||

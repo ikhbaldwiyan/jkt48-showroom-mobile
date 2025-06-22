@@ -6,6 +6,7 @@ import Loading from "../../components/atoms/Loading";
 import { JKT48_SHOWROOM_WEB } from "@env";
 import { useUser } from "../../utils/hooks";
 import { useProfile } from "../../services/hooks/useProfile";
+import useApiConfig from "../../store/useApiConfig";
 
 const MultiShowroom = () => {
   const { setOptions } = useNavigation();
@@ -15,6 +16,7 @@ const MultiShowroom = () => {
   const [url, setUrl] = useState(
     `${JKT48_SHOWROOM_WEB}/multi-room-sr-mobile?view_type=android&threeRoom=${profile?.can_3_room}&fourRoom=${profile?.can_4_room}`
   );
+  const { SETTING_MULTI_ROOM_GLOBAL } = useApiConfig();
 
   useLayoutEffect(() => {
     setOptions({
@@ -34,7 +36,8 @@ const MultiShowroom = () => {
   useEffect(() => {
     if (
       profile?.is_donator ||
-      (profile?.top_leaderboard && profile?.totalWatchLive > 400)
+      (profile?.top_leaderboard && profile?.totalWatchLive > 400) ||
+      SETTING_MULTI_ROOM_GLOBAL
     ) {
       setUrl(
         `${JKT48_SHOWROOM_WEB}/multi-room-sr-mobile?view_type=android&threeRoom=true&fourRoom=true`
