@@ -125,8 +125,15 @@ const SupportProject = ({ navigation }) => {
           <Box flexWrap="wrap" alignItems="center" space={1}>
             <Text fontSize={12} fontWeight="medium" color="primary">
               *Jika kamu sudah donasi dan akses fitur belum di berikan, silakan
-              konfirmasi ke admin melalui chat dengan menyertakan ID Showroom
-              kamu untuk mendapatkan badge Donator dan akses fitur Multi Live.
+              konfirmasi ke admin melalui chat di DM Twitter
+              <Text
+                color="gray.200"
+                onPress={() => Linking.openURL("https://x.com/JKT48_SHOWROOM")}
+              >
+                {" Disini "}
+              </Text>
+              atau Discord dengan menyertakan ID Showroom kamu untuk mendapatkan
+              badge Donator dan akses fitur Multi Live.
             </Text>
           </Box>
           <Text>Terima kasih banyak atas dukungannya guys!</Text>

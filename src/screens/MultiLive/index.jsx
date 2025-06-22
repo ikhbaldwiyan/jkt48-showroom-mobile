@@ -6,6 +6,7 @@ import { useShowroomLive } from "../../services/hooks/useShowroomLive";
 import { useProfile } from "../../services/hooks/useProfile";
 import useAuthStore from "../../store/authStore";
 import { hasMultiRoomAccess } from "../../utils/helpers";
+import trackAnalytics from "../../utils/trackAnalytics";
 
 import Layout from "../../components/templates/Layout";
 import ShowroomMulti from "./components/ShowroomMulti";
@@ -29,14 +30,10 @@ const MultiLive = ({ navigation }) => {
   const [infoModal, setInfoModal] = useState(false);
 
   const handleOpenMultiRoom = (type) => {
-    if (
-      profile?.totalWatchLive === undefined ||
-      profile?.totalWatchLive < 100
-    ) {
-      setInfoModal(true);
-    } else {
-      navigate(type === "showroom" ? "MultiShowroom" : "MultiIDN");
-    }
+    trackAnalytics("open_multi_room", {
+      username: profile?.name
+    });
+    navigate(type === "showroom" ? "MultiShowroom" : "MultiIDN");
   };
 
   useLayoutEffect(() => {
