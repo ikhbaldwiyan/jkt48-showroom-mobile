@@ -5,10 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 import { useProfile } from "../../../services/hooks/useProfile";
 import useAuthStore from "../../../store/authStore";
 import useApiConfig from "../../../store/useApiConfig";
+import trackAnalytics from "../../../utils/trackAnalytics";
 
 const ModalInfoMulti = ({ isOpen, toggleModal }) => {
   const { navigate } = useNavigation();
-  const { user } = useAuthStore();
+  const { user, session } = useAuthStore();
   const { data: profile, refetch } = useProfile(user?.account_id);
   const { IS_MULTI_LIVE_INFO, MINIMUM_WATCH_MULTI_lIVE } = useApiConfig();
 
@@ -56,6 +57,12 @@ const ModalInfoMulti = ({ isOpen, toggleModal }) => {
                 {Math.round((totalWatchUser / minimumWatch) * 100)}%
               </Text>
             </HStack>
+            {!session && (
+              <Text color="gray.300" fontSize="13">
+                Pastikan akun kamu sudah login agar total nonton live streaming
+                terhitung di profile akun
+              </Text>
+            )}
           </VStack>
         </Modal.Body>
         <Modal.Footer bg="black">
@@ -64,7 +71,12 @@ const ModalInfoMulti = ({ isOpen, toggleModal }) => {
               <Button
                 size="sm"
                 backgroundColor="emerald.600"
-                onPress={() => navigate("MultiLiveAccess")}
+                onPress={() => {
+                  navigate("MultiLiveAccess");
+                  trackAnalytics("open_support_multi_live", {
+                    name: profile?.name
+                  });
+                }}
               >
                 <HStack alignItems="center" space={2}>
                   <MultiLiveIcon color="white" size={20} />
@@ -77,7 +89,12 @@ const ModalInfoMulti = ({ isOpen, toggleModal }) => {
               <Button
                 size="sm"
                 backgroundColor="emerald.600"
-                onPress={() => navigate("SupportProject")}
+                onPress={() => {
+                  navigate("SupportProject");
+                  trackAnalytics("open_support_multi_live", {
+                    name: profile?.name
+                  });
+                }}
               >
                 <HStack alignItems="center" space={2}>
                   <Donate color="white" size={20} />
