@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useAuthStore from "../../../store/authStore";
 import { useNavigation } from "@react-navigation/native";
 import { useProfile } from "../../../services/hooks/useProfile";
@@ -21,11 +21,13 @@ import {
   ThropyIcon
 } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
+import ModalInfoMulti from "../../MultiLive/components/ModalInfoMulti";
 
 const MenuHome = () => {
   const { navigate } = useNavigation();
   const { user } = useAuthStore();
   const { data: profile } = useProfile(user?.user_id);
+  const [infoModal, setInfoModal] = useState(false);
 
   const menus = [
     {
@@ -52,6 +54,15 @@ const MenuHome = () => {
       icon: <PlayIcon size="24px" color="white" />,
       screen: "IDNLives"
     },
+    ...(!hasMultiRoomAccess(profile)
+      ? [
+          {
+            name: "Multi Live",
+            icon: <MultiLiveIcon size="24" color="white" />,
+            screen: "Multi Live"
+          }
+        ]
+      : []),
     {
       name: "Leaderboard",
       icon: <ThropyIcon size="24" color="white" />,
@@ -75,7 +86,11 @@ const MenuHome = () => {
             <TouchableOpacity
               key={idx}
               activeOpacity={0.8}
-              onPress={() => navigate(item.screen)}
+              onPress={() =>
+                !hasMultiRoomAccess(profile) && item?.name === "Multi Live"
+                  ? setInfoModal(true)
+                  : navigate(item.screen)
+              }
             >
               <Box p="2.5" px="3" bg="primary" borderRadius={10}>
                 <VStack space={1} justifyContent="center" alignItems="center">
@@ -92,6 +107,10 @@ const MenuHome = () => {
         </HStack>
       </ScrollView>
       <Divider mt="5" />
+      <ModalInfoMulti
+        isOpen={infoModal}
+        toggleModal={() => setInfoModal(!infoModal)}
+      />
     </Box>
   );
 };
