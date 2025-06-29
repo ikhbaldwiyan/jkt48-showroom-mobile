@@ -7,6 +7,7 @@ import { RoomListIDN } from "./components/RoomListIDN";
 import useThemeStore from "../../../store/themeStore";
 import ChatIDN from "./components/ChatIDN";
 import { GiftIDN } from "./components/GiftIDN";
+import { useLandscape } from "../../../utils/hooks";
 
 const initialLayout = {
   width: Dimensions.get("window").width
@@ -15,6 +16,7 @@ const initialLayout = {
 const IDNLiveTabs = () => {
   const [index, setIndex] = useState(1);
   const { header } = useThemeStore();
+  const isLandscape = useLandscape();
 
   const renderScene = SceneMap({
     room: RoomListIDN,
@@ -68,7 +70,7 @@ const IDNLiveTabs = () => {
       renderTabBar={renderTabBar}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
-      style={{ marginTop: 2, padding: 6 }}
+      style={{ marginTop: isLandscape ? 0 : 2, padding: 6 }}
     />
   );
 };

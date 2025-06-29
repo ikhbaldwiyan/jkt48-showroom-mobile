@@ -4,8 +4,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { Box, Text, VStack } from "native-base";
-import { StatusBar, TouchableOpacity, useWindowDimensions } from "react-native";
+import { StatusBar, TouchableOpacity } from "react-native";
 import { tabRoutes, stackRoutes } from "../../../config/routes";
+import { useLandscape } from "../../../utils/hooks";
 import {
   HomeIcon,
   HomeIconOutline,
@@ -27,6 +28,7 @@ const Navigation = () => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
   const navigation = useNavigation();
+  const isLandscape = useLandscape();
 
   const navigationIcon = (route, isActive) => {
     const iconConfig = {
@@ -85,9 +87,6 @@ const Navigation = () => {
   };
 
   const TabNavigator = () => {
-    const { width, height } = useWindowDimensions();
-    const isLandscape = width > height;
-
     return (
       <Tab.Navigator
         screenOptions={({ route }) => ({

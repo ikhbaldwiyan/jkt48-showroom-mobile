@@ -1,21 +1,22 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Dimensions, LogBox, StatusBar } from "react-native";
-import { Box, Button, HStack, Text, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { Box, Button, HStack, Text, useToast } from "native-base";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  LogBox,
+  StatusBar
+} from "react-native";
 
+import { RefreshIcon } from "../../assets/icon";
+import useIDNLiveStore from "../../store/idnLiveStore";
 import { activityLog } from "../../utils/activityLog";
 import { formatName } from "../../utils/helpers";
-import { RefreshIcon } from "../../assets/icon";
-import { usePipMode, useRefresh, useUser } from "../../utils/hooks";
+import { usePipMode, useRefresh, useUser, useLandscape } from "../../utils/hooks";
 import trackAnalytics from "../../utils/trackAnalytics";
-import useIDNLiveStore from "../../store/idnLiveStore";
 
-import Loading from "../../components/atoms/Loading";
-import Video from "react-native-video";
-import VideoPlayer from "react-native-video-controls";
 import Views from "../../components/atoms/Views";
-import IDNLiveTabs from "../../components/molecules/IDNLiveTabs";
+import LandscapeLayout from "./components/LandscapeLayout";
 import MenuIDN from "./components/MenuIDN";
+import PortraitLayout from "./components/PortraitLayout";
 
 const IDNStream = () => {
   const route = useRoute();
@@ -23,6 +24,7 @@ const IDNStream = () => {
   const toast = useToast();
   const navigation = useNavigation();
   const { userProfile } = useUser();
+  const isLandscape = useLandscape();
   const {
     profile,
     setProfile,
@@ -168,54 +170,32 @@ const IDNStream = () => {
 
   return (
     <Box flex="1" bg="secondary">
-      <Box
-        height={
-          isFullScreen
-            ? Dimensions.get("window").height
-            : isPipMode
-              ? 180
-              : customHeight
-        }
-      >
-        {url ? (
-          !isPipMode ? (
-            <VideoPlayer
-              source={{ uri: url }}
-              style={{
-                position: "absolute",
-                width: "100%",
-                height: isFullScreen
-                  ? Dimensions.get("window").height
-                  : customHeight
-              }}
-              disableSeekbar
-              disableBack
-              disableTimer
-              onEnterFullscreen={() => setIsFullScreen(true)}
-              onExitFullscreen={() => setIsFullScreen(false)}
-              onEnd={() => handleEndLive()}
-              toggleResizeModeOnFullscreen={isOfficial ? false : true}
-              onError={handleStreamError}
-              poster={profile?.image}
-            />
-          ) : (
-            <Video
-              source={{ uri: url }}
-              playInBackground
-              pictureInPicture
-              resizeMode="cover"
-              style={{
-                flex: 1,
-                width: "100%",
-                height: 400
-              }}
-            />
-          )
-        ) : (
-          <Loading color="white" />
-        )}
-      </Box>
-      <IDNLiveTabs profile={profile} setProfile={setProfile} />
+      {isLandscape ? (
+        <LandscapeLayout
+          profile={profile}
+          setProfile={setProfile}
+          url={url}
+          isPipMode={isPipMode}
+          isFullScreen={isFullScreen}
+          isOfficial={isOfficial}
+          setIsFullScreen={setIsFullScreen}
+          handleEndLive={handleEndLive}
+          handleStreamError={handleStreamError}
+        />
+      ) : (
+        <PortraitLayout
+          profile={profile}
+          setProfile={setProfile}
+          url={url}
+          isPipMode={isPipMode}
+          isFullScreen={isFullScreen}
+          customHeight={customHeight}
+          isOfficial={isOfficial}
+          setIsFullScreen={setIsFullScreen}
+          handleEndLive={handleEndLive}
+          handleStreamError={handleStreamError}
+        />
+      )}
     </Box>
   );
 };
