@@ -97,7 +97,7 @@ const RecentLives = ({ refreshing }) => {
                           <VStack space={2} p="3">
                             <HStack alignItems="center" space={2}>
                               <Calendar />
-                              <Text fontWeight="semibold">
+                              <Text fontWeight="medium">
                                 {moment(live_info?.date?.start).format(
                                   "dddd, D MMM"
                                 )}
@@ -146,7 +146,7 @@ const RecentLives = ({ refreshing }) => {
                         });
                       }}
                     >
-                      <Text fontWeight="bold">
+                      <Text fontWeight="semibold">
                         {member.url === "jkt48"
                           ? "JKT48 Official"
                           : member?.nickname + " JKT48"}

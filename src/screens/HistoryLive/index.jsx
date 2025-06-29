@@ -32,7 +32,7 @@ import {
   Calendar,
   CloseIcon,
   History,
-  LiveIcon,
+  IDNLiveIcon,
   LoadingIcon,
   SearchMember,
   TimesFill,
@@ -200,8 +200,8 @@ const HistoryLive = () => {
                           source={{
                             uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k"
                           }}
-                          width="50"
-                          height="50"
+                          width="38"
+                          height="38"
                           position="absolute"
                           zIndex="99"
                           bottom={0}
@@ -210,23 +210,15 @@ const HistoryLive = () => {
                           borderBottomLeftRadius={6}
                         />
                       ) : log.type === "idn" ? (
-                        <Image
-                          size="md"
-                          alt="idn live"
-                          source={{
-                            uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/IDN_Live.svg/2560px-IDN_Live.svg.png"
-                          }}
-                          width="120"
-                          left={2}
-                          height="35"
+                        <Box
                           position="absolute"
                           bg="rgba(0, 0, 0, 0.1)"
                           zIndex="99"
-                          bottom={1}
-                          borderRightRadius={6}
-                          borderBottomRightRadius={0}
-                          shadow="4"
-                        />
+                          bottom="1"
+                          left="2"
+                        >
+                          <IDNLiveIcon />
+                        </Box>
                       ) : null}
                       <Image
                         source={{ uri: member.img_alt }}
