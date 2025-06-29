@@ -219,9 +219,9 @@ const HistoryLive = ({ liveType = "all" }) => {
       {hasMore && !isLoading && allLives?.length > 0 && (
         <Button
           mt="4"
-          variant="filled"
-          borderRadius="8"
-          bg="teal"
+          variant="outline"
+          borderRadius="xl"
+          borderColor="primary"
           onPress={handleLoadMore}
         >
           <HStack alignItems="center" space={2}>

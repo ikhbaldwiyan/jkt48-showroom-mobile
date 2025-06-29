@@ -66,7 +66,7 @@ const Login = ({ navigation }) => {
                 : error.includes("Your account ID/password is incorrect")
                   ? "ID Akun atau password salah. password bisa mengandung huruf besar/kecil dan harus sesuai."
                   : error === "Please fill in all required fields."
-                    ? "Tolong Isi ID Akun dan Password"
+                    ? "Silakan Isi ID Akun dan Password"
                     : error
         }));
       }
@@ -256,6 +256,7 @@ const Login = ({ navigation }) => {
             onPress={handleLogin}
             isLoading={loading}
             isLoadingText="Logging in"
+            borderRadius="lg"
           >
             <HStack alignItems="center" space="1">
               <LoginIcon size={24} />

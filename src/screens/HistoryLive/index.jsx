@@ -300,14 +300,14 @@ const HistoryLive = () => {
       {hasNextPage && !isFetchingNextPage && recentLives.length > 0 && (
         <Button
           mt="4"
-          variant="filled"
-          borderRadius="8"
-          bg="teal"
+          variant="outline"
+          borderRadius="xl"
+          borderColor="primary"
           onPress={handleLoadMore}
         >
           <HStack alignItems="center" space={2}>
             <LoadingIcon />
-            <Text fontWeight="bold" fontSize="14">
+            <Text fontWeight="semibold" fontSize="14">
               Lihat History Live Lainnya
             </Text>
           </HStack>

@@ -241,6 +241,7 @@ const Register = ({ navigation }) => {
             mt="4"
             my="3"
             background="primary"
+            borderRadius="lg"
             onPress={handleRegister}
             isLoading={loading}
             isLoadingText="Creating Account.."
