@@ -55,13 +55,15 @@ const ShowroomMulti = ({
             mt="2"
             mb="4"
             size="sm"
-            bg="teal"
-            borderRadius="lg"
+            bg="secondary"
+            variant="outline"
+            borderColor="primary"
+            borderRadius="xl"
             onPress={handleOpenMultiRoom}
           >
             <HStack space={3}>
               <MultiLiveIcon />
-              <Text fontWeight="bold">Buka Multi Live Showroom</Text>
+              <Text fontWeight="medium">Buka Multi Live Showroom</Text>
             </HStack>
           </Button>
           <Divider mt="1" mb="4" />

@@ -94,16 +94,18 @@ const IDNLiveMulti = ({
         (rooms.length > 0 || isMultiLiveScreen) &&
         hasMultiRoomAccess(profile) && (
           <Button
-            size="sm"
-            bg="teal"
             mt="3"
             mb="2"
-            borderRadius="lg"
+            size="sm"
+            bg="secondary"
+            variant="outline"
+            borderRadius="xl"
+            borderColor="primary"
             onPress={handleOpenMultiRoom}
           >
             <HStack space={3}>
               <MultiLiveIcon />
-              <Text fontWeight="bold">Buka Multi Live IDN</Text>
+              <Text fontWeight="medium">Buka Multi Live IDN</Text>
             </HStack>
           </Button>
         )}
