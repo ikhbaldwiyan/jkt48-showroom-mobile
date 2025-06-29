@@ -3,8 +3,8 @@ import { theme } from "../../../config/theme";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
-import { Box, Text } from "native-base";
-import { StatusBar, TouchableOpacity } from "react-native";
+import { Box, Text, VStack } from "native-base";
+import { StatusBar, TouchableOpacity, useWindowDimensions } from "react-native";
 import { tabRoutes, stackRoutes } from "../../../config/routes";
 import {
   HomeIcon,
@@ -84,56 +84,63 @@ const Navigation = () => {
     tabBarHideOnKeyboard: true
   };
 
-  const TabNavigator = () => (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarStyle: { backgroundColor: theme.colors.black, height: 70 },
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.white,
-        tabBarIconStyle: {
-          marginTop: 8
-        },
-        tabBarLabel: ({ focused, color }) => (
-          <Text
-            color={color}
-            fontSize="12"
-            marginBottom="15"
-            fontWeight={focused ? "700" : "400"}
-          >
-            {route.name}
-          </Text>
-        ),
-        tabBarIcon: ({ focused }) => {
-          return navigationIcon(route, focused);
-        },
-        tabBarButton: (props) => (
-          <TouchableOpacity
-            {...props}
-            activeOpacity={0.6}
-            onPress={() => {
-              props.onPress();
-            }}
-          />
-        )
-      })}
-    >
-      {tabRoutes.map((route) => (
-        <Tab.Screen
-          key={route.name}
-          name={route.name}
-          component={route.component}
-          options={
-            route?.name === "Home"
-              ? {
-                  headerShown: false
+  const TabNavigator = () => {
+    const { width, height } = useWindowDimensions();
+    const isLandscape = width > height;
+
+    return (
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: theme.colors.black,
+            height: isLandscape ? 60 : 70
+          },
+          tabBarActiveTintColor: theme.colors.primary,
+          tabBarInactiveTintColor: theme.colors.white,
+          ...(isLandscape
+            ? {
+                tabBarLabelStyle: {
+                  fontWeight: "600",
+                  fontSize: 12
                 }
-              : BasicHeader
-          }
-        />
-      ))}
-    </Tab.Navigator>
-  );
+              }
+            : {
+                tabBarLabel: ({ focused, color }) => (
+                  <Text
+                    color={color}
+                    fontSize="12"
+                    marginBottom="15"
+                    fontWeight={focused ? "700" : "400"}
+                  >
+                    {route.name}
+                  </Text>
+                )
+              }
+          ),
+          tabBarIcon: ({ focused, color }) => (
+            <VStack alignItems="center" justifyContent="center" mt={isLandscape ? 0 : 2}>
+              {navigationIcon(route, focused)}
+            </VStack>
+          ),
+          tabBarButton: (props) => (
+            <TouchableOpacity {...props} activeOpacity={0.6} />
+          )
+        })}
+      >
+        {tabRoutes.map((route) => (
+          <Tab.Screen
+            key={route.name}
+            name={route.name}
+            component={route.component}
+            options={
+              route?.name === "Home" ? { headerShown: false } : BasicHeader
+            }
+          />
+        ))}
+      </Tab.Navigator>
+    );
+  };
 
   const showHeader = {
     headerShown: true,
