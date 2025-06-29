@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box, HStack, Image, Text, Spinner, VStack } from "native-base";
+import {
+  Box,
+  HStack,
+  Image,
+  Text,
+  VStack,
+  Button,
+  PlayIcon,
+} from "native-base";
 import moment from "moment";
 import "moment/locale/id";
 import SkeletonSchedule from "../../atoms/Skeleteon";
@@ -12,7 +20,8 @@ import {
   TheaterIcon,
   TimesIcon,
 } from "../../../assets/icon";
-import { TouchableOpacity } from "react-native";
+import { Linking, TouchableOpacity } from "react-native";
+import CountdownTimer from "../CountdownTimer";
 
 const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
   const [schedules, setSchedules] = useState([]);
@@ -124,8 +133,8 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                       height={200}
                       source={{ uri: item?.setlist?.image }}
                       borderRadius="8"
-                      borderBottomLeftRadius={isToday ? 8 : 0}
-                      borderBottomRightRadius={isToday ? 8 : 0}
+                      borderBottomLeftRadius={0}
+                      borderBottomRightRadius={0}
                       alt="Theater"
                     />
                     {!isToday && (
@@ -139,6 +148,32 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                         <Text fontSize="14" fontWeight="medium">
                           {item.setlist.description.slice(0, 200)}...
                         </Text>
+                      </Box>
+                    )}
+                    {isToday && (
+                      <Box>
+                        <CountdownTimer
+                          showDate={item?.showDate}
+                          targetDateTime={item.showTime}
+                        >
+                          <Button
+                            borderTopRightRadius={0}
+                            borderTopLeftRadius={0}
+                            borderRadius="lg"
+                            variant="filled"
+                            bg="blueLight"
+                            onPress={() =>
+                              Linking.openURL(item?.ticketShowroom)
+                            }
+                          >
+                            <HStack space={2} alignItems="center">
+                              <PlayIcon color="primary" />
+                              <Text color="primary" fontWeight="bold">
+                                Watch at IDN App
+                              </Text>
+                            </HStack>
+                          </Button>
+                        </CountdownTimer>
                       </Box>
                     )}
                   </Box>
