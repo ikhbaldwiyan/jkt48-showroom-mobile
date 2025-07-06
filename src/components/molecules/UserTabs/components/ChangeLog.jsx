@@ -59,23 +59,25 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Add Live Stream Bottom Menu</Text>
               <Text>- Added Multi Live for early acces and donator</Text>
               <Text>- Revamp layout for Showroom and IDN Live</Text>
-              <Text>- Redesign Jadwal Theater home card</Text>
               <Text>- Added edit profile screen (Name, Avatar, Bio)</Text>
               <Text>- Show IDN Live Gift list Tab</Text>
               <Text>- Show avatar image on live chat IDN</Text>
               <Text>- Revamp edit avatar showroom</Text>
-              <Text>- Redesign user profile layout</Text>
               <Text>- Show All Total Watched SR and IDN on profile</Text>
               <Text>- Update Realtime Floating live stream notif</Text>
-              <Text>- Show active today theater schedule</Text>
+              <Text>- Show active today theater schedule with countdown time</Text>
               <Text>- Added Multi Live Showroom and IDN Live</Text>
               <Text>
                 - Early access Multi Live feature for user reach Total Watch{" "}
                 {MINIMUM_WATCH_MULTI_lIVE}x
               </Text>
               <Text>
-                - Show popup info if internet connection offline
+                - Fixing banner internet connection offline landscape and PIP mode
               </Text>
+              <Text>- Change open Multi Live button styling</Text>
+              <Text>- Adjust responsive live streaming SR and Showroom</Text>
+              <Text>- Improve Landscape live stream for tablet mode</Text>
+              <Text>- Show button toogle for hide send comment input</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
