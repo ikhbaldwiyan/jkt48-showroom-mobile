@@ -107,9 +107,9 @@ const IDNStream = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: formatName(profile?.user?.name, true),
-      headerShown: isPipMode || isFullScreen ? false : true,
+      headerShown: isPipMode || isFullScreen || isLandscape ? false : true,
     });
-  }, [profile, isFullScreen, isPipMode]);
+  }, [profile, isFullScreen, isPipMode, isLandscape]);
 
   useEffect(() => {
     if (userProfile && url) {

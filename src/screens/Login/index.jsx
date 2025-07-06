@@ -6,6 +6,7 @@ import {
   HStack,
   Image,
   Input,
+  ScrollView,
   Spinner,
   Text,
   useToast
@@ -151,133 +152,140 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <Box
-      flex="1"
-      bgColor="secondary"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Logo />
-      <Text mt="38" fontSize="2xl" fontWeight="semibold" color="white">
-        Login
-      </Text>
-      <Text
-        py="3"
-        fontWeight="light"
-        color="white"
-        maxWidth="300px"
-        textAlign="center"
+    <Box flex="1" bgColor="secondary">
+      <ScrollView
+        flex="1"
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          padding: 20
+        }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
-        Silakan login untuk menggunakan fitur komen dan podium.
-      </Text>
-      <Box py="4" mx="6">
-        <FormControl>
-          <Text mb={3}>
-            ID Akun <Text color="red">*</Text>
-          </Text>
-          <Input
-            bgColor="white"
-            variant="filled"
-            w="100%"
-            fontSize="md"
-            name="id"
-            placeholder="Ex: inzoid48"
-            value={formData.account_id}
-            onChangeText={(value) => handleChange("account_id", value)}
-            isInvalid={formData?.error_message}
-          />
-          <Box position="relative">
-            <Text mt="4" mb="3">
-              Password <Text color="red">*</Text>
+        <Logo />
+        <Text mt="38" fontSize="2xl" fontWeight="semibold" color="white">
+          Login
+        </Text>
+        <Text
+          py="3"
+          fontWeight="light"
+          color="white"
+          maxWidth="300px"
+          textAlign="center"
+        >
+          Silakan login untuk menggunakan fitur komen dan podium.
+        </Text>
+        <Box py="4" mx="6" w="100%" maxW="400px">
+          <FormControl>
+            <Text mb={3}>
+              ID Akun <Text color="red">*</Text>
             </Text>
             <Input
               bgColor="white"
-              type={showPassword ? "text" : "password"}
               variant="filled"
               w="100%"
               fontSize="md"
-              name="password"
-              placeholder="Ex: abcabc123"
-              value={formData.password}
-              onChangeText={(value) => handleChange("password", value)}
-              InputRightElement={() =>
-                loading ? <Spinner color="white" /> : "Login"
-              }
+              name="id"
+              placeholder="Ex: inzoid48"
+              value={formData.account_id}
+              onChangeText={(value) => handleChange("account_id", value)}
               isInvalid={formData?.error_message}
             />
-            <Box position="absolute" right="1" top="53%">
-              <Button onPress={() => setShowPassword(!showPassword)}>
-                {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
-              </Button>
-            </Box>
-          </Box>
-
-          {formData?.error_message && (
-            <Text color="red" mt="3">
-              {formData?.error_message}
-            </Text>
-          )}
-
-          {formData?.captcha_url && (
-            <Box py="3">
-              <Text mb="3">Tolong verifikasi captcha di bawah ini:</Text>
-              <Image
-                alt="captcha"
-                source={{ uri: formData.captcha_url }}
-                size="md"
-                width="100%"
-                borderRadius="xl"
-                resizeMode="contain"
-              />
+            <Box position="relative">
+              <Text mt="4" mb="3">
+                Password <Text color="red">*</Text>
+              </Text>
               <Input
-                mt="3"
                 bgColor="white"
-                type="text"
+                type={showPassword ? "text" : "password"}
                 variant="filled"
                 w="100%"
                 fontSize="md"
-                name="id"
-                placeholder="Ketik kode captcha diatas"
-                value={formData.captcha_word}
-                onChangeText={(value) => handleChange("captcha_word", value)}
+                name="password"
+                placeholder="Ex: abcabc123"
+                value={formData.password}
+                onChangeText={(value) => handleChange("password", value)}
+                InputRightElement={() =>
+                  loading ? <Spinner color="white" /> : "Login"
+                }
+                isInvalid={formData?.error_message}
               />
+              <Box position="absolute" right="1" top="53%">
+                <Button onPress={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                </Button>
+              </Box>
             </Box>
-          )}
-          <Text onPress={handleRegister} color="white" my="1">
-            Belum Punya Akun?{" "}
-            <Text fontWeight="semibold" color="primary">
-              Daftar Disini
-            </Text>
-          </Text>
 
-          <Button
-            my="3"
-            background="primary"
-            onPress={handleLogin}
-            isLoading={loading}
-            isLoadingText="Logging in"
-            borderRadius="lg"
-          >
-            <HStack alignItems="center" space="1">
-              <LoginIcon size={24} />
-              <Text fontSize="16" color="white" fontWeight="medium">
-                Login
+            {formData?.error_message && (
+              <Text color="red" mt="3">
+                {formData?.error_message}
               </Text>
-            </HStack>
-          </Button>
-          <Center>
-            <Text
-              fontWeight="medium"
-              mt="6"
-              onPress={() => navigation.replace("Main")}
-              color="gray.400"
-              my="2"
-            >
-              Skip Login
+            )}
+
+            {formData?.captcha_url && (
+              <Box py="3">
+                <Text mb="3">Tolong verifikasi captcha di bawah ini:</Text>
+                <Image
+                  alt="captcha"
+                  source={{ uri: formData.captcha_url }}
+                  size="md"
+                  width="100%"
+                  borderRadius="xl"
+                  resizeMode="contain"
+                />
+                <Input
+                  mt="3"
+                  bgColor="white"
+                  type="text"
+                  variant="filled"
+                  w="100%"
+                  fontSize="md"
+                  name="id"
+                  placeholder="Ketik kode captcha diatas"
+                  value={formData.captcha_word}
+                  onChangeText={(value) => handleChange("captcha_word", value)}
+                />
+              </Box>
+            )}
+            <Text onPress={handleRegister} color="white" my="1">
+              Belum Punya Akun?{" "}
+              <Text fontWeight="semibold" color="primary">
+                Daftar Disini
+              </Text>
             </Text>
-          </Center>
-        </FormControl>
-      </Box>
+
+            <Button
+              my="3"
+              background="primary"
+              onPress={handleLogin}
+              isLoading={loading}
+              isLoadingText="Logging in"
+              borderRadius="lg"
+            >
+              <HStack alignItems="center" space="1">
+                <LoginIcon size={24} />
+                <Text fontSize="16" color="white" fontWeight="medium">
+                  Login
+                </Text>
+              </HStack>
+            </Button>
+            <Center>
+              <Text
+                fontWeight="medium"
+                mt="6"
+                onPress={() => navigation.replace("Main")}
+                color="gray.400"
+                my="2"
+              >
+                Skip Login
+              </Text>
+            </Center>
+          </FormControl>
+        </Box>
+      </ScrollView>
     </Box>
   );
 };
