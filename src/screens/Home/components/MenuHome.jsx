@@ -14,6 +14,7 @@ import {
   VStack
 } from "native-base";
 import {
+  ChatIcon,
   LiveIcon,
   Medal,
   MultiLiveIcon,
@@ -34,6 +35,11 @@ const MenuHome = () => {
       name: "Theater",
       icon: <TheaterIcon size="24" color="white" />,
       screen: "Theater"
+    },
+    {
+      name: "Public Chat",
+      icon: <ChatIcon size="24" color="white" />,
+      screen: "PublicChat"
     },
     ...(hasMultiRoomAccess(profile)
       ? [

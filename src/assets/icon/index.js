@@ -70,6 +70,8 @@ import GridOutline from "./GridOutline";
 import UnlockIcon from "./UnlockIcon";
 import EditProfile from "./EditProfile";
 import OfflineIcon from "./OfflineIcon";
+import ChatIcon from "./ChatIcon";
+import SendMessageIcon from "./SendMessageIcon"
 
 export {
   LogoIcon,
@@ -144,4 +146,6 @@ export {
   UnlockIcon,
   EditProfile,
   OfflineIcon,
+  ChatIcon,
+  SendMessageIcon,
 };
