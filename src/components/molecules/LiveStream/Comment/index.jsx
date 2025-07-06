@@ -10,9 +10,11 @@ import {
   useToast,
   Input,
   Button,
-  Spinner
+  Spinner,
+  ArrowUpIcon,
+  ArrowDownIcon
 } from "native-base";
-import { FlatList, RefreshControl } from "react-native";
+import { RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
 import { SendIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
@@ -36,6 +38,7 @@ export const Comment = () => {
   const [socketKey, setSocketKey] = useState("");
   const [textComment, setTextComment] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [isCommentBoxVisible, setIsCommentBoxVisible] = useState(true);
   const { refreshing, onRefresh } = useRefresh();
   const roomId = profile?.room_id;
   const { mode } = useThemeStore();
@@ -174,7 +177,7 @@ export const Comment = () => {
             <Text>Failed to send comment</Text>
           </Box>
         ),
-        placement: "bottom",
+        placement: "bottom"
       });
     } finally {
       setButtonLoading(false);
@@ -183,6 +186,10 @@ export const Comment = () => {
 
   const handleComment = (text) => {
     setTextComment(text);
+  };
+
+  const toggleCommentBox = () => {
+    setIsCommentBoxVisible(!isCommentBoxVisible);
   };
 
   return (
@@ -231,7 +238,7 @@ export const Comment = () => {
         }
       />
 
-      {session && !hideComment && (
+      {session && !hideComment && isCommentBoxVisible && (
         <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
           <Input
             variant="filled"
@@ -242,7 +249,7 @@ export const Comment = () => {
             color={isLightMode ? "black" : "white"}
             borderColor={isLightMode ? "black" : "primary"}
             borderRightWidth={0}
-            borderRadius="md"
+            borderRadius="lg"
             borderTopRightRadius="0"
             borderBottomRightRadius="0"
             placeholder="Kirim komentar.."
@@ -268,7 +275,30 @@ export const Comment = () => {
         </HStack>
       )}
 
-      {!session && (
+      {/* Toggle Button */}
+      {session && !hideComment && (
+        <Button
+          position="absolute"
+          bottom={isCommentBoxVisible ? "12" : "2"}
+          right="2"
+          size="sm"
+          mb="2"
+          borderRadius="full"
+          background={isCommentBoxVisible ? "gray.500" : "primary"}
+          onPress={toggleCommentBox}
+          _pressed={{
+            opacity: 0.7
+          }}
+        >
+          {isCommentBoxVisible ? (
+            <ArrowDownIcon color="white" />
+          ) : (
+            <ArrowUpIcon color="white" />
+          )}
+        </Button>
+      )}
+
+      {!session && isCommentBoxVisible && (
         <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
           <Input
             variant="filled"
@@ -308,6 +338,34 @@ export const Comment = () => {
             <Text fontSize="xs">Login</Text>
           </Button>
         </HStack>
+      )}
+
+      {/* Toggle Button for non-logged users */}
+      {!session && (
+        <Button
+          position="absolute"
+          bottom={isCommentBoxVisible ? "12" : "2"}
+          right="2"
+          size="sm"
+          borderRadius="full"
+          background={isLightMode ? "white" : "primary"}
+          onPress={toggleCommentBox}
+          _pressed={{
+            opacity: 0.7
+          }}
+        >
+          <Text
+            color={isLightMode ? "black" : "white"}
+            fontSize="xs"
+            fontWeight="bold"
+          >
+            {isCommentBoxVisible ? (
+              <ArrowDownIcon color="white" />
+            ) : (
+              <ArrowUpIcon color="white" />
+            )}
+          </Text>
+        </Button>
       )}
     </CardGradient>
   );
