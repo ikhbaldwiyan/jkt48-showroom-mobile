@@ -1,0 +1,28 @@
+import { CHAT } from "..";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+export const useOnlineUsers = () => {
+  return useQuery({
+    queryKey: ["onlineUsers"],
+    queryFn: async () => {
+      const response = await CHAT.getOnlineUsers()
+      return response?.data;
+    },
+  });
+};
+
+export const useChatList = (params) => {
+  return useQuery({
+    queryKey: ["chatList", params],
+    queryFn: async () => {
+      const response = await CHAT.getChatList(params)
+      return response?.data;
+    },
+  });
+};
+
+export const useSendMessage = () => {
+  return useMutation({
+    mutationFn: (payload) => CHAT.postMessage(payload),
+  });;
+}

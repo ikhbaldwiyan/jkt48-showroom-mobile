@@ -72,6 +72,7 @@ import EditProfile from "./EditProfile";
 import OfflineIcon from "./OfflineIcon";
 import ChatIcon from "./ChatIcon";
 import SendMessageIcon from "./SendMessageIcon"
+import Wrench from "./Wrench";
 
 export {
   LogoIcon,
@@ -148,4 +149,5 @@ export {
   OfflineIcon,
   ChatIcon,
   SendMessageIcon,
+  Wrench,
 };

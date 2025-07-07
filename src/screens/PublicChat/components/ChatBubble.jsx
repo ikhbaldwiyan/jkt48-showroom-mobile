@@ -1,18 +1,36 @@
 import React from "react";
 import { Box, HStack, Image, Text, VStack } from "native-base";
+import useUser from "../../../utils/hooks/useUser";
+import SenderChat from "./SenderChat";
+import { getTimes } from "../../../utils/helpers";
+import { Wrench } from "../../../assets/icon";
 
-const ChatBubble = ({ avatar, username, message, isAdmin }) => {
+const ChatBubble = ({ avatar, username, message, idx, userId, date }) => {
+  const { user } = useUser();
+  const isAdmin = userId == 4751328;
+
+  if (userId === parseInt(user?.user_id)) {
+    return (
+      <SenderChat
+        avatar={avatar}
+        username={username}
+        message={message}
+        date={date}
+        userId={user?.user_id}
+      />
+    );
+  }
+
   return (
-    <Box>
-      <HStack space="3" alignItems="center">
+    <Box key={idx}>
+      <HStack space="1.5" alignItems="center">
         <Image
           borderRadius={isAdmin ? "xl" : "none"}
           style={{ width: 45, height: 45 }}
           source={{
             uri: isAdmin
               ? "https://res.cloudinary.com/dkkagbzl4/image/upload/v1715448389/ioc8l1puv69qn7nzc2e9.png"
-              : avatar ??
-                "https://static.showroom-live.com/image/avatar/59.png?v=108"
+              : avatar
           }}
           alt="avatar"
           shadow="5"
@@ -20,14 +38,19 @@ const ChatBubble = ({ avatar, username, message, isAdmin }) => {
         <VStack alignItems="flex-start" space={2}>
           <HStack space={2.5} alignItems="center">
             <Text
-              color={isAdmin ? "primary" : "white"}
+              color={isAdmin ? "cyan.500" : "white"}
               fontWeight="semibold"
               ml="1"
             >
               {isAdmin ? "Admin" : username}
             </Text>
+            {isAdmin && (
+              <Box mt="1">
+                <Wrench size={14} />
+              </Box>
+            )}
             <Text fontSize="xs" color="coolGray.400">
-              19:48
+              {getTimes(date)}
             </Text>
           </HStack>
           <Box

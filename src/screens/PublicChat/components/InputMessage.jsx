@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Icon, Input } from "native-base";
 import { SendMessageIcon } from "../../../assets/icon";
+import { useSendMessage } from "../../../services/hooks/usePublicChat";
+import { Keyboard } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { useQueryClient } from "@tanstack/react-query";
+import useUser from "../../../utils/hooks/useUser";
 
 const InputMessage = () => {
+  const { session } = useUser();
+  const sendMessage = useSendMessage();
+  const queryClient = useQueryClient();
+
+  const [message, setMessage] = useState("");
+
+  const handleSendChat = () => {
+    sendMessage.mutate(
+      {
+        msg: message,
+        csrf_token: session?.csrf_token,
+        sr_id: session?.cookie_login_id,
+        room_id: "532815"
+      },
+      {
+        onSuccess: () => {
+          setMessage("");
+          // Keyboard.dismiss();
+          queryClient.invalidateQueries("chatList");
+        }
+      }
+    );
+  };
   return (
     <Box
       display="flex"
@@ -19,10 +47,14 @@ const InputMessage = () => {
         _input={{
           color: "white"
         }}
+        value={message}
+        onChangeText={(text) => setMessage(text)}
         rightElement={
-          <Box mr="5">
-            <Icon as={<SendMessageIcon />} size={5} />
-          </Box>
+          <TouchableOpacity onPress={handleSendChat} zIndex={999}>
+            <Box mr="5">
+              <Icon as={<SendMessageIcon />} size={5} />
+            </Box>
+          </TouchableOpacity>
         }
       />
     </Box>

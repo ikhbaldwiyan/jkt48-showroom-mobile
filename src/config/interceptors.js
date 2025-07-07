@@ -16,3 +16,4 @@ export const apiHistory = createApiInstance("HISTORY_API");
 export const apiAdmin = createApiInstance("JKT48_SHOWROOM_API");
 export const apiPodium = createApiInstance("PODIUM_API");
 export const apiRoomList = createApiInstance("ROOM_LIST_API");
+export const apiPublicChat = createApiInstance("PUBLIC_CHAT_API")

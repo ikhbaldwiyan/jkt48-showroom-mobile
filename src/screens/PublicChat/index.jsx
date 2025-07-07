@@ -7,19 +7,35 @@ import {
   CloseIcon,
   HStack,
   IconButton,
+  Pressable,
   ScrollView,
   Text,
   VStack
 } from "native-base";
+import { RefreshControl } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ChatBubble from "./components/ChatBubble";
-import SenderChat from "./components/SenderChat";
 import InputMessage from "./components/InputMessage";
+import { formatViews } from "../../utils/helpers";
+import { useRefresh } from "../../utils/hooks/useRefresh";
+import {
+  useChatList,
+  useOnlineUsers
+} from "../../services/hooks/usePublicChat";
+import useUser from "../../utils/hooks/useUser";
 
 const PublicChat = () => {
   const navigation = useNavigation();
-  const [isClose, setIsClose] = useState(false);
   const scrollViewRef = useRef(null);
+  const { session } = useUser();
+
+  const { data, refetch } = useOnlineUsers();
+  const { data: chatList } = useChatList({
+    room_id: "532815",
+    last_chat_id: 0
+  });
+  const { refreshing, onRefresh } = useRefresh();
+  const [isClose, setIsClose] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -27,11 +43,16 @@ const PublicChat = () => {
       headerRight: () => (
         <HStack space={2} alignItems="center">
           <CircleIcon size="xs" color="green.500" />
-          <Text>427 Online</Text>
+          <Text>{formatViews(data?.onlineUsers)} Online</Text>
         </HStack>
       )
     });
-  }, []);
+  }, [data]);
+
+  const handleRefresh = () => {
+    onRefresh();
+    refetch();
+  };
 
   return (
     <>
@@ -46,9 +67,8 @@ const PublicChat = () => {
               >
                 <HStack space={2} flexShrink={1}>
                   <Text fontWeight="500" fontSize="13" color="white">
-                    Selamat datang di Public Chat JKT48 Showroom Fanmade! Disini
-                    kalian bisa saling diskusi mengenai apapun tentang JKT48
-                    yaa!
+                    Selamat datang di Public Chat! Disini kalian bisa saling
+                    diskusi mengenai apapun tentang JKT48 yaa!
                   </Text>
                 </HStack>
                 <IconButton
@@ -70,47 +90,15 @@ const PublicChat = () => {
         <ScrollView
           mt="2"
           ref={scrollViewRef}
-          contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start" }}
           onContentSizeChange={() =>
             scrollViewRef.current?.scrollToEnd({ animated: false })
           }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         >
           <VStack space={4}>
-            <Center>
-              <Box
-                p="2"
-                py="1"
-                display="flex"
-                borderRadius="md"
-                justifyContent="center"
-                alignItems="center"
-                bg="coolGray.500"
-              >
-                <Text fontWeight="medium" fontSize="xs" color="gray.300">
-                  Yesterday
-                </Text>
-              </Box>
-            </Center>
-            <ChatBubble
-              avatar="https://static.showroom-live.com/image/avatar/37.png?v=108"
-              username="Indah"
-              message="Hello World"
-            />
-            <ChatBubble
-              avatar="https://static.showroom-live.com/image/avatar/1.png?v=108"
-              username="Lowly"
-              message="Admin datanggg"
-            />
-            <ChatBubble
-              avatar="https://static.showroom-live.com/image/avatar/1042177.png?v=108"
-              username="Jhon Doe"
-              message="The quick brown fox over the lazy dog."
-            />
-            <ChatBubble
-              avatar="https://static.showroom-live.com/image/avatar/1042617.png?v=108"
-              username="Belthazar"
-              message="Apaan nih"
-            />
             <Center>
               <Box
                 p="2"
@@ -126,31 +114,29 @@ const PublicChat = () => {
                 </Text>
               </Box>
             </Center>
-            <ChatBubble
-              avatar="https://static.showroom-live.com/image/avatar/20.png?v=108"
-              username="Sheanlyy"
-              message="Halo guys, apa kabar?"
-            />
-            <SenderChat
-              username="Admin"
-              message="Welcome to Public Chat JKT48 Showroom Fanmade"
-            />
-
-            <ChatBubble
-              avatar="https://static.showroom-live.com/image/avatar/2.png?v=108"
-              username="Indah"
-              message="Haloo"
-            />
-            <ChatBubble username="Inzoid" message="Jangan spamm ya guys" />
-            <ChatBubble
-              isAdmin
-              message="Iyaa ges"
-            />
+            {chatList?.map((item, idx) => (
+              <ChatBubble
+                key={idx}
+                userId={item?.user_id}
+                avatar={item?.avatar}
+                date={item?.date}
+                username={item?.username}
+                message={item?.message}
+              />
+            ))}
           </VStack>
         </ScrollView>
       </Box>
 
-      <InputMessage />
+      {session ? (
+        <InputMessage />
+      ) : (
+        <Pressable onPress={() => navigation.navigate("Login")}>
+          <Box display="flex" alignItems="center" bg="coolGray.700" p="4">
+            <Text>Silakan Login Untuk mengirim public chat</Text>
+          </Box>
+        </Pressable>
+      )}
     </>
   );
 };
