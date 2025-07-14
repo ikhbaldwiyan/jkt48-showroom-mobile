@@ -57,6 +57,8 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
             <VStack space={3}>
               <Text>- New homepage menu list</Text>
               <Text>- Add Live Stream Bottom Menu</Text>
+              <Text>- Bug fixing sr live and internet status</Text>
+              <Text>- Show button toogle for hide comment box showroom</Text>
               <Text>- Added Multi Live for early acces and donator</Text>
               <Text>- Revamp layout for Showroom and IDN Live</Text>
               <Text>- Added edit profile screen (Name, Avatar, Bio)</Text>
@@ -64,7 +66,6 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Show avatar image on live chat IDN</Text>
               <Text>- Revamp edit avatar showroom</Text>
               <Text>- Show All Total Watched SR and IDN on profile</Text>
-              <Text>- Update Realtime Floating live stream notif</Text>
               <Text>- Show active today theater schedule with countdown time</Text>
               <Text>- Added Multi Live Showroom and IDN Live</Text>
               <Text>
@@ -77,7 +78,6 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
               <Text>- Change open Multi Live button styling</Text>
               <Text>- Adjust responsive live streaming SR and Showroom</Text>
               <Text>- Improve Landscape live stream for tablet mode</Text>
-              <Text>- Show button toogle for hide send comment input</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">
