@@ -24,9 +24,21 @@ const ChatIDN = () => {
   const [messages, setMessages] = useState([]);
   const wsRef = useRef(null);
 
+  const generateRandomUUID = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0;
+        const v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  };
+
   const generateRandomUsername = () => {
-    const randomPart = Math.random().toString(36).substring(2, 8);
-    return `user_${randomPart}`;
+    const uuid = generateRandomUUID();
+    const timestamp = Date.now();
+    return `idn-${uuid}-${timestamp}`;
   };
 
   const nickname = generateRandomUsername();
@@ -56,7 +68,7 @@ const ChatIDN = () => {
       ws.onopen = () => {
         console.log("WebSocket connected");
         ws.send(`NICK ${nickname}`);
-        ws.send("USER websocket 0 * :WebSocket User");
+        ws.send(`USER ${nickname} 0 * null`);
       };
 
       ws.onmessage = (event) => {

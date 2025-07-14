@@ -64,7 +64,7 @@ const LandscapeLayout = ({
         </Box>
       </Box>
 
-      {!isFullScreen && (
+      {!isFullScreen && !isPipMode && (
         <Box pt="1" p="2" flex={1} bg="secondary">
           <LiveStreamTabs />
         </Box>
