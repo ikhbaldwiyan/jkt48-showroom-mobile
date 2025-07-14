@@ -133,7 +133,7 @@ const PublicChat = () => {
       ) : (
         <Pressable onPress={() => navigation.navigate("Login")}>
           <Box display="flex" alignItems="center" bg="coolGray.700" p="4">
-            <Text>Silakan Login Untuk mengirim public chat</Text>
+            <Text>Silakan Login untuk mengirim pesan ke public chat</Text>
           </Box>
         </Pressable>
       )}

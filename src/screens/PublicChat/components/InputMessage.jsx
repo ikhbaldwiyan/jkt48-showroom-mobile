@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Box, Icon, Input } from "native-base";
 import { SendMessageIcon } from "../../../assets/icon";
 import { useSendMessage } from "../../../services/hooks/usePublicChat";
-import { Keyboard } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import useUser from "../../../utils/hooks/useUser";
@@ -25,7 +24,6 @@ const InputMessage = () => {
       {
         onSuccess: () => {
           setMessage("");
-          // Keyboard.dismiss();
           queryClient.invalidateQueries("chatList");
         }
       }
