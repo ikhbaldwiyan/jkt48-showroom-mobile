@@ -283,6 +283,7 @@ export const Comment = () => {
           right="2"
           size="sm"
           mb="2"
+          p="2.5"
           borderRadius="full"
           background={isCommentBoxVisible ? "gray.500" : "primary"}
           onPress={toggleCommentBox}
@@ -332,40 +333,12 @@ export const Comment = () => {
             borderWidth={isLightMode ? "0" : "1"}
             background={isLightMode ? "secondary" : "primary"}
             onPress={() => {
-              navigation.replace("Login")
+              navigation.replace("Login");
             }}
           >
             <Text fontSize="xs">Login</Text>
           </Button>
         </HStack>
-      )}
-
-      {/* Toggle Button for non-logged users */}
-      {!session && (
-        <Button
-          position="absolute"
-          bottom={isCommentBoxVisible ? "12" : "2"}
-          right="2"
-          size="sm"
-          borderRadius="full"
-          background={isLightMode ? "white" : "primary"}
-          onPress={toggleCommentBox}
-          _pressed={{
-            opacity: 0.7
-          }}
-        >
-          <Text
-            color={isLightMode ? "black" : "white"}
-            fontSize="xs"
-            fontWeight="bold"
-          >
-            {isCommentBoxVisible ? (
-              <ArrowDownIcon color="white" />
-            ) : (
-              <ArrowUpIcon color="white" />
-            )}
-          </Text>
-        </Button>
       )}
     </CardGradient>
   );
