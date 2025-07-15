@@ -23,6 +23,7 @@ import MultiLive from "./MultiLive";
 import MultiShowroom from "./MultiShowroom";
 import EditProfile from "./EditProfile";
 import MultiLiveAccess from "./MultiLiveAccess";
+import PublicChat from "./PublicChat";
 
 export {
   SplashScreen,
@@ -51,4 +52,5 @@ export {
   MultiLive,
   EditProfile,
   MultiLiveAccess,
+  PublicChat,
 };

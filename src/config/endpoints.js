@@ -59,5 +59,11 @@ export default {
     SHOWROOM: "/leaderboard-member/showroom",
     IDN: "/leaderboard-member/idn",
     USER: "/leaderboard"
+  },
+  CHAT: {
+    LIST: "/chat-list",
+    ONLINE_USERS: "/analytics/real-time-users",
+    SEND_MESSAGE: "/send-message",
+    DELETE: "/delete-chat"
   }
 };
