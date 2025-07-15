@@ -26,3 +26,9 @@ export const useSendMessage = () => {
     mutationFn: (payload) => CHAT.postMessage(payload),
   });;
 }
+
+export const useDeleteMessage = () => {
+  return useMutation({
+    mutationFn: (payload) => CHAT.deleteMessage(payload),
+  });;
+}

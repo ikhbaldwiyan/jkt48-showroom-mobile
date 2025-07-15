@@ -23,14 +23,20 @@ import {
   useOnlineUsers
 } from "../../services/hooks/usePublicChat";
 import useUser from "../../utils/hooks/useUser";
+import Loading from "../../components/atoms/Loading";
 
 const PublicChat = () => {
   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
-  const { session } = useUser();
+  const { user } = useUser();
+  const isAdmin = user?.user_id === "4751328";
 
   const { data, refetch } = useOnlineUsers();
-  const { data: chatList } = useChatList({
+  const {
+    data: chatList,
+    isLoading,
+    refetch: refetchChat
+  } = useChatList({
     room_id: "532815",
     last_chat_id: 0
   });
@@ -52,6 +58,7 @@ const PublicChat = () => {
   const handleRefresh = () => {
     onRefresh();
     refetch();
+    refetchChat();
   };
 
   return (
@@ -114,21 +121,34 @@ const PublicChat = () => {
                 </Text>
               </Box>
             </Center>
-            {chatList?.map((item, idx) => (
-              <ChatBubble
-                key={idx}
-                userId={item?.user_id}
-                avatar={item?.avatar}
-                date={item?.date}
-                username={item?.username}
-                message={item?.message}
-              />
-            ))}
+            {chatList?.length > 0 ? (
+              chatList?.map((item, idx) => (
+                <ChatBubble
+                  key={idx}
+                  userId={item?.user_id}
+                  avatar={item?.avatar}
+                  date={item?.date}
+                  username={item?.username}
+                  message={item?.message}
+                  isCanDelete={isAdmin}
+                  chatId={item?.chat_id}
+                />
+              ))
+            ) : isLoading ? (
+              <Box
+                mt="70"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Loading size={40} color="white" />
+              </Box>
+            ) : null}
           </VStack>
         </ScrollView>
       </Box>
 
-      {session ? (
+      {user ? (
         <InputMessage />
       ) : (
         <Pressable onPress={() => navigation.navigate("Login")}>

@@ -11,3 +11,7 @@ export const getChatList = (params) => {
 export const postMessage = (payload) => {
   return apiPublicChat.post(ENDPOINTS.CHAT.SEND_MESSAGE, payload);
 }
+
+export const deleteMessage = (payload) => {
+  return apiPublicChat.post(ENDPOINTS.CHAT.DELETE, payload);
+}

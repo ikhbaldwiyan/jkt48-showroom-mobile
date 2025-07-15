@@ -5,6 +5,7 @@ import { useSendMessage } from "../../../services/hooks/usePublicChat";
 import { TouchableOpacity } from "react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import useUser from "../../../utils/hooks/useUser";
+import Loading from "../../../components/atoms/Loading";
 
 const InputMessage = () => {
   const { session } = useUser();
@@ -29,6 +30,7 @@ const InputMessage = () => {
       }
     );
   };
+
   return (
     <Box
       display="flex"
@@ -50,7 +52,11 @@ const InputMessage = () => {
         rightElement={
           <TouchableOpacity onPress={handleSendChat} zIndex={999}>
             <Box mr="5">
-              <Icon as={<SendMessageIcon />} size={5} />
+              {sendMessage.isPending ? (
+                <Loading size={20} />
+              ) : (
+                <Icon as={<SendMessageIcon />} size={5} />
+              )}
             </Box>
           </TouchableOpacity>
         }
