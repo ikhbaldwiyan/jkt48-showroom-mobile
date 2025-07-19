@@ -16,7 +16,7 @@ import { RefreshControl } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ChatBubble from "./components/ChatBubble";
 import InputMessage from "./components/InputMessage";
-import { formatViews } from "../../utils/helpers";
+import { formatChatDate, formatViews } from "../../utils/helpers";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import {
   useChatList,
@@ -25,6 +25,7 @@ import {
 } from "../../services/hooks/usePublicChat";
 import useUser from "../../utils/hooks/useUser";
 import Loading from "../../components/atoms/Loading";
+import moment from "moment";
 
 const PublicChat = () => {
   const navigation = useNavigation();
@@ -166,45 +167,61 @@ const PublicChat = () => {
           }
         >
           <VStack p="3" pb="8" space={4}>
-            <Center>
-              <Box
-                p="2"
-                py="1"
-                display="flex"
-                borderRadius="md"
-                justifyContent="center"
-                alignItems="center"
-                bg="coolGray.500"
-              >
-                <Text fontWeight="medium" fontSize="xs" color="gray.300">
-                  Today
-                </Text>
-              </Box>
-            </Center>
-            {allChat?.length > 0 ? (
-              allChat?.map((item, idx) => (
-                <ChatBubble
-                  key={idx}
-                  userId={item?.user_id}
-                  avatar={item?.avatar}
-                  date={item?.date}
-                  username={item?.username}
-                  message={item?.message}
-                  isCanDelete={isAdmin}
-                  chatId={item?.chat_id}
-                />
-              ))
-            ) : isLoading ? (
-              <Box
-                mt="70"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Loading size={40} color="white" />
-              </Box>
-            ) : null}
+            {allChat?.length > 0 &&
+              (() => {
+                let lastDate = null;
+                return allChat.map((item, idx) => {
+                  const chatDate = moment.unix(item?.date).format("YYYY-MM-DD");
+                  const showDateBadge = chatDate !== lastDate;
+                  lastDate = chatDate;
+
+                  return (
+                    <React.Fragment key={idx}>
+                      {showDateBadge && (
+                        <Center>
+                          <Box
+                            p="2"
+                            py="1"
+                            display="flex"
+                            borderRadius="md"
+                            justifyContent="center"
+                            alignItems="center"
+                            bg="coolGray.500"
+                          >
+                            <Text
+                              fontWeight="medium"
+                              fontSize="xs"
+                              color="gray.300"
+                            >
+                              {formatChatDate(item?.date)}
+                            </Text>
+                          </Box>
+                        </Center>
+                      )}
+                      <ChatBubble
+                        userId={item?.user_id}
+                        avatar={item?.avatar}
+                        date={item?.date}
+                        username={item?.username}
+                        message={item?.message}
+                        isCanDelete={isAdmin}
+                        chatId={item?.chat_id}
+                      />
+                    </React.Fragment>
+                  );
+                });
+              })()}
           </VStack>
+          {isLoading && (
+            <Box
+              display="flex"
+              flexGrow={1}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Loading size={40} color="white" />
+            </Box>
+          )}
         </ScrollView>
       </Box>
 
