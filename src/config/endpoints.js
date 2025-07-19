@@ -64,6 +64,7 @@ export default {
     LIST: "/chat-list",
     ONLINE_USERS: "/analytics/real-time-users",
     SEND_MESSAGE: "/send-message",
-    DELETE: "/delete-chat"
+    DELETE: "/delete-chat",
+    ROOM_INFO: "/room-info"
   }
 };

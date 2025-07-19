@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useRef } from "react";
+import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
 import {
   Alert,
   Box,
@@ -20,7 +20,8 @@ import { formatViews } from "../../utils/helpers";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import {
   useChatList,
-  useOnlineUsers
+  useOnlineUsers,
+  useRoomInfo
 } from "../../services/hooks/usePublicChat";
 import useUser from "../../utils/hooks/useUser";
 import Loading from "../../components/atoms/Loading";
@@ -32,6 +33,9 @@ const PublicChat = () => {
   const isAdmin = user?.user_id === "4751328";
 
   const { data, refetch } = useOnlineUsers();
+  const { data: roomInfo } = useRoomInfo({
+    room_key: "d2e834751328"
+  });
   const {
     data: chatList,
     isLoading,
@@ -42,6 +46,10 @@ const PublicChat = () => {
   });
   const { refreshing, onRefresh } = useRefresh();
   const [isClose, setIsClose] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [isDelete, setIsDelete] = useState(false);
+
+  const allChat = [...(Array.isArray(chatList) ? chatList : []), ...messages];
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -61,41 +69,93 @@ const PublicChat = () => {
     refetchChat();
   };
 
+  // get realtime chat
+  const newSocket = new WebSocket("wss://online.showroom-live.com/");
+
+  newSocket.addEventListener("open", () => {
+    newSocket.send(`SUB\t${roomInfo?.bcsvr_key}`);
+  });
+
+  useEffect(() => {
+    newSocket.addEventListener("message", (event) => {
+      const message = event.data;
+      const chat = JSON.parse(message.split("\t")[2]);
+      console.log(chat);
+
+      if (chat?.t === 202) {
+        setIsDelete(!isDelete);
+      }
+
+      const newChat = {
+        chat_id: chat.id,
+        username: chat.n,
+        date: chat.ts,
+        message: chat.s,
+        avatar: chat.i,
+        user_id: chat.u
+      };
+
+      if (chat?.s?.length > 1) {
+        setMessages((prevState) => {
+          if (
+            prevState?.some(
+              (data) => data?.username === chat?.n && data?.message === chat?.s
+            )
+          ) {
+            return prevState;
+          }
+          if (Array.isArray(prevState) && chat?.t === 200) {
+            return [...prevState, newChat];
+          } else {
+            return [newChat];
+          }
+        });
+      }
+    });
+  }, [roomInfo, messages, isDelete]);
+
+  useEffect(() => {
+    refetchChat();
+    setMessages([]);
+  }, [isDelete]);
+
   return (
     <>
-      <Box flex="1" bg="secondary" p="3">
-        {!isClose && (
-          <Alert borderRadius={8} w="100%" bg="#0EA5E9" mb="2">
-            <VStack space={2} w="100%">
-              <HStack
-                space={1}
-                alignItems="flex-start"
-                justifyContent="space-between"
-              >
-                <HStack space={2} flexShrink={1}>
-                  <Text fontWeight="500" fontSize="13" color="white">
-                    Selamat datang di Public Chat! Disini kalian bisa saling
-                    diskusi mengenai apapun tentang JKT48 yaa!
-                  </Text>
+      <Box flex="1" bg="secondary">
+        {!isClose && roomInfo && (
+          <Box pt="1" p="3" pb="0">
+            <Alert borderRadius={8} w="100%" bg="#0EA5E9" mb="2">
+              <VStack space={2} w="100%">
+                <HStack
+                  space={1}
+                  alignItems="flex-start"
+                  justifyContent="space-between"
+                >
+                  <HStack space={2} flexShrink={1}>
+                    <Text fontWeight="500" fontSize="13" color="white">
+                      {roomInfo?.community_description}
+                    </Text>
+                  </HStack>
+                  <IconButton
+                    variant="unstyled"
+                    _focus={{
+                      borderWidth: 0
+                    }}
+                    icon={<CloseIcon size="4" />}
+                    _icon={{
+                      color: "coolGray.300"
+                    }}
+                    onPress={() => setIsClose(true)}
+                  />
                 </HStack>
-                <IconButton
-                  variant="unstyled"
-                  _focus={{
-                    borderWidth: 0
-                  }}
-                  icon={<CloseIcon size="4" />}
-                  _icon={{
-                    color: "coolGray.300"
-                  }}
-                  onPress={() => setIsClose(true)}
-                />
-              </HStack>
-            </VStack>
-          </Alert>
+              </VStack>
+            </Alert>
+          </Box>
         )}
 
         <ScrollView
-          mt="2"
+          p="3"
+          px="0"
           ref={scrollViewRef}
           contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start" }}
           onContentSizeChange={() =>
@@ -105,7 +165,7 @@ const PublicChat = () => {
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         >
-          <VStack space={4}>
+          <VStack p="3" pb="8" space={4}>
             <Center>
               <Box
                 p="2"
@@ -121,8 +181,8 @@ const PublicChat = () => {
                 </Text>
               </Box>
             </Center>
-            {chatList?.length > 0 ? (
-              chatList?.map((item, idx) => (
+            {allChat?.length > 0 ? (
+              allChat?.map((item, idx) => (
                 <ChatBubble
                   key={idx}
                   userId={item?.user_id}

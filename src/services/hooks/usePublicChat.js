@@ -11,6 +11,16 @@ export const useOnlineUsers = () => {
   });
 };
 
+export const useRoomInfo = (params) => {
+  return useQuery({
+    queryKey: ["roomInfo", params],
+    queryFn: async () => {
+      const response = await CHAT.getRoomInfo(params)
+      return response?.data;
+    },
+  })
+}
+
 export const useChatList = (params) => {
   return useQuery({
     queryKey: ["chatList", params],

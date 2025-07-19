@@ -3,15 +3,12 @@ import { Box, Icon, Input } from "native-base";
 import { SendMessageIcon } from "../../../assets/icon";
 import { useSendMessage } from "../../../services/hooks/usePublicChat";
 import { TouchableOpacity } from "react-native";
-import { useQueryClient } from "@tanstack/react-query";
 import useUser from "../../../utils/hooks/useUser";
 import Loading from "../../../components/atoms/Loading";
 
 const InputMessage = () => {
   const { session } = useUser();
   const sendMessage = useSendMessage();
-  const queryClient = useQueryClient();
-
   const [message, setMessage] = useState("");
 
   const handleSendChat = () => {
@@ -25,7 +22,6 @@ const InputMessage = () => {
       {
         onSuccess: () => {
           setMessage("");
-          queryClient.invalidateQueries("chatList");
         }
       }
     );

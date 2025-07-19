@@ -8,6 +8,10 @@ export const getChatList = (params) => {
   return apiPublicChat.get(ENDPOINTS.CHAT.LIST, { params });
 }
 
+export const getRoomInfo = (params) => {
+  return apiPublicChat.get(ENDPOINTS.CHAT.ROOM_INFO, { params });
+}
+
 export const postMessage = (payload) => {
   return apiPublicChat.post(ENDPOINTS.CHAT.SEND_MESSAGE, payload);
 }

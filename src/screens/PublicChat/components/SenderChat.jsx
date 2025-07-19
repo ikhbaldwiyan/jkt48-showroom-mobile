@@ -23,7 +23,7 @@ const SenderChat = ({
         <HStack space="1.5" alignItems="center">
           <VStack alignItems="flex-end" space={2}>
             <HStack space={2.5} alignItems="center">
-              <Text fontWeight="semibold" ml="3">
+              <Text maxW={240} fontWeight="semibold" ml="3">
                 {username}
               </Text>
               <Text fontSize="xs" mr="1" color="coolGray.400">

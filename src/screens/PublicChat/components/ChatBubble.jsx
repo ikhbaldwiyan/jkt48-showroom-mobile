@@ -24,7 +24,6 @@ const ChatBubble = ({
   const isSender = userId === parseInt(user?.user_id);
 
   const deleteMessage = useDeleteMessage();
-  const queryClient = useQueryClient();
   const toast = useToast();
 
   const [modalConfirm, setModalConfirm] = useState(false);
@@ -49,7 +48,6 @@ const ChatBubble = ({
             ),
             placement: "top-right"
           });
-          queryClient.invalidateQueries("chatList");
         },
         onError: () => {
           toast.show({
@@ -116,12 +114,14 @@ const ChatBubble = ({
           <VStack alignItems="flex-start" space={2}>
             <HStack space={isAdmin ? 2 : 2.5} alignItems="center">
               <Text
+                maxW={240}
                 color={isAdmin ? "cyan.500" : "white"}
                 fontWeight="semibold"
                 ml="1"
               >
                 {isAdmin ? "Admin" : username}
               </Text>
+
               {isAdmin && (
                 <Box mt="1">
                   <Wrench size={14} />
