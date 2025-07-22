@@ -28,10 +28,14 @@ import Loading from "../../components/atoms/Loading";
 import moment from "moment";
 
 const PublicChat = () => {
-  const navigation = useNavigation();
-  const scrollViewRef = useRef(null);
   const { user } = useUser();
+  const scrollViewRef = useRef(null);
+  const navigation = useNavigation();
   const isAdmin = user?.user_id === "4751328";
+
+  const [lastChatId, setLastChatId] = useState(0);
+  const [allLoadedChats, setAllLoadedChats] = useState([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const { data, refetch } = useOnlineUsers();
   const { data: roomInfo } = useRoomInfo({
@@ -43,14 +47,18 @@ const PublicChat = () => {
     refetch: refetchChat
   } = useChatList({
     room_id: "532815",
-    last_chat_id: 0
+    last_chat_id: lastChatId
   });
+  
   const { refreshing, onRefresh } = useRefresh();
   const [isClose, setIsClose] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
 
-  const allChat = [...(Array.isArray(chatList) ? chatList : []), ...messages];
+  const allChat = [
+    ...(Array.isArray(allLoadedChats) ? allLoadedChats : []),
+    ...messages
+  ];
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -120,6 +128,34 @@ const PublicChat = () => {
     setMessages([]);
   }, [isDelete]);
 
+  useEffect(() => {
+    if (lastChatId === 0 && chatList && chatList.length > 0) {
+      setAllLoadedChats(chatList);
+    }
+  }, [chatList, lastChatId]);
+
+  useEffect(() => {
+    if (isLoadingMore) {
+      setIsLoadingMore(true);
+    }
+  }, [allLoadedChats]);
+
+  const handleLoadNewChat = () => {
+    if (chatList && chatList.length > 0) {
+      const firstChatId = chatList[0]?.chat_id;
+      if (firstChatId && firstChatId !== lastChatId) {
+        setLastChatId(firstChatId);
+        setIsLoadingMore(true);
+        setAllLoadedChats((prevChats) => {
+          const newChats = chatList.filter(
+            (chat) => !prevChats.some((prev) => prev.chat_id === chat.chat_id)
+          );
+          return [...newChats, ...prevChats];
+        });
+      }
+    }
+  };
+
   return (
     <>
       <Box flex="1" bg="secondary">
@@ -159,13 +195,31 @@ const PublicChat = () => {
           px="0"
           ref={scrollViewRef}
           contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start" }}
-          onContentSizeChange={() =>
-            scrollViewRef.current?.scrollToEnd({ animated: false })
-          }
+          onContentSizeChange={() => {
+            if (!isLoadingMore) {
+              scrollViewRef.current?.scrollToEnd({ animated: false });
+            }
+          }}
+          onScroll={({ nativeEvent }) => {
+            if (nativeEvent.contentOffset.y <= 10) {
+              handleLoadNewChat();
+            }
+          }}
+          scrollEventThrottle={16}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         >
+          {isLoading && isLoadingMore && (
+            <Box
+              mb="1"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Loading size={30} color="white" />
+            </Box>
+          )}
           <VStack p="3" pb="8" space={4}>
             {allChat?.length > 0 &&
               (() => {
@@ -212,7 +266,7 @@ const PublicChat = () => {
                 });
               })()}
           </VStack>
-          {isLoading && (
+          {isLoading && !isLoadingMore && (
             <Box
               display="flex"
               flexGrow={1}
@@ -226,7 +280,7 @@ const PublicChat = () => {
       </Box>
 
       {user ? (
-        <InputMessage />
+        <InputMessage setIsLoadingMore={setIsLoadingMore} />
       ) : (
         <Pressable onPress={() => navigation.navigate("Login")}>
           <Box display="flex" alignItems="center" bg="coolGray.700" p="4">

@@ -6,7 +6,7 @@ import { TouchableOpacity } from "react-native";
 import useUser from "../../../utils/hooks/useUser";
 import Loading from "../../../components/atoms/Loading";
 
-const InputMessage = () => {
+const InputMessage = ({ setIsLoadingMore }) => {
   const { session } = useUser();
   const sendMessage = useSendMessage();
   const [message, setMessage] = useState("");
@@ -22,6 +22,7 @@ const InputMessage = () => {
       {
         onSuccess: () => {
           setMessage("");
+          setIsLoadingMore(false);
         }
       }
     );

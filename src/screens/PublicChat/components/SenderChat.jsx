@@ -20,7 +20,7 @@ const SenderChat = ({
       onLongPress={isCanDelete ? () => toggleConfirm() : null}
     >
       <Box display="flex" alignItems="flex-end" right={0}>
-        <HStack space="1.5" alignItems="center">
+        <HStack space="1.5" alignItems="flex-start">
           <VStack alignItems="flex-end" space={2}>
             <HStack space={2.5} alignItems="center">
               <Text maxW={240} fontWeight="semibold" ml="3">
@@ -42,6 +42,7 @@ const SenderChat = ({
             </Box>
           </VStack>
           <Image
+            mt="2"
             borderRadius="xl"
             style={{ width: 45, height: 45 }}
             source={{

@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { Box, HStack, Image, Text, useToast, VStack } from "native-base";
 import React, { useState } from "react";
 import { TouchableOpacity } from "react-native";
@@ -99,8 +98,9 @@ const ChatBubble = ({
         activeOpacity={isCanDelete ? 0.6 : 1}
         onLongPress={() => isCanDelete && setModalConfirm(true)}
       >
-        <HStack space="1.5" alignItems="center">
+        <HStack space="1.5" alignItems="flex-start">
           <Image
+            mt="1"
             borderRadius={isAdmin ? "xl" : "none"}
             style={{ width: 45, height: 45 }}
             source={{
