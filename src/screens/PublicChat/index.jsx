@@ -26,16 +26,21 @@ import {
 import useUser from "../../utils/hooks/useUser";
 import Loading from "../../components/atoms/Loading";
 import moment from "moment";
+import { useProfile } from "../../services/hooks/useProfile";
+import useAuthStore from "../../store/authStore";
 
 const PublicChat = () => {
-  const { user } = useUser();
+  const { user, session } = useUser();
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
   const isAdmin = user?.user_id === "4751328";
+  const { setUserProfile } = useAuthStore();
+  const { data: userProfile } = useProfile(user?.account_id);
 
   const [lastChatId, setLastChatId] = useState(0);
   const [allLoadedChats, setAllLoadedChats] = useState([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isLogin, setIsLogin] = useState();
 
   const { data, refetch } = useOnlineUsers();
   const { data: roomInfo } = useRoomInfo({
@@ -71,6 +76,13 @@ const PublicChat = () => {
       )
     });
   }, [data]);
+
+  useEffect(() => {
+    if (session) {
+      setIsLogin(true);
+      setUserProfile(userProfile);
+    }
+  }, [session]);
 
   const handleRefresh = () => {
     onRefresh();
@@ -285,7 +297,7 @@ const PublicChat = () => {
         </ScrollView>
       </Box>
 
-      {user ? (
+      {isLogin ? (
         <InputMessage setIsLoadingMore={setIsLoadingMore} />
       ) : (
         <Pressable onPress={() => navigation.navigate("Login")}>
