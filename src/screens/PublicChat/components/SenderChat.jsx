@@ -42,7 +42,6 @@ const SenderChat = ({
             </Box>
           </VStack>
           <Image
-            mt="2"
             borderRadius="xl"
             style={{ width: 45, height: 45 }}
             source={{

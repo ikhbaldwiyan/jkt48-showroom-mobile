@@ -100,7 +100,6 @@ const ChatBubble = ({
       >
         <HStack space="1.5" alignItems="flex-start">
           <Image
-            mt="1"
             borderRadius={isAdmin ? "xl" : "none"}
             style={{ width: 45, height: 45 }}
             source={{

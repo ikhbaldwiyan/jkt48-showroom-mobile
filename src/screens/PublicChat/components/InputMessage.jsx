@@ -38,25 +38,33 @@ const InputMessage = ({ setIsLoadingMore }) => {
     >
       <Input
         py="2"
+        px="4"
         borderRadius="full"
-        placeholder="Send a message..."
+        placeholder="Write a message..."
         bg="secondary"
-        _input={{
-          color: "white"
-        }}
         value={message}
         onChangeText={(text) => setMessage(text)}
-        rightElement={
+        InputRightElement={
           <TouchableOpacity onPress={handleSendChat} zIndex={999}>
-            <Box mr="5">
+            <Box mr="4">
               {sendMessage.isPending ? (
                 <Loading size={20} />
               ) : (
-                <Icon as={<SendMessageIcon />} size={5} />
+                <Icon as={<SendMessageIcon size={5} color="white" />}  />
               )}
             </Box>
           </TouchableOpacity>
         }
+        _focus={{
+          borderColor: "primary",
+          backgroundColor: "secondary"
+        }}
+        _input={{
+          color: "white",
+          selectionColor: "white", 
+          cursorColor: "white",
+          paddingRight: 50 
+        }}
       />
     </Box>
   );
