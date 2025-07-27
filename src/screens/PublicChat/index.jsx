@@ -12,7 +12,7 @@ import {
   Text,
   VStack
 } from "native-base";
-import { RefreshControl } from "react-native";
+import { RefreshControl, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ChatBubble from "./components/ChatBubble";
 import InputMessage from "./components/InputMessage";
@@ -155,6 +155,13 @@ const PublicChat = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const keyboardListener = Keyboard.addListener('keyboardDidShow', () => {
+      scrollViewRef.current?.scrollToEnd({ animated: false });
+    });
+    return () => keyboardListener.remove();
+  }, []);
 
   return (
     <>
