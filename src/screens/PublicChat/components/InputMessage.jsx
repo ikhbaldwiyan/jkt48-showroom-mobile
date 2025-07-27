@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Icon, Input } from "native-base";
+import { Box, Icon, Input, Text, Toast, useToast } from "native-base";
 import { SendMessageIcon } from "../../../assets/icon";
 import { useSendMessage } from "../../../services/hooks/usePublicChat";
 import { TouchableOpacity } from "react-native";
@@ -8,6 +8,7 @@ import Loading from "../../../components/atoms/Loading";
 
 const InputMessage = ({ setIsLoadingMore }) => {
   const { session } = useUser();
+  const toast = useToast();
   const sendMessage = useSendMessage();
   const [message, setMessage] = useState("");
 
@@ -23,6 +24,18 @@ const InputMessage = ({ setIsLoadingMore }) => {
         onSuccess: () => {
           setMessage("");
           setIsLoadingMore(false);
+        },
+        onError: (error) => {
+          console.log(error);
+          toast.show({
+            render: () => (
+              <Box bg="red" px="2" m="3" py="1" rounded="sm" mb={5}>
+                <Text>Gagal mengirim chat, pesan terlalu panjang</Text>
+              </Box>
+            ),
+            placement: "bottom"
+          });
+          setMessage("");
         }
       }
     );
@@ -50,7 +63,7 @@ const InputMessage = ({ setIsLoadingMore }) => {
               {sendMessage.isPending ? (
                 <Loading size={20} />
               ) : (
-                <Icon as={<SendMessageIcon size={5} color="white" />}  />
+                <Icon as={<SendMessageIcon size={5} color="white" />} />
               )}
             </Box>
           </TouchableOpacity>
@@ -61,9 +74,9 @@ const InputMessage = ({ setIsLoadingMore }) => {
         }}
         _input={{
           color: "white",
-          selectionColor: "white", 
+          selectionColor: "white",
           cursorColor: "white",
-          paddingRight: 50 
+          paddingRight: 4
         }}
       />
     </Box>

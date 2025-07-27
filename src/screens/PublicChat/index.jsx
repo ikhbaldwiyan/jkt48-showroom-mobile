@@ -89,7 +89,6 @@ const PublicChat = () => {
     newSocket.addEventListener("message", (event) => {
       const message = event.data;
       const chat = JSON.parse(message.split("\t")[2]);
-      console.log(chat);
 
       if (chat?.t === 202) {
         setIsDelete(!isDelete);
