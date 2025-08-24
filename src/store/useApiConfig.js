@@ -11,6 +11,8 @@ import {
   ROOM_LIST_API,
   PUBLIC_CHAT_API,
   ADMIN_USERS,
+  ADMIN_TOKEN,
+  ADMIN_COOKIE,
 } from "@env";
 
 const useApiConfig = create(
@@ -25,6 +27,8 @@ const useApiConfig = create(
       ROOM_LIST_API,
       PUBLIC_CHAT_API,
       ADMIN_USERS,
+      ADMIN_TOKEN,
+      ADMIN_COOKIE,
       DONATION_IMG: "",
       MINIMUM_WATCH_MULTI_lIVE: 150,
       IS_MULTI_LIVE_RELEASE: false,

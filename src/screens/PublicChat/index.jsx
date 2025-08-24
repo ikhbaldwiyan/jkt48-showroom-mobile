@@ -1,6 +1,5 @@
 import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
 import moment from "moment";
-import { ADMIN_USERS } from "@env";
 import { RefreshControl, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useRefresh } from "../../utils/hooks/useRefresh";
@@ -31,9 +30,12 @@ import {
 import ChatBubble from "./components/ChatBubble";
 import InputMessage from "./components/InputMessage";
 import Loading from "../../components/atoms/Loading";
+import useApiConfig from "../../store/useApiConfig";
 
 const PublicChat = () => {
   const { user, session } = useUser();
+  const { ADMIN_USERS } = useApiConfig();
+
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
   const adminUserIds = ADMIN_USERS?.split(",").map(Number);

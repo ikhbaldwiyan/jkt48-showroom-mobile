@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ADMIN_USERS } from "@env";
 import { TouchableOpacity } from "react-native";
 import { useDeleteMessage } from "../../../services/hooks/usePublicChat";
 import { getTimes } from "../../../utils/helpers";
@@ -12,6 +11,7 @@ import {
   ImagePreviewModal
 } from "../../../components/atoms/Modal";
 import SenderChat from "./SenderChat";
+import useApiConfig from "../../../store/useApiConfig";
 
 const ChatBubble = ({
   avatar,
@@ -25,9 +25,11 @@ const ChatBubble = ({
   image
 }) => {
   const { user, session } = useUser();
+  const { ADMIN_USERS, ADMIN_TOKEN, ADMIN_COOKIE } = useApiConfig();
   const adminUserIds = ADMIN_USERS?.split(",").map(Number);
   const isAdmin = adminUserIds.includes(userId);
   const isSender = userId == parseInt(user?.user_id);
+  const isOwner = user?.user_id === 4751328;
 
   const deleteMessage = useDeleteMessage();
   const toast = useToast();
@@ -41,8 +43,8 @@ const ChatBubble = ({
     deleteMessage.mutate(
       {
         chat_id: chatId,
-        csrf_token: session?.csrf_token,
-        sr_id: session?.cookie_login_id,
+        csrf_token: isOwner ? session?.csrf_token : ADMIN_TOKEN,
+        sr_id: isOwner ? session?.cookie_login_id : ADMIN_COOKIE,
         room_id: "532815"
       },
       {
