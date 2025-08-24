@@ -9,7 +9,8 @@ import {
   JKT48_SHOWROOM_API,
   PODIUM_API,
   ROOM_LIST_API,
-  PUBLIC_CHAT_API
+  PUBLIC_CHAT_API,
+  ADMIN_USERS,
 } from "@env";
 
 const useApiConfig = create(
@@ -23,6 +24,7 @@ const useApiConfig = create(
       PODIUM_API,
       ROOM_LIST_API,
       PUBLIC_CHAT_API,
+      ADMIN_USERS,
       DONATION_IMG: "",
       MINIMUM_WATCH_MULTI_lIVE: 150,
       IS_MULTI_LIVE_RELEASE: false,

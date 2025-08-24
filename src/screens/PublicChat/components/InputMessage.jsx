@@ -53,7 +53,7 @@ const InputMessage = ({ setIsLoadingMore }) => {
         py="2"
         px="4"
         borderRadius="full"
-        placeholder="Write a message..."
+        placeholder="Ketik pesan..."
         bg="secondary"
         value={message}
         onChangeText={(text) => setMessage(text)}

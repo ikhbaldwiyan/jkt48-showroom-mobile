@@ -1,11 +1,16 @@
-import { Box, HStack, Image, Text, useToast, VStack } from "native-base";
 import React, { useState } from "react";
+import { ADMIN_USERS } from "@env";
 import { TouchableOpacity } from "react-native";
-import { Wrench } from "../../../assets/icon";
-import { ModalConfirmation } from "../../../components/atoms/Modal";
 import { useDeleteMessage } from "../../../services/hooks/usePublicChat";
 import { getTimes } from "../../../utils/helpers";
 import useUser from "../../../utils/hooks/useUser";
+
+import { Wrench } from "../../../assets/icon";
+import { Box, HStack, Image, Text, useToast, VStack } from "native-base";
+import {
+  ModalConfirmation,
+  ImagePreviewModal
+} from "../../../components/atoms/Modal";
 import SenderChat from "./SenderChat";
 
 const ChatBubble = ({
@@ -16,16 +21,19 @@ const ChatBubble = ({
   userId,
   date,
   chatId,
-  isCanDelete
+  isCanDelete,
+  image
 }) => {
   const { user, session } = useUser();
-  const isAdmin = userId == 4751328;
-  const isSender = userId === parseInt(user?.user_id);
+  const adminUserIds = ADMIN_USERS?.split(",").map(Number);
+  const isAdmin = adminUserIds.includes(userId);
+  const isSender = userId == parseInt(user?.user_id);
 
   const deleteMessage = useDeleteMessage();
   const toast = useToast();
 
   const [modalConfirm, setModalConfirm] = useState(false);
+  const [imagePreviewModal, setImagePreviewModal] = useState(false);
 
   const handleDeleteChat = () => {
     setModalConfirm(false);
@@ -86,6 +94,7 @@ const ChatBubble = ({
           userId={user?.user_id}
           toggleConfirm={() => setModalConfirm(true)}
           isCanDelete={isCanDelete}
+          image={image}
         />
         <ModalConfirm />
       </>
@@ -118,7 +127,13 @@ const ChatBubble = ({
                 fontWeight="semibold"
                 ml="1"
               >
-                {isAdmin ? "Admin" : username}
+                {userId === 8262647
+                  ? "Admin - Han"
+                  : userId === 4751328 || userId === 0
+                  ? "Admin - Inzoid"
+                  : isAdmin
+                  ? "Admin"
+                  : username}
               </Text>
 
               {isAdmin && (
@@ -138,12 +153,37 @@ const ChatBubble = ({
               borderRadius="2xl"
               borderTopLeftRadius={4}
             >
-              <Text fontSize="13">{message}</Text>
+              {image ? (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => setImagePreviewModal(true)}
+                  onLongPress={() => isCanDelete && setModalConfirm(true)}
+                >
+                  <Image
+                    alt="image"
+                    width={400}
+                    height={200}
+                    source={{ uri: image }}
+                    borderRadius="md"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <Text fontSize="13">{message}</Text>
+              )}
             </Box>
           </VStack>
         </HStack>
       </TouchableOpacity>
       <ModalConfirm />
+
+      {image && (
+        <ImagePreviewModal
+          isOpen={imagePreviewModal}
+          onClose={() => setImagePreviewModal(false)}
+          imageUri={image}
+          imageAlt={`Image from ${username}`}
+        />
+      )}
     </Box>
   );
 };

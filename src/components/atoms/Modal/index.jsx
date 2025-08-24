@@ -35,3 +35,5 @@ export const ModalConfirmation = ({
     </>
   );
 };
+
+export { default as ImagePreviewModal } from './ImagePreviewModal';

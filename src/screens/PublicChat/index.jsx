@@ -1,4 +1,20 @@
 import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
+import moment from "moment";
+import { ADMIN_USERS } from "@env";
+import { RefreshControl, Keyboard } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useRefresh } from "../../utils/hooks/useRefresh";
+import { useProfile } from "../../services/hooks/useProfile";
+import { formatChatDate, formatViews } from "../../utils/helpers";
+
+import {
+  useChatList,
+  useOnlineUsers,
+  useRoomInfo
+} from "../../services/hooks/usePublicChat";
+import useUser from "../../utils/hooks/useUser";
+import useAuthStore from "../../store/authStore";
+
 import {
   Alert,
   Box,
@@ -12,28 +28,16 @@ import {
   Text,
   VStack
 } from "native-base";
-import { RefreshControl, Keyboard } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import ChatBubble from "./components/ChatBubble";
 import InputMessage from "./components/InputMessage";
-import { formatChatDate, formatViews } from "../../utils/helpers";
-import { useRefresh } from "../../utils/hooks/useRefresh";
-import {
-  useChatList,
-  useOnlineUsers,
-  useRoomInfo
-} from "../../services/hooks/usePublicChat";
-import useUser from "../../utils/hooks/useUser";
 import Loading from "../../components/atoms/Loading";
-import moment from "moment";
-import { useProfile } from "../../services/hooks/useProfile";
-import useAuthStore from "../../store/authStore";
 
 const PublicChat = () => {
   const { user, session } = useUser();
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
-  const isAdmin = user?.user_id === "4751328";
+  const adminUserIds = ADMIN_USERS?.split(",").map(Number);
+  const isAdmin = adminUserIds.includes(parseInt(user?.user_id));
   const { setUserProfile } = useAuthStore();
   const { data: userProfile } = useProfile(user?.account_id);
 
@@ -112,10 +116,11 @@ const PublicChat = () => {
         date: chat.ts,
         message: chat.s,
         avatar: chat.i,
-        user_id: chat.u
+        user_id: chat.u,
+        image: chat.m,
       };
 
-      if (chat?.s?.length > 1) {
+      if (chat?.s?.length > 1 || chat.m) {
         setMessages((prevState) => {
           if (
             prevState?.some(
@@ -278,6 +283,7 @@ const PublicChat = () => {
                         message={item?.message}
                         isCanDelete={isAdmin}
                         chatId={item?.chat_id}
+                        image={item?.image}
                       />
                     </React.Fragment>
                   );

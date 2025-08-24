@@ -1,5 +1,5 @@
-import { Box, HStack, Image, Text, VStack } from "native-base";
 import React from "react";
+import { Box, HStack, Image, Text, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { getTimes } from "../../../utils/helpers";
 
@@ -24,7 +24,7 @@ const SenderChat = ({
           <VStack alignItems="flex-end" space={2}>
             <HStack space={2.5} alignItems="center">
               <Text maxW={240} fontWeight="semibold" ml="3">
-                {username}
+                {userId == 4751328 ? "Inzoid" : username}
               </Text>
               <Text fontSize="xs" mr="1" color="coolGray.400">
                 {getTimes(date)}
