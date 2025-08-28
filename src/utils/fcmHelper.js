@@ -3,6 +3,7 @@ import useAuthStore from "../store/authStore";
 import { updateDetailUser } from "../services/auth";
 
 const setUserProfile = useAuthStore.getState().setUserProfile;
+const userProfile = useAuthStore.getState().userProfile;
 
 export async function getFcmToken() {
   const fcmToken = await messaging().getToken();
