@@ -6,7 +6,7 @@ import {
   Text,
   VStack,
   Button,
-  PlayIcon,
+  PlayIcon
 } from "native-base";
 import moment from "moment";
 import "moment/locale/id";
@@ -18,7 +18,7 @@ import {
   GraduateIcon,
   RightArrow,
   TheaterIcon,
-  TimesIcon,
+  TimesIcon
 } from "../../../assets/icon";
 import { Linking, TouchableOpacity } from "react-native";
 import CountdownTimer from "../CountdownTimer";
@@ -83,7 +83,7 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                 onPress={() => navigation.navigate("ScheduleDetail", { item })}
               >
                 <VStack space={2} mb="4">
-                  <Box p="2.5" bg="teal" borderRadius={10}>
+                  <Box p="2.5" bg="cyan.600" borderRadius={10}>
                     <HStack space={2} alignItems="center">
                       <TheaterIcon size="22" color="white" />
                       <Text fontSize="md" fontWeight="bold">
@@ -133,6 +133,8 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                       height={200}
                       source={{ uri: item?.setlist?.image }}
                       borderRadius="8"
+                      borderTopRightRadius={4}
+                      borderTopLeftRadius={4}
                       borderBottomLeftRadius={0}
                       borderBottomRightRadius={0}
                       alt="Theater"
@@ -143,7 +145,7 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                         borderTopRightRadius={0}
                         borderTopLeftRadius={0}
                         borderRadius="8"
-                        bg="cyan.600"
+                        bg="blueGray.700"
                       >
                         <Text fontSize="14" fontWeight="medium">
                           {item.setlist.description.slice(0, 200)}...
