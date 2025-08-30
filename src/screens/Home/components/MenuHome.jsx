@@ -14,6 +14,7 @@ import {
   VStack
 } from "native-base";
 import {
+  ChatIcon,
   LiveIcon,
   Medal,
   MultiLiveIcon,
@@ -22,12 +23,14 @@ import {
 } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
 import ModalInfoMulti from "../../MultiLive/components/ModalInfoMulti";
+import useApiConfig from "../../../store/useApiConfig";
 
 const MenuHome = () => {
   const { navigate } = useNavigation();
   const { user } = useAuthStore();
   const { data: profile } = useProfile(user?.user_id);
   const [infoModal, setInfoModal] = useState(false);
+  const { IS_PUBLIC_CHAT_OPEN } = useApiConfig();
 
   const menus = [
     {
@@ -35,6 +38,15 @@ const MenuHome = () => {
       icon: <TheaterIcon size="24" color="white" />,
       screen: "Theater"
     },
+    ...(IS_PUBLIC_CHAT_OPEN
+      ? [
+          {
+            name: "Public Chat",
+            icon: <ChatIcon size="24" color="white" />,
+            screen: "PublicChat"
+          }
+        ]
+      : []),
     ...(hasMultiRoomAccess(profile)
       ? [
           {

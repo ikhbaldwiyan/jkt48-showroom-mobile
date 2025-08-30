@@ -25,6 +25,7 @@ import {
   MultiShowroom,
   EditProfile,
   MultiLiveAccess,
+  PublicChat,
 } from "../screens";
 
 export const tabRoutes = [
@@ -170,5 +171,10 @@ export const stackRoutes = [
     name: "SupportProject",
     component: SupportProject,
     options: { headerShown: true }
-  }
+  },
+  {
+    name: "PublicChat",
+    component: PublicChat,
+    options: { headerShown: true }
+  },
 ];

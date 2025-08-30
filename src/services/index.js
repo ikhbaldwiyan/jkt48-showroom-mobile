@@ -4,5 +4,6 @@ import * as AUTH from "./auth";
 import * as SCHEDULES from "./schedules";
 import * as USER from "./user";
 import * as LEADERBOARD from "./leaderboard";
+import * as CHAT from "./chat"
 
-export { ROOMS, STREAM, AUTH, SCHEDULES, USER, LEADERBOARD };
+export { ROOMS, STREAM, AUTH, SCHEDULES, USER, LEADERBOARD, CHAT };

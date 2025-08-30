@@ -1,8 +1,19 @@
-// stores/apiConfigStore.js
 import create from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SHOWROOM_API, USER_API, AUTH_API, HISTORY_API, JKT48_SHOWROOM_API, PODIUM_API, ROOM_LIST_API } from "@env";
+import {
+  SHOWROOM_API,
+  USER_API,
+  AUTH_API,
+  HISTORY_API,
+  JKT48_SHOWROOM_API,
+  PODIUM_API,
+  ROOM_LIST_API,
+  PUBLIC_CHAT_API,
+  ADMIN_USERS,
+  ADMIN_TOKEN,
+  ADMIN_COOKIE,
+} from "@env";
 
 const useApiConfig = create(
   persist(
@@ -14,7 +25,14 @@ const useApiConfig = create(
       JKT48_SHOWROOM_API,
       PODIUM_API,
       ROOM_LIST_API,
+      PUBLIC_CHAT_API,
+      ADMIN_USERS,
+      ADMIN_TOKEN,
+      ADMIN_COOKIE,
       DONATION_IMG: "",
+      IS_PUBLIC_CHAT_OPEN: false,
+      IS_SHOW_ONLINE_USERS: true,
+      IS_BANNER_CHAT_CLOSED: false,
       MINIMUM_WATCH_MULTI_lIVE: 150,
       IS_MULTI_LIVE_RELEASE: false,
       IS_MULTI_LIVE_INFO: false,
