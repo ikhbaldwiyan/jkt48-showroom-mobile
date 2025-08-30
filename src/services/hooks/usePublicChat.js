@@ -15,7 +15,7 @@ export const useOnlineUsers = (isShowOnline) => {
           }
         }
       } catch (error) {
-        console.error('Error fetching online users:', error);
+        console.log('Error fetching online users:', error);
         throw error;
       }
     },

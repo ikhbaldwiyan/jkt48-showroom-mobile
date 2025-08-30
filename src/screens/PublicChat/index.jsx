@@ -110,60 +110,87 @@ const PublicChat = () => {
   };
 
   // get realtime chat
-  const newSocket = new WebSocket("wss://online.showroom-live.com/");
-
-  newSocket.addEventListener("open", () => {
-    newSocket.send(`SUB\t${roomInfo?.bcsvr_key}`);
-  });
-
   useEffect(() => {
-    newSocket.addEventListener("message", (event) => {
-      const message = event.data;
-      const chat = JSON.parse(message.split("\t")[2]);
+    let socket = null;
+    
+    if (roomInfo?.bcsvr_key) {
+      socket = new WebSocket("wss://online.showroom-live.com/");
+      
+      socket.addEventListener("open", () => {
+        socket.send(`SUB\t${roomInfo.bcsvr_key}`);
+      });
 
-      if (chat?.t === 202) {
-        setIsDelete(!isDelete);
-      }
+      socket.addEventListener("message", (event) => {
+        try {
+          const message = event.data;
+          const chat = JSON.parse(message.split("\t")[2]);
 
-      const newChat = {
-        chat_id: chat.id,
-        username: chat.n,
-        date: chat.ts,
-        message: chat.s,
-        avatar: chat.i,
-        user_id: chat.u,
-        image: chat.m
-      };
-
-      if (chat?.s?.length > 1 || chat.m) {
-        setMessages((prevState) => {
-          if (
-            prevState?.some(
-              (data) => data?.username === chat?.n && data?.message === chat?.s
-            )
-          ) {
-            return prevState;
+          if (chat?.t === 202) {
+            setIsDelete(prev => !prev);
           }
-          if (Array.isArray(prevState) && chat?.t === 200) {
-            return [...prevState, newChat];
-          } else {
-            return [newChat];
+
+          const newChat = {
+            chat_id: chat.id,
+            username: chat.n,
+            date: chat.ts,
+            message: chat.s,
+            avatar: chat.i,
+            user_id: chat.u,
+            image: chat.m
+          };
+
+          if (chat?.s?.length > 1 || chat.m) {
+            setMessages((prevState) => {
+              if (
+                prevState?.some(
+                  (data) => data?.username === chat?.n && data?.message === chat?.s
+                )
+              ) {
+                return prevState;
+              }
+              if (Array.isArray(prevState) && chat?.t === 200) {
+                return [...prevState, newChat];
+              } else {
+                return [newChat];
+              }
+            });
           }
-        });
+        } catch (error) {
+          console.error('Error parsing WebSocket message:', error);
+        }
+      });
+
+      socket.addEventListener("error", (error) => {
+        console.error('WebSocket error:', error);
+      });
+
+      socket.addEventListener("close", () => {
+        console.log('WebSocket connection closed');
+      });
+    }
+
+    // Cleanup function
+    return () => {
+      if (socket) {
+        socket.removeEventListener("message", () => {});
+        socket.removeEventListener("open", () => {});
+        socket.removeEventListener("error", () => {});
+        socket.removeEventListener("close", () => {});
+        socket.close();
       }
-    });
-  }, [roomInfo, messages, isDelete]);
+    };
+  }, [roomInfo?.bcsvr_key]); // Only depend on roomInfo.bcsvr_key
 
   useEffect(() => {
     refetchChat();
     setMessages([]);
-  }, [isDelete]);
+  }, [isDelete, refetchChat]);
 
   useEffect(() => {
     if (lastChatId === 0 && chatList && chatList.length > 0) {
       setAllLoadedChats(chatList);
     }
-  }, [chatList, lastChatId]);
+  }, [chatList, lastChatId, refetchChat]);
 
   useEffect(() => {
     if (isLoadingMore) {
@@ -268,7 +295,7 @@ const PublicChat = () => {
                   lastDate = chatDate;
 
                   return (
-                    <React.Fragment key={idx}>
+                    <React.Fragment key={item?.chat_id}>
                       {showDateBadge && (
                         <Center>
                           <Box
