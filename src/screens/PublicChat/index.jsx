@@ -299,6 +299,7 @@ const PublicChat = () => {
                         isCanDelete={isAdmin}
                         chatId={item?.chat_id}
                         image={item?.image}
+                        refetchChat={refetchChat}
                       />
                     </React.Fragment>
                   );

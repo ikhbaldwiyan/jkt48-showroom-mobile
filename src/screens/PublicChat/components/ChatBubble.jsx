@@ -22,7 +22,8 @@ const ChatBubble = ({
   date,
   chatId,
   isCanDelete,
-  image
+  image,
+  refetchChat,
 }) => {
   const { user, session } = useUser();
   const { ADMIN_USERS, ADMIN_TOKEN, ADMIN_COOKIE } = useApiConfig();
@@ -57,6 +58,7 @@ const ChatBubble = ({
             ),
             placement: "top-right"
           });
+          refetchChat();
         },
         onError: () => {
           toast.show({
@@ -97,6 +99,7 @@ const ChatBubble = ({
           toggleConfirm={() => setModalConfirm(true)}
           isCanDelete={isCanDelete}
           image={image}
+          refetchChat={refetchChat}
         />
         <ModalConfirm />
       </>
