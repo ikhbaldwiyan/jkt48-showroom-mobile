@@ -131,7 +131,7 @@ const ChatBubble = ({
               >
                 {userId === 8262647
                   ? "Admin - Han"
-                  : userId === 4751328 || userId === 0
+                  : userId === 4751328
                   ? "Admin - Inzoid"
                   : isAdmin
                   ? "Admin"

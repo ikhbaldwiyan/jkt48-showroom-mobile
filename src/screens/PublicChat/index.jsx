@@ -18,6 +18,7 @@ import {
   Alert,
   Box,
   Center,
+  ChevronDownIcon,
   CircleIcon,
   CloseIcon,
   HStack,
@@ -34,7 +35,8 @@ import useApiConfig from "../../store/useApiConfig";
 
 const PublicChat = () => {
   const { user, session } = useUser();
-  const { ADMIN_USERS } = useApiConfig();
+  const { ADMIN_USERS, IS_SHOW_ONLINE_USERS, IS_BANNER_CHAT_CLOSED } =
+    useApiConfig();
 
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
@@ -47,8 +49,9 @@ const PublicChat = () => {
   const [allLoadedChats, setAllLoadedChats] = useState([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isLogin, setIsLogin] = useState();
+  const isShowOnline = IS_SHOW_ONLINE_USERS || userProfile?.is_developer
 
-  const { data, refetch } = useOnlineUsers();
+  const { data, refetch } = useOnlineUsers(isShowOnline);
   const { data: roomInfo } = useRoomInfo({
     room_key: "d2e834751328"
   });
@@ -60,9 +63,9 @@ const PublicChat = () => {
     room_id: "532815",
     last_chat_id: lastChatId
   });
-  
+
   const { refreshing, onRefresh } = useRefresh();
-  const [isClose, setIsClose] = useState(false);
+  const [isClose, setIsClose] = useState(IS_BANNER_CHAT_CLOSED);
   const [messages, setMessages] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
 
@@ -75,13 +78,23 @@ const PublicChat = () => {
     navigation.setOptions({
       headerTitle: "Public Chat",
       headerRight: () => (
-        <HStack space={2} alignItems="center">
-          <CircleIcon size="xs" color="green.500" />
-          <Text>{formatViews(data?.onlineUsers)} Online</Text>
-        </HStack>
+        <>
+          {isClose && (
+            <IconButton
+              icon={<ChevronDownIcon color="white" size="4" />}
+              onPress={() => setIsClose(false)}
+            />
+          )}
+          {isShowOnline && (
+            <HStack space={2} alignItems="center">
+              <CircleIcon size="xs" color="green.500" />
+              <Text>{formatViews(data?.onlineUsers)} Online</Text>
+            </HStack>
+          )}
+        </>
       )
     });
-  }, [data]);
+  }, [data, isClose]);
 
   useEffect(() => {
     if (session) {
@@ -119,7 +132,7 @@ const PublicChat = () => {
         message: chat.s,
         avatar: chat.i,
         user_id: chat.u,
-        image: chat.m,
+        image: chat.m
       };
 
       if (chat?.s?.length > 1 || chat.m) {
@@ -175,7 +188,7 @@ const PublicChat = () => {
   };
 
   useEffect(() => {
-    const keyboardListener = Keyboard.addListener('keyboardDidShow', () => {
+    const keyboardListener = Keyboard.addListener("keyboardDidShow", () => {
       scrollViewRef.current?.scrollToEnd({ animated: false });
     });
     return () => keyboardListener.remove();

@@ -1,12 +1,23 @@
 import { CHAT } from "..";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const useOnlineUsers = () => {
+export const useOnlineUsers = (isShowOnline) => {
   return useQuery({
     queryKey: ["onlineUsers"],
     queryFn: async () => {
-      const response = await CHAT.getOnlineUsers()
-      return response?.data;
+      try {
+        if (isShowOnline) {
+          const response = await CHAT.getOnlineUsers()
+          return response?.data;
+        } else {
+          return {
+            onlineUsers: 0
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching online users:', error);
+        throw error;
+      }
     },
   });
 };
