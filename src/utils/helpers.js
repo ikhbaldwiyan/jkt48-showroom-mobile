@@ -1,3 +1,4 @@
+import moment from "moment";
 import useApiConfig from "../store/useApiConfig";
 
 export const cleanImage = (image, isDetail) => {
@@ -154,4 +155,13 @@ export const hasMultiRoomAccess = (profile) => {
   } else {
     return false;
   }
+}
+
+export const formatChatDate = (unixTimestamp) => {
+  const date = moment.unix(unixTimestamp).locale("id");
+  const today = moment().locale("id");
+  if (date.isSame(today, "day")) {
+    return "Today";
+  }
+  return date.format("DD MMMM"); // e.g., '19 Juli'
 }
