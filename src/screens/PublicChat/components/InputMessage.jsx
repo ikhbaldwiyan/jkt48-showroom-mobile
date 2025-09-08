@@ -1,18 +1,30 @@
+import {
+  Box,
+  Icon,
+  Input,
+  useToast
+} from "native-base";
 import React, { useState } from "react";
-import { Box, Icon, Input, Text, Toast, useToast } from "native-base";
-import { SendMessageIcon } from "../../../assets/icon";
-import { useSendMessage } from "../../../services/hooks/usePublicChat";
 import { TouchableOpacity } from "react-native";
-import useUser from "../../../utils/hooks/useUser";
+import { SendMessageIcon } from "../../../assets/icon";
 import Loading from "../../../components/atoms/Loading";
+import ToastAlert from "../../../components/atoms/ToastAlert";
+import { useSendMessage } from "../../../services/hooks/usePublicChat";
+import useAuthStore from "../../../store/authStore";
 import useApiConfig from "../../../store/useApiConfig";
+import useUser from "../../../utils/hooks/useUser";
+import { useNavigation } from "@react-navigation/native";
+
 
 const InputMessage = ({ setIsLoadingMore }) => {
-  const { session } = useUser();
   const toast = useToast();
+  const { session } = useUser();
+  const { logout } = useAuthStore();
+  const { PUBLIC_CHAT_ROOM_ID } = useApiConfig();
+  const navigation = useNavigation();
+
   const sendMessage = useSendMessage();
   const [message, setMessage] = useState("");
-  const { PUBLIC_CHAT_ROOM_ID } = useApiConfig();
 
   const handleSendChat = () => {
     sendMessage.mutate(
@@ -28,20 +40,50 @@ const InputMessage = ({ setIsLoadingMore }) => {
           setIsLoadingMore(false);
         },
         onError: (error) => {
-          console.log(error);
-          toast.show({
-            render: () => (
-              <Box bg="red" px="2" m="3" py="1" rounded="sm" mb={5}>
-                {error?.response?.data?.error === 1 ? (
-                  <Text>Gagal mengirim chat, pesan terlalu panjang</Text>
-                ): (
-                  <Text>Gagal mengirim chat, session habis silakan login ulang</Text>
-                )}
-              </Box>
-            ),
-            placement: "bottom"
-          });
           setMessage("");
+          console.log(error);
+
+          const errorStatus = error?.response?.data?.error;
+          const sessionTimeout =
+            errorStatus !== 1 && !errorStatus.includes("wajib diisi");
+
+          if (sessionTimeout) {
+            toast.show({
+              render: () => (
+                <ToastAlert
+                  variant="left-accent"
+                  status="warning"
+                  title="Gagal mengirim chat"
+                  description="session token sudah habis silakan login ulang"
+                />
+              ),
+              placement: "top",
+              duration: 8000
+            });
+          } else {
+            toast.show({
+              render: () => (
+                <ToastAlert
+                  variant="left-accent"
+                  status="error"
+                  title="Gagal mengirim chat"
+                  description={
+                    errorStatus === 1
+                      ? "Pesan terlalu panjang"
+                      : errorStatus.includes("wajib diisi")
+                      ? "Pesan tidak boleh kosong"
+                      : ""
+                  }
+                />
+              ),
+              placement: "top"
+            });
+          }
+
+          if (sessionTimeout && message.length > 0) {
+            logout();
+            navigation.navigate("Login");
+          }
         }
       }
     );
