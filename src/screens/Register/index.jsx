@@ -76,7 +76,11 @@ const Register = ({ navigation }) => {
       const response = await AUTH.regsiterApi(formData);
 
       const isError = response.data.error;
-      isError && setError(isError);
+
+      if (isError) {
+        setError(isError)
+        setLoading(false);
+      }
 
       if (response.data.status.ok) {
         autoLogin();
@@ -88,7 +92,15 @@ const Register = ({ navigation }) => {
         toast.show({
           render: () => {
             return (
-              <Box m="3" py="1" px="2" mt="10" mb={5} bg="green.500" rounded="sm">
+              <Box
+                m="3"
+                py="1"
+                px="2"
+                mt="10"
+                mb={5}
+                bg="green.500"
+                rounded="sm"
+              >
                 <Text>Register Sukses</Text>
               </Box>
             );
