@@ -35,8 +35,13 @@ import useApiConfig from "../../store/useApiConfig";
 
 const PublicChat = () => {
   const { user, session } = useUser();
-  const { ADMIN_USERS, IS_SHOW_ONLINE_USERS, IS_BANNER_CHAT_CLOSED } =
-    useApiConfig();
+  const {
+    ADMIN_USERS,
+    PUBLIC_CHAT_ROOM_ID,
+    PUBLIC_CHAT_ROOM_KEY,
+    IS_SHOW_ONLINE_USERS,
+    IS_BANNER_CHAT_CLOSED
+  } = useApiConfig();
 
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
@@ -49,18 +54,18 @@ const PublicChat = () => {
   const [allLoadedChats, setAllLoadedChats] = useState([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isLogin, setIsLogin] = useState();
-  const isShowOnline = IS_SHOW_ONLINE_USERS || userProfile?.is_developer
+  const isShowOnline = IS_SHOW_ONLINE_USERS || userProfile?.is_developer;
 
   const { data, refetch } = useOnlineUsers(isShowOnline);
   const { data: roomInfo } = useRoomInfo({
-    room_key: "d2e834751328"
+    room_key: PUBLIC_CHAT_ROOM_KEY
   });
   const {
     data: chatList,
     isLoading,
     refetch: refetchChat
   } = useChatList({
-    room_id: "532815",
+    room_id: PUBLIC_CHAT_ROOM_ID,
     last_chat_id: lastChatId
   });
 
@@ -112,10 +117,10 @@ const PublicChat = () => {
   // get realtime chat
   useEffect(() => {
     let socket = null;
-    
+
     if (roomInfo?.bcsvr_key) {
       socket = new WebSocket("wss://online.showroom-live.com/");
-      
+
       socket.addEventListener("open", () => {
         socket.send(`SUB\t${roomInfo.bcsvr_key}`);
       });
@@ -126,7 +131,7 @@ const PublicChat = () => {
           const chat = JSON.parse(message.split("\t")[2]);
 
           if (chat?.t === 202) {
-            setIsDelete(prev => !prev);
+            setIsDelete((prev) => !prev);
           }
 
           const newChat = {
@@ -143,7 +148,8 @@ const PublicChat = () => {
             setMessages((prevState) => {
               if (
                 prevState?.some(
-                  (data) => data?.username === chat?.n && data?.message === chat?.s
+                  (data) =>
+                    data?.username === chat?.n && data?.message === chat?.s
                 )
               ) {
                 return prevState;
@@ -156,16 +162,16 @@ const PublicChat = () => {
             });
           }
         } catch (error) {
-          console.error('Error parsing WebSocket message:', error);
+          console.error("Error parsing WebSocket message:", error);
         }
       });
 
       socket.addEventListener("error", (error) => {
-        console.error('WebSocket error:', error);
+        console.error("WebSocket error:", error);
       });
 
       socket.addEventListener("close", () => {
-        console.log('WebSocket connection closed');
+        console.log("WebSocket connection closed");
       });
     }
 

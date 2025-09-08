@@ -13,6 +13,8 @@ import {
   ADMIN_USERS,
   ADMIN_TOKEN,
   ADMIN_COOKIE,
+  PUBLIC_CHAT_ROOM_ID,
+  PUBLIC_CHAT_ROOM_KEY,
 } from "@env";
 
 const useApiConfig = create(
@@ -38,12 +40,14 @@ const useApiConfig = create(
       IS_MULTI_LIVE_INFO: false,
       IS_MULTI_LIVE_CLOSED: false,
       SETTING_MULTI_ROOM_GLOBAL: false,
+      PUBLIC_CHAT_ROOM_ID,
+      PUBLIC_CHAT_ROOM_KEY,
 
       // Method to update the API configuration
       setApiConfig: (config) => set(config),
     }),
     {
-      name: "api-config-storage", // Unique name for the storage key
+      name: "api-config-storage",
       storage: createJSONStorage(() => AsyncStorage),
     }
   )

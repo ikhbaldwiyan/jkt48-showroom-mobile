@@ -26,7 +26,7 @@ const ChatBubble = ({
   refetchChat,
 }) => {
   const { user, session } = useUser();
-  const { ADMIN_USERS, ADMIN_TOKEN, ADMIN_COOKIE } = useApiConfig();
+  const { ADMIN_USERS, ADMIN_TOKEN, ADMIN_COOKIE, PUBLIC_CHAT_ROOM_ID } = useApiConfig();
   const adminUserIds = ADMIN_USERS?.split(",").map(Number);
   const isAdmin = adminUserIds.includes(userId);
   const isSender = userId == parseInt(user?.user_id);
@@ -46,7 +46,7 @@ const ChatBubble = ({
         chat_id: chatId,
         csrf_token: isOwner ? session?.csrf_token : ADMIN_TOKEN,
         sr_id: isOwner ? session?.cookie_login_id : ADMIN_COOKIE,
-        room_id: "532815"
+        room_id: PUBLIC_CHAT_ROOM_ID
       },
       {
         onSuccess: () => {
