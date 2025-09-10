@@ -30,19 +30,6 @@ export const Ticket = ({ ticket }) => {
                 </Button>
               </>
             )}
-            <Text>Live Stream Youtube:</Text>
-            <Button
-              variant="solid"
-              bg="secondary"
-              borderRadius="12"
-              onPress={() =>
-                Linking.openURL(
-                  "https://www.youtube.com/channel/UCadv-UfEyjjwOPcZHc2QvIQ/join"
-                )
-              }
-            >
-              <Text fontWeight="semibold">Buy Membership JKT48 TV</Text>
-            </Button>
             <Text>JKT48 Theater Ticket:</Text>
             <Button
               variant="solid"
