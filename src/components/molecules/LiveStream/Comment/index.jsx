@@ -25,6 +25,8 @@ import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import CardGradient from "../../../atoms/CardGradient";
 import useThemeStore from "../../../../store/themeStore";
 import { FlashList } from "@shopify/flash-list";
+import useAuthStore from "../../../../store/authStore";
+import ToastAlert from "../../../atoms/ToastAlert";
 
 export const Comment = () => {
   const route = useRoute();
@@ -43,6 +45,7 @@ export const Comment = () => {
   const roomId = profile?.room_id;
   const { mode } = useThemeStore();
   const isLightMode = mode === "light";
+  const { logout } = useAuthStore();
 
   useEffect(() => {
     async function getComments() {
@@ -171,14 +174,22 @@ export const Comment = () => {
       setTextComment("");
     } catch (error) {
       console.log("error", error);
-      toast.show({
-        render: () => (
-          <Box bg="red" px="2" m="3" py="1" rounded="sm" mb={5}>
-            <Text>Failed to send comment</Text>
-          </Box>
-        ),
-        placement: "bottom"
-      });
+      if (error) {
+        logout();
+        navigation.replace("Login")
+        toast.show({
+          render: () => (
+            <ToastAlert
+              variant="left-accent"
+              status="warning"
+              title="Gagal mengirim komentar"
+              description="session user sudah habis silakan coba login ulang"
+            />
+          ),
+          placement: "top",
+          duration: 8000
+        });
+      }
     } finally {
       setButtonLoading(false);
     }
