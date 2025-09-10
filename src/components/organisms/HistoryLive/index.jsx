@@ -21,6 +21,7 @@ import LinearGradient from "react-native-linear-gradient";
 import {
   Calendar,
   History,
+  IDNLiveIcon,
   LoadingIcon,
   TimesFill,
   UsersFill
@@ -121,23 +122,15 @@ const HistoryLive = ({ liveType = "all" }) => {
                           borderBottomLeftRadius={6}
                         />
                       ) : liveType === "all" && log.type === "idn" ? (
-                        <Image
-                          size="md"
-                          alt="idn live"
-                          source={{
-                            uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/IDN_Live.svg/2560px-IDN_Live.svg.png"
-                          }}
-                          width="120"
-                          left={2}
-                          height="35"
+                        <Box
                           position="absolute"
                           bg="rgba(0, 0, 0, 0.1)"
                           zIndex="99"
-                          bottom={1}
-                          borderRightRadius={6}
-                          borderBottomRightRadius={0}
-                          shadow="4"
-                        />
+                          bottom="1"
+                          left="2"
+                        >
+                          <IDNLiveIcon />
+                        </Box>
                       ) : null}
                       <Image
                         source={{ uri: member.img_alt }}

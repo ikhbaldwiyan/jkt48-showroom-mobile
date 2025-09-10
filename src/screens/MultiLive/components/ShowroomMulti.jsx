@@ -5,7 +5,7 @@ import useAuthStore from "../../../store/authStore";
 import { hasMultiRoomAccess } from "../../../utils/helpers";
 import { useAppStateChange } from "../../../utils/hooks";
 
-import { Box, Button, Divider, HStack, Text, View } from "native-base";
+import { Button, Divider, HStack, Text, View } from "native-base";
 import { LiveIcon, MultiLiveIcon } from "../../../assets/icon";
 import { ShowroomLiveCard } from "../../../components/organisms";
 import { useProfile } from "../../../services/hooks/useProfile";
