@@ -3,7 +3,6 @@ import { Box, HStack, Image, Text, Button, Spinner } from "native-base";
 import moment from "moment";
 import "moment/locale/id";
 import SkeletonSchedule from "../../atoms/Skeleteon";
-import { SCHEDULES } from "../../../services";
 import {
   BirthdayIcon,
   Calendar,
@@ -13,50 +12,44 @@ import {
 } from "../../../assets/icon";
 import { TouchableOpacity } from "react-native";
 import GradientButton from "../../atoms/ButtonGradient";
+import { useScheduleList } from "../../../services/hooks/useSchedules";
 
-const Schedule = ({ refreshing, isWeek, navigation }) => {
+const Schedule = ({ refreshing, isWeek, navigation, setlistId }) => {
   const [schedules, setSchedules] = useState([]);
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+
+  const { data, isLoading } = useScheduleList({
+    page,
+    setlistId,
+    isOnWeekSchedule: isWeek
+  });
 
   useEffect(() => {
     setPage(1);
-    fetchSchedules(1, true);
   }, [refreshing]);
 
-  const fetchSchedules = async (pageNum, reset = false) => {
-    if (isLoading || !hasMore) return;
-    setIsLoading(true);
+  useEffect(() => {
+    if (!data) return;
 
-    const theater = isWeek
-      ? await SCHEDULES.getScheduleWeek()
-      : await SCHEDULES.getScheduleList(pageNum);
-
-    const { data } = theater;
+    const { items = [], meta } = data;
 
     if (isWeek) {
-      setSchedules(data);
+      setSchedules(items);
     } else {
-      setSchedules((prev) => (reset ? data?.data : [...prev, ...data?.data]));
+      setSchedules((prev) => (page === 1 ? items : [...prev, ...items]));
     }
 
-    if (data?.paginator?.currentPage >= data?.paginator?.totalPage) {
+    if (meta && meta.currentPage >= meta.totalPages) {
       setHasMore(false);
+    } else {
+      setHasMore(true);
     }
-
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    if (page > 1) {
-      fetchSchedules(page);
-    }
-  }, [page]);
+  }, [data, page, isWeek]);
 
   const handleLoadMore = () => {
-    if (hasMore && !isLoading) {
-      setPage(page + 1);
+    if (hasMore) {
+      setPage((prev) => prev + 1);
     }
   };
 
@@ -68,9 +61,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
             <Text color="white" fontSize="2xl" mb="1" fontWeight="semibold">
               Jadwal Theater
             </Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Theater")}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("Theater")}>
               <HStack alignItems="center" space={2}>
                 <Text fontSize="sm">Lihat semua</Text>
                 <RightArrow />
@@ -79,8 +70,9 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
           </>
         )}
       </HStack>
-      {schedules.length > 0
-        ? schedules?.map((item, idx) => (
+
+      {schedules?.length > 0
+        ? schedules.map((item, idx) => (
             <TouchableOpacity
               key={idx}
               activeOpacity={0.7}
@@ -113,6 +105,7 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                       </Text>
                     </HStack>
                   </GradientButton>
+
                   <Box position="relative">
                     <Image
                       mt="2"
@@ -192,21 +185,23 @@ const Schedule = ({ refreshing, isWeek, navigation }) => {
                     </Text>
                   </HStack>
                   <Text mt="2" color="gray.300">
-                    {item.setlist.description.slice(0, 145)}...
+                    {item.setlist.description?.slice(0, 145)}...
                   </Text>
                 </Box>
               </HStack>
             </TouchableOpacity>
           ))
-        : [...Array(5)].map((_, idx) => <SkeletonSchedule key={idx} />)}
+        : [...Array(5)].map((_, idx) => (
+            <SkeletonSchedule key={idx} id={idx} />
+          ))}
 
       {hasMore && !isLoading && !isWeek && (
         <TouchableOpacity onPress={handleLoadMore}>
           <Button
             my="2"
-            variant="filled"
-            borderRadius="8"
-            bg="teal"
+            variant="outline"
+            borderRadius="xl"
+            borderColor="primary"
             onPress={handleLoadMore}
           >
             <HStack alignItems="center" space={2}>

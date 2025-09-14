@@ -1,53 +1,38 @@
 import { useRoute } from "@react-navigation/native";
 import moment from "moment";
 import { Box, HStack, Image, Text } from "native-base";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import {
   BirthdayIcon,
   Calendar,
   GraduateIcon,
-  TimesIcon,
+  TimesIcon
 } from "../../assets/icon";
 import Loading from "../../components/atoms/Loading";
 import ScheduleTabs from "../../components/molecules/ScheduleTabs";
 import Layout from "../../components/templates/Layout";
-import { SCHEDULES } from "../../services";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import useUser from "../../utils/hooks/useUser";
 import trackAnalytics from "../../utils/trackAnalytics";
+import { useScheduleDetail } from "../../services/hooks/useSchedules";
 
 const ScheduleDetail = ({ navigation }) => {
   const route = useRoute();
   const { params } = route;
-  const [theater, setTheater] = useState();
   const { refreshing, onRefresh } = useRefresh();
   const { userProfile } = useUser();
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    async function getTheaterDetail() {
-      setIsLoading(true);
-      try {
-        const response = await SCHEDULES.getScheduleDetail(params.item._id);
-        setTheater(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getTheaterDetail();
-  }, [params, refreshing]);
+  const { data: theater, isLoading } = useScheduleDetail(params.item._id);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: params?.item?.setlist?.name,
+      headerTitle: params?.item?.setlist?.name
     });
   }, []);
 
   useEffect(() => {
     trackAnalytics("visit_theater_schedule", {
       username: userProfile?.name,
-      setlist: params?.item?.setlist?.name,
+      setlist: params?.item?.setlist?.name
     });
   }, [userProfile]);
 
@@ -104,7 +89,7 @@ const ScheduleDetail = ({ navigation }) => {
             borderBottomLeftRadius="0"
             borderBottomRightRadius="0"
             source={{
-              uri: theater?.setlist?.image,
+              uri: theater?.setlist?.image
             }}
           />
           <Box

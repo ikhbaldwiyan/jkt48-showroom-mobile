@@ -1,9 +1,9 @@
 import React from "react";
 import { HStack, Skeleton, VStack } from "native-base";
 
-const SkeletonSchedule = ({ key, isHome }) => {
+const SkeletonSchedule = ({ id, isHome }) => {
   return isHome ? (
-    <HStack key={key} w="100%" maxW="400" mt="4" space={8} rounded="md">
+    <HStack key={id} w="100%" maxW="400" mt="4" space={8} rounded="md">
       <VStack flex="3" space="2">
         <Skeleton h="7" flex="1" rounded="md" />
         <Skeleton h="230" flex="1" rounded="md" />
@@ -11,7 +11,7 @@ const SkeletonSchedule = ({ key, isHome }) => {
       </VStack>
     </HStack>
   ) : (
-    <HStack key={key} w="100%" maxW="400" mt="4" space={8} rounded="md">
+    <HStack key={id} w="100%" maxW="400" mt="4" space={8} rounded="md">
       <Skeleton flex="2.5" h="130" rounded="md" startColor="coolGray.100" />
       <VStack flex="3" space="4">
         <Skeleton h="2" flex="1" rounded="md" />
