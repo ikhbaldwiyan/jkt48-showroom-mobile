@@ -226,13 +226,13 @@ export const Comment = () => {
                 <View flexShrink="1">
                   <Text
                     fontSize="md"
-                    fontWeight="bold"
+                    fontWeight="semibold"
                     color={
                       item.user_id == user?.user_id
                         ? mode === "dark"
-                          ? "primary"
+                          ? "white"
                           : "secondary"
-                        : "white"
+                        : "primary"
                     }
                   >
                     {item.name}
