@@ -17,3 +17,4 @@ export const apiAdmin = createApiInstance("JKT48_SHOWROOM_API");
 export const apiPodium = createApiInstance("PODIUM_API");
 export const apiRoomList = createApiInstance("ROOM_LIST_API");
 export const apiPublicChat = createApiInstance("PUBLIC_CHAT_API")
+export const apiNest = createApiInstance("NEST_SHOWROOM_API")

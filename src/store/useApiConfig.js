@@ -15,6 +15,7 @@ import {
   ADMIN_COOKIE,
   PUBLIC_CHAT_ROOM_ID,
   PUBLIC_CHAT_ROOM_KEY,
+  NEST_SHOWROOM_API,
 } from "@env";
 
 const useApiConfig = create(
@@ -42,6 +43,7 @@ const useApiConfig = create(
       SETTING_MULTI_ROOM_GLOBAL: false,
       PUBLIC_CHAT_ROOM_ID,
       PUBLIC_CHAT_ROOM_KEY,
+      NEST_SHOWROOM_API,
 
       // Method to update the API configuration
       setApiConfig: (config) => set(config),

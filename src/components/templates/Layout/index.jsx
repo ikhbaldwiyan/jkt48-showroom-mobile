@@ -70,6 +70,7 @@ const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
             );
           },
           placement: "top-right",
+          duration: 8000
         });
       }
     });

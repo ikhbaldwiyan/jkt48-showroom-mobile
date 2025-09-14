@@ -9,6 +9,7 @@ import {
   apiPodium,
   apiRoomList,
   apiPublicChat,
+  apiNest
 } from "./interceptors";
 
 export {
@@ -22,4 +23,5 @@ export {
   apiPodium,
   apiRoomList,
   apiPublicChat,
+  apiNest
 };

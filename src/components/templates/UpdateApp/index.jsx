@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Linking } from "react-native";
-import { Button, Text, Center, Box, Modal, Spinner } from "native-base";
+import { Button, Text, Box, Modal, VStack, Divider } from "native-base";
 import firestore from "@react-native-firebase/firestore";
 import DeviceInfo from "react-native-device-info";
 import { firebase } from "@react-native-firebase/messaging";
-import { LogoNormal } from "../../../assets/icon";
 import trackAnalytics from "../../../utils/trackAnalytics";
 import useUser from "../../../utils/hooks/useUser";
 import { PLAY_STORE_URL } from "@env";
+import { useChangeLogVersion } from "../../../services/hooks/useChangeLog";
 
 const UpdateApp = () => {
   const { profile } = useUser();
   const [updateApp, setUpdateApp] = useState(false);
   const [latestVersion, setLatestVersion] = useState("");
+
+  const { data } = useChangeLogVersion();
 
   useEffect(() => {
     const fetchLatestVersion = async () => {
@@ -40,7 +42,7 @@ const UpdateApp = () => {
   const handleUpdateApp = () => {
     trackAnalytics("update_apk", {
       username: profile?.name,
-      version: latestVersion,
+      version: latestVersion
     });
     Linking.openURL(PLAY_STORE_URL);
     setUpdateApp(false);
@@ -49,7 +51,7 @@ const UpdateApp = () => {
   const closeUpdateApp = () => {
     trackAnalytics("close_update_apk", {
       username: profile?.name,
-      version: latestVersion,
+      version: latestVersion
     });
     setUpdateApp(false);
   };
@@ -61,33 +63,46 @@ const UpdateApp = () => {
       onClose={closeUpdateApp}
       avoidKeyboard
     >
-      <Box bg="secondary" p={5} rounded="xl" shadow={3} width="80%">
-        <Text fontWeight="bold" textAlign="center" fontSize="18" mb={4}>
-          Versi Baru Tersedia!
-        </Text>
-        <Center>
-          <LogoNormal width={100} height={100} />
-        </Center>
-        <Text mt="4" textAlign="center" mb={2}>
-          Update APK ke versi{" "}
-          <Text color="primary" fontWeight="bold">
-            {latestVersion}
-          </Text>{" "}
-          di Play Store untuk menggunakan fitur baru!
-        </Text>
-
-        <Button
-          mt="3"
+      <Box bg="secondary" rounded="xl" shadow={3} width="90%">
+        <Box
+          bg="primary"
           borderRadius="xl"
-          onPress={handleUpdateApp}
-          mb={2}
-          colorScheme="cyan"
+          borderBottomLeftRadius={0}
+          borderBottomRightRadius={0}
+          p="2.5"
         >
-          <Text fontWeight="semibold">Update Sekarang</Text>
-        </Button>
-        <Button variant="ghost" onPress={closeUpdateApp} colorScheme="gray">
-          <Text>Nanti aja deh</Text>
-        </Button>
+          <Text fontWeight="semibold" textAlign="center" fontSize="15">
+            Versi baru tersedia, jangan lupa update APK ke versi{" "}
+            <Text color="gray.300" fontWeight="bold">
+              {data?.version}
+            </Text>{" "}
+            Di Play Store!
+          </Text>
+        </Box>
+        <Divider />
+        <Box pt="3" p="4">
+          <Text fontSize="md" mb="2" fontWeight="semibold">
+            What's New?
+          </Text>
+
+          <VStack space={3}>
+            {data?.description?.slice(0, 8)?.map?.((item, idx) => (
+              <Text key={idx}>- {item}</Text>
+            ))}
+          </VStack>
+          <Divider my="4" />
+          <Button
+            borderRadius="xl"
+            onPress={handleUpdateApp}
+            mb={2}
+            colorScheme="cyan"
+          >
+            <Text fontWeight="semibold">Update Sekarang</Text>
+          </Button>
+          <Button variant="ghost" onPress={closeUpdateApp} colorScheme="gray">
+            <Text>Nanti aja deh</Text>
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );

@@ -5,5 +5,6 @@ import * as SCHEDULES from "./schedules";
 import * as USER from "./user";
 import * as LEADERBOARD from "./leaderboard";
 import * as CHAT from "./chat"
+import * as VERSION from "./versions"
 
-export { ROOMS, STREAM, AUTH, SCHEDULES, USER, LEADERBOARD, CHAT };
+export { ROOMS, STREAM, AUTH, SCHEDULES, USER, LEADERBOARD, CHAT, VERSION };
