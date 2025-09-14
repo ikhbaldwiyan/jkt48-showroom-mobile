@@ -257,7 +257,7 @@ export const Comment = () => {
           variant="filled"
           fontSize="md"
           name="comment"
-          bgColor={isLightMode ? "white" : "#282C34"}
+          bgColor={isLightMode ? "white" : "secondary"}
           color={isLightMode ? "black" : "white"}
           borderColor={isLightMode ? "black" : "white"}
           borderRadius="20px"
@@ -276,6 +276,7 @@ export const Comment = () => {
           value={textComment}
           InputRightElement={
             <Button
+              bg="none"
               variant="ghost"
               onPress={sendComment}
               disabled={textComment.length === 0 || buttonLoading}
