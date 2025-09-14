@@ -1,13 +1,16 @@
-import React, { useLayoutEffect } from "react";
-import { Box } from "native-base";
+import React, { useLayoutEffect, useState } from "react";
+import { Box, CheckCircleIcon, Select } from "native-base";
 import Layout from "../../components/templates/Layout";
 import Schedule from "../../components/organisms/Schedule";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { useNavigation } from "@react-navigation/native";
+import { useFilterSetlist } from "../../services/hooks/useSchedules";
 
 const ScheduleList = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
   const { setOptions } = useNavigation();
+  const { data } = useFilterSetlist();
+  const [setlist, setSetlist] = useState("");
 
   useLayoutEffect(() => {
     setOptions({
@@ -17,8 +20,47 @@ const ScheduleList = ({ navigation }) => {
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
-      <Box mb="4">
-        <Schedule navigation={navigation} refreshing={refreshing} />
+      <Select
+        selectedValue="all"
+        onValueChange={(value) => {
+          setSetlist(value);
+        }}
+        placeholder="Filter Setlist"
+        color="white"
+        borderRadius="xl"
+      >
+        <Select.Item
+          label="Semua Setlist"
+          value=""
+          endIcon={
+            setlist === "" ? (
+              <Box mt="1">
+                <CheckCircleIcon size="4" color="primary" />
+              </Box>
+            ) : null
+          }
+        />
+        {data?.map((item, idx) => (
+          <Select.Item
+            key={idx}
+            label={item?.title}
+            value={item?._id}
+            endIcon={
+              item?._id === setlist ? (
+                <Box mt="1">
+                  <CheckCircleIcon size="4" color="primary" />
+                </Box>
+              ) : null
+            }
+          />
+        ))}
+      </Select>
+      <Box mt="2" mb="4">
+        <Schedule
+          navigation={navigation}
+          setlistId={setlist}
+          refreshing={refreshing}
+        />
       </Box>
     </Layout>
   );

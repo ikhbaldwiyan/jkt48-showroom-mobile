@@ -20,3 +20,13 @@ export const useScheduleDetail = (id) => {
     },
   });
 };
+
+export const useFilterSetlist = () => {
+  return useQuery({
+    queryKey: ["setlist"],
+    queryFn: async () => {
+      const response = await SCHEDULES.getFilterSetlist();
+      return response?.data?.data
+    },
+  });
+};

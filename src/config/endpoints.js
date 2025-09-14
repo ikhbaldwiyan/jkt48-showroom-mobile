@@ -51,6 +51,7 @@ export default {
     DETAIL: "/schedules/", //required schedule id
     WEEK: "/schedules?isOnWeekSchedule=true",
     TODAY: "/schedules/today",
+    SETLIST: "/setlist?is_active=true"
   },
   VERSIONS: {
     CURRENT_VERSION: "/mobile/app-version",

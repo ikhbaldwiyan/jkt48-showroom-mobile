@@ -11,3 +11,7 @@ export const getScheduleWeek = () => {
 export const getScheduleDetail = (id) => {
   return apiUser.get(ENDPOINTS.SCHEDULE.DETAIL + id);
 };
+
+export const getFilterSetlist = () => {
+  return apiNest.get(ENDPOINTS.SCHEDULE.SETLIST);
+};
