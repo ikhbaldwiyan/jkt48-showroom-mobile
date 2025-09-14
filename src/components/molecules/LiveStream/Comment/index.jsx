@@ -16,7 +16,7 @@ import {
 } from "native-base";
 import { RefreshControl } from "react-native";
 import { STREAM } from "../../../../services";
-import { SendIcon } from "../../../../assets/icon";
+import { SendMessageIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
 import { formatName } from "../../../../utils/helpers";
 import { activityLog } from "../../../../utils/activityLog";
@@ -176,7 +176,7 @@ export const Comment = () => {
       console.log("error", error);
       if (error) {
         logout();
-        navigation.replace("Login")
+        navigation.replace("Login");
         toast.show({
           render: () => (
             <ToastAlert
@@ -250,54 +250,49 @@ export const Comment = () => {
       />
 
       {session && !hideComment && isCommentBoxVisible && (
-        <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
-          <Input
-            variant="filled"
-            w="90%"
-            fontSize="md"
-            name="comment"
-            bgColor={isLightMode ? "white" : "#282C34"}
-            color={isLightMode ? "black" : "white"}
-            borderColor={isLightMode ? "black" : "primary"}
-            borderRightWidth={0}
-            borderRadius="lg"
-            borderTopRightRadius="0"
-            borderBottomRightRadius="0"
-            placeholder="Kirim komentar.."
-            _focus={{
-              borderColor: "primary",
-              backgroundColor: "secondary"
-            }}
-            _input={{
-              textAlign: "left",
-              color: "white",
-              selectionColor: "white",
-              cursorColor: "white"
-            }}
-            onChangeText={handleComment}
-            value={textComment}
-          />
-          <Button
-            height="10"
-            borderColor="primary"
-            borderTopLeftRadius="0"
-            borderLeftWidth={0}
-            borderBottomLeftRadius="0"
-            borderWidth={isLightMode ? "0" : "1"}
-            background={isLightMode ? "secondary" : "primary"}
-            onPress={sendComment}
-            disabled={textComment.length === 0 || buttonLoading}
-          >
-            {buttonLoading ? <Spinner color="white" /> : <SendIcon />}
-          </Button>
-        </HStack>
+        <Input
+          w="full"
+          variant="filled"
+          fontSize="md"
+          name="comment"
+          bgColor={isLightMode ? "white" : "#282C34"}
+          color={isLightMode ? "black" : "white"}
+          borderColor={isLightMode ? "black" : "white"}
+          borderRadius="20px"
+          placeholder="Ketik komentar..."
+          _focus={{
+            borderColor: "primary",
+            backgroundColor: "secondary"
+          }}
+          _input={{
+            textAlign: "left",
+            color: "white",
+            selectionColor: "primary",
+            cursorColor: "white"
+          }}
+          onChangeText={handleComment}
+          value={textComment}
+          InputRightElement={
+            <Button
+              background="secondary"
+              onPress={sendComment}
+              disabled={textComment.length === 0 || buttonLoading}
+            >
+              {buttonLoading ? (
+                <Spinner color="white" />
+              ) : (
+                <SendMessageIcon color="white" />
+              )}
+            </Button>
+          }
+        />
       )}
 
       {/* Toggle Button */}
       {session && !hideComment && (
         <Button
           position="absolute"
-          bottom={isCommentBoxVisible ? "12" : "2"}
+          bottom={isCommentBoxVisible ? "16" : "2"}
           right="2"
           size="sm"
           mb="2"

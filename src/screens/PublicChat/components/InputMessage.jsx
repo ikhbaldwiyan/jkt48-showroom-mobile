@@ -122,7 +122,7 @@ const InputMessage = ({ setIsLoadingMore }) => {
         }}
         _input={{
           color: "white",
-          selectionColor: "white",
+          selectionColor: "primary",
           cursorColor: "white",
           paddingRight: 4
         }}
