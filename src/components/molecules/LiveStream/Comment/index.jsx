@@ -232,6 +232,8 @@ export const Comment = () => {
                         ? mode === "dark"
                           ? "white"
                           : "secondary"
+                        : isLightMode
+                        ? "white"
                         : "primary"
                     }
                   >
@@ -266,22 +268,22 @@ export const Comment = () => {
           }}
           _input={{
             textAlign: "left",
-            color: "white",
+            color: isLightMode ? "black" : "white",
             selectionColor: "primary",
-            cursorColor: "white"
+            cursorColor: isLightMode ? "black" : "white"
           }}
           onChangeText={handleComment}
           value={textComment}
           InputRightElement={
             <Button
-              background="secondary"
+              variant="ghost"
               onPress={sendComment}
               disabled={textComment.length === 0 || buttonLoading}
             >
               {buttonLoading ? (
-                <Spinner color="white" />
+                <Spinner color={isLightMode ? "#21252B" : "white"} />
               ) : (
-                <SendMessageIcon color="white" />
+                <SendMessageIcon color={isLightMode ? "#21252B" : "white"} />
               )}
             </Button>
           }
