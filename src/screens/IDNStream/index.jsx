@@ -8,7 +8,7 @@ import {
   usePipMode,
   useRefresh,
   useUser,
-  useLandscape
+  useLandscape,
 } from "../../utils/hooks";
 import { activityLog } from "../../utils/activityLog";
 import { formatName } from "../../utils/helpers";
@@ -18,10 +18,7 @@ import Views from "../../components/atoms/Views";
 import LandscapeLayout from "./components/LandscapeLayout";
 import MenuIDN from "./components/MenuIDN";
 import PortraitLayout from "./components/PortraitLayout";
-import {
-  useIdnLiveDetail,
-  useIdnStreamUrl
-} from "../../services/hooks/useIDNLive";
+import { useIdnLiveDetail } from "../../services/hooks/useIDNLive";
 import useIDNLiveStore from "../../store/idnLiveStore";
 
 const IDNStream = () => {
@@ -39,24 +36,21 @@ const IDNStream = () => {
   const { profile, setProfile, clearLiveStream, url, setUrl, clearUrl } =
     useIDNLiveStore();
 
-  const { data: liveDetail } = useIdnLiveDetail(profile?.user?.username, {
+  const {
+    data: liveDetail,
+    refetch: refetchStream,
+    isFetching,
+  } = useIdnLiveDetail(profile?.user?.username, {
     enabled: !!profile?.user?.username,
-    refetchInterval: 2 * 60 * 1000
+    refetchInterval: 2 * 60 * 1000,
   });
 
-  const {
-    data: streamUrl,
-    refetch: refetchStreamUrl,
-    isFetching: isFetchingUrl
-  } = useIdnStreamUrl(profile?.user?.username);
-
   useEffect(() => {
-    if (liveDetail) setProfile(liveDetail);
+    if (liveDetail) {
+      setProfile(liveDetail);
+      setUrl(liveDetail?.stream_url);
+    }
   }, [liveDetail]);
-
-  useEffect(() => {
-    if (streamUrl) setUrl(streamUrl);
-  }, [streamUrl]);
 
   useEffect(() => {
     setProfile(params.item);
@@ -69,11 +63,11 @@ const IDNStream = () => {
   const handleRefresh = async () => {
     onRefresh();
     clearUrl();
-    await refetchStreamUrl();
+    await refetchStream();
 
     trackAnalytics("refresh_idn_button", {
       username: userProfile?.name ?? "Guest",
-      room: profile?.user?.name
+      room: profile?.user?.name,
     });
   };
 
@@ -85,7 +79,7 @@ const IDNStream = () => {
             py="1"
             size="xs"
             onPress={handleRefresh}
-            isLoading={isFetchingUrl || refreshing}
+            isLoading={isFetching || refreshing}
             borderRadius="md"
             background="black"
             px="1.5"
@@ -95,9 +89,9 @@ const IDNStream = () => {
           <Views number={profile?.view_count ?? 0} />
           <MenuIDN />
         </HStack>
-      )
+      ),
     });
-  }, [profile, refreshing, isPipMode, isFetchingUrl]);
+  }, [profile, refreshing, isPipMode, isFetching]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -126,7 +120,7 @@ const IDNStream = () => {
           <Text>{profile?.user?.name ?? "Room"} Offline</Text>
         </Box>
       ),
-      placement: "top-right"
+      placement: "top-right",
     });
   };
 

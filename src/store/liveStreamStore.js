@@ -1,4 +1,3 @@
-// store/liveStreamStore.ts
 import { create } from "zustand";
 
 const useLiveStreamStore = create((set) => ({
@@ -21,7 +20,6 @@ const useLiveStreamStore = create((set) => ({
       profile: {},
       liveInfo: {},
       url: null,
-      premiumLive: {},
       users: [],
       token: null,
       hideComment: false,

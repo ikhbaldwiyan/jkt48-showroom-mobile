@@ -24,13 +24,3 @@ export const useIdnLiveDetail = (username, options = {}) => {
   });
 };
 
-export const useIdnStreamUrl = (username, options = {}) => {
-  return useQuery({
-    queryKey: ["idnStreamUrl", username],
-    queryFn: () =>
-      STREAM.getIDNLiveDetail(username).then((res) => res.data.stream_url),
-    enabled: !!username,
-    ...options,
-  });
-};
-

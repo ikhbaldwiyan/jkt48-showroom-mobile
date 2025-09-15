@@ -13,7 +13,7 @@ const QualitySettings = ({
 }) => {
   const [selectedQuality, setSelectedQuality] = useState(null);
   const [streamType, setStreamType] = useState("hls");
-  const { profile, streamOptions, setSelectedUrl } = useLiveStreamStore();
+  const { profile, streamOptions, setUrl } = useLiveStreamStore();
 
   useEffect(() => {
     let filteredQualities = streamOptions.filter(
@@ -27,15 +27,15 @@ const QualitySettings = ({
             filteredQualities[0]
           : filteredQualities[0];
       setSelectedQuality(defaultQuality?.id);
-      setSelectedUrl(defaultQuality?.url);
+      setUrl(defaultQuality?.url);
     }
-  }, [refreshing, profile, streamOptions, streamType, setSelectedUrl]);
+  }, [refreshing, profile, streamOptions, streamType, setUrl]);
 
   const handleQualityChange = (id) => {
     setSelectedQuality(id);
     const selectedOption = streamOptions.find((q) => q.id === id);
     if (selectedOption) {
-      setSelectedUrl(selectedOption?.url);
+      setUrl(selectedOption?.url);
       closeMenu();
     }
     setTimeout(() => {
