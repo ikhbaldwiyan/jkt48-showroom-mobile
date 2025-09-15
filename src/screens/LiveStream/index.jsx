@@ -6,7 +6,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { activityLog } from "../../utils/activityLog";
 import { formatName } from "../../utils/helpers";
 import { LiveIcon, RefreshIcon } from "../../assets/icon";
-import { usePipMode, useRefresh, useUser, useLandscape } from "../../utils/hooks";
+
 import trackAnalytics from "../../utils/trackAnalytics";
 import useLiveStreamStore from "../../store/liveStreamStore";
 import useThemeStore from "../../store/themeStore";
@@ -16,6 +16,19 @@ import MenuList from "./components/MenuList";
 import LandscapeLayout from "./components/LandscapeLayout";
 import PortraitLayout from "./components/PortraitLayout";
 
+import {
+  usePipMode,
+  useRefresh,
+  useUser,
+  useLandscape
+} from "../../utils/hooks";
+import {
+  useLiveInfo,
+  useRegisterUserRoom,
+  useStreamOptions,
+  useStreamUrl
+} from "../../services/hooks/useShowroomLive";
+
 const LiveStream = () => {
   const route = useRoute();
   const { params } = route;
@@ -23,15 +36,14 @@ const LiveStream = () => {
   const {
     url,
     profile,
-    liveInfo,
     setProfile,
-    getLiveInfo,
-    getStreamUrl,
-    getStreamOptions,
-    registerUserRoom,
+    setLiveInfo,
+    setUrl,
+    setStreamOptions,
     clearLiveStream,
     clearUrl
   } = useLiveStreamStore();
+
   const toast = useToast();
   const { user, session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
@@ -39,6 +51,14 @@ const LiveStream = () => {
   const { mode } = useThemeStore();
   const { isPipMode } = usePipMode();
   const isLandscape = useLandscape();
+
+  const roomId = profile?.room_id;
+  const token = session?.cookie_login_id;
+
+  const { data: liveInfo } = useLiveInfo(roomId, token);
+  const { data: streamUrl } = useStreamUrl(roomId, token);
+  const { data: streamOptions } = useStreamOptions(roomId, token);
+  const registerUserRoom = useRegisterUserRoom();
 
   useEffect(() => {
     navigation.setOptions({
@@ -64,11 +84,18 @@ const LiveStream = () => {
       ),
       headerShown: isPipMode || isFullScreen || isLandscape ? false : true
     });
-  }, [profile, liveInfo, refreshing, isFullScreen, mode, isPipMode, isLandscape]);
+  }, [
+    profile,
+    liveInfo,
+    refreshing,
+    isFullScreen,
+    mode,
+    isPipMode,
+    isLandscape
+  ]);
 
   useEffect(() => {
     setProfile(params.item);
-    fetchLiveInfo();
 
     return () => {
       clearLiveStream();
@@ -85,30 +112,34 @@ const LiveStream = () => {
     });
   };
 
-  async function fetchLiveInfo() {
-    await getLiveInfo(profile?.room_id, session?.cookie_login_id);
-  }
-
-  async function getUrl() {
-    await getStreamUrl(profile?.room_id, session?.cookie_login_id);
-    await getStreamOptions(profile?.room_id, session?.cookie_login_id);
-  }
+  useEffect(() => {
+    if (params?.item) setProfile(params.item);
+  }, [params]);
 
   useEffect(() => {
-    setTimeout(() => {
-      fetchLiveInfo();
-    }, 1000);
-
-    const interval = setInterval(() => {
-      fetchLiveInfo();
-    }, 2 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, [profile, refreshing]);
+    if (liveInfo) setLiveInfo(liveInfo);
+  }, [liveInfo]);
 
   useEffect(() => {
-    getUrl();
-  }, [profile, refreshing]);
+    if (streamUrl) setUrl(streamUrl);
+  }, [streamUrl]);
+
+  useEffect(() => {
+    if (streamOptions?.length > 0) setStreamOptions(streamOptions);
+  }, [streamOptions]);
+
+  useEffect(() => {
+    if (session && profile) {
+      registerUserRoom.mutate({ session, profile });
+    }
+  }, [session, profile]);
+
+  useEffect(() => {
+    return () => {
+      clearLiveStream();
+      clearUrl();
+    };
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -118,12 +149,6 @@ const LiveStream = () => {
           : profile?.main_name?.replace("SHOWROOM", "")
     });
   }, [profile]);
-
-  useEffect(() => {
-    if (session && profile) {
-      registerUserRoom(session, profile);
-    }
-  }, [profile, session]);
 
   useEffect(() => {
     const room_name = formatName(profile?.room_url_key);

@@ -26,8 +26,8 @@ const QualitySettings = ({
           ? filteredQualities.find((q) => q.type === "hls_all") ||
             filteredQualities[0]
           : filteredQualities[0];
-      setSelectedQuality(defaultQuality.id);
-      setSelectedUrl(defaultQuality.url);
+      setSelectedQuality(defaultQuality?.id);
+      setSelectedUrl(defaultQuality?.url);
     }
   }, [refreshing, profile, streamOptions, streamType, setSelectedUrl]);
 
@@ -35,7 +35,7 @@ const QualitySettings = ({
     setSelectedQuality(id);
     const selectedOption = streamOptions.find((q) => q.id === id);
     if (selectedOption) {
-      setSelectedUrl(selectedOption.url);
+      setSelectedUrl(selectedOption?.url);
       closeMenu();
     }
     setTimeout(() => {
