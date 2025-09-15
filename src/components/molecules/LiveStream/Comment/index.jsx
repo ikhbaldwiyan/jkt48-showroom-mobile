@@ -275,18 +275,20 @@ export const Comment = () => {
           onChangeText={handleComment}
           value={textComment}
           InputRightElement={
-            <Button
-              bg="none"
-              variant="ghost"
-              onPress={sendComment}
-              disabled={textComment.length === 0 || buttonLoading}
-            >
-              {buttonLoading ? (
+            buttonLoading ? (
+              <Box mr="4">
                 <Spinner color={isLightMode ? "#21252B" : "white"} />
-              ) : (
+              </Box>
+            ) : (
+              <Button
+                bg="none"
+                variant="ghost"
+                onPress={sendComment}
+                disabled={textComment.length === 0 || buttonLoading}
+              >
                 <SendMessageIcon color={isLightMode ? "#21252B" : "white"} />
-              )}
-            </Button>
+              </Button>
+            )
           }
         />
       )}
