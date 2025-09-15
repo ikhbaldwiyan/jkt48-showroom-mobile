@@ -1,86 +1,81 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Box, Button, HStack, Text, useToast } from "native-base";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import {
-  LogBox,
-  StatusBar
-} from "react-native";
-
+import { LogBox, StatusBar } from "react-native";
 import { RefreshIcon } from "../../assets/icon";
-import useIDNLiveStore from "../../store/idnLiveStore";
+
+import {
+  usePipMode,
+  useRefresh,
+  useUser,
+  useLandscape
+} from "../../utils/hooks";
 import { activityLog } from "../../utils/activityLog";
 import { formatName } from "../../utils/helpers";
-import { usePipMode, useRefresh, useUser, useLandscape } from "../../utils/hooks";
 import trackAnalytics from "../../utils/trackAnalytics";
 
 import Views from "../../components/atoms/Views";
 import LandscapeLayout from "./components/LandscapeLayout";
 import MenuIDN from "./components/MenuIDN";
 import PortraitLayout from "./components/PortraitLayout";
+import {
+  useIdnLiveDetail,
+  useIdnStreamUrl
+} from "../../services/hooks/useIDNLive";
+import useIDNLiveStore from "../../store/idnLiveStore";
 
 const IDNStream = () => {
-  const route = useRoute();
-  const { params } = route;
-  const toast = useToast();
+  const { params } = useRoute();
   const navigation = useNavigation();
+  const toast = useToast();
   const { userProfile } = useUser();
   const isLandscape = useLandscape();
-  const {
-    profile,
-    setProfile,
-    getLiveProfile,
-    clearLiveStream,
-    getStreamUrl,
-    url,
-    clearUrl,
-  } = useIDNLiveStore();
-  const [isFullScreen, setIsFullScreen] = useState(false);
   const { refreshing, onRefresh } = useRefresh();
   const { isPipMode } = usePipMode();
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const isOfficial = profile?.user?.name === "JKT48";
   const customHeight = isOfficial ? 200 : 400;
 
+  const { profile, setProfile, clearLiveStream, url, setUrl, clearUrl } =
+    useIDNLiveStore();
+
+  const { data: liveDetail } = useIdnLiveDetail(profile?.user?.username, {
+    enabled: !!profile?.user?.username,
+    refetchInterval: 2 * 60 * 1000
+  });
+
+  const {
+    data: streamUrl,
+    refetch: refetchStreamUrl,
+    isFetching: isFetchingUrl
+  } = useIdnStreamUrl(profile?.user?.username);
+
+  useEffect(() => {
+    if (liveDetail) setProfile(liveDetail);
+  }, [liveDetail]);
+
+  useEffect(() => {
+    if (streamUrl) setUrl(streamUrl);
+  }, [streamUrl]);
+
   useEffect(() => {
     setProfile(params.item);
-    getStreamUrl(params?.item.user?.username);
-
     return () => {
       clearLiveStream();
       clearUrl();
     };
   }, []);
 
-  async function fetchLiveInfo() {
-    await getLiveProfile(profile?.user?.username);
-  }
-
   const handleRefresh = async () => {
     onRefresh();
     clearUrl();
-    await getStreamUrl(profile?.user?.username);
+    await refetchStreamUrl();
 
     trackAnalytics("refresh_idn_button", {
       username: userProfile?.name ?? "Guest",
-      room: profile?.user?.name,
+      room: profile?.user?.name
     });
   };
-
-  useEffect(() => {
-    profile && getStreamUrl(profile?.user?.username);
-  }, [profile, refreshing]);
-
-  useEffect(() => {
-    setProfile(params.item);
-  }, []);
-
-  useEffect(() => {
-    if (url) {
-      trackAnalytics("watch_idn_live", {
-        username: userProfile?.name ?? "Guest",
-        room: profile?.user?.name,
-      });
-    }
-  }, [userProfile, url]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -90,7 +85,7 @@ const IDNStream = () => {
             py="1"
             size="xs"
             onPress={handleRefresh}
-            isLoading={refreshing}
+            isLoading={isFetchingUrl || refreshing}
             borderRadius="md"
             background="black"
             px="1.5"
@@ -100,9 +95,9 @@ const IDNStream = () => {
           <Views number={profile?.view_count ?? 0} />
           <MenuIDN />
         </HStack>
-      ),
+      )
     });
-  }, [profile, refreshing, isPipMode]);
+  }, [profile, refreshing, isPipMode, isFetchingUrl]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -126,43 +121,27 @@ const IDNStream = () => {
   const handleEndLive = () => {
     navigation.replace("IDNLives");
     toast.show({
-      render: () => {
-        return (
-          <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
-            <Text>{profile?.user?.name ?? "Room"} Offline</Text>
-          </Box>
-        );
-      },
-      placement: "top-right",
+      render: () => (
+        <Box bg="red" px="2" mt="10" m="3" py="1" rounded="sm" mb={5}>
+          <Text>{profile?.user?.name ?? "Room"} Offline</Text>
+        </Box>
+      ),
+      placement: "top-right"
     });
   };
 
   useEffect(() => {
     StatusBar.setHidden(isFullScreen);
-
     if (isFullScreen) {
       trackAnalytics("open_full_screen_idn", {
         username: userProfile?.name ?? "Guest",
         room: profile?.user?.name,
       });
     }
-
     return () => {
       StatusBar.setHidden(false);
     };
   }, [isFullScreen]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      fetchLiveInfo();
-    }, 1000);
-
-    const interval = setInterval(() => {
-      fetchLiveInfo();
-    }, 2 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, [refreshing]);
 
   const handleStreamError = () => {
     handleRefresh();
@@ -173,7 +152,6 @@ const IDNStream = () => {
       {isLandscape ? (
         <LandscapeLayout
           profile={profile}
-          setProfile={setProfile}
           url={url}
           isPipMode={isPipMode}
           isFullScreen={isFullScreen}
@@ -185,7 +163,6 @@ const IDNStream = () => {
       ) : (
         <PortraitLayout
           profile={profile}
-          setProfile={setProfile}
           url={url}
           isPipMode={isPipMode}
           isFullScreen={isFullScreen}

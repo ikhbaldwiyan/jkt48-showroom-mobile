@@ -1,4 +1,4 @@
-import { ROOMS } from "..";
+import { ROOMS, STREAM } from "..";
 import { useQuery } from "@tanstack/react-query";
 
 export const useIDNLive = () => {
@@ -13,3 +13,24 @@ export const useIDNLive = () => {
     },
   });
 };
+
+export const useIdnLiveDetail = (username, options = {}) => {
+  return useQuery({
+    queryKey: ["idnLiveDetail", username],
+    queryFn: () => STREAM.getIDNLiveDetail(username).then((res) => res.data),
+    enabled: !!username,
+    staleTime: 60 * 1000, // cache 1 minute
+    ...options,
+  });
+};
+
+export const useIdnStreamUrl = (username, options = {}) => {
+  return useQuery({
+    queryKey: ["idnStreamUrl", username],
+    queryFn: () =>
+      STREAM.getIDNLiveDetail(username).then((res) => res.data.stream_url),
+    enabled: !!username,
+    ...options,
+  });
+};
+
