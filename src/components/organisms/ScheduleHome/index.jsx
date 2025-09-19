@@ -18,15 +18,18 @@ import {
   GraduateIcon,
   RightArrow,
   TheaterIcon,
-  TimesIcon
+  TimesIcon,
+  UsersIcon
 } from "../../../assets/icon";
 import { Linking, TouchableOpacity } from "react-native";
 import CountdownTimer from "../CountdownTimer";
+import { useTodaySchedule } from "../../../services/hooks/useSchedules";
 
 const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
   const [schedules, setSchedules] = useState([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const { data } = useTodaySchedule();
 
   useEffect(() => {
     setPage(1);
@@ -139,6 +142,23 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                       borderBottomRightRadius={0}
                       alt="Theater"
                     />
+
+                    {isToday &&
+                      data?.idn?.is_live &&
+                      data?.idn?.slug === item.liveId && (
+                        <Box
+                          p="2"
+                          borderTopLeftRadius={4}
+                          borderBottomRightRadius={6}
+                          bg="red"
+                          position="absolute"
+                        >
+                          <HStack alignItems="center" space={1}>
+                            <UsersIcon color="white" size="16" />
+                            <Text fontSize={13}>{data?.idn?.view_count}</Text>
+                          </HStack>
+                        </Box>
+                      )}
                     {!isToday && (
                       <Box
                         p="3"
@@ -152,11 +172,16 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                         </Text>
                       </Box>
                     )}
+
                     {isToday && (
                       <Box>
                         <CountdownTimer
                           showDate={item?.showDate}
                           targetDateTime={item.showTime}
+                          isLive={
+                            data?.idn?.slug === item.liveId &&
+                            data?.idn?.is_live
+                          }
                         >
                           <Button
                             borderTopRightRadius={0}

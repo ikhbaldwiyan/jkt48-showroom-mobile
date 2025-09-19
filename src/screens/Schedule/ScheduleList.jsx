@@ -21,7 +21,7 @@ const ScheduleList = ({ navigation }) => {
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Select
-        selectedValue="all"
+        selectedValue={setlist ?? ""}
         onValueChange={(value) => {
           setSetlist(value);
         }}

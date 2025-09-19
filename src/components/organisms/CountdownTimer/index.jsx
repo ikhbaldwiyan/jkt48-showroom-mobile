@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { HStack, Text, VStack } from "native-base";
+import { LiveIcon } from "../../../assets/icon";
 
-const CountdownTimer = ({ targetDateTime, showDate, children }) => {
+const CountdownTimer = ({ targetDateTime, showDate, isLive, children }) => {
   const calculateTimeLeft = () => {
     const now = new Date();
     let target;
@@ -26,18 +27,20 @@ const CountdownTimer = ({ targetDateTime, showDate, children }) => {
     const difference = target - now;
 
     let timeLeft = {
+      total: difference,
       days: 0,
       hours: 0,
       minutes: 0,
-      seconds: 0
+      seconds: 0,
     };
 
     if (difference > 0) {
       timeLeft = {
+        ...timeLeft,
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((difference / (1000 * 60)) % 60),
-        seconds: Math.floor((difference / 1000) % 60)
+        seconds: Math.floor((difference / 1000) % 60),
       };
     }
 
@@ -46,17 +49,6 @@ const CountdownTimer = ({ targetDateTime, showDate, children }) => {
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [targetDateTime]);
-
-  const formatTime = (value) => String(value).padStart(2, "0");
-
-  // Check if show has ended by combining showDate and targetDateTime
   const isShowEnded = () => {
     if (!showDate) return false;
 
@@ -82,35 +74,33 @@ const CountdownTimer = ({ targetDateTime, showDate, children }) => {
     return now > showEndTime;
   };
 
-  // Check if show is currently live (within 2 hours of start time)
-  const isShowLive = () => {
-    if (!showDate) return false;
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
 
-    const now = new Date();
-    let showStartTime;
+    return () => clearInterval(timer);
+  }, [targetDateTime]);
 
-    if (
-      typeof targetDateTime === "string" &&
-      targetDateTime.includes(":") &&
-      !targetDateTime.includes("-") &&
-      !targetDateTime.includes("/")
-    ) {
-      const [hours, minutes] = targetDateTime.split(":").map(Number);
-      showStartTime = new Date(showDate);
-      showStartTime.setHours(hours, minutes, 0, 0);
-    } else {
-      // Use targetDateTime as is if it's a full date-time
-      showStartTime = new Date(targetDateTime);
-    }
+  const formatTime = (value) => String(value).padStart(2, "0");
 
-    // Calculate show end time (2 hours after start)
-    const showEndTime = new Date(showStartTime.getTime() + 2 * 60 * 60 * 1000);
+  if (isLive) {
+    return (
+      <>
+        <VStack space={3} alignItems="center" bg="blueGray.900" py={3}>
+          <HStack alignItems="center" space={2}>
+            <LiveIcon size={16} />
+            <Text color="white" fontWeight="medium">
+              Show theater sedang berlangsung
+            </Text>
+          </HStack>
+        </VStack>
+        {children}
+      </>
+    );
+  }
 
-    return now >= showStartTime && now <= showEndTime;
-  };
-
-  // If show has ended (after 2 hours), show ended message
-  if (isShowEnded()) {
+  if (isShowEnded() && !isLive) {
     return (
       <VStack
         borderBottomLeftRadius="lg"
@@ -124,19 +114,6 @@ const CountdownTimer = ({ targetDateTime, showDate, children }) => {
           Show theater sudah berakhir
         </Text>
       </VStack>
-    );
-  }
-
-  if (isShowLive()) {
-    return (
-      <>
-        <VStack space={3} alignItems="center" bg="blueGray.900" py={3}>
-          <Text color="white" fontSize="md" fontWeight="medium">
-            Show theater sedang berlangsung
-          </Text>
-        </VStack>
-        {children}
-      </>
     );
   }
 
@@ -159,30 +136,20 @@ const CountdownTimer = ({ targetDateTime, showDate, children }) => {
             <Text fontSize="2xl" fontWeight="bold">
               {formatTime(timeLeft.hours)}
             </Text>
-            <Text fontSize="2xl" fontWeight="bold">
-              :
-            </Text>
+            <Text fontSize="2xl" fontWeight="bold">:</Text>
             <Text fontSize="2xl" fontWeight="bold">
               {formatTime(timeLeft.minutes)}
             </Text>
-            <Text fontSize="2xl" fontWeight="bold">
-              :
-            </Text>
+            <Text fontSize="2xl" fontWeight="bold">:</Text>
             <Text fontSize="2xl" fontWeight="bold">
               {formatTime(timeLeft.seconds)}
             </Text>
           </HStack>
 
           <HStack space={3} mt={1}>
-            <Text color="coolGray.400" fontSize="xs">
-              Jam
-            </Text>
-            <Text color="coolGray.400" fontSize="xs">
-              Menit
-            </Text>
-            <Text color="coolGray.400" fontSize="xs">
-              Detik
-            </Text>
+            <Text color="coolGray.400" fontSize="xs">Jam</Text>
+            <Text color="coolGray.400" fontSize="xs">Menit</Text>
+            <Text color="coolGray.400" fontSize="xs">Detik</Text>
           </HStack>
         </VStack>
       </VStack>

@@ -15,3 +15,7 @@ export const getScheduleDetail = (id) => {
 export const getFilterSetlist = () => {
   return apiNest.get(ENDPOINTS.SCHEDULE.SETLIST);
 };
+
+export const getTodaySchedule = () => {
+  return apiNest.get(ENDPOINTS.SCHEDULE.TODAY);
+};

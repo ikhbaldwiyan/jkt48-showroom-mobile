@@ -11,6 +11,16 @@ export const useScheduleList = (params) => {
   });
 };
 
+export const useTodaySchedule = () => {
+  return useQuery({
+    queryKey: ["todaySchedules"],
+    queryFn: async () => {
+      const response = await SCHEDULES.getTodaySchedule();
+      return response?.data?.data
+    },
+  });
+};
+
 export const useScheduleDetail = (id) => {
   return useQuery({
     queryKey: ["scheduleDetail", id],
