@@ -38,6 +38,7 @@ const MultiAccess = ({ isVisible, onClose }) => {
       avoidKeyboard
     >
       <Box bg="secondary" p={5} rounded="xl" shadow={3} width="85%">
+        <Modal.CloseButton />
         <Text fontWeight="bold" textAlign="center" fontSize="18" mb={4}>
           Fitur Multi Live Terbuka 🥳
         </Text>
