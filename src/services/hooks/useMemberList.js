@@ -36,5 +36,6 @@ export const useMemberListShowroom = (category, search) => {
       const response = await getRoomListMember(category, search);
       return response?.data?.data;
     },
+    retry: 0
   });
 };

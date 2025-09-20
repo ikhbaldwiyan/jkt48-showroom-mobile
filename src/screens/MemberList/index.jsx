@@ -3,21 +3,20 @@ import React, {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState,
+  useState
 } from "react";
 import { Box, Button, HStack, IconButton, Input, Text } from "native-base";
 import {
   CloseIcon,
   Dashboard,
   GraduateIcon,
-  SearchMember,
+  SearchMember
 } from "../../assets/icon";
-import RoomRegular from "../../components/organisms/RoomRegular";
-import RoomTrainee from "../../components/organisms/RoomTrainee";
 import Layout from "../../components/templates/Layout";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { useNavigation } from "@react-navigation/native";
 import debounce from "lodash/debounce";
+import MemberRoomList from "../../components/organisms/MemberRoomlist";
 
 const MemberList = () => {
   const [activeTab, setActiveTab] = useState("regular");
@@ -31,7 +30,7 @@ const MemberList = () => {
   const debouncedChangeHandler = useCallback(
     debounce((value) => {
       setDebouncedSearch(value);
-    }, 1000),
+    }, 600),
     []
   );
 
@@ -85,7 +84,7 @@ const MemberList = () => {
             mt="2"
             mr="4"
           />
-        ),
+        )
     });
   }, [searchQuery, isSearch]);
 
@@ -133,16 +132,16 @@ const MemberList = () => {
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
         {!searchQuery && (
-          <HStack space={1.5} mb="4">
+          <HStack space={1.5} mb="2">
             <TabButton label="Regular" type="regular" currentType={activeTab} />
             <TabButton label="Trainee" type="trainee" currentType={activeTab} />
           </HStack>
         )}
-        {activeTab === "regular" ? (
-          <RoomRegular refreshing={refreshing} searchQuery={debouncedSearch} />
-        ) : (
-          <RoomTrainee refreshing={refreshing} searchQuery={debouncedSearch} />
-        )}
+        <MemberRoomList
+          memberCategory={activeTab}
+          refreshing={refreshing}
+          searchQuery={debouncedSearch}
+        />
       </Box>
     </Layout>
   );
