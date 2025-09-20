@@ -10,3 +10,13 @@ export const useChangeLogVersion = () => {
     },
   });
 };
+
+export const useChangeLogVersionById = (version) => {
+  return useQuery({
+    queryKey: ["changeLogDetail"],
+    queryFn: async () => {
+      const response = await VERSION.getChangeLogVersionDetail(version);
+      return response?.data?.data
+    },
+  });
+};

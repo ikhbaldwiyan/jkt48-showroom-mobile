@@ -7,3 +7,7 @@ export const getCurrentVersion = () => {
 export const getChangeLogVersion = () => {
   return apiNest.get(ENDPOINTS.VERSIONS.CHANGE_LOG);
 }
+
+export const getChangeLogVersionDetail = (version) => {
+  return apiNest.get(ENDPOINTS.VERSIONS.CHANGE_LOG_DETAIL + "/" + version);
+}

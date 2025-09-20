@@ -13,8 +13,7 @@ const UpdateApp = () => {
   const { profile } = useUser();
   const [updateApp, setUpdateApp] = useState(false);
   const [latestVersion, setLatestVersion] = useState("");
-
-  const { data } = useChangeLogVersion();
+  const { data, isFetched } = useChangeLogVersion();
 
   useEffect(() => {
     const fetchLatestVersion = async () => {
@@ -59,13 +58,13 @@ const UpdateApp = () => {
   return (
     <Modal
       size="full"
-      isOpen={updateApp}
+      isOpen={updateApp && isFetched}
       onClose={closeUpdateApp}
       avoidKeyboard
     >
       <Box bg="secondary" rounded="xl" shadow={3} width="90%">
         <Box
-          bg="primary"
+          bg="blueGray.600"
           borderRadius="xl"
           borderBottomLeftRadius={0}
           borderBottomRightRadius={0}
@@ -82,7 +81,7 @@ const UpdateApp = () => {
         <Divider />
         <Box pt="3" p="4">
           <Text fontSize="md" mb="2" fontWeight="semibold">
-            What's New?
+            Release note:
           </Text>
 
           <VStack space={3}>

@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Linking } from "react-native";
 import { APK_VERSION, PLAY_STORE_URL } from "@env";
 import { Button, HStack, Modal, Text, VStack } from "native-base";
+import React, { useEffect, useState } from "react";
+import { Linking, TouchableOpacity } from "react-native";
 import DeviceInfo from "react-native-device-info";
-import { TouchableOpacity } from "react-native";
 import { DownloadIcon, History } from "../../../../assets/icon";
+import { useChangeLogVersionById } from "../../../../services/hooks/useChangeLog";
 import { getCurrentVersion } from "../../../../services/versions";
-import useApiConfig from "../../../../store/useApiConfig";
+import moment from "moment";
 
 const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
   const [latestVersion, setLatestVersion] = useState("");
   const [isNewVersion, setIsNewVersion] = useState(false);
-  const { MINIMUM_WATCH_MULTI_lIVE } = useApiConfig();
+  const { data, isFetched } = useChangeLogVersionById(APK_VERSION);
 
   const getVersionAndroid = async () => {
     try {
@@ -43,7 +43,7 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
           </HStack>
         </TouchableOpacity>
       )}
-      <Modal isOpen={modal} size="xl" onClose={toggleModal}>
+      <Modal isOpen={modal && isFetched} size="xl" onClose={toggleModal}>
         <Modal.Content borderWidth={1} borderColor="white" maxH="550">
           <Modal.Header bg="primary">
             <HStack space={2} alignItems="center">
@@ -55,29 +55,12 @@ const ChangeLog = ({ modal, toggleModal, hideButton = false }) => {
           </Modal.Header>
           <Modal.Body bg="secondary">
             <VStack space={3}>
-              <Text>- New homepage menu list</Text>
-              <Text>- Add Live Stream Bottom Menu</Text>
-              <Text>- Bug fixing sr live and internet status</Text>
-              <Text>- Show button toogle for hide comment box showroom</Text>
-              <Text>- Added Multi Live for early acces and donator</Text>
-              <Text>- Revamp layout for Showroom and IDN Live</Text>
-              <Text>- Added edit profile screen (Name, Avatar, Bio)</Text>
-              <Text>- Show IDN Live Gift list Tab</Text>
-              <Text>- Show avatar image on live chat IDN</Text>
-              <Text>- Revamp edit avatar showroom</Text>
-              <Text>- Show All Total Watched SR and IDN on profile</Text>
-              <Text>- Show active today theater schedule with countdown time</Text>
-              <Text>- Added Multi Live Showroom and IDN Live</Text>
-              <Text>
-                - Early access Multi Live feature for user reach Total Watch{" "}
-                {MINIMUM_WATCH_MULTI_lIVE}x
+              {data?.description?.map?.((item, idx) => (
+                <Text key={idx}>- {item}</Text>
+              ))}
+              <Text fontWeight="semibold" color="cyan.500">
+                Release date: {moment(data?.releaseDate).format("DD MMMM YYYY")}
               </Text>
-              <Text>
-                - Fixing banner internet connection offline landscape and PIP mode
-              </Text>
-              <Text>- Change open Multi Live button styling</Text>
-              <Text>- Adjust responsive live streaming SR and Showroom</Text>
-              <Text>- Improve Landscape live stream for tablet mode</Text>
             </VStack>
           </Modal.Body>
           <Modal.Footer bg="black">

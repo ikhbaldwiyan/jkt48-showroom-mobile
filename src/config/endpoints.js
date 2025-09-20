@@ -55,7 +55,8 @@ export default {
   },
   VERSIONS: {
     CURRENT_VERSION: "/mobile/app-version",
-    CHANGE_LOG: "/change-logs/active"
+    CHANGE_LOG: "/change-logs/active",
+    CHANGE_LOG_DETAIL: "/change-logs/"
   },
   LEADERBOARD: {
     SHOWROOM: "/leaderboard-member/showroom",
