@@ -1,34 +1,29 @@
-import React, { useEffect } from "react";
-import { Box, HStack, Image, Text, VStack, Center } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { cleanImage, formatName } from "../../../utils/helpers";
-import { Info, LiveIcon } from "../../../assets/icon";
+import { Box, Center, HStack, Image, Text, VStack } from "native-base";
+import React, { useEffect } from "react";
 import { TouchableOpacity } from "react-native";
 import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
+import { Info } from "../../../assets/icon";
+import { useMemberListShowroom } from "../../../services/hooks/useMemberList";
+import { cleanImage } from "../../../utils/helpers";
 import SkeletonRoomList from "../../atoms/Skeleteon/SkeletonRoomList";
-import { useMemberList } from "../../../services/hooks/useMemberList";
 
 const RoomTrainee = ({ refreshing, searchQuery }) => {
   const { navigate } = useNavigation();
   const { width } = useWindowDimensions();
   const columnCount = width > 600 ? 3 : 2;
+  const category = !searchQuery ? "regular" : null;
 
-  const { data: rooms = [], isLoading } = useMemberList({
-    type: "trainee",
+  const { data: rooms = [], isLoading } = useMemberListShowroom(
+    category,
     searchQuery
-  });
+  );
 
   useEffect(() => {
     if (refreshing) {
-      refetch()
+      refetch();
     }
-  }, [refreshing])
-
-  const filteredRooms = rooms?.filter(
-    (room) =>
-      room.name?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
-      room.main_name?.toLowerCase().includes(searchQuery?.toLowerCase())
-  );
+  }, [refreshing]);
 
   const renderRoomItem = (room, idx) => (
     <Box key={idx} mr={3}>
@@ -36,41 +31,23 @@ const RoomTrainee = ({ refreshing, searchQuery }) => {
         activeOpacity={0.6}
         onPress={() => {
           navigate("RoomDetail", {
-            room: {
-              room_id: room.id ?? room.room_id,
-              ...room
-            }
+            room,
           });
         }}
       >
         <Box>
           <Image
             borderRadius={8}
-            source={{ uri: cleanImage(room.image_square) }}
-            alt={room?.main_name ?? room?.name}
+            source={{ uri: cleanImage(room?.image_url) }}
+            alt={room?.name}
             size="md"
             width={width / columnCount - 20}
             height={(width / columnCount - 16) * 0.85}
           />
-          {room?.is_onlive && (
-            <Box
-              borderTopLeftRadius="8"
-              borderBottomRightRadius="8"
-              position="absolute"
-              background="primary"
-              py="1"
-              px="2"
-            >
-              <HStack space={1} alignItems="center">
-                <LiveIcon size={16} />
-                <Text fontWeight="semibold">Live</Text>
-              </HStack>
-            </Box>
-          )}
         </Box>
         <Box mt={2}>
           <Text fontSize="md" fontWeight="medium" color="white">
-            {formatName(room?.room_url_key ?? room?.url_key)}
+            {room?.name}
           </Text>
         </Box>
       </TouchableOpacity>
@@ -85,9 +62,9 @@ const RoomTrainee = ({ refreshing, searchQuery }) => {
 
   const renderRoomList = () => {
     const columns = [];
-    const itemsPerColumn = Math.ceil(filteredRooms.length / columnCount);
+    const itemsPerColumn = Math.ceil(rooms?.length / columnCount);
     for (let i = 0; i < columnCount; i++) {
-      const columnRooms = filteredRooms.slice(
+      const columnRooms = rooms?.slice(
         i * itemsPerColumn,
         (i + 1) * itemsPerColumn
       );
@@ -100,7 +77,7 @@ const RoomTrainee = ({ refreshing, searchQuery }) => {
     return <SkeletonRoomList />;
   }
 
-  if (searchQuery && filteredRooms.length === 0) {
+  if (searchQuery && rooms?.length === 0) {
     return (
       <Center flex={1} py={10}>
         <VStack space={4} alignItems="center">

@@ -1,5 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getRoomRegular, getRoomTrainee, getRoomGen10 } from "../rooms";
+import {
+  getRoomRegular,
+  getRoomTrainee,
+  getRoomGen10,
+  getRoomListMember,
+} from "../rooms";
 
 export const useMemberList = ({ type = "regular", searchQuery = "" }) => {
   return useQuery({
@@ -8,7 +13,7 @@ export const useMemberList = ({ type = "regular", searchQuery = "" }) => {
       if (type === "regular") {
         const [regularResponse, gen10Response] = await Promise.all([
           getRoomRegular(),
-          getRoomGen10()
+          getRoomGen10(),
         ]);
         return [...regularResponse.data, ...gen10Response.data];
       } else {
@@ -20,6 +25,16 @@ export const useMemberList = ({ type = "regular", searchQuery = "" }) => {
     cacheTime: 30 * 60 * 1000, // Cache kept for 30 minutes
     onError: (error) => {
       console.error("Error fetching member list:", error);
-    }
+    },
+  });
+};
+
+export const useMemberListShowroom = (category, search) => {
+  return useQuery({
+    queryKey: ["memberListShowroom", category, search],
+    queryFn: async () => {
+      const response = await getRoomListMember(category, search);
+      return response?.data?.data;
+    },
   });
 };

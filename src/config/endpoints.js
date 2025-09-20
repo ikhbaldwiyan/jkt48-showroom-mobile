@@ -25,6 +25,7 @@ export default {
     ONLIVES: "/rooms/onlives",
     PREMIUM_LIVE: "/rooms/premium-live",
     PROFILE: "/profile/room/",
+    MEMBERS: "/member",
     FOLLOW: "/room/follow",
     HISTORY_LIVE: "/recent?sort=date&order=-1&group=jkt48",
     HISTORY_LIVE_PROFILE:
