@@ -1,4 +1,4 @@
-import { apiUser, apiAuth, ENDPOINTS, apiAdmin } from "../config";
+import { apiUser, apiAuth, ENDPOINTS, apiAdmin, apiNest } from "../config";
 
 export const postActivityLog = (params) => {
   return apiUser.post(ENDPOINTS.USER.ACTIVIY_LOG, params);
@@ -35,3 +35,7 @@ export const getProfile = (payload) => {
 export const getMostWatchIDN = (userId) => {
   return apiAdmin.get(ENDPOINTS.USER.MOST_WATCH_IDN + userId);
 };
+
+export const getDonatorUser = () => {
+  return apiNest.get(ENDPOINTS.USER.DOANTOR_SHOWROOM)
+}

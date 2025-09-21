@@ -11,11 +11,17 @@ import useUser from "../../utils/hooks/useUser";
 import { activityLog } from "../../utils/activityLog";
 import trackAnalytics from "../../utils/trackAnalytics";
 import useApiConfig from "../../store/useApiConfig";
+import { useDonatorUser } from "../../services/hooks/useDonator";
+import UserModal from "../../components/atoms/UserModal";
+import { ImagePreviewModal } from "../../components/atoms/Modal";
 
 const SupportProject = ({ navigation }) => {
   const { userProfile } = useUser();
   const [donator, setDonator] = useState();
   const { DONATION_IMG } = useApiConfig();
+  const { data } = useDonatorUser();
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [imagePreviewModal, setImagePreviewModal] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -142,18 +148,64 @@ const SupportProject = ({ navigation }) => {
         <Text fontWeight="semibold" fontSize="xl">
           Top Donation Saweria
         </Text>
-        <Image
-          my="3"
-          width="100%"
-          height="81"
-          borderRadius="md"
-          alt="Donation Image"
-          source={{ uri: DONATION_IMG }}
+        <TouchableOpacity onPress={() => setImagePreviewModal(true)}>
+          <Image
+            my="3"
+            width="100%"
+            height="81"
+            borderRadius="md"
+            alt="Donation Image"
+            source={{ uri: DONATION_IMG }}
+          />
+        </TouchableOpacity>
+        <ImagePreviewModal
+          isOpen={imagePreviewModal}
+          onClose={() => setImagePreviewModal(false)}
+          imageUri={DONATION_IMG}
+          imageAlt="Donation"
         />
         <Text mb="3" fontWeight="semibold" fontSize="xl">
+          Donator User
+        </Text>
+        <CardGradient color="dark" isRounded>
+          <HStack
+            space="3"
+            flexWrap="wrap"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {data?.user?.map((item, idx) => (
+              <VStack key={idx} my="4" alignItems="center" width="20%">
+                <TouchableOpacity
+                  activeOpacity={0.4}
+                  onPress={() => {
+                    setSelectedUser(item);
+                  }}
+                >
+                  <Image
+                    borderRadius="6"
+                    alt={item?.name}
+                    style={{ width: 50, height: 50 }}
+                    source={{
+                      uri: item?.avatar
+                    }}
+                  />
+                  <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
+                    {item?.name}
+                  </Text>
+                </TouchableOpacity>
+              </VStack>
+            ))}
+          </HStack>
+        </CardGradient>
+        <UserModal
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+        />
+        <Text my="3" fontWeight="semibold" fontSize="xl">
           Donator Discord Role
         </Text>
-        <CardGradient color="light" isRounded>
+        <CardGradient color="dark" isRounded>
           <HStack
             space="3"
             flexWrap="wrap"

@@ -186,7 +186,7 @@ const ChatBubble = ({
           isOpen={imagePreviewModal}
           onClose={() => setImagePreviewModal(false)}
           imageUri={image}
-          imageAlt={`Image from ${username}`}
+          imageAlt={`Preview Image`}
         />
       )}
     </Box>

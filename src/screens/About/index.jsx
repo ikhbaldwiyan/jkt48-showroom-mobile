@@ -7,12 +7,14 @@ import { Dimensions, Linking, TouchableOpacity } from "react-native";
 import { activityLog } from "../../utils/activityLog";
 import useUser from "../../utils/hooks/useUser";
 import trackAnalytics from "../../utils/trackAnalytics";
-import { USER } from "../../services";
 import CardGradient from "../../components/atoms/CardGradient";
+import { useDonatorUser } from "../../services/hooks/useDonator";
+import UserModal from "../../components/atoms/UserModal";
 
 const About = () => {
   const { userProfile } = useUser();
-  const [donator, setDonator] = useState();
+  const { data } = useDonatorUser();
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const donateClick = () => {
     Linking.openURL("https://saweria.co/JKT48Showroom48");
@@ -39,19 +41,6 @@ const About = () => {
       username: userProfile?.name ?? "Guest"
     });
   };
-
-  const getDonator = async () => {
-    try {
-      const response = await USER.getDonatorList();
-      setDonator(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getDonator();
-  }, []);
 
   const socialMedia = [
     {
@@ -198,34 +187,45 @@ const About = () => {
           Donator
         </Text>
         <Text mb="3">
-          Jika kamu sudah mendukung project ini akan mendapatkan role Donator di
-          server discord dan foto profile dengan username kalian akan di
-          tampilkan di bawah ini, Terima kasih.
+          Jika kamu sudah mendukung project ini akan mendapatkan badge Donator
+          di profile dan avatar dengan username akun kalian akan di tampilkan di
+          bawah ini, Terima kasih.
         </Text>
-        <CardGradient color="light" isRounded>
+        <CardGradient color="dark" isRounded>
           <HStack
             space="3"
             flexWrap="wrap"
             alignItems="center"
             justifyContent="center"
           >
-            {donator?.map((item, idx) => (
+            {data?.user?.map((item, idx) => (
               <VStack key={idx} my="4" alignItems="center" width="20%">
-                <Image
-                  borderRadius="6"
-                  alt={item.user.username}
-                  style={{ width: 50, height: 50 }}
-                  source={{
-                    uri: `https://cdn.discordapp.com/avatars/${item.user.id}/${item.user.avatar}.png`
+                <TouchableOpacity
+                  activeOpacity={0.4}
+                  onPress={() => {
+                    setSelectedUser(item);
                   }}
-                />
-                <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
-                  {item.user.global_name ?? item.user.username}
-                </Text>
+                >
+                  <Image
+                    borderRadius="6"
+                    alt={item?.name}
+                    style={{ width: 50, height: 50 }}
+                    source={{
+                      uri: item?.avatar
+                    }}
+                  />
+                  <Text mt="2" fontSize="sm" fontWeight="semibold" isTruncated>
+                    {item?.name}
+                  </Text>
+                </TouchableOpacity>
               </VStack>
             ))}
           </HStack>
         </CardGradient>
+        <UserModal
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+        />
         <Divider mt="4" mb="2" />
       </Box>
     </Layout>
