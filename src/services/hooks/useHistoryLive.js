@@ -27,3 +27,13 @@ export const useHistoryLiveInfinite = (type = "all", search = "") => {
     initialPageParam: 1,
   });
 }; 
+
+export const useHistoryLiveDetail = (id) => {
+  return useQuery({
+    queryKey: ["historyLiveDetail", id],
+    queryFn: async () => {
+      const response = await ROOMS.getHistoryLiveDetail(id);
+      return response?.data;
+    },
+  });
+};

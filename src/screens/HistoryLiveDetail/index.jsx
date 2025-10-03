@@ -1,50 +1,167 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
-import { WebView } from "react-native-webview";
-import { Box } from "native-base";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
+import { Box, HStack, Image, Text, VStack } from "native-base";
+import { useLayoutEffect } from "react";
+import {
+  Calendar,
+  ChatIcon,
+  EyeIcon,
+  GiftFill,
+  IDNLiveIcon,
+  LiveIcon,
+  StartIcon,
+  StopIcon,
+  TimesIcon,
+  UsersIcon,
+} from "../../assets/icon";
 import Loading from "../../components/atoms/Loading";
+import { useHistoryLiveDetail } from "../../services/hooks/useHistoryLive";
+import {
+  formatLongDate,
+  formatViews,
+  getLiveDurationMinutes,
+} from "../../utils/helpers";
+import Layout from "../../components/templates/Layout";
+import Screenshot from "./components/Screenshot";
 
 const HistoryLiveDetail = ({ route }) => {
-  const { setOptions } = useNavigation();
-  const { url, title } = route.params;
-  const [isLoading, setIsLoading] = useState(true);
+  const navigation = useNavigation();
+  const { liveId, title } = route.params;
+  const { data, isLoading } = useHistoryLiveDetail(liveId);
+  const isShowroom = data?.type === "showroom";
+  const images = data?.live_info?.screenshot?.list;
+  const folder = data?.live_info?.screenshot?.folder;
 
   useLayoutEffect(() => {
-    setOptions({
-      headerTitle: title
+    navigation.setOptions({
+      headerTitle: "Detail Live",
     });
-  }, [setOptions, title]);
+  }, [navigation, title]);
 
-  useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [url]);
-
-  return (
-    <Box flex={1}>
-      <WebView
-        source={{ uri: url + "?view_type=android" }}
-        style={{ flex: 1, backgroundColor: "#282C34" }}
-      />
-      {isLoading && (
-        <Box
-          position="absolute"
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          justifyContent="center"
-          alignItems="center"
-          bg="secondary"
-        >
-          <Loading color="white" />
-        </Box>
-      )}
+  return isLoading ? (
+    <Box justifyContent="center" alignItems="center" flex="1" bg="secondary">
+      <Loading />
     </Box>
+  ) : (
+    <Layout>
+      <HStack justifyContent="space-between" alignItems="center">
+        <Box>
+          <Text fontSize="xl" fontWeight="semibold">
+            {data?.room_info?.nickname}
+          </Text>
+          <Text color="gray.400">{data?.room_info?.fullname}</Text>
+        </Box>
+        {isShowroom ? (
+          <Image
+            size="md"
+            alt="showroom"
+            source={{
+              uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
+            }}
+            width="42"
+            height="42"
+            rounded="md"
+          />
+        ) : (
+          <IDNLiveIcon />
+        )}
+      </HStack>
+
+      <Screenshot
+        thumbnail={data?.room_info?.img}
+        images={images}
+        folder={folder}
+        isShowroom={isShowroom}
+      />
+
+      <Box my="3">
+        <Text fontSize="xl" fontWeight="semibold">
+          Detail
+        </Text>
+
+        <HStack flexWrap="wrap" mt="4">
+          <VStack w="50%" mb="4" pr="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <Calendar color="#A3A3A3" />
+              <Text color="gray.400" fontSize={13}>
+                Tanggal
+              </Text>
+            </HStack>
+            <Text>
+              {moment(data?.live_info?.date?.start).format("dddd, DD MMM YYYY")}
+            </Text>
+          </VStack>
+
+          <VStack w="50%" mb="4" pl="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <TimesIcon color="#A3A3A3" size={15} />
+              <Text color="gray.400" fontSize={13}>
+                Durasi Live
+              </Text>
+            </HStack>
+            <Text>{getLiveDurationMinutes(data?.live_info?.duration)}</Text>
+          </VStack>
+
+          <VStack w="50%" mb="4" pr="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <StartIcon />
+              <Text color="gray.400" fontSize={13}>
+                Mulai
+              </Text>
+            </HStack>
+            <Text>{formatLongDate(data?.live_info?.date?.start, true)}</Text>
+          </VStack>
+
+          <VStack w="50%" mb="4" pl="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <StopIcon />
+              <Text color="gray.400" fontSize={13}>
+                Selesai
+              </Text>
+            </HStack>
+            <Text>{formatLongDate(data?.live_info?.date?.end, true)}</Text>
+          </VStack>
+
+          <VStack w="50%" mb="4" pr="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <ChatIcon color="#A3A3A3" size="18" />
+              <Text color="gray.400" fontSize={13}>
+                Komentar
+              </Text>
+            </HStack>
+            <Text>{formatViews(data?.live_info?.comments?.num)} chat</Text>
+          </VStack>
+          <VStack w="50%" mb="4" pl="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <GiftFill size="16" color="#A3A3A3" />
+              <Text color="gray.400" fontSize={13}>
+                Gifts
+              </Text>
+            </HStack>
+            <Text>{formatViews(data?.total_gifts)}</Text>
+          </VStack>
+
+          <VStack w="50%" mb="4" pr="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <EyeIcon color="#A3A3A3" size="17" />
+              <Text color="gray.400" fontSize={13}>
+                Penonton
+              </Text>
+            </HStack>
+            <Text>{formatViews(data?.live_info?.viewers?.num)}</Text>
+          </VStack>
+          <VStack w="50%" mb="4" pl="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <LiveIcon size="18" color="#A3A3A3" />
+              <Text color="gray.400" fontSize={13}>
+                Judul Live
+              </Text>
+            </HStack>
+            <Text>{data?.idn?.title ?? "-"}</Text>
+          </VStack>
+        </HStack>
+      </Box>
+    </Layout>
   );
 };
 

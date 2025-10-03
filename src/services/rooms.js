@@ -55,6 +55,12 @@ export const getHistoryLives = (type, search, page) => {
   );
 };
 
+export const getHistoryLiveDetail = (id) => {
+  return apiHistory.get(
+    `${ENDPOINTS.ROOM.HISTORY_LIVE_DETAIL}/${id}`
+  );
+};
+
 export const getRoomListMember = (category, search) => {
   return apiNest.get(
     `${ENDPOINTS.ROOM.MEMBERS}?category=${category}&search=${search}`

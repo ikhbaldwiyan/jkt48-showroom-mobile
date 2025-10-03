@@ -9,7 +9,7 @@ import {
   LiveIcon,
   RightArrow,
   TimesFill,
-  UsersFill
+  UsersFill,
 } from "../../../assets/icon";
 import { formatViews, getLiveDurationMinutes } from "../../../utils/helpers";
 import TimeAgo from "react-native-timeago";
@@ -67,12 +67,7 @@ const RecentLives = ({ refreshing }) => {
                   activeOpacity={0.7}
                   onPress={() =>
                     navigation.navigate("HistoryDetail", {
-                      url: `https://www.jkt48showroom.com/history/${member.url}/${log.data_id}`,
-                      title: member?.is_official
-                        ? "JKT48 Official"
-                        : member?.nickname +
-                        " - " +
-                        moment(live_info?.date.start).format("DD MMMM YYYY")
+                      liveId: log.data_id,
                     })
                   }
                 >
@@ -106,7 +101,8 @@ const RecentLives = ({ refreshing }) => {
                             <HStack alignItems="center" space={2}>
                               <UsersFill />
                               <Text>
-                                {formatViews(live_info?.viewers?.num ?? 0)} views
+                                {formatViews(live_info?.viewers?.num ?? 0)}{" "}
+                                views
                               </Text>
                             </HStack>
                             <HStack alignItems="center" space={2}>
@@ -142,7 +138,7 @@ const RecentLives = ({ refreshing }) => {
                       activeOpacity={0.6}
                       onPress={() => {
                         navigation.navigate("RoomDetail", {
-                          room: log
+                          room: log,
                         });
                       }}
                     >
@@ -189,6 +185,6 @@ export default RecentLives;
 const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
-    borderRadius: 6
-  }
+    borderRadius: 6,
+  },
 });
