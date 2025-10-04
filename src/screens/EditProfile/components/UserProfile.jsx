@@ -1,4 +1,5 @@
 import {
+  Actionsheet,
   Box,
   Button,
   FormControl,
@@ -11,7 +12,7 @@ import {
   useToast
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { IDCard, UserIcon } from "../../../assets/icon";
+import { IDCard, StarIcon, UserIcon } from "../../../assets/icon";
 import CardGradient from "../../../components/atoms/CardGradient";
 import useAuthStore from "../../../store/authStore";
 import { useUser } from "../../../utils/hooks";
@@ -21,6 +22,7 @@ import {
   useUpdateUserProfile
 } from "../../../services/hooks/useProfile";
 import { useNavigation } from "@react-navigation/native";
+import { Oshimen } from "../../../components/organisms";
 
 export const UserProfile = () => {
   const toast = useToast();
@@ -28,6 +30,7 @@ export const UserProfile = () => {
   const { user, session, profile, userProfile } = useUser();
   const { data } = useShowroomProfile(user?.user_id);
   const { setProfile } = useAuthStore();
+  const [isOpen, setIsOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     name: profile?.name,
@@ -124,6 +127,17 @@ export const UserProfile = () => {
               value={formData.name}
               onChangeText={(value) => handleChange("name", value)}
             />
+            <HStack space={2} alignItems="center">
+              <StarIcon color="white" size="14" />
+              <Box flex={1}>
+                <Text color="gray.300" fontSize="14">
+                  Oshimen
+                </Text>
+              </Box>
+            </HStack>
+            <Box>
+              <Text onPress={() => setIsOpen(true)}>Pilih Oshimen</Text>
+            </Box>
             <Box>
               <HStack space={2} alignItems="center">
                 <IDCard size={15} />
@@ -162,6 +176,8 @@ export const UserProfile = () => {
             </Button>
           </VStack>
         </FormControl>
+
+        <Oshimen isOpen={isOpen} setIsOpen={setIsOpen} />
       </ScrollView>
     </CardGradient>
   );

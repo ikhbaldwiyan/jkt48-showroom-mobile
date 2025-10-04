@@ -71,5 +71,8 @@ export default {
     SEND_MESSAGE: "/send-message",
     DELETE: "/delete-chat",
     ROOM_INFO: "/room-info"
+  },
+  MEMBERS: {
+    PROFILE: "/profile-member"
   }
 };

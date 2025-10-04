@@ -8,6 +8,7 @@ import EmptyLive from "./EmptyLive";
 import HistoryLive from "./HistoryLive";
 import ScheduleHome from "./ScheduleHome";
 import ShowroomLiveCard from "./ShowroomLiveCard";
+import Oshimen from "./Oshimen";
 
 export {
   RoomList,
@@ -20,4 +21,5 @@ export {
   HistoryLive,
   ScheduleHome,
   ShowroomLiveCard,
+  Oshimen
 }
