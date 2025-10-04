@@ -10,15 +10,23 @@ import {
   Text,
   VStack
 } from "native-base";
-import { useMemberProfile } from "../../../services/hooks/useMembers";
+import {
+  useMemberProfile,
+  useUpdateOshimen
+} from "../../../services/hooks/useMembers";
 import Loading from "../../../components/atoms/Loading";
 import { TouchableOpacity } from "react-native";
 import TabButton from "../../../components/atoms/TabButton";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUser } from "../../../utils/hooks";
 
 const Oshimen = ({ isOpen, setIsOpen }) => {
+  const { user } = useUser();
   const [type, setType] = useState("");
   const [selectedMember, setSelectedMember] = useState(null);
   const { data: members, isLoading } = useMemberProfile(type, "");
+  const updateOshimen = useUpdateOshimen();
+  const queryClient = useQueryClient();
 
   const handleMemberSelect = (member) => {
     setSelectedMember(member);
@@ -26,8 +34,21 @@ const Oshimen = ({ isOpen, setIsOpen }) => {
 
   const handleConfirmSelection = () => {
     if (selectedMember) {
-      console.log("Selected member:", selectedMember);
-      setIsOpen(false);
+      updateOshimen.mutate(
+        {
+          user_id: user?.account_id,
+          oshimen_id: selectedMember?._id
+        },
+        {
+          onSuccess: () => {
+            setIsOpen(false);
+            queryClient.invalidateQueries(["profile", user?.account_id]);
+          },
+          onError: (error) => {
+            console.log(error);
+          }
+        }
+      );
     }
   };
 

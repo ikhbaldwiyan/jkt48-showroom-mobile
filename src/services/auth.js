@@ -1,4 +1,4 @@
-import { ENDPOINTS, apiAuth, apiUser } from "../config";
+import { ENDPOINTS, apiAuth, apiNest, apiUser } from "../config";
 
 export const loginApi = (params) => {
   return apiAuth.post(ENDPOINTS.AUTH.LOGIN, params);
@@ -9,7 +9,7 @@ export const regsiterApi = (params) => {
 };
 
 export const detailUserApi = (id) => {
-  return apiUser.get(ENDPOINTS.AUTH.DETAIL_USER + id);
+  return apiNest.get(ENDPOINTS.AUTH.DETAIL_USER + id);
 };
 
 export const updateDetailUser = (id, params) => {

@@ -17,7 +17,8 @@ export default {
     CREATE_USER: "/users/",
     DONATOR: "/discord/role?type=donator",
     MOST_WATCH_IDN: "/activity/most-watch-idn/",
-    DOANTOR_SHOWROOM: "/users/donator"
+    DOANTOR_SHOWROOM: "/users/donator",
+    UPDATE_OSHIMEN: "/users/oshimen",
   },
   ROOM: {
     LIST: "/rooms",
@@ -73,6 +74,6 @@ export default {
     ROOM_INFO: "/room-info"
   },
   MEMBERS: {
-    PROFILE: "/profile-member"
+    PROFILE: "/profile-member",
   }
 };

@@ -4,10 +4,11 @@ import {
   Button,
   FormControl,
   HStack,
+  Image,
   Input,
   ScrollView,
+  Spinner,
   Text,
-  TextArea,
   VStack,
   useToast
 } from "native-base";
@@ -17,6 +18,7 @@ import CardGradient from "../../../components/atoms/CardGradient";
 import useAuthStore from "../../../store/authStore";
 import { useUser } from "../../../utils/hooks";
 import {
+  useProfile,
   useShowroomProfile,
   useUpdateProfile,
   useUpdateUserProfile
@@ -31,6 +33,7 @@ export const UserProfile = () => {
   const { data } = useShowroomProfile(user?.user_id);
   const { setProfile } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
+  const { data: profileUser, isRefetching } = useProfile(user?.account_id);
 
   const [formData, setFormData] = useState({
     name: profile?.name,
@@ -136,30 +139,56 @@ export const UserProfile = () => {
               </Box>
             </HStack>
             <Box>
-              <Text onPress={() => setIsOpen(true)}>Pilih Oshimen</Text>
-            </Box>
-            <Box>
-              <HStack space={2} alignItems="center">
-                <IDCard size={15} />
-                <Box flex={1}>
-                  <Text color="gray.300" fontSize="14">
-                    About Me
-                  </Text>
+              {profileUser?.oshimen && !isRefetching ? (
+                <HStack alignItems="center">
+                  <VStack w="30%">
+                    <Image
+                      alt="Member"
+                      style={{ width: 84, height: 110 }}
+                      source={{ uri: profileUser?.oshimen?.image }}
+                      rounded="lg"
+                    />
+                  </VStack>
+                  <VStack w="70%" space={1}>
+                    <Text fontWeight="semibold" flexWrap="nowrap">
+                      {profileUser?.oshimen?.name}
+                    </Text>
+                    <Text fontSize="xs" flexWrap="wrap">
+                      {profileUser?.oshimen?.jiko}
+                    </Text>
+                    <Button
+                      px="3"
+                      width={120}
+                      size="sm"
+                      bg="blueLight"
+                      onPress={() => setIsOpen(true)}
+                    >
+                      <Text fontSize="xs" color="primary" fontWeight="semibold">
+                        Ubah Oshimen
+                      </Text>
+                    </Button>
+                  </VStack>
+                </HStack>
+              ) : isRefetching ? (
+                <Box>
+                  <HStack space={2}>
+                    <Spinner color="white" size={14} />
+                    <Text>Loading Oshimen</Text>
+                  </HStack>
                 </Box>
-              </HStack>
-              <TextArea
-                mt="2"
-                bgColor="white"
-                variant="filled"
-                w="100%"
-                fontSize="md"
-                name="about"
-                placeholder="Tell us about yourself"
-                value={formData.about}
-                onChangeText={(value) => handleChange("about", value)}
-                autoCompleteType={false}
-                h={100}
-              />
+              ) : (
+                <Button
+                  px="3"
+                  width={120}
+                  size="sm"
+                  bg="blueLight"
+                  onPress={() => setIsOpen(true)}
+                >
+                  <Text fontSize="xs" color="primary" fontWeight="semibold">
+                    Pilih Oshimen
+                  </Text>
+                </Button>
+              )}
             </Box>
             <Button
               my="3"

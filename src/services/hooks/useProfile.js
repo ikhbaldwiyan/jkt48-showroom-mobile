@@ -5,10 +5,10 @@ import { updateProfile, updateUserProfile } from "../user";
 
 export const useProfile = (userId) => {
   return useQuery({
-    queryKey: ["profile"],
+    queryKey: ["profile", userId],
     queryFn: async () => {
       const response = await AUTH.detailUserApi(userId);
-      return response?.data;
+      return response?.data?.data;
     },
     enabled: !!userId,
   });

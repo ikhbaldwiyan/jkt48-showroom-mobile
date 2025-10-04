@@ -5,3 +5,9 @@ export const getMemberProfile = (type, search) => {
     `${ENDPOINTS.MEMBERS.PROFILE}?type=${type}&search=${search}&is_active=true`
   );
 };
+
+export const updateOshimen = (payload) => {
+  return apiNest.patch(
+    `${ENDPOINTS.USER.UPDATE_OSHIMEN}/${payload.user_id}`, payload
+  );
+};
