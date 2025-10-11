@@ -1,4 +1,4 @@
-import { ROOMS } from "..";
+import { ROOMS, STREAM } from "..";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
 // Basic query hook for single page data
@@ -26,7 +26,7 @@ export const useHistoryLiveInfinite = (type = "all", search = "") => {
     },
     initialPageParam: 1,
   });
-}; 
+};
 
 export const useHistoryLiveDetail = (id) => {
   return useQuery({
@@ -34,6 +34,33 @@ export const useHistoryLiveDetail = (id) => {
     queryFn: async () => {
       const response = await ROOMS.getHistoryLiveDetail(id);
       return response?.data;
+    },
+  });
+};
+
+export const usePodiumList = (platform, liveId) => {
+  return useQuery({
+    queryKey: ["historyLiveDetail", platform, liveId],
+    queryFn: async () => {
+      const response =
+        platform === "showroom"
+          ? await STREAM.getLivePodium(liveId)
+          : await STREAM.getIDNLivePodium(liveId);
+      return response?.data;
+    },
+  });
+};
+
+
+export const useHistoryDetail = (platform, liveId) => {
+  return useQuery({
+    queryKey: ["historyLiveDetailPlatform", platform, liveId],
+    queryFn: async () => {
+      const response =
+        platform === "showroom"
+          ? await ROOMS.getHistoryLiveShowroom(liveId)
+          : await ROOMS.getHistoryLiveIDN(liveId);
+      return response?.data?.data;
     },
   });
 };

@@ -12,10 +12,13 @@ import {
   StartIcon,
   StopIcon,
   TimesIcon,
-  UsersIcon,
 } from "../../assets/icon";
 import Loading from "../../components/atoms/Loading";
-import { useHistoryLiveDetail } from "../../services/hooks/useHistoryLive";
+import {
+  useHistoryDetail,
+  useHistoryLiveDetail,
+  usePodiumList,
+} from "../../services/hooks/useHistoryLive";
 import {
   formatLongDate,
   formatViews,
@@ -23,6 +26,8 @@ import {
 } from "../../utils/helpers";
 import Layout from "../../components/templates/Layout";
 import Screenshot from "./components/Screenshot";
+import HistoryLiveTabs from "../../components/molecules/HistoryLiveTabs";
+import WebView from "react-native-webview";
 
 const HistoryLiveDetail = ({ route }) => {
   const navigation = useNavigation();
@@ -31,6 +36,11 @@ const HistoryLiveDetail = ({ route }) => {
   const isShowroom = data?.type === "showroom";
   const images = data?.live_info?.screenshot?.list;
   const folder = data?.live_info?.screenshot?.folder;
+
+  const liveSlug = isShowroom ? data?.live_id : data?.idn?.slug;
+
+  const { data: history, isSuccess } = useHistoryDetail(data?.type, liveSlug);
+  const replay = history?.youtube;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -67,19 +77,37 @@ const HistoryLiveDetail = ({ route }) => {
         )}
       </HStack>
 
-      <Screenshot
-        thumbnail={data?.room_info?.img}
-        images={images}
-        folder={folder}
-        isShowroom={isShowroom}
-      />
+      {replay !== undefined && isSuccess && replay.length > 1 ? (
+        <Box mt="3" borderRadius={6} overflow="hidden">
+          <WebView
+            style={{
+              width: "100%",
+              height: isShowroom ? 188 : 412,
+            }}
+            source={{
+              uri:
+                replay !== undefined && isSuccess
+                  ? `https://www.youtube.com/embed/${replay}`
+                  : null,
+            }}
+            allowsFullscreenVideo
+          />
+        </Box>
+      ) : (
+        <Screenshot
+          thumbnail={data?.room_info?.img}
+          images={images}
+          folder={folder}
+          isShowroom={isShowroom}
+        />
+      )}
 
       <Box my="3">
         <Text fontSize="xl" fontWeight="semibold">
           Detail
         </Text>
 
-        <HStack flexWrap="wrap" mt="4">
+        <HStack flexWrap="wrap" mt="3">
           <VStack w="50%" mb="4" pr="2" space={1}>
             <HStack space={1.5} alignItems="center">
               <Calendar color="#A3A3A3" />
@@ -104,7 +132,7 @@ const HistoryLiveDetail = ({ route }) => {
 
           <VStack w="50%" mb="4" pr="2" space={1}>
             <HStack space={1.5} alignItems="center">
-              <StartIcon />
+              <StartIcon size={20} />
               <Text color="gray.400" fontSize={13}>
                 Mulai
               </Text>
@@ -114,12 +142,31 @@ const HistoryLiveDetail = ({ route }) => {
 
           <VStack w="50%" mb="4" pl="2" space={1}>
             <HStack space={1.5} alignItems="center">
-              <StopIcon />
+              <StopIcon size={20} />
               <Text color="gray.400" fontSize={13}>
                 Selesai
               </Text>
             </HStack>
             <Text>{formatLongDate(data?.live_info?.date?.end, true)}</Text>
+          </VStack>
+
+          <VStack w="50%" mb="4" pr="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <LiveIcon size="16" color="#A3A3A3" />
+              <Text color="gray.400" fontSize={13}>
+                Judul Live
+              </Text>
+            </HStack>
+            <Text>{data?.idn?.title ?? "-"}</Text>
+          </VStack>
+          <VStack w="50%" mb="4" pl="2" space={1}>
+            <HStack space={1.5} alignItems="center">
+              <EyeIcon color="#A3A3A3" size="17" />
+              <Text color="gray.400" fontSize={13}>
+                Penonton
+              </Text>
+            </HStack>
+            <Text>{formatViews(data?.live_info?.viewers?.num)}</Text>
           </VStack>
 
           <VStack w="50%" mb="4" pr="2" space={1}>
@@ -139,25 +186,6 @@ const HistoryLiveDetail = ({ route }) => {
               </Text>
             </HStack>
             <Text>{formatViews(data?.total_gifts)}</Text>
-          </VStack>
-
-          <VStack w="50%" mb="4" pr="2" space={1}>
-            <HStack space={1.5} alignItems="center">
-              <EyeIcon color="#A3A3A3" size="17" />
-              <Text color="gray.400" fontSize={13}>
-                Penonton
-              </Text>
-            </HStack>
-            <Text>{formatViews(data?.live_info?.viewers?.num)}</Text>
-          </VStack>
-          <VStack w="50%" mb="4" pl="2" space={1}>
-            <HStack space={1.5} alignItems="center">
-              <LiveIcon size="18" color="#A3A3A3" />
-              <Text color="gray.400" fontSize={13}>
-                Judul Live
-              </Text>
-            </HStack>
-            <Text>{data?.idn?.title ?? "-"}</Text>
           </VStack>
         </HStack>
       </Box>

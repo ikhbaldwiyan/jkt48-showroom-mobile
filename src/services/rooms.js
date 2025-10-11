@@ -66,3 +66,16 @@ export const getRoomListMember = (category, search) => {
     `${ENDPOINTS.ROOM.MEMBERS}?category=${category}&search=${search}`
   );
 };
+
+
+export const getHistoryLiveIDN  = (liveId) => {
+  return apiNest.get(
+    `${ENDPOINTS.ROOM.HISTORY_LIVE_IDN}/${liveId}`
+  )
+}
+
+export const getHistoryLiveShowroom  = (liveId) => {
+  return apiNest.get(
+    `${ENDPOINTS.ROOM.HISTORY_LIVE_SHOWROOM}/${liveId}`
+  )
+}

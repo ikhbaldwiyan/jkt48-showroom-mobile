@@ -31,6 +31,8 @@ export default {
     HISTORY_LIVE_DETAIL: "/recent",
     HISTORY_LIVE_PROFILE:
       "/recent?sort=date&page=1&order=-1&perpage=10&group=jkt48&type=all",
+    HISTORY_LIVE_IDN: "/history-live/idn",
+    HISTORY_LIVE_SHOWROOM: "/history-live/showroom",
   },
   IDN_LIVE: {
     ROOM_LIVES: "/idn_lives",
