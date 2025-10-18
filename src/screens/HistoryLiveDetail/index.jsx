@@ -1,34 +1,43 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import { Box, HStack, Image, Text, VStack } from "native-base";
-import { useLayoutEffect } from "react";
+import {
+  Box,
+  Divider,
+  HStack,
+  Image,
+  PlayIcon,
+  Spinner,
+  Text,
+  VStack
+} from "native-base";
+import { useLayoutEffect, useState } from "react";
+import WebView from "react-native-webview";
 import {
   Calendar,
   ChatIcon,
+  Dashboard,
   EyeIcon,
   GiftFill,
   IDNLiveIcon,
   LiveIcon,
   StartIcon,
   StopIcon,
-  TimesIcon,
+  TimesIcon
 } from "../../assets/icon";
 import Loading from "../../components/atoms/Loading";
+import TabButton from "../../components/atoms/TabButton";
+import Layout from "../../components/templates/Layout";
 import {
   useHistoryDetail,
-  useHistoryLiveDetail,
-  usePodiumList,
+  useHistoryLiveDetail
 } from "../../services/hooks/useHistoryLive";
 import {
   formatLongDate,
   formatViews,
-  getLiveDurationMinutes,
+  getLiveDurationMinutes
 } from "../../utils/helpers";
-import Layout from "../../components/templates/Layout";
 import Screenshot from "./components/Screenshot";
-import HistoryLiveTabs from "../../components/molecules/HistoryLiveTabs";
-import WebView from "react-native-webview";
-import { WatchingUser } from "../../components/molecules/HistoryLiveTabs/components";
+import MenuHistoryLive from "./components/Menu";
 
 const HistoryLiveDetail = ({ route }) => {
   const navigation = useNavigation();
@@ -37,15 +46,19 @@ const HistoryLiveDetail = ({ route }) => {
   const isShowroom = data?.type === "showroom";
   const images = data?.live_info?.screenshot?.list;
   const folder = data?.live_info?.screenshot?.folder;
-
   const liveSlug = isShowroom ? data?.live_id : data?.idn?.slug;
 
-  const { data: history, isSuccess } = useHistoryDetail(data?.type, liveSlug);
+  const {
+    data: history,
+    isSuccess,
+    isLoading: isLoadingReplay
+  } = useHistoryDetail(data?.type, liveSlug);
   const replay = history?.youtube;
+  const [type, setType] = useState("screenshot");
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Detail Live",
+      headerTitle: "Detail Live"
     });
   }, [navigation, title]);
 
@@ -58,9 +71,11 @@ const HistoryLiveDetail = ({ route }) => {
       <Layout>
         <HStack justifyContent="space-between" alignItems="center">
           <Box>
-            <Text fontSize="xl" fontWeight="semibold">
-              {data?.room_info?.nickname}
-            </Text>
+            {data?.room_info?.nickname && (
+              <Text fontSize="xl" fontWeight="semibold">
+                {data?.room_info?.nickname}
+              </Text>
+            )}
             <Text color="gray.400">{data?.room_info?.fullname}</Text>
           </Box>
           {isShowroom ? (
@@ -68,7 +83,7 @@ const HistoryLiveDetail = ({ route }) => {
               size="md"
               alt="showroom"
               source={{
-                uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
+                uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k"
               }}
               width="42"
               height="42"
@@ -79,29 +94,51 @@ const HistoryLiveDetail = ({ route }) => {
           )}
         </HStack>
 
-        {replay !== undefined && isSuccess && replay.length > 1 ? (
-          <Box mt="3" borderRadius={6} overflow="hidden">
-            <WebView
-              style={{
-                width: "100%",
-                height: isShowroom ? 188 : 412,
-              }}
-              source={{
-                uri:
-                  replay !== undefined && isSuccess
-                    ? `https://www.youtube.com/embed/${replay}`
-                    : null,
-              }}
-              allowsFullscreenVideo
+        <HStack space={3} mt="3" mb="1">
+          <TabButton
+            type="screenshot"
+            currentType={type}
+            onPress={() => setType("screenshot")}
+            label="Screenshot"
+            customIcon={<Dashboard size="16" color="#24A2B7" />}
+          />
+          {replay && (
+            <TabButton
+              type="replay"
+              currentType={type}
+              onPress={() => setType("replay")}
+              label="Replay"
+              customIcon={<PlayIcon size="sm" color="#24A2B7" />}
             />
-          </Box>
-        ) : (
+          )}
+          {isLoadingReplay && <Spinner color="white" />}
+        </HStack>
+
+        {type === "screenshot" ? (
           <Screenshot
             thumbnail={data?.room_info?.img}
             images={images}
             folder={folder}
             isShowroom={isShowroom}
           />
+        ) : (
+          <Box mt="3" borderRadius={6} overflow="hidden">
+            {replay !== undefined && isSuccess && replay.length > 1 && (
+              <WebView
+                style={{
+                  width: "100%",
+                  height: isShowroom ? 188 : 412
+                }}
+                source={{
+                  uri:
+                    replay !== undefined && isSuccess
+                      ? `https://www.youtube.com/embed/${replay}`
+                      : null
+                }}
+                allowsFullscreenVideo
+              />
+            )}
+          </Box>
         )}
 
         <Box my="3">
@@ -192,9 +229,12 @@ const HistoryLiveDetail = ({ route }) => {
               <Text>{formatViews(data?.total_gifts)}</Text>
             </VStack>
           </HStack>
-          <WatchingUser
-            platform={isShowroom ? "showroom" : "idn"}
-            liveId={liveSlug}
+          <Divider color="white" />
+
+          <MenuHistoryLive
+            gifts={data?.live_info?.gift?.list}
+            podium={data?.users}
+            isShowroom={isShowroom}
           />
         </Box>
       </Layout>
