@@ -19,14 +19,14 @@ export const formatName = (name, hideGroup) => {
   }
 
   if (name === "officialJKT48") {
-    return "JKT48"
+    return "JKT48";
   }
 
   !hideGroup
     ? (memberName = name ? name?.replace("JKT48_", "") + " JKT48" : "Loading")
     : (memberName = name?.includes("JKT48_")
-      ? name?.replace("JKT48_", "")
-      : name?.replace("JKT48", ""));
+        ? name?.replace("JKT48_", "")
+        : name?.replace("JKT48", ""));
   return memberName;
 };
 
@@ -136,26 +136,35 @@ export const monthNames = [
   { name: "September", short: "09" },
   { name: "October", short: "10" },
   { name: "November", short: "11" },
-  { name: "December", short: "12" }
+  { name: "December", short: "12" },
 ];
 
 export const hasMultiRoomAccess = (profile) => {
-  const { MINIMUM_WATCH_MULTI_lIVE, IS_MULTI_LIVE_RELEASE, IS_MULTI_LIVE_CLOSED } = useApiConfig.getState();
+  const {
+    MINIMUM_WATCH_MULTI_lIVE,
+    IS_MULTI_LIVE_RELEASE,
+    IS_MULTI_LIVE_CLOSED,
+  } = useApiConfig.getState();
 
   if (IS_MULTI_LIVE_CLOSED) {
-    return false
+    return false;
   }
 
-  if (profile?.is_donator ||
+  if (
+    profile?.is_donator ||
     profile?.is_developer ||
     profile?.top_leaderboard ||
     profile?.can_farming_multi ||
-    profile?.is_multi_live || profile?.can_3_room || profile?.totalWatchLive >= MINIMUM_WATCH_MULTI_lIVE || IS_MULTI_LIVE_RELEASE) {
+    profile?.is_multi_live ||
+    profile?.can_3_room ||
+    profile?.totalWatchLive >= MINIMUM_WATCH_MULTI_lIVE ||
+    IS_MULTI_LIVE_RELEASE
+  ) {
     return true;
   } else {
     return false;
   }
-}
+};
 
 export const formatChatDate = (unixTimestamp) => {
   const date = moment.unix(unixTimestamp).locale("id");
@@ -164,23 +173,60 @@ export const formatChatDate = (unixTimestamp) => {
     return "Today";
   }
   return date.format("DD MMMM"); // e.g., '19 Juli'
-}
-
+};
 
 export const formatLongDate = (dateInput, isGetTime = false) => {
-  const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Mei",
+    "Jun",
+    "Jul",
+    "Agu",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Des",
+  ];
 
   function format_two_digits(n) {
-    return n < 10 ? '0' + n : n;
+    return n < 10 ? "0" + n : n;
   }
 
   var dt = new Date(dateInput);
 
   if (isGetTime) {
-    var time = format_two_digits(dt.getHours()) + ":" + format_two_digits(dt.getMinutes());
+    var time =
+      format_two_digits(dt.getHours()) +
+      ":" +
+      format_two_digits(dt.getMinutes());
     return time;
   } else {
-    var longDate = dt.getDate() + " " + months[dt.getMonth()] + " " + dt.getFullYear() + " " + format_two_digits(dt.getHours()) + ":" + format_two_digits(dt.getMinutes());
+    var longDate =
+      dt.getDate() +
+      " " +
+      months[dt.getMonth()] +
+      " " +
+      dt.getFullYear() +
+      " " +
+      format_two_digits(dt.getHours()) +
+      ":" +
+      format_two_digits(dt.getMinutes());
     return longDate;
   }
-}
+};
+
+
+export const estimateIDNGift = (gold) => {
+  const GOLD_TO_IDR = 2500;
+  if (!gold) return 0;
+  return gold * GOLD_TO_IDR;
+};
+
+export const estimateSRGift = (gold) => {
+  const GOLD_TO_IDR = 110;
+  if (!gold) return 0;
+  return gold * GOLD_TO_IDR;
+};

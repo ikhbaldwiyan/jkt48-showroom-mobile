@@ -1,5 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
+
+import { useLayoutEffect, useState } from "react";
+import WebView from "react-native-webview";
+import {
+  useHistoryDetail,
+  useHistoryLiveDetail,
+} from "../../services/hooks/useHistoryLive";
+import {
+  estimateIDNGift,
+  estimateSRGift,
+  formatLongDate,
+  formatViews,
+  getLiveDurationMinutes,
+} from "../../utils/helpers";
+
 import {
   Box,
   Divider,
@@ -8,34 +23,23 @@ import {
   PlayIcon,
   Spinner,
   Text,
-  VStack
+  VStack,
 } from "native-base";
-import { useLayoutEffect, useState } from "react";
-import WebView from "react-native-webview";
 import {
   Calendar,
-  ChatIcon,
   Dashboard,
+  Donate,
   EyeIcon,
   GiftFill,
   IDNLiveIcon,
   LiveIcon,
   StartIcon,
   StopIcon,
-  TimesIcon
+  TimesIcon,
 } from "../../assets/icon";
 import Loading from "../../components/atoms/Loading";
 import TabButton from "../../components/atoms/TabButton";
 import Layout from "../../components/templates/Layout";
-import {
-  useHistoryDetail,
-  useHistoryLiveDetail
-} from "../../services/hooks/useHistoryLive";
-import {
-  formatLongDate,
-  formatViews,
-  getLiveDurationMinutes
-} from "../../utils/helpers";
 import Screenshot from "./components/Screenshot";
 import MenuHistoryLive from "./components/Menu";
 
@@ -51,14 +55,14 @@ const HistoryLiveDetail = ({ route }) => {
   const {
     data: history,
     isSuccess,
-    isLoading: isLoadingReplay
+    isLoading: isLoadingReplay,
   } = useHistoryDetail(data?.type, liveSlug);
   const replay = history?.youtube;
   const [type, setType] = useState("screenshot");
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Detail Live"
+      headerTitle: "Detail Live",
     });
   }, [navigation, title]);
 
@@ -83,7 +87,7 @@ const HistoryLiveDetail = ({ route }) => {
               size="md"
               alt="showroom"
               source={{
-                uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k"
+                uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
               }}
               width="42"
               height="42"
@@ -127,13 +131,13 @@ const HistoryLiveDetail = ({ route }) => {
               <WebView
                 style={{
                   width: "100%",
-                  height: isShowroom ? 188 : 412
+                  height: isShowroom ? 188 : 412,
                 }}
                 source={{
                   uri:
                     replay !== undefined && isSuccess
                       ? `https://www.youtube.com/embed/${replay}`
-                      : null
+                      : null,
                 }}
                 allowsFullscreenVideo
               />
@@ -212,12 +216,16 @@ const HistoryLiveDetail = ({ route }) => {
 
             <VStack w="50%" mb="4" pr="2" space={1}>
               <HStack space={1.5} alignItems="center">
-                <ChatIcon color="#A3A3A3" size="18" />
+                <Donate color="#A3A3A3" size="17" />
                 <Text color="gray.400" fontSize={13}>
-                  Komentar
+                  Estimasi Total Gift
                 </Text>
               </HStack>
-              <Text>{formatViews(data?.live_info?.comments?.num)} chat</Text>
+              <Text>
+                {isShowroom
+                  ? ` Rp ${formatViews(estimateSRGift(data?.total_gifts))}`
+                  : ` Rp ${formatViews(estimateIDNGift(data?.total_gifts))}`}
+              </Text>
             </VStack>
             <VStack w="50%" mb="4" pl="2" space={1}>
               <HStack space={1.5} alignItems="center">
@@ -226,7 +234,7 @@ const HistoryLiveDetail = ({ route }) => {
                   Gifts
                 </Text>
               </HStack>
-              <Text>{formatViews(data?.total_gifts)}</Text>
+              <Text>{formatViews(data?.total_gifts)} Gold</Text>
             </VStack>
           </HStack>
           <Divider color="white" />
@@ -235,6 +243,7 @@ const HistoryLiveDetail = ({ route }) => {
             gifts={data?.live_info?.gift?.list}
             podium={data?.users}
             isShowroom={isShowroom}
+            liveId={liveSlug}
           />
         </Box>
       </Layout>

@@ -5,15 +5,14 @@ import {
   GiftFill,
   ThropyIcon,
   UsersFill,
-  UsersIcon
+  UsersIcon,
 } from "../../../../assets/icon";
 import CardGradient from "../../../../components/atoms/CardGradient";
 import { FlashList } from "@shopify/flash-list";
+import { WatchingUser } from "./WatchingUser";
 
-const MenuHistoryLive = ({ gifts, isShowroom, podium }) => {
+const MenuHistoryLive = ({ gifts, isShowroom, podium, liveId }) => {
   const [type, setType] = useState("gift");
-
-  console.log(podium);
 
   return (
     <Box mb="8">
@@ -23,20 +22,20 @@ const MenuHistoryLive = ({ gifts, isShowroom, podium }) => {
           currentType={type}
           onPress={() => setType("gift")}
           label="Gift"
-          customIcon={<GiftFill size="16" color="#24A2B7" />}
+          customIcon={<GiftFill size="15" color="#24A2B7" />}
         />
         <TabButton
           type="podium"
           currentType={type}
           onPress={() => setType("podium")}
           label="Podium"
-          customIcon={<ThropyIcon size="16" color="#24A2B7" />}
+          customIcon={<ThropyIcon size="15" color="#24A2B7" />}
         />
         <TabButton
           type="watching"
           currentType={type}
           onPress={() => setType("watching")}
-          label="Users"
+          label="Total Users"
           customIcon={<UsersFill size="16" color="#24A2B7" />}
         />
       </HStack>
@@ -102,7 +101,7 @@ const MenuHistoryLive = ({ gifts, isShowroom, podium }) => {
                 keyExtractor={(item, index) => `${item.name}-${index}`}
                 contentContainerStyle={{
                   paddingHorizontal: 4,
-                  paddingBottom: 10
+                  paddingBottom: 10,
                 }}
               />
             </Box>
@@ -134,7 +133,7 @@ const MenuHistoryLive = ({ gifts, isShowroom, podium }) => {
                         source={{
                           uri: isShowroom
                             ? `https://static.showroom-live.com/image/avatar/${item?.avatar_id}.png`
-                            : item?.avatar_url
+                            : item?.avatar_url,
                         }}
                         alt="avatar"
                       />
@@ -151,7 +150,10 @@ const MenuHistoryLive = ({ gifts, isShowroom, podium }) => {
           />
         </CardGradient>
       ) : (
-        ""
+        <WatchingUser
+          platform={isShowroom ? "showroom" : "idn"}
+          liveId={liveId}
+        />
       )}
     </Box>
   );
