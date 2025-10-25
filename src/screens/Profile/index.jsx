@@ -16,7 +16,6 @@ import { Box, Button, HStack, Image, Text, VStack } from "native-base";
 import { Donate, EditProfile, Info, UserIcon } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
-import Theme from "../../components/templates/Theme";
 import NoLogin from "./components/NoLogin";
 import MenuInfo from "./components/MenuInfo";
 import { Oshimen, ScheduleOshimen } from "../../components/organisms";
@@ -177,7 +176,6 @@ const Profile = () => {
           </Box>
         </HStack>
         <ScheduleOshimen />
-        <Theme />
         <HStack my="1.5" mb="4" space={3}>
           <Button
             flex={1}
