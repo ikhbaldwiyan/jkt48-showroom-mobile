@@ -13,12 +13,13 @@ import trackAnalytics from "../../utils/trackAnalytics";
 
 import { TouchableOpacity } from "react-native";
 import { Box, Button, HStack, Image, Text, VStack } from "native-base";
-import { Donate, EditProfile, Info, UserIcon } from "../../assets/icon";
+import { Donate, EditProfile, Info } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
 import NoLogin from "./components/NoLogin";
 import MenuInfo from "./components/MenuInfo";
 import { Oshimen, ScheduleOshimen } from "../../components/organisms";
+import { UserProfile } from "../../components/molecules/UserTabs/components";
 
 const Profile = () => {
   const { profile, session, user } = useUser();
@@ -83,30 +84,17 @@ const Profile = () => {
     <Layout flex={1} bg="secondary">
       <HStack mb="2" space={4}>
         <TouchableOpacity activeOpacity={0.7} onPress={() => setIsOpen(true)}>
-          {oshimen ? (
-            <Image
-              width={106}
-              height={155}
-              source={{ uri: oshimen?.image }}
-              borderRadius="xl"
-              alt="oshimen"
-            />
-          ) : (
-            <Box
-              justifyContent="center"
-              alignItems="center"
-              rounded="xl"
-              bg="black"
-              flex={1}
-              p="3"
-              width={106}
-            >
-              <UserIcon size={20} />
-              <Text mt="1" textAlign="center">
-                Pilih Oshimen
-              </Text>
-            </Box>
-          )}
+          <Image
+            width={106}
+            height={155}
+            source={
+              oshimen
+                ? { uri: oshimen?.image }
+                : require("../../assets/image/default.png")
+            }
+            borderRadius="xl"
+            alt="oshimen"
+          />
         </TouchableOpacity>
         <VStack space={3} flex={1}>
           <HStack space={3}>
@@ -116,27 +104,32 @@ const Profile = () => {
                 ID: {userProfile?.user_id}
               </Text>
             </Box>
-            <Box borderRadius="xl" bg="black" p="3">
-              <Image
-                style={{ width: 50, height: 50 }}
-                source={{
-                  uri: profile?.avatar_url,
-                }}
-                alt="avatar"
-                shadow="5"
-              />
-            </Box>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate("Avatar")}
+            >
+              <Box borderRadius="xl" bg="black" p="3">
+                <Image
+                  style={{ width: 50, height: 50 }}
+                  source={{
+                    uri: profile?.avatar_url,
+                  }}
+                  alt="avatar"
+                  shadow="5"
+                />
+              </Box>
+            </TouchableOpacity>
           </HStack>
           <TouchableOpacity activeOpacity={0.7} onPress={() => setIsOpen(true)}>
             <Box borderRadius="xl" bg="black" p="3">
               <HStack justifyContent="space-between">
                 <Text fontWeight="semibold">
-                  {oshimen?.stage_name ?? "Oshimen"}
+                  {oshimen?.stage_name ? "Oshimen" : "Belum ada oshimen"}
                 </Text>
                 <EditProfile size={18} />
               </HStack>
               <Text fontSize="sm" mt="1" color="gray.400">
-                {oshimen?.name ?? "-"}
+                {oshimen?.name ?? "Pilih oshimen sekarang!"}
               </Text>
             </Box>
           </TouchableOpacity>
@@ -175,7 +168,13 @@ const Profile = () => {
             </VStack>
           </Box>
         </HStack>
-        <ScheduleOshimen />
+        {oshimen ? (
+          <ScheduleOshimen />
+        ) : (
+          <Box mb="8">
+            <UserProfile navigation={navigation} />
+          </Box>
+        )}
         <HStack my="1.5" mb="4" space={3}>
           <Button
             flex={1}

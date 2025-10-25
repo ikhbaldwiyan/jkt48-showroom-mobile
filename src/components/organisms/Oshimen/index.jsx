@@ -20,7 +20,7 @@ import TabButton from "../../../components/atoms/TabButton";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../../../utils/hooks";
 
-const Oshimen = ({ isOpen, setIsOpen }) => {
+const Oshimen = ({ isOpen, setIsOpen, isRegister = false, setOshimen }) => {
   const { user } = useUser();
   const [type, setType] = useState("");
   const [selectedMember, setSelectedMember] = useState(null);
@@ -33,7 +33,7 @@ const Oshimen = ({ isOpen, setIsOpen }) => {
   };
 
   const handleConfirmSelection = () => {
-    if (selectedMember) {
+    if (selectedMember && !isRegister) {
       updateOshimen.mutate(
         {
           user_id: user?.account_id,
@@ -49,6 +49,9 @@ const Oshimen = ({ isOpen, setIsOpen }) => {
           }
         }
       );
+    } else {
+      setIsOpen(false)
+      setOshimen(selectedMember)
     }
   };
 
