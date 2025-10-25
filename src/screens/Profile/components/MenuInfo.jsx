@@ -3,10 +3,11 @@ import { Linking } from "react-native";
 import { DeleteIcon, HStack, Menu, Pressable, Text } from "native-base";
 import { Donate, GithubIcon, History, KebabMenu } from "../../../assets/icon";
 import useChangeLogStore from "../../../store/changeLogStore";
+import useApiConfig from "../../../store/useApiConfig";
 
 const MenuInfo = () => {
   const { setOpenModal } = useChangeLogStore();
-
+  const { DONATION_LINK } = useApiConfig();
   const [isOpen, setIsOpen] = useState(false);
 
   const closeMenu = () => setIsOpen(false);
@@ -45,7 +46,7 @@ const MenuInfo = () => {
         );
         break;
       case "donation":
-        Linking.openURL("https://saweria.co/JKT48Showroom48");
+        Linking.openURL(DONATION_LINK);
         break;
       case "delete":
         Linking.openURL("https://www.jkt48showroom.com/remove-account");
