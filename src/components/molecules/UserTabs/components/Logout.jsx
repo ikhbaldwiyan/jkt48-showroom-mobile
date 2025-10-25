@@ -34,7 +34,7 @@ const Logout = ({ isProfile = false }) => {
   };
 
   return (
-    <View>
+    <View mb="8">
       <Button
         size="sm"
         borderRadius="10"

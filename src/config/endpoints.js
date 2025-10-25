@@ -75,5 +75,6 @@ export default {
   },
   MEMBERS: {
     PROFILE: "/profile-member",
+    SCHEDULE: "/schedules/member"
   }
 };

@@ -15,5 +15,16 @@ export const useMemberProfile = (category, search) => {
 export const useUpdateOshimen = () => {
   return useMutation({
     mutationFn: (payload) => MEMBERS.updateOshimen(payload),
-  });;
+  });
 }
+
+export const useScheduleOshimen = (memberId) => {
+  return useQuery({
+    queryKey: ["scheduleOshimen", memberId],
+    queryFn: async () => {
+      const response = await MEMBERS.getScheduleOshimen(memberId);
+      return response?.data?.data;
+    },
+    retry: 0
+  });
+};

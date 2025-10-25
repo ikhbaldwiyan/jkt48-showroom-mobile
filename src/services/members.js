@@ -11,3 +11,9 @@ export const updateOshimen = (payload) => {
     `${ENDPOINTS.USER.UPDATE_OSHIMEN}/${payload.user_id}`, payload
   );
 };
+
+export const getScheduleOshimen = (memberId) => {
+  return apiNest.get(
+    `${ENDPOINTS.MEMBERS.SCHEDULE}/${memberId}`
+  );
+};

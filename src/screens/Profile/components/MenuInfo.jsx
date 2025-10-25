@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import { Linking } from "react-native";
 import { DeleteIcon, HStack, Menu, Pressable, Text } from "native-base";
-import { Donate, GithubIcon, History, KebabMenu } from "../../../assets/icon";
+import { Donate, EditProfile, GithubIcon, History, KebabMenu, UserIcon } from "../../../assets/icon";
 import useChangeLogStore from "../../../store/changeLogStore";
+import { useNavigation } from "@react-navigation/native";
 
 const MenuInfo = () => {
   const { setOpenModal } = useChangeLogStore();
+  const navigation = useNavigation();
 
   const [isOpen, setIsOpen] = useState(false);
 
   const closeMenu = () => setIsOpen(false);
 
   const menu = [
+    {
+      key: "edit-profile",
+      title: "Edit Profile",
+      icon: <EditProfile size={18} color="black" />
+    },
     {
       key: "change-log",
       title: "Change Log",
@@ -36,6 +43,9 @@ const MenuInfo = () => {
 
   const handleMenu = (key) => {
     switch (key) {
+      case "edit-profile":
+        navigation.navigate("Edit Profile")
+        break;
       case "change-log":
         setOpenModal();
         break;
