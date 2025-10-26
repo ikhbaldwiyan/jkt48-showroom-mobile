@@ -75,6 +75,7 @@ import SendMessageIcon from "./SendMessageIcon"
 import Wrench from "./Wrench";
 import StartIcon from "./StartIcon";
 import StopIcon from "./StopIcon";
+import GiftOutline from "./GiftOutline";
 
 export {
   LogoIcon,
@@ -153,5 +154,6 @@ export {
   SendMessageIcon,
   Wrench,
   StartIcon,
-  StopIcon
+  StopIcon,
+  GiftOutline,
 };
