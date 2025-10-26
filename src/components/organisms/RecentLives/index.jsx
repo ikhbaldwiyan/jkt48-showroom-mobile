@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { Box, Divider, HStack, Image, Text, VStack } from "native-base";
+import { Box, ChevronRightIcon, Divider, HStack, Image, Text, VStack } from "native-base";
 import React, { useCallback, useEffect } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -54,9 +54,9 @@ const RecentLives = ({ refreshing }) => {
           <TouchableOpacity
             onPress={() => navigation.replace("Main", { screen: "History" })}
           >
-            <HStack alignItems="center" mb="1" space={2}>
-              <Text fontSize="sm">Lihat semua</Text>
-              <RightArrow />
+            <HStack alignItems="center" mb="1" space={1.5}>
+              <Text fontSize="sm" color="gray.400">Lihat semua</Text>
+              <ChevronRightIcon />
             </HStack>
           </TouchableOpacity>
         </HStack>
