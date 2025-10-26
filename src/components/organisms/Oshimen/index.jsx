@@ -43,6 +43,7 @@ const Oshimen = ({ isOpen, setIsOpen, isRegister = false, setOshimen }) => {
           onSuccess: () => {
             setIsOpen(false);
             queryClient.invalidateQueries(["profile", user?.account_id]);
+            queryClient.invalidateQueries(["scheduleOshimen", selectedMember?._id]);
           },
           onError: (error) => {
             console.log(error);
