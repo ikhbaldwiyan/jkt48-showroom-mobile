@@ -25,7 +25,8 @@ export const useScheduleOshimen = (memberId) => {
       const response = await MEMBERS.getScheduleOshimen(memberId);
       return response?.data?.data;
     },
-    retry: 0
+    retry: 0,
+    enabled: !!memberId
   });
 };
 

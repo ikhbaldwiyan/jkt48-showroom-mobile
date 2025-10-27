@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import {
   useIsFocused,
   useNavigation,
-  useFocusEffect,
+  useFocusEffect
 } from "@react-navigation/native";
 import { useProfile } from "../../services/hooks/useProfile";
 import useAuthStore from "../../store/authStore";
@@ -46,7 +46,7 @@ const Profile = () => {
         <Box mr="2">
           <MenuInfo />
         </Box>
-      ),
+      )
     });
   }, [profile]);
 
@@ -59,14 +59,14 @@ const Profile = () => {
   const handleAbout = () => {
     navigation.navigate("About");
     trackAnalytics("about_app_click", {
-      username: userProfile?.name ?? "Guest",
+      username: userProfile?.name ?? "Guest"
     });
   };
 
   const handleSupport = () => {
     navigation.navigate("SupportProject");
     trackAnalytics("support_project_btn_click", {
-      username: userProfile?.name ?? "Guest",
+      username: userProfile?.name ?? "Guest"
     });
   };
 
@@ -114,7 +114,7 @@ const Profile = () => {
                 <Image
                   style={{ width: 50, height: 50 }}
                   source={{
-                    uri: profile?.avatar_url,
+                    uri: profile?.avatar_url
                   }}
                   alt="avatar"
                   shadow="5"
@@ -142,7 +142,7 @@ const Profile = () => {
           <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
             {oshimen ? (
               <VStack space={1} justifyContent="center" alignItems="center">
-                <Text>Oshi Watch</Text>
+                <Text fontSize="13">Oshi Watch</Text>
                 <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
                   <Text color="primary" fontWeight="extrabold">
                     {formatViews(totalWatchMember?.totalAll)}x
@@ -151,7 +151,7 @@ const Profile = () => {
               </VStack>
             ) : (
               <VStack space={1} justifyContent="center" alignItems="center">
-                <Text>Total Watch</Text>
+                <Text fontSize="13">Total Watch</Text>
                 <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
                   <Text color="primary" fontWeight="extrabold">
                     {formatViews(userProfile?.totalWatchLive)}x
@@ -162,7 +162,7 @@ const Profile = () => {
           </Box>
           <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
             <VStack space={1} justifyContent="center" alignItems="center">
-              <Text>SR Watched</Text>
+              <Text fontSize="13">SR Watch</Text>
               <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
                 <Text color="primary" fontWeight="extrabold">
                   {formatViews(userProfile?.watchShowroomMember)}x
@@ -172,7 +172,7 @@ const Profile = () => {
           </Box>
           <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
             <VStack space={1} justifyContent="center" alignItems="center">
-              <Text>IDN Watched</Text>
+              <Text fontSize="13">IDN Watch</Text>
               <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
                 <Text color="primary" fontWeight="extrabold">
                   {formatViews(userProfile?.watchLiveIDN)}x
