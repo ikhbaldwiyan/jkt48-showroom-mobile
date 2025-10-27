@@ -16,6 +16,7 @@ import {
   PUBLIC_CHAT_ROOM_ID,
   PUBLIC_CHAT_ROOM_KEY,
   NEST_SHOWROOM_API,
+  DONATION_LINK,
 } from "@env";
 
 const useApiConfig = create(
@@ -33,6 +34,7 @@ const useApiConfig = create(
       ADMIN_TOKEN,
       ADMIN_COOKIE,
       DONATION_IMG: "",
+      DONATION_LINK,
       IS_PUBLIC_CHAT_OPEN: false,
       IS_SHOW_ONLINE_USERS: true,
       IS_BANNER_CHAT_CLOSED: false,

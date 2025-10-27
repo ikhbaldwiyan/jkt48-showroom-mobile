@@ -10,14 +10,16 @@ import trackAnalytics from "../../utils/trackAnalytics";
 import CardGradient from "../../components/atoms/CardGradient";
 import { useDonatorUser } from "../../services/hooks/useDonator";
 import UserModal from "../../components/atoms/UserModal";
+import useApiConfig from "../../store/useApiConfig";
 
 const About = () => {
   const { userProfile } = useUser();
   const { data } = useDonatorUser();
   const [selectedUser, setSelectedUser] = useState(null);
+  const { DONATION_LINK } = useApiConfig();
 
   const donateClick = () => {
-    Linking.openURL("https://saweria.co/JKT48Showroom48");
+    Linking.openURL(DONATION_LINK);
     activityLog({
       userId: userProfile?._id,
       logName: "Donate",
@@ -139,14 +141,14 @@ const About = () => {
         <Text my="3">
           Aplikasi ini gratis dan bebas iklan. Jika kamu ingin mendukung biaya
           server dan pengembangan oleh developer, kamu bisa memberikan donasi
-          melalui link Saweria berikut.{" "}
+          melalui link Tako berikut.{" "}
         </Text>
         <TouchableOpacity activeOpacity={0.6} onPress={donateClick}>
-          <Box bg="#E49C20" p="3" py="2" borderRadius="xl">
+          <Box bg="primary" p="3" py="2" borderRadius="xl">
             <HStack justifyContent="center" alignItems="center" space={3}>
               <Donate />
               <Text fontSize={16} fontWeight="semibold" color="white">
-                Support Project via Saweria
+                Support Project via Tako
               </Text>
             </HStack>
           </Box>

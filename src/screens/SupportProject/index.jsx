@@ -18,10 +18,10 @@ import { ImagePreviewModal } from "../../components/atoms/Modal";
 const SupportProject = ({ navigation }) => {
   const { userProfile } = useUser();
   const [donator, setDonator] = useState();
-  const { DONATION_IMG } = useApiConfig();
   const { data } = useDonatorUser();
   const [selectedUser, setSelectedUser] = useState(null);
   const [imagePreviewModal, setImagePreviewModal] = useState(false);
+  const { DONATION_IMG, DONATION_LINK } = useApiConfig();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -33,7 +33,7 @@ const SupportProject = ({ navigation }) => {
   }, []);
 
   const donateClick = () => {
-    Linking.openURL("https://saweria.co/JKT48Showroom48");
+    Linking.openURL(DONATION_LINK);
     activityLog({
       userId: userProfile?._id,
       logName: "Donate",
@@ -81,11 +81,11 @@ const SupportProject = ({ navigation }) => {
           berarti bagi kami. 🙏
         </Text>
         <TouchableOpacity activeOpacity={0.6} onPress={donateClick}>
-          <Box mt="2" bg="#E49C20" p="3" py="2.5" borderRadius="xl">
+          <Box mt="2" bg="primary" p="3" py="2.5" borderRadius="xl">
             <HStack justifyContent="center" alignItems="center" space={3}>
               <Donate />
               <Text fontSize={16} fontWeight="semibold" color="white">
-                Support Project via Saweria
+                Support Project via Tako
               </Text>
             </HStack>
           </Box>
