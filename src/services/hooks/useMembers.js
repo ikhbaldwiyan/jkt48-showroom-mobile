@@ -28,3 +28,14 @@ export const useScheduleOshimen = (memberId) => {
     retry: 0
   });
 };
+
+export const useTotalWatchMember = (userId) => {
+  return useQuery({
+    queryKey: ["watcheMember", userId],
+    queryFn: async () => {
+      const response = await MEMBERS.getWatchStreamMember(userId);
+      return response?.data?.data;
+    },
+    enabled: !!userId
+  });
+};

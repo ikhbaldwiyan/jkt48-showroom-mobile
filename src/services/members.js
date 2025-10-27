@@ -17,3 +17,9 @@ export const getScheduleOshimen = (memberId) => {
     `${ENDPOINTS.MEMBERS.SCHEDULE}/${memberId}`
   );
 };
+
+export const getWatchStreamMember = (userId) => {
+  return apiNest.get(
+    `${ENDPOINTS.MEMBERS.TOTAL_WATCH}/${userId}`
+  );
+};

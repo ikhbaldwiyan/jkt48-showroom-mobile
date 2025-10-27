@@ -20,10 +20,12 @@ import NoLogin from "./components/NoLogin";
 import MenuInfo from "./components/MenuInfo";
 import { Oshimen, ScheduleOshimen } from "../../components/organisms";
 import { UserProfile } from "../../components/molecules/UserTabs/components";
+import { useTotalWatchMember } from "../../services/hooks/useMembers";
 
 const Profile = () => {
   const { profile, session, user } = useUser();
   const { data: userProfile, refetch } = useProfile(user?.account_id);
+  const { data: totalWatchMember } = useTotalWatchMember(user?.account_id);
   const { setUserProfile } = useAuthStore();
   const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState();
@@ -138,14 +140,25 @@ const Profile = () => {
       <Box flex={1}>
         <HStack space={2.5} mt="2" mb="4">
           <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
-            <VStack space={1} justifyContent="center" alignItems="center">
-              <Text>Total Watch</Text>
-              <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
-                <Text color="primary" fontWeight="extrabold">
-                  {formatViews(userProfile?.totalWatchLive)}x
-                </Text>
-              </Box>
-            </VStack>
+            {oshimen ? (
+              <VStack space={1} justifyContent="center" alignItems="center">
+                <Text>Oshi Watch</Text>
+                <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
+                  <Text color="primary" fontWeight="extrabold">
+                    {formatViews(totalWatchMember?.totalAll)}x
+                  </Text>
+                </Box>
+              </VStack>
+            ) : (
+              <VStack space={1} justifyContent="center" alignItems="center">
+                <Text>Total Watch</Text>
+                <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
+                  <Text color="primary" fontWeight="extrabold">
+                    {formatViews(userProfile?.totalWatchLive)}x
+                  </Text>
+                </Box>
+              </VStack>
+            )}
           </Box>
           <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
             <VStack space={1} justifyContent="center" alignItems="center">

@@ -75,6 +75,7 @@ export default {
   },
   MEMBERS: {
     PROFILE: "/profile-member",
-    SCHEDULE: "/schedules/member"
+    SCHEDULE: "/schedules/member",
+    TOTAL_WATCH: "/users/total-watch-member"
   }
 };
