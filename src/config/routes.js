@@ -75,7 +75,7 @@ export const stackRoutes = [
   {
     name: "Register",
     component: Register,
-    options: { headerShown: false }
+    options: { headerShown: true }
   },
   {
     name: "Theater",
