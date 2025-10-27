@@ -10,7 +10,7 @@ import React, {
   useLayoutEffect,
   useState,
   useCallback,
-  useRef
+  useRef,
 } from "react";
 import {
   Box,
@@ -24,7 +24,7 @@ import {
   VStack,
   Spinner,
   IconButton,
-  CheckIcon
+  CheckIcon,
 } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -36,7 +36,7 @@ import {
   LoadingIcon,
   SearchMember,
   TimesFill,
-  UsersFill
+  UsersFill,
 } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import TimeAgo from "react-native-timeago";
@@ -100,7 +100,7 @@ const HistoryLive = () => {
             mt="2"
             mr="4"
           />
-        )
+        ),
     });
   }, [search, isSearch]);
 
@@ -128,14 +128,9 @@ const HistoryLive = () => {
     }
   };
 
-  const handleDetail = (member, live_info, log) => {
+  const handleDetail = (log) => {
     navigate("HistoryDetail", {
-      url: `https://www.jkt48showroom.com/history/${member.url}/${log.data_id}`,
-      title: member.is_official
-        ? "JKT48 Official"
-        : member.nickname +
-          " - " +
-          moment(live_info.date.start).format("DD MMMM YYYY")
+      liveId: log.data_id,
     });
   };
 
@@ -183,7 +178,7 @@ const HistoryLive = () => {
               <TouchableOpacity
                 key={idx}
                 activeOpacity={0.7}
-                onPress={() => handleDetail(member, live_info, log)}
+                onPress={() => handleDetail(log)}
               >
                 <Box w="100%" mr="3">
                   <LinearGradient
@@ -198,7 +193,7 @@ const HistoryLive = () => {
                           size="md"
                           alt="showroom"
                           source={{
-                            uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k"
+                            uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
                           }}
                           width="38"
                           height="38"
@@ -231,9 +226,7 @@ const HistoryLive = () => {
                       />
                       <Box px="2" flex={1}>
                         <VStack space={2} p="3">
-                          <TouchableOpacity
-                            onPress={() => handleDetail(member, live_info, log)}
-                          >
+                          <TouchableOpacity onPress={() => handleDetail(log)}>
                             <HStack
                               alignItems="center"
                               justifyContent="space-between"
@@ -328,6 +321,6 @@ export default HistoryLive;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    borderRadius: 6
-  }
+    borderRadius: 6,
+  },
 });

@@ -14,7 +14,7 @@ import {
   Image,
   Text,
   VStack,
-  Spinner
+  Spinner,
 } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -24,10 +24,9 @@ import {
   IDNLiveIcon,
   LoadingIcon,
   TimesFill,
-  UsersFill
+  UsersFill,
 } from "../../../assets/icon";
 import TimeAgo from "react-native-timeago";
-
 
 const HistoryLive = ({ liveType = "all" }) => {
   const { navigate } = useNavigation();
@@ -44,7 +43,7 @@ const HistoryLive = ({ liveType = "all" }) => {
       if (page === 1) {
         setAllLives(historyData.recents);
       } else {
-        setAllLives(prev => [...prev, ...historyData.recents]);
+        setAllLives((prev) => [...prev, ...historyData.recents]);
       }
       setHasMore(historyData.recents.length > 0);
     }
@@ -61,19 +60,14 @@ const HistoryLive = ({ liveType = "all" }) => {
   const handleLoadMore = () => {
     if (hasMore && !isLoadingMore) {
       setIsLoadingMore(true);
-      setPage(prev => prev + 1);
+      setPage((prev) => prev + 1);
       setIsLoadingMore(false);
     }
   };
 
   const handleDetail = (member, live_info, log) => {
     navigate("HistoryDetail", {
-      url: `https://www.jkt48showroom.com/history/${member.url}/${log.data_id}`,
-      title: member.is_official
-        ? "JKT48 Official"
-        : member.nickname +
-        " - " +
-        moment(live_info.date.start).format("DD MMMM YYYY")
+      liveId: log.data_id,
     });
   };
 
@@ -83,8 +77,8 @@ const HistoryLive = ({ liveType = "all" }) => {
         {liveType === "idn"
           ? "History IDN Live"
           : liveType === "all"
-            ? "Live Stream Terakhir"
-            : "History Live Showroom"}
+          ? "Live Stream Terakhir"
+          : "History Live Showroom"}
       </Text>
 
       {allLives?.length > 0 && (
@@ -105,12 +99,14 @@ const HistoryLive = ({ liveType = "all" }) => {
                     style={styles.linearGradient}
                   >
                     <HStack>
-                      {liveType === "all" && log.type === "showroom" && !member.is_official ? (
+                      {liveType === "all" &&
+                      log.type === "showroom" &&
+                      !member.is_official ? (
                         <Image
                           size="md"
                           alt="showroom"
                           source={{
-                            uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k"
+                            uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
                           }}
                           width="50"
                           height="50"
