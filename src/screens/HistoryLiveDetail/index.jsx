@@ -42,6 +42,7 @@ import TabButton from "../../components/atoms/TabButton";
 import Layout from "../../components/templates/Layout";
 import Screenshot from "./components/Screenshot";
 import MenuHistoryLive from "./components/Menu";
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const HistoryLiveDetail = ({ route }) => {
   const navigation = useNavigation();
@@ -124,23 +125,18 @@ const HistoryLiveDetail = ({ route }) => {
             images={images}
             folder={folder}
             isShowroom={isShowroom}
+            room_name={data?.room_info?.fullname}
           />
         ) : (
-          <Box mt="3" borderRadius={6} overflow="hidden">
-            {replay !== undefined && isSuccess && replay.length > 1 && (
-              <WebView
-                style={{
-                  width: "100%",
-                  height: isShowroom ? 188 : 412,
-                }}
-                source={{
-                  uri:
-                    replay !== undefined && isSuccess
-                      ? `https://www.youtube.com/embed/${replay}`
-                      : null,
-                }}
-                allowsFullscreenVideo
-              />
+          <Box
+            mt="3"
+            borderRadius={6}
+            overflow="hidden"
+            width="100%"
+            height={200}
+          >
+            {replay && isSuccess && replay.length > 1 && (
+              <YoutubePlayer height={200} width={"100%"} videoId={replay} />
             )}
           </Box>
         )}

@@ -10,15 +10,15 @@ const Screenshot = ({
   isShowroom = false,
   autoPlayMs = 3000,
   thumbnail,
+  room_name,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
   const slideWidth = windowWidth - 24;
+  const landscape = isShowroom || room_name === "JKT48";
 
   const handleScroll = (event) => {
-    const slide = Math.round(
-      event.nativeEvent.contentOffset.x / slideWidth
-    );
+    const slide = Math.round(event.nativeEvent.contentOffset.x / slideWidth);
     setActiveIndex(slide);
   };
 
@@ -55,8 +55,9 @@ const Screenshot = ({
     );
   }
 
+
   return (
-    <Box mt="3" height={isShowroom ? 200 : 412}>
+    <Box mt="3" height={landscape ? 200 : 412}>
       <ScrollView
         ref={scrollRef}
         horizontal
@@ -69,7 +70,7 @@ const Screenshot = ({
           <Image
             key={idx}
             width={slideWidth}
-            height={isShowroom ? 200 : 412}
+            height={landscape ? 200 : 412}
             rounded="lg"
             source={{
               uri: `https://res.cloudinary.com/haymzm4wp/image/upload/${folder}/${img}.jpg`,
