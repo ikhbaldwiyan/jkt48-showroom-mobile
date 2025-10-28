@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import {
   useIsFocused,
   useNavigation,
-  useFocusEffect
+  useFocusEffect,
 } from "@react-navigation/native";
 import { useProfile } from "../../services/hooks/useProfile";
 import useAuthStore from "../../store/authStore";
@@ -21,17 +21,20 @@ import MenuInfo from "./components/MenuInfo";
 import { Oshimen, ScheduleOshimen } from "../../components/organisms";
 import { UserProfile } from "../../components/molecules/UserTabs/components";
 import { useTotalWatchMember } from "../../services/hooks/useMembers";
+import { useRefresh } from "../../utils/hooks";
 
 const Profile = () => {
   const { profile, session, user } = useUser();
   const { data: userProfile, refetch } = useProfile(user?.account_id);
-  const { data: totalWatchMember } = useTotalWatchMember(user?.account_id);
+  const { data: totalWatchMember, refetch: refetchTotalWatch } =
+    useTotalWatchMember(user?.account_id);
   const { setUserProfile } = useAuthStore();
   const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const isFocused = useIsFocused();
   const oshimen = userProfile?.oshimen;
+  const { refreshing, onRefresh } = useRefresh();
 
   useEffect(() => {
     if (session) {
@@ -46,27 +49,28 @@ const Profile = () => {
         <Box mr="2">
           <MenuInfo />
         </Box>
-      )
+      ),
     });
   }, [profile]);
 
   useFocusEffect(
     useCallback(() => {
       refetch();
-    }, [refetch])
+      refetchTotalWatch();
+    }, [refetch, refreshing])
   );
 
   const handleAbout = () => {
     navigation.navigate("About");
     trackAnalytics("about_app_click", {
-      username: userProfile?.name ?? "Guest"
+      username: userProfile?.name ?? "Guest",
     });
   };
 
   const handleSupport = () => {
     navigation.navigate("SupportProject");
     trackAnalytics("support_project_btn_click", {
-      username: userProfile?.name ?? "Guest"
+      username: userProfile?.name ?? "Guest",
     });
   };
 
@@ -83,10 +87,16 @@ const Profile = () => {
   }
 
   return (
-    <Layout flex={1} bg="secondary">
+    <Layout
+      flex={1}
+      bg="secondary"
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+    >
       <HStack mb="2" space={4}>
         <TouchableOpacity activeOpacity={0.7} onPress={() => setIsOpen(true)}>
           <Image
+            flex={1}
             width={106}
             height={155}
             source={
@@ -101,20 +111,26 @@ const Profile = () => {
         <VStack space={3} flex={1}>
           <HStack space={3}>
             <Box flex={1} borderRadius="xl" bg="black" p="3">
-              <Text fontWeight="semibold">{profile?.name}</Text>
-              <Text mt="1" color="gray.400">
-                ID: {userProfile?.user_id}
-              </Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate("Edit Profile")}
+              >
+                <Text fontWeight="semibold">{profile?.name}</Text>
+                <Text mt="1" color="gray.400">
+                  {userProfile?.user_id}
+                </Text>
+              </TouchableOpacity>
             </Box>
+
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => navigation.navigate("Avatar")}
             >
-              <Box borderRadius="xl" bg="black" p="3">
+              <Box flex={1} borderRadius="xl" bg="black" p="3">
                 <Image
                   style={{ width: 50, height: 50 }}
                   source={{
-                    uri: profile?.avatar_url
+                    uri: profile?.avatar_url,
                   }}
                   alt="avatar"
                   shadow="5"
@@ -123,7 +139,7 @@ const Profile = () => {
             </TouchableOpacity>
           </HStack>
           <TouchableOpacity activeOpacity={0.7} onPress={() => setIsOpen(true)}>
-            <Box borderRadius="xl" bg="black" p="3">
+            <Box flex={1} borderRadius="xl" bg="black" p="3">
               <HStack justifyContent="space-between">
                 <Text fontWeight="semibold">
                   {oshimen?.stage_name ? "Oshimen" : "Belum ada oshimen"}
