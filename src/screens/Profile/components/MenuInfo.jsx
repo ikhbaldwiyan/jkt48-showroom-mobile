@@ -10,12 +10,13 @@ import {
 } from "../../../assets/icon";
 import useChangeLogStore from "../../../store/changeLogStore";
 import useApiConfig from "../../../store/useApiConfig";
+import { useNavigation } from "@react-navigation/native";
 
 const MenuInfo = () => {
   const { setOpenModal } = useChangeLogStore();
   const { DONATION_LINK } = useApiConfig();
   const [isOpen, setIsOpen] = useState(false);
-
+  const navigation = useNavigation();
   const closeMenu = () => setIsOpen(false);
 
   const menu = [

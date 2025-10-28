@@ -35,8 +35,8 @@ const AvatarUser = ({ userProfile, profile, isLogin }) => {
   return (
     <>
       <Box
-        w={badge ? "130" : "120"}
-        h={badge ? "130" : "120"}
+        w={badge ? "130" : "90"}
+        h={badge ? "130" : "90"}
         borderWidth="6px"
         borderColor="white"
         justifyContent="center"
@@ -45,7 +45,7 @@ const AvatarUser = ({ userProfile, profile, isLogin }) => {
         borderRadius="full"
       >
         <Image
-          style={{ width: 80, height: 80 }}
+          style={{ width: 60, height: 60 }}
           source={
             isLogin
               ? {

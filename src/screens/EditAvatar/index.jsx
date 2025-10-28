@@ -219,7 +219,7 @@ const EditAvatar = () => {
   };
 
   return (
-    <Box flex={1} bg="secondary" p="4">
+    <Box flex={1} bg={isAvatarScreen ? "secondary" : "blueGray.600"} p="4">
       <VStack mt="2" space={4}>
         <HStack alignItems="center" justifyContent="space-between">
           <HStack space={2}>
