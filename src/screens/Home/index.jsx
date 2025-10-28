@@ -61,7 +61,7 @@ const Home = ({ navigation }) => {
         <ShowroomLive refreshing={refreshing} />
         <IDNLIve refreshing={refreshing} />
         <RecentLives refreshing={refreshing} />
-        <ScheduleOshimen />
+        <ScheduleOshimen isHome />
         <ScheduleHome isToday refreshing={refreshing} navigation={navigation} />
         <ScheduleHome refreshing={refreshing} navigation={navigation} />
       </Box>

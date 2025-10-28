@@ -72,18 +72,21 @@ const Oshimen = ({ isOpen, setIsOpen, isRegister = false, setOshimen }) => {
               currentType={type}
               onPress={() => setType("")}
               label="All Member"
+              background="blueGray.600"
             />
             <TabButton
               type="regular"
               currentType={type}
               onPress={() => setType("regular")}
               label="Regular"
+              background="blueGray.600"
             />
             <TabButton
               type="trainee"
               currentType={type}
               onPress={() => setType("trainee")}
               label="Trainee"
+              background="blueGray.600"
             />
           </HStack>
 

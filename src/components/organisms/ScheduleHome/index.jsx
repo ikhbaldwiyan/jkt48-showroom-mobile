@@ -17,7 +17,6 @@ import {
   BirthdayIcon,
   Calendar,
   GraduateIcon,
-  RightArrow,
   TheaterIcon,
   TimesIcon,
   UsersIcon
@@ -104,7 +103,7 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                         <Text fontWeight="bold">
                           {moment(item.showDate)
                             .locale("id")
-                            .format("dddd, DD MMM YYYY")}
+                            .format("dddd, DD MMMM YYYY")}
                         </Text>
                       </HStack>
                       <HStack alignItems="center" space={2}>

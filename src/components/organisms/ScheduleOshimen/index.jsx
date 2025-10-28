@@ -13,11 +13,12 @@ import { useScheduleOshimen } from "../../../services/hooks/useMembers";
 import { useUser } from "../../../utils/hooks";
 import { useProfile } from "../../../services/hooks/useProfile";
 import moment from "moment";
-import { TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../atoms/Loading";
+import LinearGradient from "react-native-linear-gradient";
 
-const ScheduleOshimen = () => {
+const ScheduleOshimen = ({ isHome }) => {
   const { user } = useUser();
   const { data: userProfile } = useProfile(user?.account_id);
   const { data, isLoading } = useScheduleOshimen(userProfile?.oshimen?._id);
@@ -26,10 +27,22 @@ const ScheduleOshimen = () => {
   return (
     userProfile?.oshimen && (
       <>
-        <Box bg="black" p="3" borderRadius="lg">
-          <Text fontSize="xl" mb="3" fontWeight="semibold">
+        {isHome && (
+          <Text fontSize="2xl" mb="3" fontWeight="semibold">
             Jadwal Oshimen
           </Text>
+        )}
+        <LinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          colors={isHome ? ["#4A5568", "#21252B"] : ["#21252B", "#21252B"]}
+          style={styles.linearGradient}
+        >
+          {!isHome && (
+            <Text fontSize="xl" mb="3" fontWeight="semibold">
+              Jadwal Oshimen
+            </Text>
+          )}
           {isLoading && (
             <Box justifyContent="center" py="28" alignItems="center">
               <Loading size={30} />
@@ -57,18 +70,18 @@ const ScheduleOshimen = () => {
                         alt={item?.setlist?.name}
                       />
                       <Text fontSize={16} fontWeight="medium">
-                        {item?.setlist?.name?.length < 16
+                        {item?.setlist?.name?.length < 18
                           ? item?.setlist?.name
-                          : item?.setlist?.name.slice(0, 14) + ".."}
+                          : item?.setlist?.name?.slice(0, 14) + ".."}
                       </Text>
                       <HStack alignItems="center" space={2}>
-                        <Calendar color="#ADADAD" />
+                        <Calendar size={15} color="#ADADAD" />
                         <Text color="gray.400" fontSize="14">
                           {moment(item?.showDate).format("ddd, DD MMM")}
                         </Text>
                       </HStack>
                       <HStack alignItems="center" space={2}>
-                        <TimesIcon size="16" color="#ADADAD" />
+                        <TimesIcon size="15" color="#ADADAD" />
                         <Text color="gray.400" fontSize="14">
                           {item?.showTime}
                         </Text>
@@ -79,11 +92,19 @@ const ScheduleOshimen = () => {
               ))}
             </HStack>
           </ScrollView>
-        </Box>
-        <Divider my="3" />
+        </LinearGradient>
+        {isHome && <Divider my="3" />}
       </>
     )
   );
 };
 
 export default ScheduleOshimen;
+
+const styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1,
+    borderRadius: 8,
+    padding: 10,
+  },
+});

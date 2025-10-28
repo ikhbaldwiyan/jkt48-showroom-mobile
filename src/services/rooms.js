@@ -51,7 +51,7 @@ export const getHistoryProfile = (roomId) => {
 
 export const getHistoryLives = (type, search, page) => {
   return apiHistory.get(
-    `${ENDPOINTS.ROOM.HISTORY_LIVE}&type=${type}&filter=${type}&search=${search}&page=${page}&perpage=8`
+    `${ENDPOINTS.ROOM.HISTORY_LIVE}&type=${type}&filter=${type}&search=${search}&page=${page}&perpage=10`
   );
 };
 

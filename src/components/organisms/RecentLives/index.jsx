@@ -7,7 +7,6 @@ import TimeAgo from "react-native-timeago";
 import {
   GiftOutline,
   IDNLiveIcon,
-  RightArrow,
   TimesIcon,
   UserIconOutline
 } from "../../../assets/icon";
@@ -23,7 +22,6 @@ const RecentLives = ({ refreshing }) => {
   const navigation = useNavigation();
   const { data: historyLive = [], refetch } = useHistoryLive("all", "", 1);
 
-  // Refetch when the screen comes into focus
   useFocusEffect(
     useCallback(() => {
       refetch();
@@ -33,13 +31,6 @@ const RecentLives = ({ refreshing }) => {
   useEffect(() => {
     refetch();
   }, [refreshing]);
-
-  const isMinuteTime = (endDate) => {
-    const currentTime = new Date();
-    const diffMinutes = Math.floor((currentTime - new Date(endDate)) / 60000);
-
-    return diffMinutes < 60 ? true : false;
-  };
 
   // Handle app state changes (background -> foreground)
   useAppStateChange(refetch);
@@ -114,7 +105,7 @@ const RecentLives = ({ refreshing }) => {
                       <VStack space={1} mt="2">
                         <Text fontWeight="medium" fontSize="md">
                           {member.url === "jkt48"
-                            ? "JKT48 Official"
+                            ? "JKT48"
                             : member?.nickname}
                         </Text>
                         <HStack space={1.5} alignItems="center">

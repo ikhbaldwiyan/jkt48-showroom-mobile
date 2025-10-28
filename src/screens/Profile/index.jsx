@@ -188,7 +188,7 @@ const Profile = () => {
             <UserProfile navigation={navigation} />
           </Box>
         )}
-        <HStack my="1.5" mb="4" space={3}>
+        <HStack mt="3" my="1.5" mb="4" space={3}>
           <Button
             flex={1}
             variant="outline"

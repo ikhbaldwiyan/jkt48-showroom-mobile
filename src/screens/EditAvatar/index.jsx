@@ -24,29 +24,8 @@ import {
   useToast,
   VStack,
 } from "native-base";
-
-const TabButton = ({ type, currentType, onPress, label }) => (
-  <Button
-    onPress={() => onPress(type)}
-    bg={currentType === type ? "blueLight" : "#4A5568"}
-    borderRadius="full"
-    variant={currentType === type ? "filled" : "outline"}
-    borderColor="primary"
-    size="sm"
-    py="1.5"
-  >
-    <HStack alignItems="center" space={1}>
-      {currentType === type && <CheckIcon color="primary" />}
-      <Text
-        fontSize="13"
-        color={currentType === type ? "primary" : "white"}
-        fontWeight={currentType === type ? "bold" : "medium"}
-      >
-        {label}
-      </Text>
-    </HStack>
-  </Button>
-);
+import TabButton from "../../components/atoms/TabButton";
+import ToastAlert from "../../components/atoms/ToastAlert";
 
 const AvatarItem = ({ item, selectedAvatar, onSelect }) => (
   <LinearGradient
@@ -193,9 +172,12 @@ const EditAvatar = () => {
   const showSuccessToast = () => {
     toast.show({
       render: () => (
-        <Box m="3" py="1" px="2" mt="10" mb={5} bg="green.600" rounded="sm">
-          <Text>Berhasil update avatar</Text>
-        </Box>
+        <ToastAlert
+          variant="left-accent"
+          status="success"
+          title="Success"
+          description="Berhasil update avatar"
+        />
       ),
       placement: "top-right",
     });

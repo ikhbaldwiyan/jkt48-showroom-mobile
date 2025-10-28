@@ -40,6 +40,7 @@ import {
 } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import TimeAgo from "react-native-timeago";
+import TabButton from "../../components/atoms/TabButton";
 
 const HistoryLive = () => {
   const { navigate, setOptions } = useNavigation();
@@ -134,39 +135,28 @@ const HistoryLive = () => {
     });
   };
 
-  const TabButton = ({ type, currentType, label }) => {
-    const isActive = type === currentType;
-
-    return (
-      <Button
-        onPress={() => setType(type)}
-        bg={isActive ? "blueLight" : "secondary"}
-        borderRadius="full"
-        variant={isActive ? "filled" : "outline"}
-        borderColor="primary"
-        size="md"
-        py="1.5"
-      >
-        <HStack alignItems="center" space={1}>
-          {isActive && <CheckIcon size="18px" color="primary" />}
-          <Text
-            fontWeight={isActive ? "bold" : "medium"}
-            color={isActive ? "primary" : "white"}
-          >
-            {label}
-          </Text>
-        </HStack>
-      </Button>
-    );
-  };
-
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="4">
         <HStack space={2} alignItems="center">
-          <TabButton type="all" currentType={type} label="All Platform" />
-          <TabButton type="showroom" currentType={type} label="Showroom" />
-          <TabButton type="idn" currentType={type} label="IDN Live" />
+          <TabButton
+            onPress={() => setType("all")}
+            type="all"
+            currentType={type}
+            label="All Platform"
+          />
+          <TabButton
+            onPress={() => setType("showroom")}
+            type="showroom"
+            currentType={type}
+            label="Showroom"
+          />
+          <TabButton
+            onPress={() => setType("idn")}
+            type="idn"
+            currentType={type}
+            label="IDN Live"
+          />
         </HStack>
       </Box>
 
