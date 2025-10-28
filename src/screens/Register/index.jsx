@@ -1,3 +1,4 @@
+import analytics from "@react-native-firebase/analytics";
 import {
   Box,
   Button,
@@ -10,16 +11,17 @@ import {
   useToast,
   VStack,
 } from "native-base";
-import React, { useLayoutEffect, useState } from "react";
-import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
-import { activityLog } from "../../utils/activityLog";
-import analytics from "@react-native-firebase/analytics";
-import useAuthStore from "../../store/authStore";
-import { AUTH } from "../../services";
-import Layout from "../../components/templates/Layout";
-import { Oshimen } from "../../components/organisms";
-import { useUpdateOshimen } from "../../services/hooks/useMembers";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { TouchableOpacity } from "react-native";
+import { EyeIcon, EyeSlashIcon, LogoNormal } from "../../assets/icon";
+import Loading from "../../components/atoms/Loading";
 import ToastAlert from "../../components/atoms/ToastAlert";
+import { Oshimen } from "../../components/organisms";
+import Layout from "../../components/templates/Layout";
+import { AUTH } from "../../services";
+import { useUpdateOshimen } from "../../services/hooks/useMembers";
+import useAuthStore from "../../store/authStore";
+import { activityLog } from "../../utils/activityLog";
 
 const Register = ({ navigation }) => {
   const { setUser, setSession, setProfile, setUserProfile } = useAuthStore();
@@ -31,6 +33,7 @@ const Register = ({ navigation }) => {
     avatar_id: 1,
   });
   const [loading, setLoading] = useState(false);
+  const [loadingRegister, setLoadingRegister] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
@@ -71,35 +74,53 @@ const Register = ({ navigation }) => {
       setRegisterProfile(formData.account_id);
     });
 
-    navigation.replace("Main");
+    toast.show({
+      render: () => (
+        <ToastAlert
+          variant="left-accent"
+          status="success"
+          title="Registrasi Berhasil"
+          description={`Welcome ${formData?.name}`}
+        />
+      ),
+      placement: "top-right",
+    });
+
+    navigation.replace("SplashScreen");
   };
 
-  const setRegisterProfile = async (userId) => {
-    await AUTH.detailUserApi(userId)
-      .then((res) => {
-        setUserProfile(res.data);
-        setLoading(false);
-        updateUserOshimen();
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  };
-
-  const updateUserOshimen = () => {
+  const updateUserOshimen = (userId) => {
     updateOshimen.mutate(
       {
-        user_id: formData?.account_id,
+        user_id: userId,
         oshimen_id: oshimen?._id,
       },
       {
         onError: (error) => {
+          console.log("oshimen", oshimen)
           console.log(error);
         },
       }
     );
   };
+
+  const setRegisterProfile = async (userId) => {
+    await AUTH.detailUserApi(userId)
+      .then((res) => {
+        console.log(res?.data?._id)
+        setUserProfile(res.data);
+        updateUserOshimen(userId);
+        setLoadingRegister(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoadingRegister(false);
+      });
+  };
+
+  useEffect(() => {
+    console.log(oshimen);
+  }, [oshimen]);
 
   const handleRegister = async () => {
     setLoading(true);
@@ -114,22 +135,11 @@ const Register = ({ navigation }) => {
       }
 
       if (response.data.status.ok) {
+        setLoadingRegister(true);
         autoLogin();
 
         await analytics().logEvent("Register", {
           username: formData.account_id,
-        });
-
-        toast.show({
-          render: () => (
-            <ToastAlert
-              variant="left-accent"
-              status="success"
-              title="Register Berhasil"
-              description={`Welcome ${formData?.name}`}
-            />
-          ),
-          placement: "top-right",
         });
       }
     } catch (error) {
@@ -140,6 +150,28 @@ const Register = ({ navigation }) => {
   const handleLoginRedirect = () => {
     navigation.replace("Login");
   };
+
+  if (loadingRegister) {
+    return (
+      <Layout>
+        <Box
+          pt="44"
+          flex="1"
+          justifyContent="center"
+          alignItems="center"
+          bg="secondary"
+        >
+          <VStack justifyContent="center" alignItems="center" space={3}>
+            <LogoNormal width="60" height="150" />
+            <Loading size={35} />
+            <Text textAlign="center" fontWeight="medium" mt="4">
+              Sedang membuat akun, Tunggu sebentar ya {formData?.name}
+            </Text>
+          </VStack>
+        </Box>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -197,9 +229,7 @@ const Register = ({ navigation }) => {
             />
 
             <Box>
-              <Text py={3}>
-                Oshimen <Text color="red">*</Text>
-              </Text>
+              <Text py={3}>Oshimen</Text>
               {oshimen ? (
                 <HStack
                   rounded="md"
@@ -241,42 +271,47 @@ const Register = ({ navigation }) => {
                   </VStack>
                 </HStack>
               ) : (
-                <HStack
-                  rounded="md"
-                  bg="gray.200"
-                  p="2"
-                  space={4}
-                  alignItems="center"
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => setIsOpen(true)}
                 >
-                  <Box
-                    width={75}
-                    height={75}
-                    borderWidth={2}
-                    borderColor="gray.500"
-                    borderRadius="full"
-                    overflow="hidden"
+                  <HStack
+                    rounded="md"
+                    bg="gray.200"
+                    p="2"
+                    space={4}
+                    alignItems="center"
                   >
-                    <Image
-                      alt="Member"
-                      source={require("../../assets/image/default.png")}
+                    <Box
                       width={75}
                       height={75}
-                    />
-                  </Box>
-                  <VStack w="70%" space={2}>
-                    <Button
-                      px="3"
-                      width={120}
-                      size="sm"
-                      bg="blueGray.700"
-                      onPress={() => setIsOpen(true)}
+                      borderWidth={2}
+                      borderColor="gray.500"
+                      borderRadius="full"
+                      overflow="hidden"
                     >
-                      <Text fontSize="xs" fontWeight="semibold">
-                        Pilih Member
-                      </Text>
-                    </Button>
-                  </VStack>
-                </HStack>
+                      <Image
+                        alt="Member"
+                        source={require("../../assets/image/default.png")}
+                        width={75}
+                        height={75}
+                      />
+                    </Box>
+                    <VStack w="70%" space={2}>
+                      <Button
+                        px="3"
+                        width={120}
+                        size="sm"
+                        bg="blueGray.700"
+                        onPress={() => setIsOpen(true)}
+                      >
+                        <Text fontSize="xs" fontWeight="semibold">
+                          Pilih Member
+                        </Text>
+                      </Button>
+                    </VStack>
+                  </HStack>
+                </TouchableOpacity>
               )}
             </Box>
 
