@@ -135,6 +135,14 @@ const HistoryLive = () => {
     });
   };
 
+  const handleProfile = (log) => {
+    navigate("RoomDetail", {
+      room: {
+        room_id: log.room_id
+      },
+    });
+  };
+
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="4">
@@ -216,7 +224,7 @@ const HistoryLive = () => {
                       />
                       <Box px="2" flex={1}>
                         <VStack space={2} p="3">
-                          <TouchableOpacity onPress={() => handleDetail(log)}>
+                          <TouchableOpacity onPress={() => handleProfile(log)}>
                             <HStack
                               alignItems="center"
                               justifyContent="space-between"

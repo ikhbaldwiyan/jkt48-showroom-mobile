@@ -71,6 +71,14 @@ const HistoryLive = ({ liveType = "all" }) => {
     });
   };
 
+  const handleProfile = (log) => {
+    navigate("RoomDetail", {
+      room: {
+        room_id: log.room_id
+      },
+    });
+  };
+
   return (
     <>
       <Text fontSize="20" mb="4" fontWeight="semibold">
@@ -140,7 +148,7 @@ const HistoryLive = ({ liveType = "all" }) => {
                       <Box px="2" flex={1}>
                         <VStack space={2} p="3">
                           <TouchableOpacity
-                            onPress={() => handleDetail(member, live_info, log)}
+                            onPress={() => handleProfile(log)}
                           >
                             <HStack
                               alignItems="center"
