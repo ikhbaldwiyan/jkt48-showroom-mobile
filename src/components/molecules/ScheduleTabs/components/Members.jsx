@@ -5,13 +5,16 @@ import {
   ScrollView,
   Text,
   View,
-  VStack
+  VStack,
 } from "native-base";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { Followers } from "../../../../assets/icon";
+import { useNavigation } from "@react-navigation/native";
 
 export const Members = ({ members }) => {
+  const navigation = useNavigation();
+
   return (
     <LinearGradient
       colors={["#0082A6", "#004A66"]}
@@ -22,29 +25,45 @@ export const Members = ({ members }) => {
           Array.from(
             { length: Math.ceil(members.length / 4) },
             (_, rowIndex) => (
-              <HStack key={rowIndex} space="2" alignItems="center" justifyContent="center">
+              <HStack
+                key={rowIndex}
+                space="2"
+                alignItems="center"
+                justifyContent="center"
+              >
                 {members
                   .slice(rowIndex * 4, rowIndex * 4 + 4)
                   .map((member, idx) => (
-                    <VStack
+                    <TouchableOpacity
                       key={idx}
-                      py="2"
-                      alignItems="center"
-                      justifyItems="center"
-                      justifyContent="space-around"
+                      activeOpacity={0.7}
+                      onPress={() =>
+                        navigation.replace("RoomDetail", {
+                          room: {
+                            room_id: member.room_id,
+                          },
+                        })
+                      }
                     >
-                      <Image
-                        alt="Member"
-                        style={{ width: 70, height: 92 }}
-                        source={{ uri: member?.image }}
-                        rounded="lg"
-                      />
-                      <View justifyContent="center" alignItems="center">
-                        <Text mt="1" fontSize="md" fontWeight="semibold">
-                          {member.stage_name}
-                        </Text>
-                      </View>
-                    </VStack>
+                      <VStack
+                        py="2"
+                        alignItems="center"
+                        justifyItems="center"
+                        justifyContent="space-around"
+                      >
+                        <Image
+                          alt="Member"
+                          style={{ width: 70, height: 92 }}
+                          source={{ uri: member?.image }}
+                          rounded="lg"
+                        />
+                        <View justifyContent="center" alignItems="center">
+                          <Text mt="1" fontSize="md" fontWeight="semibold">
+                            {member.stage_name}
+                          </Text>
+                        </View>
+                      </VStack>
+                    </TouchableOpacity>
                   ))}
               </HStack>
             )
@@ -69,6 +88,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6
-  }
+    borderBottomRightRadius: 6,
+  },
 });

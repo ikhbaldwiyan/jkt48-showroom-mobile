@@ -6,7 +6,8 @@ import {
   Text,
   VStack,
   Button,
-  PlayIcon
+  PlayIcon,
+  ChevronRightIcon
 } from "native-base";
 import moment from "moment";
 import "moment/locale/id";
@@ -16,7 +17,6 @@ import {
   BirthdayIcon,
   Calendar,
   GraduateIcon,
-  RightArrow,
   TheaterIcon,
   TimesIcon,
   UsersIcon
@@ -70,9 +70,11 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                 Jadwal Theater
               </Text>
               <TouchableOpacity onPress={() => navigation.navigate("Theater")}>
-                <HStack alignItems="center" space={2}>
-                  <Text fontSize="sm">Lihat semua</Text>
-                  <RightArrow />
+                <HStack alignItems="center" mb="1" space={1.5}>
+                  <Text fontSize="sm" color="gray.400">
+                    Lihat semua
+                  </Text>
+                  <ChevronRightIcon />
                 </HStack>
               </TouchableOpacity>
             </>
@@ -101,7 +103,7 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                         <Text fontWeight="bold">
                           {moment(item.showDate)
                             .locale("id")
-                            .format("dddd, DD MMM YYYY")}
+                            .format("dddd, DD MMMM YYYY")}
                         </Text>
                       </HStack>
                       <HStack alignItems="center" space={2}>

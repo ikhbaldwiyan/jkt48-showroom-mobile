@@ -7,7 +7,7 @@ import {
   VStack,
   Divider,
   ScrollView,
-  ChevronRightIcon
+  ChevronRightIcon,
 } from "native-base";
 import { TouchableOpacity } from "react-native";
 import TimeAgo from "react-native-timeago";
@@ -41,7 +41,7 @@ export const HistoryLiveProfile = () => {
                 size="sm"
                 borderRadius="md"
                 source={{
-                  uri: item.member.img_alt
+                  uri: item.member.img_alt,
                 }}
                 alt="image"
                 width="90"
@@ -52,14 +52,7 @@ export const HistoryLiveProfile = () => {
                   <TouchableOpacity
                     onPress={() =>
                       navigate("HistoryDetail", {
-                        url: `https://www.jkt48showroom.com/history/${item?.member.url}/${item?.data_id}`,
-                        title: item?.member.is_official
-                          ? "JKT48 Official"
-                          : item?.member.nickname +
-                            " - " +
-                            moment(item?.live_info.date.start).format(
-                              "DD MMMM YYYY"
-                            )
+                        liveId: item?.data_id,
                       })
                     }
                   >

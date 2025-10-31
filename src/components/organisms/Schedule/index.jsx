@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, HStack, Image, Text, Button, Spinner } from "native-base";
+import { Box, HStack, Image, Text, Button, Spinner, ChevronRightIcon } from "native-base";
 import moment from "moment";
 import "moment/locale/id";
 import SkeletonSchedule from "../../atoms/Skeleteon";
@@ -62,9 +62,11 @@ const Schedule = ({ refreshing, isWeek, navigation, setlistId }) => {
               Jadwal Theater
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Theater")}>
-              <HStack alignItems="center" space={2}>
-                <Text fontSize="sm">Lihat semua</Text>
-                <RightArrow />
+              <HStack alignItems="center" mb="1" space={1.5}>
+                <Text fontSize="sm" color="gray.400">
+                  Lihat semua
+                </Text>
+                <ChevronRightIcon />
               </HStack>
             </TouchableOpacity>
           </>

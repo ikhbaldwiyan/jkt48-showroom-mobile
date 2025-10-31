@@ -4,7 +4,7 @@ import {
   Donate,
   IDCard,
   PencilIcon,
-  ThropyIcon
+  ThropyIcon,
 } from "../../../assets/icon";
 import {
   Box,
@@ -15,7 +15,7 @@ import {
   Modal,
   Popover,
   Text,
-  VStack
+  VStack,
 } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { formatViews } from "../../../utils/helpers";
@@ -26,12 +26,14 @@ import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useUser from "../../../utils/hooks/useUser";
 import Logout from "../../molecules/UserTabs/components/Logout";
+import { useProfile } from "../../../services/hooks/useProfile";
+import { useTotalWatchMember } from "../../../services/hooks/useMembers";
 
 const UserModal = ({
   selectedUser,
   setSelectedUser,
   showID = false,
-  isEdit = false
+  isEdit = false,
 }) => {
   const { profile } = useUser();
   const navigation = useNavigation();
@@ -47,6 +49,9 @@ const UserModal = ({
   const isDonator = userInfo?.is_donator;
   const isDeveloper = userInfo?.is_developer;
   const topLeaderboard = userInfo?.top_leaderboard;
+  const { data: profileUser } = useProfile(selectedUser?.user_id);
+  const { data: totalWatchMember } = useTotalWatchMember(selectedUser?.user_id);
+  const oshimen = profileUser?.oshimen;
 
   const badgeList = [
     {
@@ -55,7 +60,7 @@ const UserModal = ({
       label: "Top Leaderboard",
       desc: "Badge special karena masuk Top 10 Leaderboard bulanan",
       bg: "blueLight",
-      textColor: "primary"
+      textColor: "primary",
     },
     {
       condition: isDonator,
@@ -63,7 +68,7 @@ const UserModal = ({
       label: "Donator",
       desc: "Badge special Donator karena sudah support project JKT48 Showroom Fanmade",
       bg: "#E49C20",
-      textColor: "white"
+      textColor: "white",
     },
     {
       condition: isDeveloper,
@@ -74,9 +79,9 @@ const UserModal = ({
       textColor: "white",
       border: {
         width: 1,
-        color: "gray.300"
-      }
-    }
+        color: "gray.300",
+      },
+    },
   ];
 
   return (
@@ -89,7 +94,7 @@ const UserModal = ({
               DONATOR_WITH_TOP: "72%",
               SPECIAL_USER: "71%",
               WITH_ID: "66%",
-              DEFAULT: "60%"
+              DEFAULT: "60%",
             };
 
             if (isDonator && topLeaderboard)
@@ -104,7 +109,7 @@ const UserModal = ({
           <LinearGradient
             colors={["#055D7E", "#009FCB"]}
             style={{
-              flex: 1
+              flex: 1,
             }}
           >
             <Box py="4" pb="2">
@@ -137,7 +142,7 @@ const UserModal = ({
                   <Image
                     style={{ width: 70, height: 70 }}
                     source={{
-                      uri: isEdit ? profile?.avatar_url : selectedUser.avatar
+                      uri: isEdit ? profile?.avatar_url : selectedUser.avatar,
                     }}
                     alt="avatar"
                     defaultSource={require("../../../assets/image/ava.png")}
@@ -225,7 +230,7 @@ const UserModal = ({
                         flex: 1,
                         borderRadius: 10,
                         width: "100%",
-                        marginTop: 6
+                        marginTop: 6,
                       }}
                     >
                       <Box p="3.5" py="3">
@@ -236,16 +241,43 @@ const UserModal = ({
                             fontSize={15}
                             fontWeight="semibold"
                           >
-                            Favorite Member
+                            {oshimen ? "Oshi" : "Favorite Member"}
                           </Text>
                         </HStack>
                         <Divider my="2" mb="3" />
-                        {favMember ? (
+                        {oshimen ? (
+                          <HStack space={4} alignItems="center">
+                            <Image
+                              style={{
+                                width: 80,
+                                height: 100,
+                                borderRadius: 8,
+                              }}
+                              source={{
+                                uri: oshimen?.image,
+                              }}
+                              alt="member fav"
+                            />
+                            <VStack space={2}>
+                              <Text fontSize="16" fontWeight="semibold">
+                                {oshimen?.stage_name}
+                              </Text>
+                              <Text
+                                color="gray.300"
+                                fontSize="16"
+                                fontWeight="medium"
+                              >
+                                {oshimen?.name}
+                              </Text>
+                              <Text>{totalWatchMember?.totalAll}x Watch</Text>
+                            </VStack>
+                          </HStack>
+                        ) : favMember ? (
                           <HStack space={4} alignItems="center">
                             <Image
                               style={{ width: 70, height: 70, borderRadius: 8 }}
                               source={{
-                                uri: favMember?.member?.image
+                                uri: favMember?.member?.image,
                               }}
                               alt="member fav"
                             />
@@ -257,7 +289,10 @@ const UserModal = ({
                             </VStack>
                           </HStack>
                         ) : (
-                          <Text fontSize="sm">Favorit member tidak ditemukan. Silakan tonton live streaming untuk menampilkan favorit member.</Text>
+                          <Text fontSize="sm">
+                            Favorit member tidak ditemukan. Silakan tonton live
+                            streaming untuk menampilkan favorit member.
+                          </Text>
                         )}
                       </Box>
                     </LinearGradient>
@@ -321,9 +356,7 @@ const UserModal = ({
               </VStack>
             </Modal.Body>
             <Modal.Footer justifyContent="space-around" py="2" bg="transparent">
-              {isEdit && (
-                <Logout />
-              )}
+              {isEdit && <Logout />}
               <Button variant="ghost" onPress={() => setSelectedUser(null)}>
                 <Text fontWeight="semibold">Close</Text>
               </Button>

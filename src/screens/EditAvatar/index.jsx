@@ -22,31 +22,10 @@ import {
   Spinner,
   Text,
   useToast,
-  VStack
+  VStack,
 } from "native-base";
-
-const TabButton = ({ type, currentType, onPress, label }) => (
-  <Button
-    onPress={() => onPress(type)}
-    bg={currentType === type ? "blueLight" : "#4A5568"}
-    borderRadius="full"
-    variant={currentType === type ? "filled" : "outline"}
-    borderColor="primary"
-    size="sm"
-    py="1.5"
-  >
-    <HStack alignItems="center" space={1}>
-      {currentType === type && <CheckIcon color="primary" />}
-      <Text
-        fontSize="13"
-        color={currentType === type ? "primary" : "white"}
-        fontWeight={currentType === type ? "bold" : "medium"}
-      >
-        {label}
-      </Text>
-    </HStack>
-  </Button>
-);
+import TabButton from "../../components/atoms/TabButton";
+import ToastAlert from "../../components/atoms/ToastAlert";
 
 const AvatarItem = ({ item, selectedAvatar, onSelect }) => (
   <LinearGradient
@@ -55,7 +34,7 @@ const AvatarItem = ({ item, selectedAvatar, onSelect }) => (
     colors={["#282C34", "#9FAEBD"]}
     style={[
       styles.gradientContainer,
-      selectedAvatar === item.avatar_id && styles.selectedGradient
+      selectedAvatar === item.avatar_id && styles.selectedGradient,
     ]}
   >
     <Pressable onPress={() => onSelect(item.avatar_id, item.image_url)}>
@@ -112,7 +91,7 @@ const UpdateAvatarButton = ({ isLoading, onPress }) => (
     disabled={isLoading}
     opacity={isLoading ? "0.5" : "1"}
     _disabled={{
-      bgColor: "gray.600"
+      bgColor: "gray.600",
     }}
   >
     <TouchableOpacity onPress={onPress}>
@@ -162,7 +141,7 @@ const EditAvatar = () => {
         cookies_id: session.cookie_login_id,
         limit,
         page,
-        type
+        type,
       });
       const { avatars, current_user_avatar, total_entries } = response.data;
       setAvatars(avatars);
@@ -177,10 +156,10 @@ const EditAvatar = () => {
     setIsLoading(true);
     try {
       await updateDetailUser(userProfile.user_id, {
-        avatar: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
+        avatar: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`,
       });
       trackAnalytics("update_user_avatar", {
-        userId: userProfile.user_id
+        userId: userProfile.user_id,
       });
       showSuccessToast();
     } catch (err) {
@@ -193,11 +172,14 @@ const EditAvatar = () => {
   const showSuccessToast = () => {
     toast.show({
       render: () => (
-        <Box m="3" py="1" px="2" mt="10" mb={5} bg="green.600" rounded="sm">
-          <Text>Berhasil update avatar</Text>
-        </Box>
+        <ToastAlert
+          variant="left-accent"
+          status="success"
+          title="Success"
+          description="Berhasil update avatar"
+        />
       ),
-      placement: "top-right"
+      placement: "top-right",
     });
   };
 
@@ -208,11 +190,11 @@ const EditAvatar = () => {
       await updateAvatar({
         csrf_token: session.csrf_token,
         cookies_id: session.cookie_login_id,
-        avatar_id: selectedAvatar
+        avatar_id: selectedAvatar,
       });
       setProfile({
         ...profile,
-        avatar_url: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`
+        avatar_url: `https://static.showroom-live.com/image/avatar/${selectedAvatar}.png`,
       });
       await updateUserAvatar();
       navigation.navigate("Profile");
@@ -237,7 +219,7 @@ const EditAvatar = () => {
   };
 
   return (
-    <CardGradient halfCard={!isAvatarScreen}>
+    <Box flex={1} bg={isAvatarScreen ? "secondary" : "blueGray.600"} p="4">
       <VStack mt="2" space={4}>
         <HStack alignItems="center" justifyContent="space-between">
           <HStack space={2}>
@@ -288,14 +270,14 @@ const EditAvatar = () => {
 
         <UpdateAvatarButton isLoading={isLoading} onPress={updateAvatarImage} />
       </VStack>
-    </CardGradient>
+    </Box>
   );
 };
 
 const styles = StyleSheet.create({
   columnWrapper: {
     justifyContent: "space-between",
-    marginBottom: 8
+    marginBottom: 8,
   },
   gradientContainer: {
     width: "24%",
@@ -305,19 +287,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "transparent"
+    borderColor: "transparent",
   },
   image: {
     width: 48,
     height: 48,
     borderRadius: 8,
     marginVertical: 4,
-    marginBottom: 8
+    marginBottom: 8,
   },
   selectedGradient: {
     borderRadius: 20,
     borderColor: "#24A2B7",
-  }
+  },
 });
 
 export default EditAvatar;

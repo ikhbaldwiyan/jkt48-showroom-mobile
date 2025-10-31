@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import {
   useIsFocused,
   useNavigation,
-  useFocusEffect
+  useFocusEffect,
 } from "@react-navigation/native";
 import { useProfile } from "../../services/hooks/useProfile";
 import useAuthStore from "../../store/authStore";
@@ -12,23 +12,30 @@ import { formatViews } from "../../utils/helpers";
 import trackAnalytics from "../../utils/trackAnalytics";
 
 import { TouchableOpacity } from "react-native";
-import { Box, Button, HStack, Text, VStack } from "native-base";
-import { Donate, Info } from "../../assets/icon";
-import { UserProfile } from "../../components/molecules/UserTabs/components";
+import { Box, Button, HStack, Image, Text, VStack } from "native-base";
+import { Donate, EditProfile, Info } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import Logout from "../../components/molecules/UserTabs/components/Logout";
-import Theme from "../../components/templates/Theme";
-import AvatarUser from "./components/AvatarUser";
 import NoLogin from "./components/NoLogin";
 import MenuInfo from "./components/MenuInfo";
+import { Oshimen, ScheduleOshimen } from "../../components/organisms";
+import { UserProfile } from "../../components/molecules/UserTabs/components";
+import { useTotalWatchMember } from "../../services/hooks/useMembers";
+import { useRefresh } from "../../utils/hooks";
+import BadgeUser from "./components/BadgeUser";
 
 const Profile = () => {
   const { profile, session, user } = useUser();
   const { data: userProfile, refetch } = useProfile(user?.account_id);
+  const { data: totalWatchMember, refetch: refetchTotalWatch } =
+    useTotalWatchMember(user?.account_id);
   const { setUserProfile } = useAuthStore();
   const navigation = useNavigation();
   const [isLogin, setIsLogin] = useState();
+  const [isOpen, setIsOpen] = useState(false);
   const isFocused = useIsFocused();
+  const oshimen = userProfile?.oshimen;
+  const { refreshing, onRefresh } = useRefresh();
 
   useEffect(() => {
     if (session) {
@@ -43,27 +50,28 @@ const Profile = () => {
         <Box mr="2">
           <MenuInfo />
         </Box>
-      )
+      ),
     });
   }, [profile]);
 
   useFocusEffect(
     useCallback(() => {
       refetch();
-    }, [refetch])
+      refetchTotalWatch();
+    }, [refetch, refreshing])
   );
 
   const handleAbout = () => {
     navigation.navigate("About");
     trackAnalytics("about_app_click", {
-      username: userProfile?.name ?? "Guest"
+      username: userProfile?.name ?? "Guest",
     });
   };
 
   const handleSupport = () => {
     navigation.navigate("SupportProject");
     trackAnalytics("support_project_btn_click", {
-      username: userProfile?.name ?? "Guest"
+      username: userProfile?.name ?? "Guest",
     });
   };
 
@@ -80,34 +88,99 @@ const Profile = () => {
   }
 
   return (
-    <Layout flex={1} bg="secondary">
-      <VStack space={3} alignItems="center">
-        <AvatarUser
-          profile={profile}
-          userProfile={userProfile}
-          isLogin={isLogin}
-        />
-        <HStack space={2} alignItems="center">
-          <Text fontWeight="bold" mb="1" fontSize="2xl">
-            {profile?.name}
-          </Text>
-        </HStack>
-      </VStack>
-      <Box flex={1}>
-        <HStack space={2.5} mt="2" mb="4">
-          <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
-            <VStack space={1} justifyContent="center" alignItems="center">
-              <Text>Total Watch</Text>
-              <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
-                <Text color="primary" fontWeight="extrabold">
-                  {formatViews(userProfile?.totalWatchLive)}x
+    <Layout
+      flex={1}
+      bg="secondary"
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+    >
+      <HStack mb="2" space={4}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => setIsOpen(true)}>
+          <Image
+            flex={1}
+            width={106}
+            height={155}
+            source={
+              oshimen
+                ? { uri: oshimen?.image }
+                : require("../../assets/image/default.png")
+            }
+            borderRadius="xl"
+            alt="oshimen"
+          />
+        </TouchableOpacity>
+        <VStack space={3} flex={1}>
+          <HStack space={3}>
+            <Box flex={1} borderRadius="xl" bg="black" p="3">
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate("Edit Profile")}
+              >
+                <Text fontWeight="semibold">{profile?.name}</Text>
+                <Text mt="1" color="gray.400">
+                  {userProfile?.user_id}
                 </Text>
+              </TouchableOpacity>
+            </Box>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate("Avatar")}
+            >
+              <Box flex={1} borderRadius="xl" bg="black" p="3">
+                <Image
+                  style={{ width: 50, height: 50 }}
+                  source={{
+                    uri: profile?.avatar_url,
+                  }}
+                  alt="avatar"
+                  shadow="5"
+                />
               </Box>
-            </VStack>
+            </TouchableOpacity>
+          </HStack>
+          <TouchableOpacity activeOpacity={0.7} onPress={() => setIsOpen(true)}>
+            <Box flex={1} borderRadius="xl" bg="black" p="3">
+              <HStack justifyContent="space-between">
+                <Text fontWeight="semibold">
+                  {oshimen?.stage_name ? "Oshimen" : "Belum ada oshimen"}
+                </Text>
+                <EditProfile size={18} />
+              </HStack>
+              <Text fontSize="sm" mt="1" color="gray.400">
+                {oshimen?.name ?? "Pilih oshimen sekarang!"}
+              </Text>
+            </Box>
+          </TouchableOpacity>
+        </VStack>
+      </HStack>
+      <BadgeUser userProfile={userProfile} />
+      <Box flex={1}>
+        <HStack space={2.5} mt="1" mb="2.5">
+          <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
+            {oshimen ? (
+              <VStack space={1} justifyContent="center" alignItems="center">
+                <Text fontSize="13">Oshi Watch</Text>
+                <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
+                  <Text color="primary" fontWeight="extrabold">
+                    {formatViews(totalWatchMember?.totalAll)}x
+                  </Text>
+                </Box>
+              </VStack>
+            ) : (
+              <VStack space={1} justifyContent="center" alignItems="center">
+                <Text fontSize="13">Total Watch</Text>
+                <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
+                  <Text color="primary" fontWeight="extrabold">
+                    {formatViews(userProfile?.totalWatchLive)}x
+                  </Text>
+                </Box>
+              </VStack>
+            )}
           </Box>
           <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
             <VStack space={1} justifyContent="center" alignItems="center">
-              <Text>SR Watched</Text>
+              <Text fontSize="13">SR Watch</Text>
               <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
                 <Text color="primary" fontWeight="extrabold">
                   {formatViews(userProfile?.watchShowroomMember)}x
@@ -117,7 +190,7 @@ const Profile = () => {
           </Box>
           <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
             <VStack space={1} justifyContent="center" alignItems="center">
-              <Text>IDN Watched</Text>
+              <Text fontSize="13">IDN Watch</Text>
               <Box p="0.9" px="3" bg="blueLight" borderRadius={10}>
                 <Text color="primary" fontWeight="extrabold">
                   {formatViews(userProfile?.watchLiveIDN)}x
@@ -126,10 +199,14 @@ const Profile = () => {
             </VStack>
           </Box>
         </HStack>
-        <UserProfile navigation={navigation} />
-        <Theme />
-        <Box my="1.5" />
-        <HStack mb="4" space={3}>
+        {oshimen ? (
+          <ScheduleOshimen />
+        ) : (
+          <Box mb="8">
+            <UserProfile navigation={navigation} />
+          </Box>
+        )}
+        <HStack mt="3" my="1.5" mb="4" space={3}>
           <Button
             flex={1}
             variant="outline"
@@ -165,6 +242,7 @@ const Profile = () => {
           </Button>
         </HStack>
         <Logout />
+        <Oshimen isOpen={isOpen} setIsOpen={setIsOpen} />
       </Box>
     </Layout>
   );

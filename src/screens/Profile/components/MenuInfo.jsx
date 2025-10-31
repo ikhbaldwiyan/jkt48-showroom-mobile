@@ -1,42 +1,52 @@
-import React, { useState } from "react";
+import { HStack, Menu, Pressable, Text } from "native-base";
+import { useState } from "react";
 import { Linking } from "react-native";
-import { DeleteIcon, HStack, Menu, Pressable, Text } from "native-base";
-import { Donate, GithubIcon, History, KebabMenu } from "../../../assets/icon";
+import {
+  Donate,
+  EditProfile,
+  GithubIcon,
+  History,
+  KebabMenu,
+} from "../../../assets/icon";
 import useChangeLogStore from "../../../store/changeLogStore";
 import useApiConfig from "../../../store/useApiConfig";
+import { useNavigation } from "@react-navigation/native";
 
 const MenuInfo = () => {
   const { setOpenModal } = useChangeLogStore();
   const { DONATION_LINK } = useApiConfig();
   const [isOpen, setIsOpen] = useState(false);
-
+  const navigation = useNavigation();
   const closeMenu = () => setIsOpen(false);
 
   const menu = [
     {
+      key: "edit-profile",
+      title: "Edit Profile",
+      icon: <EditProfile size={18} color="black" />,
+    },
+    {
       key: "change-log",
       title: "Change Log",
-      icon: <History size={18} color="black" />
+      icon: <History size={18} color="black" />,
     },
     {
       key: "github",
       title: "Github",
-      icon: <GithubIcon size={18} color="black" />
+      icon: <GithubIcon size={18} color="black" />,
     },
     {
       key: "donation",
       title: "Support Project",
-      icon: <Donate size={18} color="black" />
+      icon: <Donate size={18} color="black" />,
     },
-    {
-      key: "delete",
-      title: "Delete Account",
-      icon: <DeleteIcon size={18} color="black" />
-    }
   ];
 
   const handleMenu = (key) => {
     switch (key) {
+      case "edit-profile":
+        navigation.navigate("Edit Profile");
+        break;
       case "change-log":
         setOpenModal();
         break;
@@ -47,9 +57,6 @@ const MenuInfo = () => {
         break;
       case "donation":
         Linking.openURL(DONATION_LINK);
-        break;
-      case "delete":
-        Linking.openURL("https://www.jkt48showroom.com/remove-account");
         break;
       default:
         break;

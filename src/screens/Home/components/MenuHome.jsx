@@ -28,7 +28,7 @@ import useApiConfig from "../../../store/useApiConfig";
 const MenuHome = () => {
   const { navigate } = useNavigation();
   const { user } = useAuthStore();
-  const { data: profile } = useProfile(user?.user_id);
+  const { data: profile } = useProfile(user?.account_id);
   const [infoModal, setInfoModal] = useState(false);
   const { IS_PUBLIC_CHAT_OPEN } = useApiConfig();
 

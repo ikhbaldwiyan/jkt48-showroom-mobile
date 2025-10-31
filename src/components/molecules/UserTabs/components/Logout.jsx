@@ -6,15 +6,13 @@ import { ModalConfirmation } from "../../../atoms/Modal";
 import useUser from "../../../../utils/hooks/useUser";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../../../store/authStore";
-import useMultiAccessStore from "../../../../store/multiAccesStore";
 import { useQueryClient } from "@tanstack/react-query";
 
-const Logout = ({ isProfile = false }) => {
+const Logout = () => {
   const navigation = useNavigation();
   const { profile } = useUser();
   const { logout } = useAuthStore();
   const [modalLogout, setModalLogout] = useState(false);
-  const { setOpenMultiModal } = useMultiAccessStore();
   const queryClient = useQueryClient();
 
   const handleModal = () => {
@@ -24,7 +22,6 @@ const Logout = ({ isProfile = false }) => {
   const handleLogout = () => {
     handleModal();
     logout();
-    setOpenMultiModal();
     navigation.replace("SplashScreen");
     queryClient.removeQueries(["profile"]);
 
@@ -34,7 +31,7 @@ const Logout = ({ isProfile = false }) => {
   };
 
   return (
-    <View>
+    <View mb="8">
       <Button
         size="sm"
         borderRadius="10"

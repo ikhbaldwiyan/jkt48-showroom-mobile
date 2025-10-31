@@ -10,7 +10,7 @@ import React, {
   useLayoutEffect,
   useState,
   useCallback,
-  useRef
+  useRef,
 } from "react";
 import {
   Box,
@@ -24,7 +24,7 @@ import {
   VStack,
   Spinner,
   IconButton,
-  CheckIcon
+  CheckIcon,
 } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -36,10 +36,11 @@ import {
   LoadingIcon,
   SearchMember,
   TimesFill,
-  UsersFill
+  UsersFill,
 } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import TimeAgo from "react-native-timeago";
+import TabButton from "../../components/atoms/TabButton";
 
 const HistoryLive = () => {
   const { navigate, setOptions } = useNavigation();
@@ -100,7 +101,7 @@ const HistoryLive = () => {
             mt="2"
             mr="4"
           />
-        )
+        ),
     });
   }, [search, isSearch]);
 
@@ -128,50 +129,42 @@ const HistoryLive = () => {
     }
   };
 
-  const handleDetail = (member, live_info, log) => {
+  const handleDetail = (log) => {
     navigate("HistoryDetail", {
-      url: `https://www.jkt48showroom.com/history/${member.url}/${log.data_id}`,
-      title: member.is_official
-        ? "JKT48 Official"
-        : member.nickname +
-          " - " +
-          moment(live_info.date.start).format("DD MMMM YYYY")
+      liveId: log.data_id,
     });
   };
 
-  const TabButton = ({ type, currentType, label }) => {
-    const isActive = type === currentType;
-
-    return (
-      <Button
-        onPress={() => setType(type)}
-        bg={isActive ? "blueLight" : "secondary"}
-        borderRadius="full"
-        variant={isActive ? "filled" : "outline"}
-        borderColor="primary"
-        size="md"
-        py="1.5"
-      >
-        <HStack alignItems="center" space={1}>
-          {isActive && <CheckIcon size="18px" color="primary" />}
-          <Text
-            fontWeight={isActive ? "bold" : "medium"}
-            color={isActive ? "primary" : "white"}
-          >
-            {label}
-          </Text>
-        </HStack>
-      </Button>
-    );
+  const handleProfile = (log) => {
+    navigate("RoomDetail", {
+      room: {
+        room_id: log.room_id
+      },
+    });
   };
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="4">
         <HStack space={2} alignItems="center">
-          <TabButton type="all" currentType={type} label="All Platform" />
-          <TabButton type="showroom" currentType={type} label="Showroom" />
-          <TabButton type="idn" currentType={type} label="IDN Live" />
+          <TabButton
+            onPress={() => setType("all")}
+            type="all"
+            currentType={type}
+            label="All Platform"
+          />
+          <TabButton
+            onPress={() => setType("showroom")}
+            type="showroom"
+            currentType={type}
+            label="Showroom"
+          />
+          <TabButton
+            onPress={() => setType("idn")}
+            type="idn"
+            currentType={type}
+            label="IDN Live"
+          />
         </HStack>
       </Box>
 
@@ -183,7 +176,7 @@ const HistoryLive = () => {
               <TouchableOpacity
                 key={idx}
                 activeOpacity={0.7}
-                onPress={() => handleDetail(member, live_info, log)}
+                onPress={() => handleDetail(log)}
               >
                 <Box w="100%" mr="3">
                   <LinearGradient
@@ -198,7 +191,7 @@ const HistoryLive = () => {
                           size="md"
                           alt="showroom"
                           source={{
-                            uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k"
+                            uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
                           }}
                           width="38"
                           height="38"
@@ -231,9 +224,7 @@ const HistoryLive = () => {
                       />
                       <Box px="2" flex={1}>
                         <VStack space={2} p="3">
-                          <TouchableOpacity
-                            onPress={() => handleDetail(member, live_info, log)}
-                          >
+                          <TouchableOpacity onPress={() => handleProfile(log)}>
                             <HStack
                               alignItems="center"
                               justifyContent="space-between"
@@ -328,6 +319,6 @@ export default HistoryLive;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    borderRadius: 6
-  }
+    borderRadius: 6,
+  },
 });

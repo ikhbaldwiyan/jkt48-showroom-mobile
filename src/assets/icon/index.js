@@ -73,6 +73,9 @@ import OfflineIcon from "./OfflineIcon";
 import ChatIcon from "./ChatIcon";
 import SendMessageIcon from "./SendMessageIcon"
 import Wrench from "./Wrench";
+import StartIcon from "./StartIcon";
+import StopIcon from "./StopIcon";
+import GiftOutline from "./GiftOutline";
 
 export {
   LogoIcon,
@@ -150,4 +153,7 @@ export {
   ChatIcon,
   SendMessageIcon,
   Wrench,
+  StartIcon,
+  StopIcon,
+  GiftOutline,
 };

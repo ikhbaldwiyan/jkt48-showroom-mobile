@@ -19,6 +19,7 @@ import { loginApi } from "../../services/auth";
 import { activityLog } from "../../utils/activityLog";
 import analytics from "@react-native-firebase/analytics";
 import useAuthStore from "../../store/authStore";
+import ToastAlert from "../../components/atoms/ToastAlert";
 
 const Login = ({ navigation }) => {
   const { setUser, setSession, setProfile, setUserProfile } = useAuthStore();
@@ -63,16 +64,19 @@ const Login = ({ navigation }) => {
             error === "An error occured. Please go back and try again."
               ? "Login gagal, silakan coba lagi"
               : error === "Incorrect authentication code"
-                ? "Kode captcha salah, tolong cek lagi"
-                : error.includes("Your account ID/password is incorrect")
-                  ? "ID Akun atau password salah. password bisa mengandung huruf besar/kecil dan harus sesuai."
-                  : error === "Please fill in all required fields."
-                    ? "Silakan Isi ID Akun dan Password"
-                    : error
+              ? "Kode captcha salah, tolong cek lagi"
+              : error.includes("Your account ID/password is incorrect")
+              ? "ID Akun atau password salah. password bisa mengandung huruf besar/kecil dan harus sesuai."
+              : error === "Please fill in all required fields."
+              ? "Silakan Isi ID Akun dan Password"
+              : error
         }));
       }
 
-      if (error === "Incorrect authentication code" || error?.includes("Your account ID/password is incorrect")) {
+      if (
+        error === "Incorrect authentication code" ||
+        error?.includes("Your account ID/password is incorrect")
+      ) {
         setFormData((prevState) => ({
           ...prevState,
           captcha_word: ""
@@ -90,17 +94,12 @@ const Login = ({ navigation }) => {
         toast.show({
           render: () => {
             return (
-              <Box
-                m="3"
-                py="1"
-                px="2"
-                mt="10"
-                mb={5}
-                bg="green.700"
-                rounded="sm"
-              >
-                <Text>Login Sukses</Text>
-              </Box>
+              <ToastAlert
+                variant="left-accent"
+                status="success"
+                title="Login Berhasil"
+                description={`Welcome ${data?.profile?.name}`}
+              />
             );
           },
           placement: "top-right"

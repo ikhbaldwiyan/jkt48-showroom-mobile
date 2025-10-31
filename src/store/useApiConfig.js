@@ -43,6 +43,7 @@ const useApiConfig = create(
       IS_MULTI_LIVE_INFO: false,
       IS_MULTI_LIVE_CLOSED: false,
       SETTING_MULTI_ROOM_GLOBAL: false,
+      IS_REPLAY_RELEASED: false,
       PUBLIC_CHAT_ROOM_ID,
       PUBLIC_CHAT_ROOM_KEY,
       NEST_SHOWROOM_API,

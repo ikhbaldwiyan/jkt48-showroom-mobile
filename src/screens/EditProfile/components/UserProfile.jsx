@@ -1,26 +1,32 @@
 import {
+  Actionsheet,
   Box,
   Button,
   FormControl,
   HStack,
+  Image,
   Input,
   ScrollView,
+  Spinner,
   Text,
-  TextArea,
   VStack,
-  useToast
+  useToast,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { IDCard, UserIcon } from "../../../assets/icon";
+import { IDCard, StarIcon, UserIcon } from "../../../assets/icon";
 import CardGradient from "../../../components/atoms/CardGradient";
 import useAuthStore from "../../../store/authStore";
 import { useUser } from "../../../utils/hooks";
 import {
+  useProfile,
   useShowroomProfile,
   useUpdateProfile,
-  useUpdateUserProfile
+  useUpdateUserProfile,
 } from "../../../services/hooks/useProfile";
 import { useNavigation } from "@react-navigation/native";
+import { Oshimen } from "../../../components/organisms";
+import { Linking } from "react-native";
+import ToastAlert from "../../../components/atoms/ToastAlert";
 
 export const UserProfile = () => {
   const toast = useToast();
@@ -28,16 +34,18 @@ export const UserProfile = () => {
   const { user, session, profile, userProfile } = useUser();
   const { data } = useShowroomProfile(user?.user_id);
   const { setProfile } = useAuthStore();
+  const [isOpen, setIsOpen] = useState(false);
+  const { data: profileUser, isRefetching } = useProfile(user?.account_id);
 
   const [formData, setFormData] = useState({
     name: profile?.name,
-    about: ""
+    about: "",
   });
 
   useEffect(() => {
     setFormData((prevState) => ({
       ...prevState,
-      about: data?.description
+      about: data?.description,
     }));
   }, [data]);
 
@@ -47,7 +55,7 @@ export const UserProfile = () => {
   const handleChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -58,32 +66,35 @@ export const UserProfile = () => {
         description: formData.about,
         csrf_token: session.csrf_token,
         cookies_id: session.cookie_login_id,
-        residence: 48
+        residence: 48,
       },
       {
         onSuccess: () => {
           setProfile({
             ...profile,
             name: formData?.name,
-            avatar: data?.avatar_url
+            avatar: data?.avatar_url,
           });
 
           updateUserProfileMutation.mutate({
             user_id: userProfile?.user_id,
-            name: formData.name
+            name: formData.name,
           });
 
           toast.show({
             render: () => (
-              <Box bg="green.600" px="2" py="1" rounded="sm" mb={5}>
-                <Text color="white">Update profile success</Text>
-              </Box>
+              <ToastAlert
+                variant="left-accent"
+                status="success"
+                title="Success"
+                description="Berhasil update profil"
+              />
             ),
-            placement: "top-right"
+            placement: "top-right",
           });
 
           navigation.navigate("Profile");
-        }
+        },
       },
       {
         onError: (error) => {
@@ -94,75 +105,133 @@ export const UserProfile = () => {
                 <Text color="white">Failed to update profile</Text>
               </Box>
             ),
-            placement: "bottom"
+            placement: "bottom",
           });
-        }
+        },
       }
     );
   };
 
   return (
-    <CardGradient halfCard>
-      <ScrollView mt="3">
-        <FormControl>
-          <VStack space={3}>
-            <HStack space={2} alignItems="center">
-              <UserIcon size="14" />
-              <Box flex={1}>
-                <Text color="gray.300" fontSize="14">
-                  Name
-                </Text>
-              </Box>
-            </HStack>
-            <Input
-              bgColor="white"
-              variant="filled"
-              w="100%"
-              fontSize="md"
-              name="name"
-              placeholder="Enter your name"
-              value={formData.name}
-              onChangeText={(value) => handleChange("name", value)}
-            />
-            <Box>
+    <>
+      <CardGradient halfCard>
+        <ScrollView mt="3">
+          <FormControl>
+            <VStack space={3}>
               <HStack space={2} alignItems="center">
-                <IDCard size={15} />
+                <UserIcon size="14" />
                 <Box flex={1}>
                   <Text color="gray.300" fontSize="14">
-                    About Me
+                    Name
                   </Text>
                 </Box>
               </HStack>
-              <TextArea
-                mt="2"
+              <Input
                 bgColor="white"
                 variant="filled"
                 w="100%"
                 fontSize="md"
-                name="about"
-                placeholder="Tell us about yourself"
-                value={formData.about}
-                onChangeText={(value) => handleChange("about", value)}
-                autoCompleteType={false}
-                h={100}
+                name="name"
+                placeholder="Enter your name"
+                value={formData.name}
+                onChangeText={(value) => handleChange("name", value)}
               />
-            </Box>
-            <Button
-              my="3"
-              bg="primary"
-              borderRadius="md"
-              onPress={handleUpdate}
-              isLoading={updateProfileMutation.isPending}
-              _pressed={{ bg: "cyan.700" }}
-              isLoadingText="Updating Profile"
-            >
-              <Text color="white" fontWeight="bold">
-                Update Profile
-              </Text>
-            </Button>
-          </VStack>
-        </FormControl>
-      </ScrollView>
-    </CardGradient>
+              <HStack space={2} alignItems="center">
+                <StarIcon color="white" size="14" />
+                <Box flex={1}>
+                  <Text color="gray.300" fontSize="14">
+                    Oshimen
+                  </Text>
+                </Box>
+              </HStack>
+              <Box>
+                {profileUser?.oshimen && !isRefetching ? (
+                  <HStack alignItems="center">
+                    <VStack w="30%">
+                      <Image
+                        alt="Member"
+                        style={{ width: 84, height: 110 }}
+                        source={{ uri: profileUser?.oshimen?.image }}
+                        rounded="lg"
+                      />
+                    </VStack>
+                    <VStack w="70%" space={1}>
+                      <Text fontWeight="semibold" flexWrap="nowrap">
+                        {profileUser?.oshimen?.name}
+                      </Text>
+                      <Text fontSize="xs" flexWrap="wrap">
+                        {profileUser?.oshimen?.jiko}
+                      </Text>
+                      <Button
+                        px="3"
+                        width={120}
+                        size="sm"
+                        bg="blueLight"
+                        onPress={() => setIsOpen(true)}
+                      >
+                        <Text
+                          fontSize="xs"
+                          color="primary"
+                          fontWeight="semibold"
+                        >
+                          Ubah Oshimen
+                        </Text>
+                      </Button>
+                    </VStack>
+                  </HStack>
+                ) : isRefetching ? (
+                  <Box>
+                    <HStack space={2}>
+                      <Spinner color="white" size={14} />
+                      <Text>Loading Oshimen</Text>
+                    </HStack>
+                  </Box>
+                ) : (
+                  <Button
+                    px="3"
+                    width={120}
+                    size="sm"
+                    bg="blueLight"
+                    onPress={() => setIsOpen(true)}
+                  >
+                    <Text fontSize="xs" color="primary" fontWeight="semibold">
+                      Pilih Oshimen
+                    </Text>
+                  </Button>
+                )}
+              </Box>
+              <Button
+                my="3"
+                bg="primary"
+                borderRadius="md"
+                onPress={handleUpdate}
+                isLoading={updateProfileMutation.isPending}
+                _pressed={{ bg: "cyan.700" }}
+                isLoadingText="Updating Profile"
+              >
+                <Text color="white" fontWeight="bold">
+                  Update Profile
+                </Text>
+              </Button>
+            </VStack>
+          </FormControl>
+
+          <Oshimen isOpen={isOpen} setIsOpen={setIsOpen} />
+        </ScrollView>
+      </CardGradient>
+      <Button
+        borderColor="red"
+        variant="outline"
+        borderRadius="md"
+        mt="4"
+        onPress={() =>
+          Linking.openURL("https://www.jkt48showroom.com/remove-account")
+        }
+      >
+        <Text color="red" fontWeight="bold">
+          Delete Account
+        </Text>
+      </Button>
+    </>
   );
 };

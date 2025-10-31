@@ -17,7 +17,8 @@ export default {
     CREATE_USER: "/users/",
     DONATOR: "/discord/role?type=donator",
     MOST_WATCH_IDN: "/activity/most-watch-idn/",
-    DOANTOR_SHOWROOM: "/users/donator"
+    DOANTOR_SHOWROOM: "/users/donator",
+    UPDATE_OSHIMEN: "/users/oshimen",
   },
   ROOM: {
     LIST: "/rooms",
@@ -29,8 +30,11 @@ export default {
     MEMBERS: "/member",
     FOLLOW: "/room/follow",
     HISTORY_LIVE: "/recent?sort=date&order=-1&group=jkt48",
+    HISTORY_LIVE_DETAIL: "/recent",
     HISTORY_LIVE_PROFILE:
       "/recent?sort=date&page=1&order=-1&perpage=10&group=jkt48&type=all",
+    HISTORY_LIVE_IDN: "/history-live/idn",
+    HISTORY_LIVE_SHOWROOM: "/history-live/showroom",
   },
   IDN_LIVE: {
     ROOM_LIVES: "/idn_lives",
@@ -71,5 +75,11 @@ export default {
     SEND_MESSAGE: "/send-message",
     DELETE: "/delete-chat",
     ROOM_INFO: "/room-info"
+  },
+  MEMBERS: {
+    PROFILE: "/profile-member",
+    SCHEDULE: "/schedules/member",
+    TOTAL_WATCH: "/users/total-watch-member",
+    DETAIL_MEMBER: "/member"
   }
 };

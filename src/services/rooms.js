@@ -51,7 +51,13 @@ export const getHistoryProfile = (roomId) => {
 
 export const getHistoryLives = (type, search, page) => {
   return apiHistory.get(
-    `${ENDPOINTS.ROOM.HISTORY_LIVE}&type=${type}&filter=${type}&search=${search}&page=${page}&perpage=8`
+    `${ENDPOINTS.ROOM.HISTORY_LIVE}&type=${type}&filter=${type}&search=${search}&page=${page}&perpage=10`
+  );
+};
+
+export const getHistoryLiveDetail = (id) => {
+  return apiHistory.get(
+    `${ENDPOINTS.ROOM.HISTORY_LIVE_DETAIL}/${id}`
   );
 };
 
@@ -60,3 +66,16 @@ export const getRoomListMember = (category, search) => {
     `${ENDPOINTS.ROOM.MEMBERS}?category=${category}&search=${search}`
   );
 };
+
+
+export const getHistoryLiveIDN  = (liveId) => {
+  return apiNest.get(
+    `${ENDPOINTS.ROOM.HISTORY_LIVE_IDN}/${liveId}`
+  )
+}
+
+export const getHistoryLiveShowroom  = (liveId) => {
+  return apiNest.get(
+    `${ENDPOINTS.ROOM.HISTORY_LIVE_SHOWROOM}/${liveId}`
+  )
+}
