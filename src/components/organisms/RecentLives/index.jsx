@@ -1,5 +1,13 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { Box, ChevronRightIcon, Divider, HStack, Image, Text, VStack } from "native-base";
+import {
+  Box,
+  ChevronRightIcon,
+  Divider,
+  HStack,
+  Image,
+  Text,
+  VStack,
+} from "native-base";
 import React, { useCallback, useEffect } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -8,13 +16,13 @@ import {
   GiftOutline,
   IDNLiveIcon,
   TimesIcon,
-  UserIconOutline
+  UserIconOutline,
 } from "../../../assets/icon";
 import { useHistoryLive } from "../../../services/hooks/useHistoryLive";
 import {
   estimateIDNGift,
   estimateSRGift,
-  formatViews
+  formatViews,
 } from "../../../utils/helpers";
 import { useAppStateChange } from "../../../utils/hooks";
 
@@ -46,7 +54,9 @@ const RecentLives = ({ refreshing }) => {
             onPress={() => navigation.replace("Main", { screen: "History" })}
           >
             <HStack alignItems="center" mb="1" space={1.5}>
-              <Text fontSize="sm" color="gray.400">Lihat semua</Text>
+              <Text fontSize="sm" color="gray.400">
+                Lihat semua
+              </Text>
               <ChevronRightIcon />
             </HStack>
           </TouchableOpacity>
@@ -66,7 +76,7 @@ const RecentLives = ({ refreshing }) => {
                     activeOpacity={0.7}
                     onPress={() =>
                       navigation.navigate("HistoryDetail", {
-                        liveId: log.data_id
+                        liveId: log.data_id,
                       })
                     }
                   >
@@ -91,7 +101,7 @@ const RecentLives = ({ refreshing }) => {
                               size="sm"
                               alt="showroom"
                               source={{
-                                uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k"
+                                uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
                               }}
                               width="6"
                               height="6"
@@ -103,11 +113,22 @@ const RecentLives = ({ refreshing }) => {
                         </Box>
                       </HStack>
                       <VStack space={1} mt="2">
-                        <Text fontWeight="medium" fontSize="md">
-                          {member.url === "jkt48"
-                            ? "JKT48"
-                            : member?.nickname}
-                        </Text>
+                        <TouchableOpacity
+                          activeOpacity={0.7}
+                          onPress={() =>
+                            navigation.navigate("RoomDetail", {
+                              room: {
+                                room_id: log.room_id
+                              },
+                            })
+                          }
+                        >
+                          <Text fontWeight="medium" fontSize="md">
+                            {member.url === "jkt48"
+                              ? "JKT48"
+                              : member?.nickname}
+                          </Text>
+                        </TouchableOpacity>
                         <HStack space={1.5} alignItems="center">
                           <TimesIcon color="#A3A3A3" size={16} />
                           <Text color="#A3A3A3" fontSize={12.5}>
@@ -155,6 +176,6 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
     borderRadius: 8,
-    padding: 10
-  }
+    padding: 10,
+  },
 });

@@ -1,9 +1,8 @@
 import { useCallback, useEffect } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { Box, Divider, HStack, ScrollView, Text } from "native-base";
+import { Box, ChevronRightIcon, Divider, HStack, ScrollView, Text } from "native-base";
 import { TouchableOpacity } from "react-native";
 
-import { RightArrow } from "../../../assets/icon";
 import { useIDNLive } from "../../../services/hooks/useIDNLive";
 import { useAppStateChange } from "../../../utils/hooks";
 import IDNLiveCard from "../../atoms/IDNLiveCard";
@@ -33,11 +32,11 @@ const IDNLive = ({ refreshing }) => {
           </Text>
           {rooms.length > 2 && (
             <TouchableOpacity onPress={() => navigate("IDNLives")}>
-              <HStack space={2} alignItems="center">
-                <Text color="white" fontSize="sm">
-                  Semua live
+              <HStack alignItems="center" mb="1" space={1.5}>
+                <Text fontSize="sm" color="gray.400">
+                  Lihat semua
                 </Text>
-                <RightArrow />
+                <ChevronRightIcon />
               </HStack>
             </TouchableOpacity>
           )}

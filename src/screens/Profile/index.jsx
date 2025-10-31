@@ -22,6 +22,7 @@ import { Oshimen, ScheduleOshimen } from "../../components/organisms";
 import { UserProfile } from "../../components/molecules/UserTabs/components";
 import { useTotalWatchMember } from "../../services/hooks/useMembers";
 import { useRefresh } from "../../utils/hooks";
+import BadgeUser from "./components/BadgeUser";
 
 const Profile = () => {
   const { profile, session, user } = useUser();
@@ -153,8 +154,9 @@ const Profile = () => {
           </TouchableOpacity>
         </VStack>
       </HStack>
+      <BadgeUser userProfile={userProfile} />
       <Box flex={1}>
-        <HStack space={2.5} mt="2" mb="4">
+        <HStack space={2.5} mt="1" mb="2.5">
           <Box flex={1} p="2.5" bg="primary" borderRadius={10}>
             {oshimen ? (
               <VStack space={1} justifyContent="center" alignItems="center">
