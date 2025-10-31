@@ -12,6 +12,17 @@ export const useMemberProfile = (category, search) => {
   });
 };
 
+export const useMemberShowroomProfile = (roomId) => {
+  return useQuery({
+    queryKey: ["memberShowroomProfile", roomId],
+    queryFn: async () => {
+      const response = await MEMBERS.getMemberShowroomProfile(roomId);
+      return response?.data?.data;
+    },
+    retry: 0
+  });
+};
+
 export const useUpdateOshimen = () => {
   return useMutation({
     mutationFn: (payload) => MEMBERS.updateOshimen(payload),

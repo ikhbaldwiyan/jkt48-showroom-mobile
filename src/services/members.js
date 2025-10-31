@@ -23,3 +23,9 @@ export const getWatchStreamMember = (userId) => {
     `${ENDPOINTS.MEMBERS.TOTAL_WATCH}/${userId}`
   );
 };
+
+export const getMemberShowroomProfile = (roomId) => {
+  return apiNest.get(
+    `${ENDPOINTS.MEMBERS.DETAIL_MEMBER}/${roomId}`
+  );
+};

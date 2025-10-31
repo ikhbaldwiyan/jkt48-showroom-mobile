@@ -10,13 +10,15 @@ import {
   Horoscope,
   Instagram,
   Star,
-  Twitter
+  Twitter,
 } from "../../../../assets/icon";
 import CardGradient from "../../../atoms/CardGradient";
+import { useMemberShowroomProfile } from "../../../../services/hooks/useMembers";
 
 export const Profile = () => {
   const { profile } = useProfileStore();
   const [description, setDescription] = useState();
+  const { data } = useMemberShowroomProfile(profile?.room_id);
 
   useEffect(() => {
     const parseDesc = parseDescription(profile?.description);
@@ -27,7 +29,12 @@ export const Profile = () => {
     <CardGradient>
       <ScrollView mt="2">
         {profile?.room_url_key !== "officialJKT48" ? (
-          <VStack space={4}>
+          <VStack space={3}>
+            <HStack space={2} flexWrap="wrap">
+              <Dna />
+              <Text fontWeight="semibold">Jikoshoukai</Text>
+              <Text mt="1">{data?.profile?.jiko ?? ""}</Text>
+            </HStack>
             <HStack space={2}>
               <BirthdayIcon />
               <Text fontWeight="semibold">Birthday:</Text>
@@ -42,11 +49,6 @@ export const Profile = () => {
               <Horoscope />
               <Text fontWeight="semibold">Zodiac :</Text>
               <Text>{description?.["Zodiac signs"] ?? "-"}</Text>
-            </HStack>
-            <HStack space={2}>
-              <Dna />
-              <Text fontWeight="semibold">Blood type :</Text>
-              <Text>{description?.["Blood type"] ?? "-"}</Text>
             </HStack>
             <HStack space={2} flexWrap="wrap">
               <Star />

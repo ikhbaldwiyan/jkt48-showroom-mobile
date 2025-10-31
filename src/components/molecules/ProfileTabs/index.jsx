@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Pressable, Text, useColorModeValue } from "native-base";
 import { Dimensions } from "react-native";
 import { SceneMap, TabView } from "react-native-tab-view";
-import { Profile, HistoryLiveProfile } from "./components";
+import { Profile, HistoryLiveProfile, ScheduleMember } from "./components";
 import useThemeStore from "../../../store/themeStore";
 
 const initialLayout = {
@@ -11,7 +11,8 @@ const initialLayout = {
 
 const renderScene = SceneMap({
   profile: Profile,
-  history: HistoryLiveProfile
+  history: HistoryLiveProfile,
+  schedule: ScheduleMember,
 });
 
 const ProfileTabs = () => {
@@ -20,7 +21,8 @@ const ProfileTabs = () => {
 
   const routes = [
     { key: "profile", title: "Profile" },
-    { key: "history", title: "History Live" }
+    { key: "history", title: "History Live" },
+    { key: "schedule", title: "Schedule" },
   ];
 
   const renderTabBar = ({ navigationState }) => (
