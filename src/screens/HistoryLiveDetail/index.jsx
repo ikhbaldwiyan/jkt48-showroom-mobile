@@ -42,7 +42,8 @@ import Layout from "../../components/templates/Layout";
 import Screenshot from "./components/Screenshot";
 import MenuHistoryLive from "./components/Menu";
 import YoutubePlayer from "react-native-youtube-iframe";
-import { useRefresh } from "../../utils/hooks";
+import { useRefresh, useUser } from "../../utils/hooks";
+import useApiConfig from "../../store/useApiConfig";
 
 const HistoryLiveDetail = ({ route }) => {
   const navigation = useNavigation();
@@ -62,6 +63,11 @@ const HistoryLiveDetail = ({ route }) => {
   } = useHistoryDetail(data?.type, liveSlug);
   const replay = history?.youtube;
   const [type, setType] = useState("screenshot");
+
+  const { user } = useUser();
+  const { IS_REPLAY_RELEASED, ADMIN_USERS } = useApiConfig();
+  const adminUserIds = ADMIN_USERS?.split(",").map(Number);
+  const isAdmin = adminUserIds.includes(parseInt(user?.user_id));
 
   useEffect(() => {
     refetch();
@@ -112,7 +118,7 @@ const HistoryLiveDetail = ({ route }) => {
           label="Screenshot"
           customIcon={<Dashboard size="16" color="#24A2B7" />}
         />
-        {replay && (
+        {((replay && IS_REPLAY_RELEASED) || (replay && isAdmin)) && (
           <TabButton
             type="replay"
             currentType={type}
@@ -121,7 +127,9 @@ const HistoryLiveDetail = ({ route }) => {
             customIcon={<PlayIcon size="sm" color="#24A2B7" />}
           />
         )}
-        {isLoadingReplay && <Spinner color="white" />}
+        {((isLoadingReplay && IS_REPLAY_RELEASED) || (isAdmin && isLoadingReplay)) && (
+           <Spinner color="white" />
+        )}
       </HStack>
 
       {type === "screenshot" ? (

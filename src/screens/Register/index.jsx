@@ -20,6 +20,7 @@ import Layout from "../../components/templates/Layout";
 import { Oshimen } from "../../components/organisms";
 import { useUpdateOshimen } from "../../services/hooks/useMembers";
 import ToastAlert from "../../components/atoms/ToastAlert";
+import { TouchableOpacity } from "react-native";
 
 const Register = ({ navigation }) => {
   const { setUser, setSession, setProfile, setUserProfile } = useAuthStore();
@@ -241,42 +242,47 @@ const Register = ({ navigation }) => {
                   </VStack>
                 </HStack>
               ) : (
-                <HStack
-                  rounded="md"
-                  bg="gray.200"
-                  p="2"
-                  space={4}
-                  alignItems="center"
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => setIsOpen(true)}
                 >
-                  <Box
-                    width={75}
-                    height={75}
-                    borderWidth={2}
-                    borderColor="gray.500"
-                    borderRadius="full"
-                    overflow="hidden"
+                  <HStack
+                    rounded="md"
+                    bg="gray.200"
+                    p="2"
+                    space={4}
+                    alignItems="center"
                   >
-                    <Image
-                      alt="Member"
-                      source={require("../../assets/image/default.png")}
+                    <Box
                       width={75}
                       height={75}
-                    />
-                  </Box>
-                  <VStack w="70%" space={2}>
-                    <Button
-                      px="3"
-                      width={120}
-                      size="sm"
-                      bg="blueGray.700"
-                      onPress={() => setIsOpen(true)}
+                      borderWidth={2}
+                      borderColor="gray.500"
+                      borderRadius="full"
+                      overflow="hidden"
                     >
-                      <Text fontSize="xs" fontWeight="semibold">
-                        Pilih Member
-                      </Text>
-                    </Button>
-                  </VStack>
-                </HStack>
+                      <Image
+                        alt="Member"
+                        source={require("../../assets/image/default.png")}
+                        width={75}
+                        height={75}
+                      />
+                    </Box>
+                    <VStack w="70%" space={2}>
+                      <Button
+                        px="3"
+                        width={120}
+                        size="sm"
+                        bg="blueGray.700"
+                        onPress={() => setIsOpen(true)}
+                      >
+                        <Text fontSize="xs" fontWeight="semibold">
+                          Pilih Member
+                        </Text>
+                      </Button>
+                    </VStack>
+                  </HStack>
+                </TouchableOpacity>
               )}
             </Box>
 
@@ -345,7 +351,7 @@ const Register = ({ navigation }) => {
                   ? "Tolong isi semua form yang wajib di input"
                   : error ===
                     "Password must be 6 characters (minimum) to 30 characters (maximum) in length."
-                  ? "Password harus terdiri minimal 6 karakter dan maksimal 30 karakter"
+                  ? "Password harus terdiri angka, minimal 6 karakter dan maksimal 30 karakter"
                   : error !== "This account ID cannot be used." && error}
               </Text>
             )}

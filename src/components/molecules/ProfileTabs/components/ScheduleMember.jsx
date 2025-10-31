@@ -12,11 +12,7 @@ import { TouchableOpacity } from "react-native";
 import TimeAgo from "react-native-timeago";
 import moment from "moment";
 
-import {
-  Calendar,
-  History,
-  TimesFill,
-} from "../../../../assets/icon";
+import { Calendar, History, TimesFill } from "../../../../assets/icon";
 import useProfileStore from "../../../../store/profileStore";
 import { useNavigation } from "@react-navigation/native";
 import CardGradient from "../../../atoms/CardGradient";
@@ -24,15 +20,21 @@ import {
   useMemberShowroomProfile,
   useScheduleOshimen,
 } from "../../../../services/hooks/useMembers";
+import Loading from "../../../atoms/Loading";
 
 export const ScheduleMember = () => {
   const { profile } = useProfileStore();
   const { navigate } = useNavigation();
   const { data } = useMemberShowroomProfile(profile?.room_id);
-  const { data: schedule } = useScheduleOshimen(data?.profile?._id);
+  const { data: schedule, isLoading } = useScheduleOshimen(data?.profile?._id);
 
   return (
     <CardGradient>
+      {isLoading && (
+        <Box justifyContent="center" alignItems="center" mt="10">
+          <Loading size={40} />
+        </Box>
+      )}
       <ScrollView mt="2">
         {schedule?.items?.map((item, idx) => (
           <TouchableOpacity
@@ -68,7 +70,7 @@ export const ScheduleMember = () => {
                   </HStack>
 
                   <HStack space={2} alignItems="center">
-                    <Calendar size={18} />
+                    <Calendar size={16} />
                     <Text>{moment(item?.showDate).format("dddd, D MMMM")}</Text>
                   </HStack>
                   <HStack space={2} alignItems="center">

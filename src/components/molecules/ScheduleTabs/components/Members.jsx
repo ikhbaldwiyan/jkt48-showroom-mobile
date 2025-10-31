@@ -35,9 +35,10 @@ export const Members = ({ members }) => {
                   .slice(rowIndex * 4, rowIndex * 4 + 4)
                   .map((member, idx) => (
                     <TouchableOpacity
+                      key={idx}
                       activeOpacity={0.7}
                       onPress={() =>
-                        navigation.navigate("RoomDetail", {
+                        navigation.replace("RoomDetail", {
                           room: {
                             room_id: member.room_id,
                           },
@@ -45,7 +46,6 @@ export const Members = ({ members }) => {
                       }
                     >
                       <VStack
-                        key={idx}
                         py="2"
                         alignItems="center"
                         justifyItems="center"

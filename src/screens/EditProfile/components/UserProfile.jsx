@@ -26,6 +26,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Oshimen } from "../../../components/organisms";
 import { Linking } from "react-native";
+import ToastAlert from "../../../components/atoms/ToastAlert";
 
 export const UserProfile = () => {
   const toast = useToast();
@@ -82,9 +83,12 @@ export const UserProfile = () => {
 
           toast.show({
             render: () => (
-              <Box bg="green.600" px="2" py="1" rounded="sm" mb={5}>
-                <Text color="white">Update profile success</Text>
-              </Box>
+              <ToastAlert
+                variant="left-accent"
+                status="success"
+                title="Success"
+                description="Berhasil update profil"
+              />
             ),
             placement: "top-right",
           });
