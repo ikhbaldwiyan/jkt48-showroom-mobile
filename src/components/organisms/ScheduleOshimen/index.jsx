@@ -15,8 +15,8 @@ import { useProfile } from "../../../services/hooks/useProfile";
 import moment from "moment";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Loading from "../../atoms/Loading";
 import LinearGradient from "react-native-linear-gradient";
+import SkeletonScheduleOshimen from "../../atoms/Skeleteon/SkeletonScheduleOshimen";
 
 const ScheduleOshimen = ({ isHome }) => {
   const { user } = useUser();
@@ -44,8 +44,12 @@ const ScheduleOshimen = ({ isHome }) => {
             </Text>
           )}
           {isLoading && (
-            <Box justifyContent="center" py="28" alignItems="center">
-              <Loading size={30} />
+            <Box justifyContent="center" py="2">
+              <HStack space={3}>
+                <SkeletonScheduleOshimen />
+                <SkeletonScheduleOshimen />
+                <SkeletonScheduleOshimen />
+              </HStack>
             </Box>
           )}
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
