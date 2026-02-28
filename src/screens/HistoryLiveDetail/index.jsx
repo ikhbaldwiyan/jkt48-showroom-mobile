@@ -53,6 +53,7 @@ const HistoryLiveDetail = ({ route }) => {
   const isShowroom = data?.type === "showroom";
   const images = data?.live_info?.screenshot?.list;
   const folder = data?.live_info?.screenshot?.folder;
+  const format = data?.live_info?.screenshot?.format;
   const liveSlug = isShowroom ? data?.live_id : data?.idn?.slug;
 
   const {
@@ -139,6 +140,7 @@ const HistoryLiveDetail = ({ route }) => {
           folder={folder}
           isShowroom={isShowroom}
           room_name={data?.room_info?.fullname}
+          format={format}
         />
       ) : (
         <Box

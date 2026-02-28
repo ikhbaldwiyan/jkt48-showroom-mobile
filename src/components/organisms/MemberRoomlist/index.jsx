@@ -38,6 +38,7 @@ const MemberRoomList = ({ refreshing, searchQuery, memberCategory }) => {
       >
         <Box>
           <Image
+            key={room.image_url}
             borderRadius={8}
             source={{
               uri:

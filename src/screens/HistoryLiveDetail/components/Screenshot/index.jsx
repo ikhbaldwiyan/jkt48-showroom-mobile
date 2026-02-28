@@ -11,6 +11,7 @@ const Screenshot = ({
   autoPlayMs = 3000,
   thumbnail,
   room_name,
+  format,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
@@ -55,7 +56,6 @@ const Screenshot = ({
     );
   }
 
-
   return (
     <Box mt="3" height={landscape ? 200 : 412}>
       <ScrollView
@@ -73,7 +73,7 @@ const Screenshot = ({
             height={landscape ? 200 : 412}
             rounded="lg"
             source={{
-              uri: `https://res.cloudinary.com/haymzm4wp/image/upload/${folder}/${img}.jpg`,
+              uri: `https://img.crstlnz.my.id/${folder}/${img}.${format}`,
             }}
             alt={`screenshot-${idx}`}
           />
