@@ -13,6 +13,13 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+const defaultConfig = getDefaultConfig(__dirname);
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+const config = {
+  resolver: {
+    sourceExts: [...defaultConfig.resolver.sourceExts, 'mjs'],
+    unstable_enablePackageExports: false, // Disable to prefer CommonJS over ESM
+  },
+};
+
+module.exports = mergeConfig(defaultConfig, config);

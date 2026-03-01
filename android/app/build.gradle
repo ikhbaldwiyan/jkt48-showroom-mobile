@@ -127,3 +127,18 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+// Ensure codegen tasks run before CMake configuration
+afterEvaluate {
+    tasks.matching { it.name.startsWith("configureCMake") }.configureEach { task ->
+        task.dependsOn(
+            ":react-native-async-storage_async-storage:generateCodegenArtifactsFromSchema",
+            ":react-native-pager-view:generateCodegenArtifactsFromSchema",
+            ":react-native-vector-icons:generateCodegenArtifactsFromSchema",
+            ":react-native-webview:generateCodegenArtifactsFromSchema",
+            ":react-native-safe-area-context:generateCodegenArtifactsFromSchema",
+            ":react-native-screens:generateCodegenArtifactsFromSchema",
+            ":react-native-svg:generateCodegenArtifactsFromSchema"
+        )
+    }
+}
