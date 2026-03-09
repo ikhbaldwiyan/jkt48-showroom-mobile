@@ -93,7 +93,7 @@ const Navigation = () => {
           headerShown: false,
           tabBarStyle: {
             backgroundColor: theme.colors.black,
-            height: isLandscape ? 60 : 70
+            height: isLandscape ? 60 : 90
           },
           tabBarActiveTintColor: theme.colors.primary,
           tabBarInactiveTintColor: theme.colors.white,

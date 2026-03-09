@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { NativeBaseProvider } from "native-base";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { theme } from "./config";
 import Navigation from "./components/templates/Navigation";
 
@@ -43,32 +44,34 @@ const App = () => {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <NavigationContainer
-        ref={navigationRef}
-        onReady={() => {
-          routeNameRef.current = navigationRef.current.getCurrentRoute()?.name;
-        }}
-        onStateChange={async () => {
-          const previousRouteName = routeNameRef.current;
-          const currentRouteName =
-            navigationRef.current.getCurrentRoute()?.name;
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer
+          ref={navigationRef}
+          onReady={() => {
+            routeNameRef.current = navigationRef.current.getCurrentRoute()?.name;
+          }}
+          onStateChange={async () => {
+            const previousRouteName = routeNameRef.current;
+            const currentRouteName =
+              navigationRef.current.getCurrentRoute()?.name;
 
-          if (previousRouteName !== currentRouteName) {
-            await analytics().logScreenView({
-              screen_name: currentRouteName,
-              screen_class: currentRouteName
-            });
-          }
-          routeNameRef.current = currentRouteName;
-        }}
-      >
-        <NativeBaseProvider theme={theme}>
-          <InternetStatusInfo />
-          <Navigation />
-        </NativeBaseProvider>
-      </NavigationContainer>
-    </QueryClientProvider>
+            if (previousRouteName !== currentRouteName) {
+              await analytics().logScreenView({
+                screen_name: currentRouteName,
+                screen_class: currentRouteName
+              });
+            }
+            routeNameRef.current = currentRouteName;
+          }}
+        >
+          <NativeBaseProvider theme={theme}>
+            <InternetStatusInfo />
+            <Navigation />
+          </NativeBaseProvider>
+        </NavigationContainer>
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 };
 

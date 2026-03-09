@@ -13,16 +13,16 @@ import {
   ShowroomLive,
   RecentLives,
   ScheduleHome,
-  ScheduleOshimen
+  ScheduleOshimen,
 } from "../../components/organisms";
 import Layout from "../../components/templates/Layout";
 import RatingApp from "../../components/templates/RatingApp";
 import UpdateApp from "../../components/templates/UpdateApp";
-import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
 import SupportApp from "../../components/templates/SupportApp";
 import MaintenanceInfo from "../../components/templates/MaintenanceInfo";
 import MenuHome from "./components/MenuHome";
 import MultiAccess from "../../components/templates/MultiAccess";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
@@ -55,40 +55,47 @@ const Home = ({ navigation }) => {
   }, [session]);
 
   return (
-    <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
-      <Box flex="1" mb="6">
-        <MenuHome />
-        <ShowroomLive refreshing={refreshing} />
-        <IDNLIve refreshing={refreshing} />
-        <RecentLives refreshing={refreshing} />
-        <ScheduleOshimen isHome />
-        <ScheduleHome isToday refreshing={refreshing} navigation={navigation} />
-        <ScheduleHome refreshing={refreshing} navigation={navigation} />
-      </Box>
-      <UpdateApp />
-      <ChangeLog
-        modal={showChangeLog}
-        toggleModal={() => setCloseModal()}
-        hideButton={true}
-      />
-      <RatingApp
-        isVisible={ratingApp}
-        onOpen={() => setRatingApp(true)}
-        onClose={() => setRatingApp(false)}
-      />
-      <SupportApp
-        isVisible={supportApp}
-        onOpen={() => setSupportApp(true)}
-        onClose={() => setSupportApp(false)}
-      />
-      <MaintenanceInfo />
-      <MultiAccess
-        isVisible={showMultiAccess}
-        onClose={() => {
-          setCloseMultiModal();
-        }}
-      />
-    </Layout>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: "#21252B",
+      }}
+      edges={["top", "left", "right"]}
+    >
+      <Layout isHeader refreshing={refreshing} onRefresh={onRefresh}>
+        <Box flex="1" mb="6">
+          <MenuHome />
+          <ShowroomLive refreshing={refreshing} />
+          <IDNLIve refreshing={refreshing} />
+          <RecentLives refreshing={refreshing} />
+          <ScheduleOshimen isHome />
+          <ScheduleHome
+            isToday
+            refreshing={refreshing}
+            navigation={navigation}
+          />
+          <ScheduleHome refreshing={refreshing} navigation={navigation} />
+        </Box>
+        <UpdateApp />
+        <RatingApp
+          isVisible={ratingApp}
+          onOpen={() => setRatingApp(true)}
+          onClose={() => setRatingApp(false)}
+        />
+        <SupportApp
+          isVisible={supportApp}
+          onOpen={() => setSupportApp(true)}
+          onClose={() => setSupportApp(false)}
+        />
+        <MaintenanceInfo />
+        <MultiAccess
+          isVisible={showMultiAccess}
+          onClose={() => {
+            setCloseMultiModal();
+          }}
+        />
+      </Layout>
+    </SafeAreaView>
   );
 };
 
