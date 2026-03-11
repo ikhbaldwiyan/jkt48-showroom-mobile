@@ -1,26 +1,24 @@
+import analytics from "@react-native-firebase/analytics";
 import {
   Box,
   Button,
-  FormControl,
   HStack,
   Image,
-  Input,
-  Spinner,
   Text,
   useToast,
-  VStack,
+  VStack
 } from "native-base";
-import React, { useLayoutEffect, useState } from "react";
-import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
-import { activityLog } from "../../utils/activityLog";
-import analytics from "@react-native-firebase/analytics";
-import useAuthStore from "../../store/authStore";
-import { AUTH } from "../../services";
-import Layout from "../../components/templates/Layout";
-import { Oshimen } from "../../components/organisms";
-import { useUpdateOshimen } from "../../services/hooks/useMembers";
-import ToastAlert from "../../components/atoms/ToastAlert";
+import { useLayoutEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
+import { EyeIcon, EyeSlashIcon } from "../../assets/icon";
+import FormInput from "../../components/atoms/FormInput";
+import ToastAlert from "../../components/atoms/ToastAlert";
+import { Oshimen } from "../../components/organisms";
+import Layout from "../../components/templates/Layout";
+import { AUTH } from "../../services";
+import { useUpdateOshimen } from "../../services/hooks/useMembers";
+import useAuthStore from "../../store/authStore";
+import { activityLog } from "../../utils/activityLog";
 
 const Register = ({ navigation }) => {
   const { setUser, setSession, setProfile, setUserProfile } = useAuthStore();
@@ -159,49 +157,74 @@ const Register = ({ navigation }) => {
         >
           Silakan isi semua form dibawah untuk daftar
         </Text>
-        <Box py="4" mx="6">
-          <FormControl>
-            <Text mb={3}>
-              ID Akun <Text color="red">*</Text>
-            </Text>
-            <Input
-              bgColor="white"
-              variant="filled"
-              w="100%"
-              fontSize="md"
-              name="id"
-              placeholder="Ex: sorum48"
-              value={formData.account_id}
-              onChangeText={(value) => handleChange("account_id", value)}
-              isInvalid={error === "This account ID cannot be used."}
-            />
-            {error === "This account ID cannot be used." && (
-              <Text color="red" mt="2">
-                ID Akun sudah dipakai user lain, silakan ganti ID dengan
-                username lain
-              </Text>
-            )}
+        <Box py="4" mx="6" w="full" px="6">
+          <FormInput
+            label="ID Akun"
+            required
+            placeholder="Ex: sorum48"
+            value={formData.account_id}
+            onChange={(value) => handleChange("account_id", value)}
+            isInvalid={error === "This account ID cannot be used."}
+            errorText="ID Akun sudah dipakai user lain, silakan ganti ID dengan username lain"
+          />
 
-            <Text py={3}>
-              Nama <Text color="red">*</Text>
-            </Text>
-            <Input
-              bgColor="white"
-              variant="filled"
-              w="100%"
-              fontSize="md"
-              name="id"
-              placeholder="Ex : Indah"
-              value={formData.name}
-              onChangeText={(value) => handleChange("name", value)}
-              isInvalid={formData?.error_message}
-            />
+          <FormInput
+            label="Nama"
+            required
+            placeholder="Ex : Indah"
+            value={formData.name}
+            onChange={(value) => handleChange("name", value)}
+          />
 
-            <Box>
-              <Text py={3}>
-                Oshimen <Text color="red">*</Text>
-              </Text>
-              {oshimen ? (
+          <Box mb="4">
+            <Text color="white" fontWeight="medium" mb="2">
+              Oshimen <Text color="red">*</Text>
+            </Text>
+            {oshimen ? (
+              <HStack
+                rounded="md"
+                bg="gray.200"
+                p="2"
+                space={4}
+                alignItems="center"
+              >
+                <Box
+                  width={75}
+                  height={75}
+                  borderWidth={2}
+                  borderColor="gray.600"
+                  borderRadius="full"
+                  overflow="hidden"
+                >
+                  <Image
+                    alt="Member"
+                    source={{ uri: oshimen?.image }}
+                    width="100%"
+                    height="100%"
+                  />
+                </Box>
+                <VStack w="70%" space={2}>
+                  <Text color="black" fontWeight="semibold" flexWrap="nowrap">
+                    {oshimen?.name}
+                  </Text>
+                  <Button
+                    px="3"
+                    width={120}
+                    size="sm"
+                    bg="blueGray.700"
+                    onPress={() => setIsOpen(true)}
+                  >
+                    <Text fontSize="xs" fontWeight="semibold">
+                      Ubah Oshimen
+                    </Text>
+                  </Button>
+                </VStack>
+              </HStack>
+            ) : (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => setIsOpen(true)}
+              >
                 <HStack
                   rounded="md"
                   bg="gray.200"
@@ -213,21 +236,18 @@ const Register = ({ navigation }) => {
                     width={75}
                     height={75}
                     borderWidth={2}
-                    borderColor="gray.600"
+                    borderColor="gray.500"
                     borderRadius="full"
                     overflow="hidden"
                   >
                     <Image
                       alt="Member"
-                      source={{ uri: oshimen?.image }}
-                      width="100%"
-                      height="100%"
+                      source={require("../../assets/image/default.png")}
+                      width={75}
+                      height={75}
                     />
                   </Box>
                   <VStack w="70%" space={2}>
-                    <Text color="black" fontWeight="semibold" flexWrap="nowrap">
-                      {oshimen?.name}
-                    </Text>
                     <Button
                       px="3"
                       width={120}
@@ -236,154 +256,81 @@ const Register = ({ navigation }) => {
                       onPress={() => setIsOpen(true)}
                     >
                       <Text fontSize="xs" fontWeight="semibold">
-                        Ubah Oshimen
+                        Pilih Member
                       </Text>
                     </Button>
                   </VStack>
                 </HStack>
-              ) : (
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() => setIsOpen(true)}
-                >
-                  <HStack
-                    rounded="md"
-                    bg="gray.200"
-                    p="2"
-                    space={4}
-                    alignItems="center"
-                  >
-                    <Box
-                      width={75}
-                      height={75}
-                      borderWidth={2}
-                      borderColor="gray.500"
-                      borderRadius="full"
-                      overflow="hidden"
-                    >
-                      <Image
-                        alt="Member"
-                        source={require("../../assets/image/default.png")}
-                        width={75}
-                        height={75}
-                      />
-                    </Box>
-                    <VStack w="70%" space={2}>
-                      <Button
-                        px="3"
-                        width={120}
-                        size="sm"
-                        bg="blueGray.700"
-                        onPress={() => setIsOpen(true)}
-                      >
-                        <Text fontSize="xs" fontWeight="semibold">
-                          Pilih Member
-                        </Text>
-                      </Button>
-                    </VStack>
-                  </HStack>
-                </TouchableOpacity>
-              )}
-            </Box>
-
-            <Box position="relative">
-              <Text mt="4" mb="3">
-                Password <Text color="red">*</Text>
-              </Text>
-              <Input
-                bgColor="white"
-                type={showPassword ? "text" : "password"}
-                variant="filled"
-                w="100%"
-                fontSize="md"
-                name="password"
-                placeholder="Ex: abcabc123"
-                value={formData.password}
-                onChangeText={(value) => handleChange("password", value)}
-                InputRightElement={() =>
-                  loading ? <Spinner color="white" /> : "Login"
-                }
-                isInvalid={error === "Incorrect authentication password"}
-              />
-              <Box position="absolute" right="1" top="53%">
-                <Button onPress={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
-                </Button>
-              </Box>
-            </Box>
-            <Box position="relative">
-              <Text mt="4" mb="3">
-                Konfirmasi Password <Text color="red">*</Text>
-              </Text>
-              <Input
-                bgColor="white"
-                type={showPasswordConfirmation ? "text" : "password"}
-                variant="filled"
-                w="100%"
-                fontSize="md"
-                name="password_confirm"
-                placeholder="Ex: abcabc123"
-                value={formData.password_confirm}
-                onChangeText={(value) =>
-                  handleChange("password_confirm", value)
-                }
-                InputRightElement={() =>
-                  loading ? <Spinner color="white" /> : "Login"
-                }
-                isInvalid={error === "Incorrect authentication password"}
-              />
-              <Box position="absolute" right="1" top="53%">
-                <Button
-                  onPress={() =>
-                    setShowPasswordConfirmation(!showPasswordConfirmation)
-                  }
-                >
-                  {showPasswordConfirmation ? <EyeSlashIcon /> : <EyeIcon />}
-                </Button>
-              </Box>
-            </Box>
-
-            {error && (
-              <Text color="red" mt="3">
-                {error === "Incorrect authentication password"
-                  ? "Password dan Konfirmasi Password tidak sama, tolong cek ulang"
-                  : error === "Please fill in all required fields."
-                  ? "Tolong isi semua form yang wajib di input"
-                  : error ===
-                    "Password must be 6 characters (minimum) to 30 characters (maximum) in length."
-                  ? "Password harus terdiri angka, minimal 6 karakter dan maksimal 30 karakter"
-                  : error !== "This account ID cannot be used." && error}
-              </Text>
+              </TouchableOpacity>
             )}
+          </Box>
 
-            <Text onPress={handleLoginRedirect} color="white" mt="3">
-              Sudah punya akun?{" "}
-              <Text fontWeight="semibold" color="primary">
-                Login Disini
-              </Text>
+          <FormInput
+            label="Password"
+            required
+            placeholder="Ex: abcabc123"
+            value={formData.password}
+            onChange={(value) => handleChange("password", value)}
+            type={showPassword ? "text" : "password"}
+            InputRightElement={
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+              </TouchableOpacity>
+            }
+          />
+
+          <FormInput
+            required
+            label="Konfirmasi Password"
+            placeholder="Ex: abcabc123"
+            value={formData.password_confirm}
+            onChange={(value) => handleChange("password_confirm", value)}
+            type={showPasswordConfirmation ? "text" : "password"}
+            InputRightElement={
+              <TouchableOpacity
+                onPress={() =>
+                  setShowPasswordConfirmation(!showPasswordConfirmation)
+                }
+              >
+                {showPasswordConfirmation ? <EyeSlashIcon /> : <EyeIcon />}
+              </TouchableOpacity>
+            }
+          />
+
+          {error && (
+            <Text color="red" mt="1" mb="3">
+              {error === "Incorrect authentication password"
+                ? "Password dan Konfirmasi Password tidak sama, tolong cek ulang"
+                : error === "Please fill in all required fields."
+                ? "Tolong isi semua form yang wajib di input"
+                : error ===
+                  "Password must be 6 characters (minimum) to 30 characters (maximum) in length."
+                ? "Password harus terdiri angka, minimal 6 karakter dan maksimal 30 karakter"
+                : error !== "This account ID cannot be used." && error}
             </Text>
+          )}
 
-            <Button
-              mt="4"
-              my="3"
-              background="primary"
-              borderRadius="lg"
-              onPress={handleRegister}
-              isLoading={loading}
-              isLoadingText="Creating Account.."
-            >
-              <HStack alignItems="center" space="1">
-                <Text
-                  onPress={handleRegister}
-                  fontSize="16"
-                  color="white"
-                  fontWeight="medium"
-                >
-                  Register
-                </Text>
-              </HStack>
-            </Button>
-          </FormControl>
+          <Text onPress={handleLoginRedirect} color="white" mt="1">
+            Sudah punya akun?{" "}
+            <Text fontWeight="semibold" color="primary">
+              Login Disini
+            </Text>
+          </Text>
+
+          <Button
+            mt="6"
+            mb="3"
+            background="primary"
+            borderRadius="lg"
+            onPress={handleRegister}
+            isLoading={loading}
+            isLoadingText="Creating Account.."
+          >
+            <Text fontSize="16" color="white" fontWeight="medium">
+              Register
+            </Text>
+          </Button>
+
           <Oshimen
             isRegister={true}
             isOpen={isOpen}

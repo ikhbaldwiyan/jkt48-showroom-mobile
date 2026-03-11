@@ -1,25 +1,23 @@
+import analytics from "@react-native-firebase/analytics";
 import {
   Box,
-  Button,
   Center,
-  FormControl,
   HStack,
-  Image,
-  Input,
   ScrollView,
   Spinner,
   Text,
   useToast
 } from "native-base";
-import React, { useState } from "react";
+import { useState } from "react";
+import { TouchableOpacity } from "react-native";
 import { EyeIcon, EyeSlashIcon, LoginIcon } from "../../assets/icon";
+import FormInput from "../../components/atoms/FormInput";
 import Logo from "../../components/atoms/Logo";
+import ToastAlert from "../../components/atoms/ToastAlert";
 import { AUTH } from "../../services";
 import { loginApi } from "../../services/auth";
-import { activityLog } from "../../utils/activityLog";
-import analytics from "@react-native-firebase/analytics";
 import useAuthStore from "../../store/authStore";
-import ToastAlert from "../../components/atoms/ToastAlert";
+import { activityLog } from "../../utils/activityLog";
 
 const Login = ({ navigation }) => {
   const { setUser, setSession, setProfile, setUserProfile } = useAuthStore();
@@ -171,118 +169,91 @@ const Login = ({ navigation }) => {
           py="3"
           fontWeight="light"
           color="white"
-          maxWidth="300px"
+          maxWidth="300%"
           textAlign="center"
         >
           Silakan login untuk menggunakan fitur komen dan podium.
         </Text>
         <Box py="4" mx="6" w="100%" maxW="400px">
-          <FormControl>
-            <Text mb={3}>
-              ID Akun <Text color="red">*</Text>
+          <FormInput
+            label="ID Akun"
+            required
+            placeholder="Ex: inzoid48"
+            value={formData.account_id}
+            onChange={(value) => handleChange("account_id", value)}
+          />
+
+          <FormInput
+            label="Password"
+            required
+            placeholder="Ex: abcabc123"
+            value={formData.password}
+            onChange={(value) => handleChange("password", value)}
+            type={showPassword ? "text" : "password"}
+            InputRightElement={
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+              </TouchableOpacity>
+            }
+          />
+
+          {formData?.error_message && (
+            <Text color="red.500" mt="3">
+              {formData?.error_message}
             </Text>
-            <Input
-              bgColor="white"
-              variant="filled"
-              w="100%"
-              fontSize="md"
-              name="id"
-              placeholder="Ex: inzoid48"
-              value={formData.account_id}
-              onChangeText={(value) => handleChange("account_id", value)}
-              isInvalid={formData?.error_message}
-            />
-            <Box position="relative">
-              <Text mt="4" mb="3">
-                Password <Text color="red">*</Text>
+          )}
+
+          {formData?.captcha_url && (
+            <Box py="3">
+              <Text mb="3" color="white">
+                Tolong verifikasi captcha di bawah ini:
               </Text>
-              <Input
-                bgColor="white"
-                type={showPassword ? "text" : "password"}
-                variant="filled"
-                w="100%"
-                fontSize="md"
-                name="password"
-                placeholder="Ex: abcabc123"
-                value={formData.password}
-                onChangeText={(value) => handleChange("password", value)}
-                InputRightElement={() =>
-                  loading ? <Spinner color="white" /> : "Login"
-                }
-                isInvalid={formData?.error_message}
+              <FormInput
+                placeholder="Ketik kode captcha diatas"
+                value={formData.captcha_word}
+                onChange={(value) => handleChange("captcha_word", value)}
               />
-              <Box position="absolute" right="1" top="53%">
-                <Button onPress={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
-                </Button>
-              </Box>
             </Box>
+          )}
 
-            {formData?.error_message && (
-              <Text color="red" mt="3">
-                {formData?.error_message}
-              </Text>
-            )}
-
-            {formData?.captcha_url && (
-              <Box py="3">
-                <Text mb="3">Tolong verifikasi captcha di bawah ini:</Text>
-                <Image
-                  alt="captcha"
-                  source={{ uri: formData.captcha_url }}
-                  size="md"
-                  width="100%"
-                  borderRadius="xl"
-                  resizeMode="contain"
-                />
-                <Input
-                  mt="3"
-                  bgColor="white"
-                  type="text"
-                  variant="filled"
-                  w="100%"
-                  fontSize="md"
-                  name="id"
-                  placeholder="Ketik kode captcha diatas"
-                  value={formData.captcha_word}
-                  onChangeText={(value) => handleChange("captcha_word", value)}
-                />
-              </Box>
-            )}
-            <Text onPress={handleRegister} color="white" my="1">
-              Belum Punya Akun?{" "}
-              <Text fontWeight="semibold" color="primary">
-                Daftar Disini
-              </Text>
+          <Text onPress={handleRegister} color="white" my="1">
+            Belum Punya Akun?{" "}
+            <Text fontWeight="semibold" color="primary">
+              Daftar Disini
             </Text>
+          </Text>
 
-            <Button
-              my="3"
-              background="primary"
-              onPress={handleLogin}
-              isLoading={loading}
-              isLoadingText="Logging in"
-              borderRadius="lg"
-            >
-              <HStack alignItems="center" space="1">
-                <LoginIcon size={24} />
-                <Text fontSize="16" color="white" fontWeight="medium">
-                  Login
-                </Text>
-              </HStack>
-            </Button>
-            <Center>
-              <Text
-                fontWeight="medium"
-                mt="6"
-                onPress={() => navigation.replace("Main")}
-                color="gray.400"
-                my="2"
-              >
-                Skip Login
+          <TouchableOpacity
+            style={{
+              marginVertical: 12,
+              backgroundColor: "#24A2B7",
+              borderRadius: 12,
+              paddingVertical: 12,
+              alignItems: "center",
+              opacity: loading ? 0.7 : 1,
+            }}
+            onPress={handleLogin}
+            disabled={loading}
+            activeOpacity={0.8}
+          >
+            <HStack alignItems="center" space="1">
+              {loading ? <Spinner color="white" /> : <LoginIcon size={24} />}
+              <Text fontSize="16" color="white" fontWeight="medium">
+                {loading ? "Loading..." : "Login"}
               </Text>
-            </Center>
-          </FormControl>
+            </HStack>
+          </TouchableOpacity>
+          <Center>
+            <Text
+              fontWeight="medium"
+              mt="6"
+              onPress={() => navigation.replace("Main")}
+              color="gray.400"
+              my="2"
+            >
+              Skip Login
+            </Text>
+          </Center>
         </Box>
       </ScrollView>
     </Box>

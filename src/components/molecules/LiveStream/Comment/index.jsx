@@ -8,13 +8,12 @@ import {
   Text,
   View,
   useToast,
-  Input,
   Button,
   Spinner,
   ArrowUpIcon,
   ArrowDownIcon
 } from "native-base";
-import { RefreshControl } from "react-native";
+import { RefreshControl, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import { STREAM } from "../../../../services";
 import { SendMessageIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
@@ -205,78 +204,84 @@ export const Comment = () => {
 
   return (
     <CardGradient>
-      <FlashList
-        data={comments?.length > 0 ? comments?.slice(0, 45) : []}
-        keyExtractor={(item, index) => index.toString()}
-        estimatedItemSize={50}
-        renderItem={({ item }) =>
-          item.comment.length > 2 && (
-            <Box>
-              <HStack alignItems="center" p="2">
-                <Image
-                  mr="3"
-                  alt={item.name}
-                  style={{ width: 40, height: 40 }}
-                  source={{
-                    uri:
-                      item?.avatar_url ??
-                      `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`
-                  }}
-                />
-                <View flexShrink="1">
-                  <Text
-                    fontSize="md"
-                    fontWeight="semibold"
-                    color={
-                      item.user_id == user?.user_id
-                        ? mode === "dark"
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={350}
+      >
+        <FlashList
+          data={comments?.length > 0 ? comments?.slice(0, 45) : []}
+          keyExtractor={(item, index) => index.toString()}
+          estimatedItemSize={50}
+          renderItem={({ item }) =>
+            item.comment.length > 2 && (
+              <Box>
+                <HStack alignItems="center" p="2">
+                  <Image
+                    mr="3"
+                    alt={item.name}
+                    style={{ width: 40, height: 40 }}
+                    source={{
+                      uri:
+                        item?.avatar_url ??
+                        `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`
+                    }}
+                  />
+                  <View flexShrink="1">
+                    <Text
+                      fontSize="md"
+                      fontWeight="semibold"
+                      color={
+                        item.user_id == user?.user_id
+                          ? mode === "dark"
+                            ? "white"
+                            : "secondary"
+                          : isLightMode
                           ? "white"
-                          : "secondary"
-                        : isLightMode
-                        ? "white"
-                        : "primary"
-                    }
-                  >
-                    {item.name}
-                  </Text>
-                  <Text mt="1">{item.comment}</Text>
-                </View>
-              </HStack>
-              <Divider mb="1" />
-            </Box>
-          )
-        }
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
+                          : "primary"
+                      }
+                    >
+                      {item.name}
+                    </Text>
+                    <Text mt="1">{item.comment}</Text>
+                  </View>
+                </HStack>
+                <Divider mb="1" />
+              </Box>
+            )
+          }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
 
-      {session && !hideComment && isCommentBoxVisible && (
-        <Input
-          w="full"
-          variant="filled"
-          fontSize="md"
-          name="comment"
-          bgColor={isLightMode ? "white" : "secondary"}
-          color={isLightMode ? "black" : "white"}
-          borderColor={isLightMode ? "black" : "white"}
-          borderRadius="20px"
-          placeholder="Ketik komentar..."
-          _focus={{
-            borderColor: "primary",
-            backgroundColor: "secondary"
-          }}
-          _input={{
-            textAlign: "left",
-            color: isLightMode ? "black" : "white",
-            selectionColor: "primary",
-            cursorColor: isLightMode ? "black" : "white"
-          }}
-          onChangeText={handleComment}
-          value={textComment}
-          InputRightElement={
-            buttonLoading ? (
-              <Box mr="4">
+        {session && !hideComment && isCommentBoxVisible && (
+          <HStack
+            w="full"
+            bg={isLightMode ? "white" : "secondary"}
+            borderColor={isLightMode ? "black" : "white"}
+            borderWidth="1"
+            borderRadius="20px"
+            alignItems="center"
+            px="4"
+            py="1"
+          >
+            <TextInput
+              placeholder="Ketik komentar..."
+              placeholderTextColor={isLightMode ? "gray" : "#A3A3A3"}
+              style={{
+                flex: 1,
+                fontSize: 16,
+                color: isLightMode ? "black" : "white",
+                textAlign: "left",
+                paddingVertical: 8,
+              }}
+              onChangeText={handleComment}
+              value={textComment}
+              selectionColor={"gray"}
+            />
+            {buttonLoading ? (
+              <Box ml="2">
                 <Spinner color={isLightMode ? "#21252B" : "white"} />
               </Box>
             ) : (
@@ -285,79 +290,82 @@ export const Comment = () => {
                 variant="ghost"
                 onPress={sendComment}
                 disabled={textComment.length === 0 || buttonLoading}
+                p="1"
               >
                 <SendMessageIcon color={isLightMode ? "#21252B" : "white"} />
               </Button>
-            )
-          }
-        />
-      )}
+            )}
+          </HStack>
+        )}
 
-      {/* Toggle Button */}
-      {session && !hideComment && (
-        <Button
-          position="absolute"
-          bottom={isCommentBoxVisible ? "16" : "2"}
-          right="2"
-          size="sm"
-          mb="2"
-          p="2.5"
-          borderRadius="full"
-          background={isCommentBoxVisible ? "gray.500" : "primary"}
-          onPress={toggleCommentBox}
-          _pressed={{
-            opacity: 0.7
-          }}
-        >
-          {isCommentBoxVisible ? (
-            <ArrowDownIcon color="white" />
-          ) : (
-            <ArrowUpIcon color="white" />
-          )}
-        </Button>
-      )}
-
-      {!session && isCommentBoxVisible && (
-        <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
-          <Input
-            variant="filled"
-            w="85%"
-            fontSize="md"
-            name="comment"
-            bgColor={isLightMode ? "white" : "#282C34"}
-            color={isLightMode ? "black" : "white"}
-            borderColor={isLightMode ? "black" : "primary"}
-            borderRightWidth={0}
-            borderRadius="md"
-            borderTopRightRadius="0"
-            borderBottomRightRadius="0"
-            placeholder="Silakan login untuk kirim komentar"
-            _input={{
-              textAlign: "left"
-            }}
-            _disabled={{
-              opacity: 1
-            }}
-            onChangeText={handleComment}
-            value={textComment}
-            isDisabled
-          />
+        {/* Toggle Button */}
+        {session && !hideComment && (
           <Button
-            w="20%"
-            borderColor="primary"
-            borderTopLeftRadius="0"
-            borderLeftWidth={0}
-            borderBottomLeftRadius="0"
-            borderWidth={isLightMode ? "0" : "1"}
-            background={isLightMode ? "secondary" : "primary"}
-            onPress={() => {
-              navigation.replace("Login");
+            position="absolute"
+            bottom={isCommentBoxVisible ? "16" : "2"}
+            right="2"
+            size="sm"
+            mb="2"
+            p="2.5"
+            borderRadius="full"
+            background={isCommentBoxVisible ? "gray.500" : "primary"}
+            onPress={toggleCommentBox}
+            _pressed={{
+              opacity: 0.7
             }}
           >
-            <Text fontSize="xs">Login</Text>
+            {isCommentBoxVisible ? (
+              <ArrowDownIcon color="white" />
+            ) : (
+              <ArrowUpIcon color="white" />
+            )}
           </Button>
-        </HStack>
-      )}
+        )}
+
+        {!session && isCommentBoxVisible && (
+          <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
+            <HStack
+              w="85%"
+              bg={isLightMode ? "white" : "#282C34"}
+              borderColor={isLightMode ? "black" : "primary"}
+              borderWidth="1"
+              borderRightWidth={0}
+              borderRadius="md"
+              borderTopRightRadius="0"
+              borderBottomRightRadius="0"
+              alignItems="center"
+              px="4"
+            >
+              <TextInput
+                placeholder="Silakan login untuk kirim komentar"
+                placeholderTextColor={isLightMode ? "gray" : "#A3A3A3"}
+                style={{
+                  flex: 1,
+                  fontSize: 16,
+                  color: isLightMode ? "black" : "white",
+                  opacity: 1,
+                }}
+                value={textComment}
+                editable={false}
+              />
+            </HStack>
+            <Button
+              w="20%"
+              borderColor="primary"
+              borderTopLeftRadius="0"
+              borderLeftWidth={0}
+              borderBottomLeftRadius="0"
+              borderWidth={isLightMode ? "0" : "1"}
+              background={isLightMode ? "secondary" : "primary"}
+              onPress={() => {
+                navigation.replace("Login");
+              }}
+            >
+              <Text fontSize="xs">Login</Text>
+            </Button>
+          </HStack>
+        )}
+      </KeyboardAvoidingView>
     </CardGradient>
   );
 };
