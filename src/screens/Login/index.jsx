@@ -6,7 +6,7 @@ import {
   ScrollView,
   Spinner,
   Text,
-  useToast
+  useToast,
 } from "native-base";
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
@@ -28,7 +28,7 @@ const Login = ({ navigation }) => {
     captcha_word: "",
     csrf_token: "",
     cookies_sr_id: "",
-    error_message: ""
+    error_message: "",
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -49,7 +49,7 @@ const Login = ({ navigation }) => {
           ...prevState,
           captcha_url: response.data.user.captcha_url,
           csrf_token: response.data.session.csrf_token,
-          cookies_sr_id: response.data.session["cookies sr_id"]
+          cookies_sr_id: response.data.session["cookies sr_id"],
         }));
       }
 
@@ -67,7 +67,7 @@ const Login = ({ navigation }) => {
               ? "ID Akun atau password salah. password bisa mengandung huruf besar/kecil dan harus sesuai."
               : error === "Please fill in all required fields."
               ? "Silakan Isi ID Akun dan Password"
-              : error
+              : error,
         }));
       }
 
@@ -77,7 +77,7 @@ const Login = ({ navigation }) => {
       ) {
         setFormData((prevState) => ({
           ...prevState,
-          captcha_word: ""
+          captcha_word: "",
         }));
       }
 
@@ -100,11 +100,11 @@ const Login = ({ navigation }) => {
               />
             );
           },
-          placement: "top-right"
+          placement: "top-right",
         });
 
         await analytics().logEvent("login", {
-          username: formData.account_id
+          username: formData.account_id,
         });
       }
     } catch (error) {
@@ -117,7 +117,7 @@ const Login = ({ navigation }) => {
             </Box>
           );
         },
-        placement: "top-right"
+        placement: "top-right",
       });
     } finally {
       setLoading(false);
@@ -131,14 +131,14 @@ const Login = ({ navigation }) => {
         activityLog({
           userId: res?.data?._id,
           logName: "Login",
-          description: "Login user to Android"
+          description: "Login user to Android",
         });
       })
       .catch((err) => {
         activityLog({
           userId: null,
           logName: "Login",
-          description: "Register user profile"
+          description: "Register user profile",
         });
         console.log(err);
       });
@@ -156,7 +156,7 @@ const Login = ({ navigation }) => {
           flexGrow: 1,
           justifyContent: "center",
           alignItems: "center",
-          padding: 20
+          padding: 20,
         }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
@@ -198,13 +198,21 @@ const Login = ({ navigation }) => {
           />
 
           {formData?.error_message && (
-            <Text color="red.500" mt="3">
+            <Text color="red" mt="3">
               {formData?.error_message}
             </Text>
           )}
 
           {formData?.captcha_url && (
             <Box py="3">
+              <Image
+                alt="captcha"
+                source={{ uri: formData.captcha_url }}
+                size="md"
+                width="100%"
+                borderRadius="xl"
+                resizeMode="contain"
+              />
               <Text mb="3" color="white">
                 Tolong verifikasi captcha di bawah ini:
               </Text>
