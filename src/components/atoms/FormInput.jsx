@@ -12,11 +12,12 @@ const FormInput = ({
   type = "text",
   isInvalid,
   errorText,
+  InputLeftElement,
   InputRightElement,
   ...props
 }) => {
   return (
-    <Box mb="4">
+    <Box mb="4" {...props}>
       {label && (
         <HStack space={2} alignItems="center" mb="2">
           {labelIcon}
@@ -34,6 +35,7 @@ const FormInput = ({
         borderColor={isInvalid ? "red" : "transparent"}
         borderWidth={1}
       >
+        {InputLeftElement && <Box mr="2">{InputLeftElement}</Box>}
         <TextInput
           placeholder={placeholder}
           placeholderTextColor="#A3A3A3"
@@ -41,6 +43,8 @@ const FormInput = ({
           value={value}
           onChangeText={onChange}
           secureTextEntry={type === "password"}
+          returnKeyType={props.returnKeyType}
+          onSubmitEditing={props.onSubmitEditing}
           {...props}
         />
         {InputRightElement && <Box ml="2">{InputRightElement}</Box>}

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import { Box, Button, HStack, IconButton, Input, Text } from "native-base";
+import { Box, Button, HStack, IconButton, Text } from "native-base";
 import {
   CloseIcon,
   Dashboard,
@@ -16,6 +16,7 @@ import Layout from "../../components/templates/Layout";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { useNavigation } from "@react-navigation/native";
 import debounce from "lodash/debounce";
+import FormInput from "../../components/atoms/FormInput";
 import MemberRoomList from "../../components/organisms/MemberRoomlist";
 
 const MemberList = () => {
@@ -44,22 +45,16 @@ const MemberList = () => {
       headerTitle: "Member List",
       headerRight: () =>
         isSearch ? (
-          <Input
+          <FormInput
             mt="1"
             mr="3"
             w="90%"
+            mb={0}
             autoFocus
             ref={inputRef}
-            bgColor="white"
-            variant="filled"
-            fontSize="sm"
-            name="id"
-            height="35px"
-            placeholderTextColor="secondary"
             placeholder="Cari member"
             value={searchQuery}
-            onChangeText={handleSearch}
-            borderRadius={6}
+            onChange={handleSearch}
             InputLeftElement={
               <Box ml="2">
                 <SearchMember />
@@ -71,9 +66,10 @@ const MemberList = () => {
                   handleSearch("");
                   setIsSearch(false);
                 }}
-                color="secondary"
+                variant="unstyled"
+                p="0"
               >
-                <CloseIcon />
+                <CloseIcon color="secondary" />
               </Button>
             }
           />

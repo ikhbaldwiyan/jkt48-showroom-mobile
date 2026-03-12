@@ -24,7 +24,6 @@ import {
   VStack,
   Spinner,
   IconButton,
-  CheckIcon,
 } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -41,6 +40,7 @@ import {
 import Layout from "../../components/templates/Layout";
 import TimeAgo from "react-native-timeago";
 import TabButton from "../../components/atoms/TabButton";
+import FormInput from "../../components/atoms/FormInput";
 
 const HistoryLive = () => {
   const { navigate, setOptions } = useNavigation();
@@ -61,22 +61,16 @@ const HistoryLive = () => {
       headerTitle: "History Live",
       headerRight: () =>
         isSearch ? (
-          <Input
+          <FormInput
             mt="1"
             mr="3"
             w="90%"
+            mb={0}
             autoFocus
             ref={inputRef}
-            bgColor="white"
-            variant="filled"
-            fontSize="sm"
-            name="id"
-            height="35px"
-            placeholderTextColor="secondary"
             placeholder="Cari member"
             value={search}
-            onChangeText={handleSearch}
-            borderRadius={6}
+            onChange={handleSearch}
             InputLeftElement={
               <Box ml="2">
                 <SearchMember />
@@ -88,9 +82,10 @@ const HistoryLive = () => {
                   search.length > 0 && handleSearch("");
                   setIsSearch(false);
                 }}
-                color="secondary"
+                variant="unstyled"
+                p="0"
               >
-                <CloseIcon />
+                <CloseIcon color="secondary" />
               </Button>
             }
           />
