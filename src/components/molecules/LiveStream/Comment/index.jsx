@@ -11,9 +11,14 @@ import {
   Button,
   Spinner,
   ArrowUpIcon,
-  ArrowDownIcon
+  ArrowDownIcon,
+  Input,
 } from "native-base";
-import { RefreshControl, TextInput, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  RefreshControl,
+  TextInput,
+  KeyboardAvoidingView,
+} from "react-native";
 import { STREAM } from "../../../../services";
 import { SendMessageIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
@@ -26,12 +31,14 @@ import useThemeStore from "../../../../store/themeStore";
 import { FlashList } from "@shopify/flash-list";
 import useAuthStore from "../../../../store/authStore";
 import ToastAlert from "../../../atoms/ToastAlert";
+import { useBehavior } from "../../../../utils/hooks/useBehaviour";
 
 export const Comment = () => {
   const route = useRoute();
   const toast = useToast();
   const { params } = route;
   const navigation = useNavigation();
+  const behaviour = useBehavior();
   const { user, session, userProfile } = useUser();
   const { profile, token, hideComment } = useLiveStreamStore();
 
@@ -69,7 +76,7 @@ export const Comment = () => {
       name: msg.ac,
       avatar_id: msg.av,
       comment: msg.cm,
-      created_at: msg.created_at
+      created_at: msg.created_at,
     };
 
     return comments;
@@ -78,8 +85,8 @@ export const Comment = () => {
   const handleEndLive = () => {
     navigation.replace("RoomDetail", {
       room: {
-        room_id: profile?.room_id
-      }
+        room_id: profile?.room_id,
+      },
     });
 
     const roomName =
@@ -94,7 +101,7 @@ export const Comment = () => {
           </Box>
         );
       },
-      placement: "top-right"
+      placement: "top-right",
     });
   };
 
@@ -162,13 +169,13 @@ export const Comment = () => {
         room_id: roomId?.toString(),
         comment: textComment,
         csrf: session?.csrf_token,
-        cookies_id: session?.cookie_login_id
+        cookies_id: session?.cookie_login_id,
       });
       activityLog({
         logName: "Comment",
         userId: userProfile?._id,
         description: `Send Comment to ${formatName(profile?.room_url_key)}`,
-        liveId: params?.item?.live_id
+        liveId: params?.item?.live_id,
       });
       setTextComment("");
     } catch (error) {
@@ -186,7 +193,7 @@ export const Comment = () => {
             />
           ),
           placement: "top",
-          duration: 8000
+          duration: 8000,
         });
       }
     } finally {
@@ -205,7 +212,7 @@ export const Comment = () => {
   return (
     <CardGradient>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={behaviour}
         style={{ flex: 1 }}
         keyboardVerticalOffset={350}
       >
@@ -224,7 +231,7 @@ export const Comment = () => {
                     source={{
                       uri:
                         item?.avatar_url ??
-                        `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`
+                        `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`,
                     }}
                   />
                   <View flexShrink="1">
@@ -311,7 +318,7 @@ export const Comment = () => {
             background={isCommentBoxVisible ? "gray.500" : "primary"}
             onPress={toggleCommentBox}
             _pressed={{
-              opacity: 0.7
+              opacity: 0.7,
             }}
           >
             {isCommentBoxVisible ? (
@@ -323,34 +330,32 @@ export const Comment = () => {
         )}
 
         {!session && isCommentBoxVisible && (
-          <HStack w="100%" ml="1.5" h={10} position="absolute" bottom="2">
-            <HStack
-              w="85%"
-              bg={isLightMode ? "white" : "#282C34"}
+          <HStack w="100%" h={10} position="absolute" bottom="2">
+            <Input
+              variant="filled"
+              w="82%"
+              fontSize="md"
+              name="comment"
+              bgColor={isLightMode ? "white" : "#282C34"}
+              color={isLightMode ? "black" : "white"}
               borderColor={isLightMode ? "black" : "primary"}
-              borderWidth="1"
               borderRightWidth={0}
               borderRadius="md"
               borderTopRightRadius="0"
               borderBottomRightRadius="0"
-              alignItems="center"
-              px="4"
-            >
-              <TextInput
-                placeholder="Silakan login untuk kirim komentar"
-                placeholderTextColor={isLightMode ? "gray" : "#A3A3A3"}
-                style={{
-                  flex: 1,
-                  fontSize: 16,
-                  color: isLightMode ? "black" : "white",
-                  opacity: 1,
-                }}
-                value={textComment}
-                editable={false}
-              />
-            </HStack>
+              placeholder="Silakan login untuk kirim komentar"
+              _input={{
+                textAlign: "left",
+              }}
+              _disabled={{
+                opacity: 1,
+              }}
+              onChangeText={handleComment}
+              value={textComment}
+              isDisabled
+            />
             <Button
-              w="20%"
+              w="18%"
               borderColor="primary"
               borderTopLeftRadius="0"
               borderLeftWidth={0}

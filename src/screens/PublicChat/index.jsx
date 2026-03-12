@@ -1,10 +1,6 @@
 import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
 import moment from "moment";
-import {
-  RefreshControl,
-  Keyboard,
-  KeyboardAvoidingView,
-} from "react-native";
+import { RefreshControl, Keyboard, KeyboardAvoidingView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { useProfile } from "../../services/hooks/useProfile";
@@ -36,6 +32,7 @@ import ChatBubble from "./components/ChatBubble";
 import InputMessage from "./components/InputMessage";
 import Loading from "../../components/atoms/Loading";
 import useApiConfig from "../../store/useApiConfig";
+import { useBehavior } from "../../utils/hooks/useBehaviour";
 
 const PublicChat = () => {
   const { user, session } = useUser();
@@ -77,6 +74,7 @@ const PublicChat = () => {
   const [isClose, setIsClose] = useState(IS_BANNER_CHAT_CLOSED);
   const [messages, setMessages] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
+  const behaviour = useBehavior();
 
   const allChat = [
     ...(Array.isArray(allLoadedChats) ? allLoadedChats : []),
@@ -226,7 +224,9 @@ const PublicChat = () => {
 
   useEffect(() => {
     const keyboardListener = Keyboard.addListener("keyboardDidShow", () => {
-      scrollViewRef.current?.scrollToEnd({ animated: false });
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: false });
+      }, 100);
     });
     return () => keyboardListener.remove();
   }, []);
@@ -234,7 +234,7 @@ const PublicChat = () => {
   return (
     <>
       <KeyboardAvoidingView
-        behavior="height"
+        behavior={behaviour}
         style={{ flex: 1 }}
         keyboardVerticalOffset={160}
       >
@@ -280,7 +280,9 @@ const PublicChat = () => {
             }}
             onContentSizeChange={() => {
               if (!isLoadingMore) {
-                scrollViewRef.current?.scrollToEnd({ animated: false });
+                setTimeout(() => {
+                  scrollViewRef.current?.scrollToEnd({ animated: false });
+                }, 100);
               }
             }}
             onScroll={({ nativeEvent }) => {
