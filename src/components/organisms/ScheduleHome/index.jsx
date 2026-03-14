@@ -20,12 +20,13 @@ import {
   TimesIcon,
   UsersIcon
 } from "../../../assets/icon";
-import { useScheduleWeek } from "../../../services/hooks/useSchedules";
+import { useScheduleWeek, useTodaySchedule } from "../../../services/hooks/useSchedules";
 import SkeletonSchedule from "../../atoms/Skeleteon";
 import CountdownTimer from "../CountdownTimer";
 
 const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
   const { data: schedules, refetch } = useScheduleWeek();
+  const { data: todayLive } = useTodaySchedule();
 
   useEffect(() => {
     refetch();
@@ -126,8 +127,8 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                     />
 
                     {isToday &&
-                      schedules?.idn?.is_live &&
-                      schedules?.idn?.slug === item.liveId && (
+                      todayLive?.is_live &&
+                      todayLive?.slug === item.liveId && (
                         <Box
                           p="2"
                           borderTopLeftRadius={4}
@@ -137,7 +138,7 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                         >
                           <HStack alignItems="center" space={1}>
                             <UsersIcon color="white" size="16" />
-                            <Text fontSize={13}>{schedules?.idn?.view_count}</Text>
+                            <Text fontSize={13}>{todayLive?.view_count}</Text>
                           </HStack>
                         </Box>
                       )}
@@ -161,8 +162,8 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                           showDate={item?.showDate}
                           targetDateTime={item.showTime}
                           isLive={
-                            schedules?.idn?.slug === item.liveId &&
-                            schedules?.idn?.is_live
+                            todayLive?.slug === item.liveId &&
+                            todayLive?.is_live
                           }
                         >
                           <Button

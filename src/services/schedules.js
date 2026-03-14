@@ -9,7 +9,7 @@ export const getScheduleWeek = () => {
 };
 
 export const getScheduleDetail = (id) => {
-  return apiUser.get(ENDPOINTS.SCHEDULE.DETAIL + id);
+  return apiNest.get(ENDPOINTS.SCHEDULE.DETAIL + id);
 };
 
 export const getFilterSetlist = () => {
@@ -17,5 +17,5 @@ export const getFilterSetlist = () => {
 };
 
 export const getTodaySchedule = () => {
-  return apiUser.get(ENDPOINTS.SCHEDULE.TODAY);
+  return apiNest.get(ENDPOINTS.SCHEDULE.TODAY);
 };

@@ -26,8 +26,9 @@ export const useScheduleDetail = (id) => {
     queryKey: ["scheduleDetail", id],
     queryFn: async () => {
       const response = await SCHEDULES.getScheduleDetail(id);
-      return response?.data
+      return response?.data?.data
     },
+    enabled: !!id
   });
 };
 

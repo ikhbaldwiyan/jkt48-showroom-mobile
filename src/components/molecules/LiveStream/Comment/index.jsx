@@ -311,7 +311,7 @@ export const Comment = () => {
         {bufferComments.length > 0 && (
           <Button
             position="absolute"
-            top="3"
+            top="2"
             alignSelf="center"
             bg="blue.500"
             borderRadius="full"
