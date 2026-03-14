@@ -15,6 +15,7 @@ import Views from "../../components/atoms/Views";
 import MenuList from "./components/MenuList";
 import LandscapeLayout from "./components/LandscapeLayout";
 import PortraitLayout from "./components/PortraitLayout";
+import Orientation from "react-native-orientation-locker";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -73,6 +74,7 @@ const LiveStream = () => {
     return () => {
       clearLiveStream();
       clearUrl();
+      Orientation.lockToPortrait();
     };
   }, []);
 

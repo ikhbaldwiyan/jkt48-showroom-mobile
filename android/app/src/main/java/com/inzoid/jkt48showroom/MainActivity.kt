@@ -1,5 +1,7 @@
 package com.inzoid.jkt48showroom
 
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -24,4 +26,11 @@ class MainActivity : ReactActivity() {
    */
   override fun createReactActivityDelegate(): ReactActivityDelegate =
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
+
+  override fun onConfigurationChanged(newConfig: Configuration) {
+      super.onConfigurationChanged(newConfig)
+      val intent = Intent("onConfigurationChanged")
+        intent.putExtra("newConfig", newConfig)
+      this.sendBroadcast(intent)
+  }
 }

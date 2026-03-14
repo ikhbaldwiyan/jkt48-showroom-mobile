@@ -4,6 +4,7 @@ import Video from "react-native-video";
 import VideoPlayer from "react-native-video-controls";
 import Loading from "../../../components/atoms/Loading";
 import LiveStreamTabs from "../../../components/molecules/LiveStreamTabs";
+import Orientation from "react-native-orientation-locker";
 
 const LandscapeLayout = ({
   url,
@@ -11,7 +12,7 @@ const LandscapeLayout = ({
   setIsFullScreen,
   isFullScreen,
   handleStreamError,
-  navigation
+  navigation,
 }) => {
   return (
     <Box flex="2" flexDirection="row">
@@ -25,11 +26,14 @@ const LandscapeLayout = ({
                   flex: 1,
                   position: "absolute",
                   width: "100%",
-                  height: "100%"
+                  height: "100%",
                 }}
                 toggleResizeModeOnFullscreen={false}
                 onEnterFullscreen={() => setIsFullScreen(true)}
-                onExitFullscreen={() => setIsFullScreen(false)}
+                onExitFullscreen={() => {
+                  Orientation.lockToPortrait();
+                  setIsFullScreen(false);
+                }}
                 onError={handleStreamError}
                 onEnd={() => {
                   navigation.navigate("Main");
@@ -46,7 +50,7 @@ const LandscapeLayout = ({
                 style={{
                   flex: 1,
                   width: "100%",
-                  height: "100%"
+                  height: "100%",
                 }}
                 resizeMode="cover"
               />
