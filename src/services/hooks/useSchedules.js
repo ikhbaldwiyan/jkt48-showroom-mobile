@@ -40,3 +40,13 @@ export const useFilterSetlist = () => {
     },
   });
 };
+
+export const useScheduleWeek = () => {
+  return useQuery({
+    queryKey: ["scheduleWeek"],
+    queryFn: async () => {
+      const response = await SCHEDULES.getScheduleWeek();
+      return response?.data?.data?.items
+    },
+  });
+};
