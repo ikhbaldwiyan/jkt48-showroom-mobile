@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Box,
@@ -14,11 +14,7 @@ import {
   ArrowDownIcon,
   Input,
 } from "native-base";
-import {
-  RefreshControl,
-  TextInput,
-  KeyboardAvoidingView,
-} from "react-native";
+import { RefreshControl, TextInput, KeyboardAvoidingView } from "react-native";
 import { STREAM } from "../../../../services";
 import { SendMessageIcon } from "../../../../assets/icon";
 import useUser from "../../../../utils/hooks/useUser";
@@ -41,12 +37,17 @@ export const Comment = () => {
   const behaviour = useBehavior();
   const { user, session, userProfile } = useUser();
   const { profile, token, hideComment } = useLiveStreamStore();
+  const flashListRef = useRef(null);
+  const isAutoScrollRef = useRef(true);
 
   const [comments, setComments] = useState([]);
   const [socketKey, setSocketKey] = useState("");
   const [textComment, setTextComment] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isCommentBoxVisible, setIsCommentBoxVisible] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
+  const [bufferComments, setBufferComments] = useState([]);
+  const [isAutoScroll, setIsAutoScroll] = useState(true);
   const { refreshing, onRefresh } = useRefresh();
   const roomId = profile?.room_id;
   const { mode } = useThemeStore();
@@ -129,22 +130,35 @@ export const Comment = () => {
       if (code === 1) {
         if (!Number.isNaN(msg.cm) && parseInt(msg.cm) <= 50) return;
         const newComments = formatCommentWebsocket(msg);
-
-        setComments((prevComments) => {
-          if (
-            Array.isArray(prevComments) &&
-            prevComments?.some(
-              (data) => data?.name === msg?.ac && data?.comment === msg?.cm
-            )
-          ) {
-            return prevComments;
-          }
-          if (Array.isArray(prevComments)) {
-            return [newComments, ...prevComments];
-          } else {
-            return [newComments];
-          }
-        });
+        if (isAutoScrollRef.current) {
+          setComments((prevComments) => {
+            if (
+              Array.isArray(prevComments) &&
+              prevComments?.some(
+                (data) => data?.name === msg?.ac && data?.comment === msg?.cm
+              )
+            ) {
+              return prevComments;
+            }
+            if (Array.isArray(prevComments)) {
+              return [newComments, ...prevComments];
+            } else {
+              return [newComments];
+            }
+          });
+        } else {
+          setBufferComments((prevBuffer) => {
+            if (
+              Array.isArray(prevBuffer) &&
+              prevBuffer?.some(
+                (data) => data?.name === msg?.ac && data?.comment === msg?.cm
+              )
+            ) {
+              return prevBuffer;
+            }
+            return [newComments, ...prevBuffer];
+          });
+        }
       } else if (code === 101) {
         handleEndLive();
       }
@@ -209,14 +223,46 @@ export const Comment = () => {
     setIsCommentBoxVisible(!isCommentBoxVisible);
   };
 
+  const handleShowNewComments = () => {
+    if (bufferComments.length > 0) {
+      setComments((prev) => [...bufferComments, ...prev]);
+      setBufferComments([]);
+    }
+    flashListRef.current?.scrollToOffset({ offset: 0, animated: true });
+    setIsAutoScroll(true);
+    isAutoScrollRef.current = true;
+  };
+
+  const handleScroll = (event) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    if (offsetY < 20) {
+      if (!isAutoScrollRef.current) {
+        setIsAutoScroll(true);
+        isAutoScrollRef.current = true;
+        if (bufferComments.length > 0) {
+          setComments((prev) => [...bufferComments, ...prev]);
+          setBufferComments([]);
+        }
+      }
+    } else {
+      if (isAutoScrollRef.current) {
+        setIsAutoScroll(false);
+        isAutoScrollRef.current = false;
+      }
+    }
+  };
+
   return (
     <CardGradient>
       <KeyboardAvoidingView
         behavior={behaviour}
         style={{ flex: 1 }}
-        keyboardVerticalOffset={350}
+        keyboardVerticalOffset={360}
       >
         <FlashList
+          ref={flashListRef}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
           data={comments?.length > 0 ? comments?.slice(0, 45) : []}
           keyExtractor={(item, index) => index.toString()}
           estimatedItemSize={50}
@@ -262,11 +308,35 @@ export const Comment = () => {
           }
         />
 
+        {bufferComments.length > 0 && (
+          <Button
+            position="absolute"
+            top="3"
+            alignSelf="center"
+            bg="blue.500"
+            borderRadius="full"
+            px="5"
+            py="1"
+            onPress={handleShowNewComments}
+            _pressed={{ opacity: 0.8 }}
+            zIndex={10}
+          >
+            <HStack alignItems="center" space="2">
+              <ArrowUpIcon color="white" />
+              <Text color="white" fontWeight="semibold">
+                {bufferComments.length} new comments
+              </Text>
+            </HStack>
+          </Button>
+        )}
+
         {session && !hideComment && isCommentBoxVisible && (
           <HStack
             w="full"
             bg={isLightMode ? "white" : "secondary"}
-            borderColor={isLightMode ? "black" : "white"}
+            borderColor={
+              isFocused ? "primary" : isLightMode ? "black" : "white"
+            }
             borderWidth="1"
             borderRadius="20px"
             alignItems="center"
@@ -286,6 +356,8 @@ export const Comment = () => {
               onChangeText={handleComment}
               value={textComment}
               selectionColor={"gray"}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
             />
             {buttonLoading ? (
               <Box ml="2">
@@ -309,7 +381,7 @@ export const Comment = () => {
         {session && !hideComment && (
           <Button
             position="absolute"
-            bottom={isCommentBoxVisible ? "16" : "2"}
+            bottom={isCommentBoxVisible ? "12" : "2"}
             right="2"
             size="sm"
             mb="2"
