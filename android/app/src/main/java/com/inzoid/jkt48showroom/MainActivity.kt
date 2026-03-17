@@ -17,7 +17,7 @@ class MainActivity : ReactActivity() {
   override fun getMainComponentName(): String = "JKT48Showroom"
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(null)
+    super.onCreate(savedInstanceState)
   }
 
   /**

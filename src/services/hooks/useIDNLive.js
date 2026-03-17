@@ -19,7 +19,7 @@ export const useIdnLiveDetail = (username, options = {}) => {
     queryKey: ["idnLiveDetail", username],
     queryFn: () => STREAM.getIDNLiveDetail(username).then((res) => res.data),
     enabled: !!username,
-    staleTime: 60 * 1000, // cache 1 minute
+    staleTime: 5 * 60 * 1000,
     ...options,
   });
 };

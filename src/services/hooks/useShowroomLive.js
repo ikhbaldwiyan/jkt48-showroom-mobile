@@ -20,6 +20,7 @@ export function useLiveInfo(roomId, cookieLoginId) {
     },
     enabled: !!roomId,
     refetchInterval: 5 * 60 * 1000, // refetch query every 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 }
 
@@ -31,6 +32,7 @@ export function useStreamUrl(roomId, cookieLoginId) {
       return res?.data?.[0]?.url ?? null;
     },
     enabled: !!roomId,
+    staleTime: 5 * 60 * 1000,
   });
 }
 
