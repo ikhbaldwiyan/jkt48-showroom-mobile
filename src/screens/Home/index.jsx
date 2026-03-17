@@ -21,7 +21,6 @@ import UpdateApp from "../../components/templates/UpdateApp";
 import SupportApp from "../../components/templates/SupportApp";
 import MaintenanceInfo from "../../components/templates/MaintenanceInfo";
 import MenuHome from "./components/MenuHome";
-import MultiAccess from "../../components/templates/MultiAccess";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = ({ navigation }) => {
@@ -88,12 +87,6 @@ const Home = ({ navigation }) => {
           onClose={() => setSupportApp(false)}
         />
         <MaintenanceInfo />
-        <MultiAccess
-          isVisible={showMultiAccess}
-          onClose={() => {
-            setCloseMultiModal();
-          }}
-        />
       </Layout>
     </SafeAreaView>
   );

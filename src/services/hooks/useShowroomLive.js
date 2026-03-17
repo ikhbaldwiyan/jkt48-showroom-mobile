@@ -32,7 +32,7 @@ export function useStreamUrl(roomId, cookieLoginId) {
       return res?.data?.[0]?.url ?? null;
     },
     enabled: !!roomId,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
   });
 }
 

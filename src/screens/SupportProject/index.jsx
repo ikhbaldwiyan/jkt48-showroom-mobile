@@ -146,7 +146,7 @@ const SupportProject = ({ navigation }) => {
         </VStack>
         <Divider my="3" />
         <Text fontWeight="semibold" fontSize="xl">
-          Top Donation Saweria
+          Top Donation Tako
         </Text>
         <TouchableOpacity onPress={() => setImagePreviewModal(true)}>
           <Image
