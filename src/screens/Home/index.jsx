@@ -5,8 +5,6 @@ import { AUTH } from "../../services";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { handleFcmTokenUpdate } from "../../utils/fcmHelper";
 import useAuthStore from "../../store/authStore";
-import useChangeLogStore from "../../store/changeLogStore";
-import useMultiAccessStore from "../../store/multiAccesStore";
 
 import {
   IDNLIve,
@@ -26,8 +24,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
   const { userProfile, session, user, setUserProfile } = useAuthStore();
-  const { showChangeLog, setCloseModal } = useChangeLogStore();
-  const { showMultiAccess, setCloseMultiModal } = useMultiAccessStore();
   const [ratingApp, setRatingApp] = useState(false);
   const [supportApp, setSupportApp] = useState(false);
 

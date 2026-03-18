@@ -21,13 +21,13 @@ import {
   usePipMode,
   useRefresh,
   useUser,
-  useLandscape
+  useLandscape,
 } from "../../utils/hooks";
 import {
   useLiveInfo,
   useRegisterUserRoom,
   useStreamOptions,
-  useStreamUrl
+  useStreamUrl,
 } from "../../services/hooks/useShowroomLive";
 
 const LiveStream = () => {
@@ -42,7 +42,7 @@ const LiveStream = () => {
     setUrl,
     setStreamOptions,
     clearLiveStream,
-    clearUrl
+    clearUrl,
   } = useLiveStreamStore();
 
   const toast = useToast();
@@ -57,7 +57,7 @@ const LiveStream = () => {
   const token = session?.cookie_login_id;
 
   const { data: liveInfo } = useLiveInfo(roomId, token);
-  const { data: streamUrl } = useStreamUrl(roomId, token);
+  const { data: streamUrl, refetch: refetchStreamUrl } = useStreamUrl(roomId, token);
   const { data: streamOptions } = useStreamOptions(roomId, token);
   const registerUserRoom = useRegisterUserRoom();
 
@@ -83,7 +83,7 @@ const LiveStream = () => {
           <MenuList />
         </HStack>
       ),
-      headerShown: isPipMode || isFullScreen || isLandscape ? false : true
+      headerShown: isPipMode || isFullScreen || isLandscape ? false : true,
     });
   }, [
     profile,
@@ -92,7 +92,7 @@ const LiveStream = () => {
     isFullScreen,
     mode,
     isPipMode,
-    isLandscape
+    isLandscape,
   ]);
 
   useEffect(() => {
@@ -109,8 +109,22 @@ const LiveStream = () => {
     onRefresh();
     clearUrl();
 
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    try {
+      const streamRes = await refetchStreamUrl();
+
+      const currentUrl = streamRes?.data || streamUrl;
+      if (currentUrl) {
+        const separator = currentUrl.includes("?") ? "&" : "?";
+        setUrl(`${currentUrl}${separator}t=${Date.now()}`);
+      }
+    } catch (error) {
+       console.log("Error refreshing stream", error);
+    }
+
     trackAnalytics("refresh_button", {
-      username: user?.account_id ?? "Guest"
+      username: user?.account_id ?? "Guest",
     });
   };
 
@@ -148,7 +162,7 @@ const LiveStream = () => {
       headerTitle:
         profile?.room_url_key && profile?.room_url_key !== "officialJKT48"
           ? formatName(profile?.room_url_key, true)
-          : profile?.main_name?.replace("SHOWROOM", "")
+          : profile?.main_name?.replace("SHOWROOM", ""),
     });
   }, [profile]);
 
@@ -160,12 +174,12 @@ const LiveStream = () => {
         logName: "Watch",
         userId: userProfile?._id,
         description: `Watch Live ${room_name} Room`,
-        liveId: profile?.live_id
+        liveId: profile?.live_id,
       });
 
       trackAnalytics("watch_showroom_live", {
         username: user?.account_id ?? "Guest",
-        room: profile?.room_url_key
+        room: profile?.room_url_key,
       });
     }
     LogBox.ignoreAllLogs(true);
@@ -187,7 +201,7 @@ const LiveStream = () => {
             </Box>
           );
         },
-        placement: "top-right"
+        placement: "top-right",
       });
     } else {
       toast.show({
@@ -201,13 +215,13 @@ const LiveStream = () => {
             </Box>
           );
         },
-        placement: "top-right"
+        placement: "top-right",
       });
     }
     navigation.replace("RoomDetail", {
       room: {
-        room_id: profile?.room_id
-      }
+        room_id: profile?.room_id,
+      },
     });
   };
 
@@ -222,7 +236,7 @@ const LiveStream = () => {
     if (isFullScreen) {
       trackAnalytics("open_full_screen_showroom", {
         username: userProfile?.user_id ?? "Guest",
-        room: profile?.user?.name
+        room: profile?.user?.name,
       });
     }
 

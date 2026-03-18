@@ -63,7 +63,19 @@ const IDNStream = () => {
   const handleRefresh = async () => {
     onRefresh();
     clearUrl();
-    await refetchStream();
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    try {
+      const { data } = await refetchStream();
+      const currentUrl = data?.stream_url || liveDetail?.stream_url;
+      
+      if (currentUrl) {
+        setUrl(currentUrl);
+      }
+    } catch (e) {
+      console.log('Error refreshing stream', e);
+    }
 
     trackAnalytics("refresh_idn_button", {
       username: userProfile?.name ?? "Guest",
