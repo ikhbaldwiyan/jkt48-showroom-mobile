@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { theme } from "../../../config/theme";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -87,13 +88,15 @@ const Navigation = () => {
   };
 
   const TabNavigator = () => {
+    const insets = useSafeAreaInsets();
+
     return (
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarStyle: {
             backgroundColor: theme.colors.black,
-            height: isLandscape ? 60 : 90
+            height: isLandscape ? 60 : 75 + insets.bottom
           },
           tabBarActiveTintColor: theme.colors.primary,
           tabBarInactiveTintColor: theme.colors.white,
