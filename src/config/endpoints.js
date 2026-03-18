@@ -81,5 +81,8 @@ export default {
     SCHEDULE: "/schedules/member",
     TOTAL_WATCH: "/users/total-watch-member",
     DETAIL_MEMBER: "/member"
+  },
+  NEWS: {
+    LIST: "/news"
   }
 };

@@ -230,3 +230,26 @@ export const estimateSRGift = (gold) => {
   if (!gold) return 0;
   return gold * GOLD_TO_IDR;
 };
+
+export const getNewsCategory = (label) => {
+  if (label?.includes("cat1")) {
+    return { text: "Theater", color: "primary" };
+  }
+  if (label?.includes("cat2")) {
+    return { text: "Event", color: "blue.600" };
+  }
+  if (label?.includes("cat4")) {
+    return { text: "Release", color: "purple.600" };
+  }
+  if (label?.includes("cat5")) {
+    return { text: "Birthday", color: "pink.600" };
+  }
+  if (label?.includes("cat6")) {
+    return { text: "Merch", color: "green.600" };
+  }
+  if (label?.includes("cat8")) {
+    return { text: "Other", color: "blueGray.500" };
+  }
+  return { text: "News", color: "blueGray.600" };
+};
+
