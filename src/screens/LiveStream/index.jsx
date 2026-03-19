@@ -16,6 +16,8 @@ import MenuList from "./components/MenuList";
 import LandscapeLayout from "./components/LandscapeLayout";
 import PortraitLayout from "./components/PortraitLayout";
 import Orientation from "react-native-orientation-locker";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 import {
   usePipMode,
@@ -57,7 +59,10 @@ const LiveStream = () => {
   const token = session?.cookie_login_id;
 
   const { data: liveInfo } = useLiveInfo(roomId, token);
-  const { data: streamUrl, refetch: refetchStreamUrl } = useStreamUrl(roomId, token);
+  const { data: streamUrl, refetch: refetchStreamUrl } = useStreamUrl(
+    roomId,
+    token
+  );
   const { data: streamOptions } = useStreamOptions(roomId, token);
   const registerUserRoom = useRegisterUserRoom();
 
@@ -120,7 +125,7 @@ const LiveStream = () => {
         setUrl(`${currentUrl}${separator}t=${Date.now()}`);
       }
     } catch (error) {
-       console.log("Error refreshing stream", error);
+      console.log("Error refreshing stream", error);
     }
 
     trackAnalytics("refresh_button", {
@@ -231,7 +236,11 @@ const LiveStream = () => {
   };
 
   useEffect(() => {
-    StatusBar.setHidden(isFullScreen);
+    if (isFullScreen || isLandscape) {
+      StatusBar.setHidden(true);
+    } else {
+      StatusBar.setHidden(false);
+    }
 
     if (isFullScreen) {
       trackAnalytics("open_full_screen_showroom", {
@@ -243,36 +252,42 @@ const LiveStream = () => {
     return () => {
       StatusBar.setHidden(false);
     };
-  }, [isFullScreen]);
+  }, [isFullScreen, isLandscape]);
 
   return (
     <Box flex="1" bg="secondary">
-      {isLandscape ? (
-        <LandscapeLayout
-          url={url}
-          isPipMode={isPipMode}
-          isFullScreen={isFullScreen}
-          profile={profile}
-          setIsFullScreen={setIsFullScreen}
-          handleEndLive={handleEndLive}
-          handleStreamError={handleStreamError}
-          navigation={navigation}
-          isLandscape={isLandscape}
-        />
-      ) : (
-        <PortraitLayout
-          url={url}
-          isPipMode={isPipMode}
-          isFullScreen={isFullScreen}
-          profile={profile}
-          setIsFullScreen={setIsFullScreen}
-          handleEndLive={handleEndLive}
-          handleStreamError={handleStreamError}
-          navigation={navigation}
-        />
-      )}
+      <SafeAreaView
+        style={{ flex: 1 }}
+        edges={isFullScreen || isLandscape ? [] : ["left", "right", "bottom"]}
+      >
+        {isLandscape ? (
+          <LandscapeLayout
+            url={url}
+            isPipMode={isPipMode}
+            isFullScreen={isFullScreen}
+            profile={profile}
+            setIsFullScreen={setIsFullScreen}
+            handleEndLive={handleEndLive}
+            handleStreamError={handleStreamError}
+            navigation={navigation}
+            isLandscape={isLandscape}
+          />
+        ) : (
+          <PortraitLayout
+            url={url}
+            isPipMode={isPipMode}
+            isFullScreen={isFullScreen}
+            profile={profile}
+            setIsFullScreen={setIsFullScreen}
+            handleEndLive={handleEndLive}
+            handleStreamError={handleStreamError}
+            navigation={navigation}
+          />
+        )}
+      </SafeAreaView>
     </Box>
   );
 };
+
 
 export default LiveStream;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import { Box, View } from "native-base";
 import Video from "react-native-video";
 import VideoPlayer from "react-native-video-controls";
@@ -14,9 +14,11 @@ const PortraitLayout = ({
   handleStreamError,
   navigation,
 }) => {
+  const { height } = useWindowDimensions();
+
   return (
     <>
-      <Box height={isFullScreen ? Dimensions.get("window").height : 200}>
+      <Box height={isFullScreen ? height : 200}>
         {url ? (
           !isPipMode ? (
             <VideoPlayer

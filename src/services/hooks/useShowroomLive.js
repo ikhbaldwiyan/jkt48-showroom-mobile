@@ -6,7 +6,8 @@ export const useShowroomLive = () => {
     queryKey: ["showroomLive"],
     queryFn: async () => {
       const response = await ROOMS.getRoomLive();
-      return response?.data.data;
+
+      return response?.data?.data ?? [];
     },
   });
 };
