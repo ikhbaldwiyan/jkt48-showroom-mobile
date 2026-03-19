@@ -150,6 +150,7 @@ const htmlStyles = StyleSheet.create({
   h2: { color: "white", fontSize: 20, fontWeight: "bold", marginBottom: 2 },
   h3: { color: "white", fontSize: 18, fontWeight: "bold", marginBottom: 2 },
   div: { color: "#cbd5e1" },
+  ol: { color: "#cbd5e1" },
   ul: { color: "#cbd5e1" },
   li: { color: "#cbd5e1" },
 });
