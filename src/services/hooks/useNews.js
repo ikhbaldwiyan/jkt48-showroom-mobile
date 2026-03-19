@@ -6,7 +6,7 @@ export const useNews = (page = 1) => {
     queryKey: ["news", page],
     queryFn: async () => {
       const response = await NEWS.getNews(page);
-      return response?.data;
+      return response?.data?.data;
     },
   });
 };
@@ -16,7 +16,7 @@ export const useNewsDetail = (id) => {
     queryKey: ["news-detail", id],
     queryFn: async () => {
       const response = await NEWS.getNewsDetail(id);
-      return response?.data;
+      return response?.data?.data;
     },
     enabled: !!id,
   });

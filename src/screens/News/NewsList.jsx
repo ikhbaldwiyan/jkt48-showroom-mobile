@@ -23,9 +23,9 @@ const NewsList = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useNews(page);
-  const newsItems = data?.news || [];
-  const totalItems = data?.total_count || 0;
-  const perPage = data?.perpage || 10;
+  const newsItems = data?.data || [];
+  const totalItems = data?.meta?.total_count || 0;
+  const perPage = data?.meta?.perpage || 10;
   const totalPages = Math.ceil(totalItems / perPage) || 1;
 
   useLayoutEffect(() => {
@@ -57,16 +57,15 @@ const NewsList = () => {
           ))
         ) : (
           <>
-            {newsItems.map((item, idx) => {
-              const category = getNewsCategory(item?.label);
+            {newsItems.map((item) => {
+              const category = getNewsCategory(item?.category);
               return (
                 <TouchableOpacity
-                  key={`${item._id}-${idx}`}
+                  key={item?.news_id}
                   activeOpacity={0.7}
                   onPress={() =>
                     navigate("NewsDetail", {
-                      id: item.id,
-                      label: item.label,
+                      id: item.url,
                     })
                   }
                 >

@@ -10,7 +10,7 @@ import { StyleSheet, Image, Dimensions } from "react-native";
 
 const NewsDetail = ({ navigation }) => {
   const route = useRoute();
-  const { id, label } = route.params;
+  const { id } = route.params;
   const { data, isLoading } = useNewsDetail(id);
   const { width: windowWidth } = Dimensions.get("window");
 
@@ -20,8 +20,7 @@ const NewsDetail = ({ navigation }) => {
     });
   }, [navigation]);
 
-  const category = getNewsCategory(label);
-
+  const category = getNewsCategory(data?.category);
   const htmlContent = (data?.content || "").replace(/#33333[3]?/gi, "white");
 
   const renderNode = (node, index, siblings, parent, defaultRenderer) => {

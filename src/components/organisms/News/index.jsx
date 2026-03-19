@@ -4,7 +4,6 @@ import {
   ChevronRightIcon,
   Divider,
   HStack,
-  Skeleton,
   Text,
   VStack,
 } from "native-base";
@@ -16,16 +15,8 @@ import { getNewsCategory } from "../../../utils/helpers";
 
 const News = () => {
   const navigation = useNavigation();
-  const { data, isLoading } = useNews(1);
-  const news = data?.news;
-
-  if (isLoading) {
-    return (
-      <Box mb="3">
-        <Skeleton h="150" rounded="xl" />
-      </Box>
-    );
-  }
+  const { data } = useNews(1);
+  const news = data?.data;
 
   if (!news) return null;
 
@@ -46,15 +37,14 @@ const News = () => {
       </HStack>
       <VStack space={3}>
         {news.slice(0, 3).map((item, idx) => {
-          const category = getNewsCategory(item?.label);
+          const category = getNewsCategory(item?.category);
           return (
             <TouchableOpacity
               key={idx}
               activeOpacity={0.7}
               onPress={() =>
                 navigation.navigate("NewsDetail", {
-                  id: item.id,
-                  label: item.label,
+                  id: item.url,
                 })
               }
             >
@@ -76,9 +66,7 @@ const News = () => {
                     {moment(item?.date).format("DD MMM YYYY")}
                   </Text>
                 </HStack>
-                <Text fontSize="md">
-                  {item?.title}
-                </Text>
+                <Text fontSize="md">{item?.title}</Text>
               </VStack>
             </TouchableOpacity>
           );
