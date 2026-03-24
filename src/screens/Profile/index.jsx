@@ -106,6 +106,7 @@ const Profile = () => {
                 : require("../../assets/image/default.png")
             }
             borderRadius="xl"
+            fallbackSource={require("../../assets/image/default.png")}
             alt="oshimen"
           />
         </TouchableOpacity>

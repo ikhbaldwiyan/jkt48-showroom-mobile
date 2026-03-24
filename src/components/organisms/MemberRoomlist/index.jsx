@@ -9,7 +9,7 @@ import { useMemberListShowroom } from "../../../services/hooks/useMemberList";
 import { getSquareImage } from "../../../utils/helpers";
 import SkeletonRoomList from "../../atoms/Skeleteon/SkeletonRoomList";
 
-const MemberRoomList = ({ refreshing, searchQuery, memberCategory }) => {
+const MemberRoomList = ({ refreshing, searchQuery, memberCategory, team }) => {
   const { navigate } = useNavigation();
   const { width } = useWindowDimensions();
   const columnCount = width > 600 ? 3 : 2;
@@ -20,7 +20,7 @@ const MemberRoomList = ({ refreshing, searchQuery, memberCategory }) => {
     isLoading,
     refetch,
     error
-  } = useMemberListShowroom(category, searchQuery);
+  } = useMemberListShowroom(category, searchQuery, team);
 
   useEffect(() => {
     if (refreshing) {

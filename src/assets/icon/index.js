@@ -76,6 +76,8 @@ import Wrench from "./Wrench";
 import StartIcon from "./StartIcon";
 import StopIcon from "./StopIcon";
 import GiftOutline from "./GiftOutline";
+import LoveIcon from "./LoveIcon";
+import FireIcon from "./FireIcon";
 
 export {
   LogoIcon,
@@ -156,4 +158,6 @@ export {
   StartIcon,
   StopIcon,
   GiftOutline,
+  LoveIcon,
+  FireIcon,
 };

@@ -96,6 +96,9 @@ const ScheduleOshimen = ({ isHome }) => {
               ))}
             </HStack>
           </ScrollView>
+          {data?.items?.length === 0 && (
+            <Text>Tidak ada jadwal untuk member ini</Text>
+          )}
         </LinearGradient>
         {isHome && <Divider my="3" />}
       </>
