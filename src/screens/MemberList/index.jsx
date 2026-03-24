@@ -29,7 +29,7 @@ import MemberRoomList from "../../components/organisms/MemberRoomlist";
 import TabButton from "../../components/atoms/TabButton";
 
 const MemberList = () => {
-  const [activeTab, setActiveTab] = useState("dream");
+  const [activeTab, setActiveTab] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const { refreshing, onRefresh } = useRefresh();
   const { setOptions } = useNavigation();
