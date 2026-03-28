@@ -28,26 +28,26 @@ const Home = ({ navigation }) => {
   const [supportApp, setSupportApp] = useState(false);
 
   const setRegisterProfile = async (userId) => {
-    await AUTH.detailUserApi(userId)
-      .then((res) => {
-        setUserProfile(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (!userId) return;
+    try {
+      const res = await AUTH.detailUserApi(userId);
+      setUserProfile(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
-    if (session && !userProfile) {
-      setRegisterProfile(user?.account_id);
+    if (session && !userProfile && user?.account_id) {
+      setRegisterProfile(user.account_id);
     }
-  }, [userProfile]);
+  }, [session, userProfile, user?.account_id]);
 
   useEffect(() => {
-    if (userProfile) {
+    if (userProfile && session) {
       handleFcmTokenUpdate(userProfile);
     }
-  }, [session]);
+  }, [userProfile, session]);
 
   return (
     <SafeAreaView

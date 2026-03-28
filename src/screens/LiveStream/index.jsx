@@ -18,7 +18,6 @@ import PortraitLayout from "./components/PortraitLayout";
 import Orientation from "react-native-orientation-locker";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
 import {
   usePipMode,
   useRefresh,
@@ -55,7 +54,7 @@ const LiveStream = () => {
   const { isPipMode } = usePipMode();
   const isLandscape = useLandscape();
 
-  const roomId = profile?.room_id;
+  const roomId = params?.item?.room_id ?? profile?.room_id;
   const token = session?.cookie_login_id;
 
   const { data: liveInfo } = useLiveInfo(roomId, token);
@@ -65,7 +64,7 @@ const LiveStream = () => {
   );
   const { data: streamOptions } = useStreamOptions(roomId, token);
   const registerUserRoom = useRegisterUserRoom();
-
+  
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -102,6 +101,10 @@ const LiveStream = () => {
 
   useEffect(() => {
     setProfile(params.item);
+
+    if (params?.item?.streaming_url_list?.length > 0) {
+      setUrl(params?.item?.streaming_url_list[0]?.url);
+    }
 
     return () => {
       clearLiveStream();
@@ -288,6 +291,5 @@ const LiveStream = () => {
     </Box>
   );
 };
-
 
 export default LiveStream;
