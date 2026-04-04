@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Layout from "../../components/templates/Layout";
 import Logo from "../../components/atoms/Logo";
 import { Box, Divider, HStack, Image, Text, VStack } from "native-base";
 import { DiscordIcon, Donate, GithubIcon, WebIcon } from "../../assets/icon";
-import { Dimensions, Linking, TouchableOpacity } from "react-native";
+import {  Linking, TouchableOpacity } from "react-native";
 import { activityLog } from "../../utils/activityLog";
 import useUser from "../../utils/hooks/useUser";
 import trackAnalytics from "../../utils/trackAnalytics";
@@ -87,19 +87,7 @@ const About = () => {
         <Box display="flex" alignItems="center">
           <Logo />
         </Box>
-        <Image
-          mt="4"
-          mb="2"
-          size="md"
-          alt="banner"
-          width="100%"
-          height={Dimensions.get("window").width * 0.6}
-          source={{
-            uri: "https://res.cloudinary.com/dkkagbzl4/image/upload/v1721372451/enzbvfxozrq4xn7uiaeo.png"
-          }}
-          borderRadius="md"
-        />
-        <Text mt="2">
+        <Text mt="4">
           <Text fontWeight="bold">JKT48 Showroom Fanmade</Text> adalah platform
           Live Streaming yang bertujuan untuk memfilter room member JKT48.
           disini kalian bisa menonton streaming Showroom atau IDN Live semua,

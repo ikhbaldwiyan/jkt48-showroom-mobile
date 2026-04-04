@@ -26,6 +26,8 @@ import {
   EditProfile,
   MultiLiveAccess,
   PublicChat,
+  NewsList,
+  NewsDetail
 } from "../screens";
 
 export const tabRoutes = [
@@ -175,6 +177,16 @@ export const stackRoutes = [
   {
     name: "PublicChat",
     component: PublicChat,
+    options: { headerShown: true }
+  },
+  {
+    name: "NewsList",
+    component: NewsList,
+    options: { headerShown: true }
+  },
+  {
+    name: "NewsDetail",
+    component: NewsDetail,
     options: { headerShown: true }
   },
 ];

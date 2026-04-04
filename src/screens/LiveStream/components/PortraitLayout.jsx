@@ -1,22 +1,24 @@
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import { Box, View } from "native-base";
 import Video from "react-native-video";
 import VideoPlayer from "react-native-video-controls";
 import Loading from "../../../components/atoms/Loading";
 import LiveStreamTabs from "../../../components/molecules/LiveStreamTabs";
+import Orientation from "react-native-orientation-locker";
 
 const PortraitLayout = ({
   url,
   isPipMode,
   isFullScreen,
-  setIsFullScreen,
   handleStreamError,
-  navigation
+  navigation,
 }) => {
+  const { height } = useWindowDimensions();
+
   return (
     <>
-      <Box height={isFullScreen ? Dimensions.get("window").height : 200}>
+      <Box height={isFullScreen ? height : 200}>
         {url ? (
           !isPipMode ? (
             <VideoPlayer
@@ -24,12 +26,13 @@ const PortraitLayout = ({
               style={{
                 flex: 1,
                 position: "absolute",
-                width: Dimensions.get("window").width,
-                height: "100%"
+                width: "100%",
+                height: "100%",
               }}
+              resizeMode={!isFullScreen ? "cover" : "contain"}
               toggleResizeModeOnFullscreen={false}
-              onEnterFullscreen={() => setIsFullScreen(true)}
-              onExitFullscreen={() => setIsFullScreen(false)}
+              onEnterFullscreen={() => Orientation.lockToLandscape()}
+              onExitFullscreen={() => Orientation.lockToPortrait()}
               onError={handleStreamError}
               onEnd={() => {
                 navigation.navigate("Main");
@@ -46,7 +49,7 @@ const PortraitLayout = ({
               style={{
                 flex: 1,
                 width: "100%",
-                height: "100%"
+                height: "100%",
               }}
               resizeMode="cover"
             />
@@ -57,7 +60,7 @@ const PortraitLayout = ({
               ...StyleSheet.absoluteFillObject,
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: "rgba(0, 0, 0, 0.5)"
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
             }}
           >
             <Loading size={25} color="white" />
@@ -71,4 +74,4 @@ const PortraitLayout = ({
   );
 };
 
-export default PortraitLayout; 
+export default PortraitLayout;

@@ -1,25 +1,25 @@
+import analytics from "@react-native-firebase/analytics";
 import {
   Box,
-  Button,
   Center,
-  FormControl,
   HStack,
   Image,
-  Input,
   ScrollView,
   Spinner,
   Text,
-  useToast
+  useToast,
 } from "native-base";
-import React, { useState } from "react";
+import { useState } from "react";
+import { KeyboardAvoidingView, TouchableOpacity } from "react-native";
 import { EyeIcon, EyeSlashIcon, LoginIcon } from "../../assets/icon";
+import FormInput from "../../components/atoms/FormInput";
 import Logo from "../../components/atoms/Logo";
+import ToastAlert from "../../components/atoms/ToastAlert";
 import { AUTH } from "../../services";
 import { loginApi } from "../../services/auth";
-import { activityLog } from "../../utils/activityLog";
-import analytics from "@react-native-firebase/analytics";
 import useAuthStore from "../../store/authStore";
-import ToastAlert from "../../components/atoms/ToastAlert";
+import { activityLog } from "../../utils/activityLog";
+import { useBehavior } from "../../utils/hooks/useBehaviour";
 
 const Login = ({ navigation }) => {
   const { setUser, setSession, setProfile, setUserProfile } = useAuthStore();
@@ -30,11 +30,11 @@ const Login = ({ navigation }) => {
     captcha_word: "",
     csrf_token: "",
     cookies_sr_id: "",
-    error_message: ""
+    error_message: "",
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const behaviour = useBehavior()
   const toast = useToast();
 
   const handleChange = (name, value) => {
@@ -51,7 +51,7 @@ const Login = ({ navigation }) => {
           ...prevState,
           captcha_url: response.data.user.captcha_url,
           csrf_token: response.data.session.csrf_token,
-          cookies_sr_id: response.data.session["cookies sr_id"]
+          cookies_sr_id: response.data.session["cookies sr_id"],
         }));
       }
 
@@ -69,7 +69,7 @@ const Login = ({ navigation }) => {
               ? "ID Akun atau password salah. password bisa mengandung huruf besar/kecil dan harus sesuai."
               : error === "Please fill in all required fields."
               ? "Silakan Isi ID Akun dan Password"
-              : error
+              : error,
         }));
       }
 
@@ -79,7 +79,7 @@ const Login = ({ navigation }) => {
       ) {
         setFormData((prevState) => ({
           ...prevState,
-          captcha_word: ""
+          captcha_word: "",
         }));
       }
 
@@ -102,11 +102,11 @@ const Login = ({ navigation }) => {
               />
             );
           },
-          placement: "top-right"
+          placement: "top-right",
         });
 
         await analytics().logEvent("login", {
-          username: formData.account_id
+          username: formData.account_id,
         });
       }
     } catch (error) {
@@ -114,12 +114,12 @@ const Login = ({ navigation }) => {
       toast.show({
         render: () => {
           return (
-            <Box m="3" py="1" px="2" mt="10" mb={5} bg="red" rounded="sm">
+            <Box m="3" py="1" px="2" mt="8" mb={5} bg="red" rounded="sm">
               <Text>Login Gagal, Silahkan coba lagi nanti</Text>
             </Box>
           );
         },
-        placement: "top-right"
+        placement: "top-right",
       });
     } finally {
       setLoading(false);
@@ -133,14 +133,14 @@ const Login = ({ navigation }) => {
         activityLog({
           userId: res?.data?._id,
           logName: "Login",
-          description: "Login user to Android"
+          description: "Login user to Android",
         });
       })
       .catch((err) => {
         activityLog({
           userId: null,
           logName: "Login",
-          description: "Register user profile"
+          description: "Register user profile",
         });
         console.log(err);
       });
@@ -150,105 +150,79 @@ const Login = ({ navigation }) => {
     navigation.navigate("Register");
   };
 
+
   return (
-    <Box flex="1" bgColor="secondary">
-      <ScrollView
-        flex="1"
-        contentContainerStyle={{
-          flexGrow: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 20
-        }}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-      >
-        <Logo />
-        <Text mt="38" fontSize="2xl" fontWeight="semibold" color="white">
-          Login
-        </Text>
-        <Text
-          py="3"
-          fontWeight="light"
-          color="white"
-          maxWidth="300px"
-          textAlign="center"
+    <KeyboardAvoidingView
+      behavior={behaviour}
+      style={{ flex: 1, backgroundColor: "#282C34" }}
+    >
+      <Box flex="1" bgColor="secondary">
+        <ScrollView
+          flex="1"
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+          }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
-          Silakan login untuk menggunakan fitur komen dan podium.
-        </Text>
-        <Box py="4" mx="6" w="100%" maxW="400px">
-          <FormControl>
-            <Text mb={3}>
-              ID Akun <Text color="red">*</Text>
-            </Text>
-            <Input
-              bgColor="white"
-              variant="filled"
-              w="100%"
-              fontSize="md"
-              name="id"
-              placeholder="Ex: inzoid48"
+          <Logo />
+          <Text mt="38" fontSize="2xl" fontWeight="semibold" color="white">
+            Login
+          </Text>
+          <Box py="4" mx="6" w="100%" maxW="400px">
+            <FormInput
+              label="ID Akun"
+              required
+              placeholder="Masukin ID Showroom"
               value={formData.account_id}
-              onChangeText={(value) => handleChange("account_id", value)}
-              isInvalid={formData?.error_message}
+              onChange={(value) => handleChange("account_id", value)}
             />
-            <Box position="relative">
-              <Text mt="4" mb="3">
-                Password <Text color="red">*</Text>
-              </Text>
-              <Input
-                bgColor="white"
-                type={showPassword ? "text" : "password"}
-                variant="filled"
-                w="100%"
-                fontSize="md"
-                name="password"
-                placeholder="Ex: abcabc123"
-                value={formData.password}
-                onChangeText={(value) => handleChange("password", value)}
-                InputRightElement={() =>
-                  loading ? <Spinner color="white" /> : "Login"
-                }
-                isInvalid={formData?.error_message}
-              />
-              <Box position="absolute" right="1" top="53%">
-                <Button onPress={() => setShowPassword(!showPassword)}>
+
+            <FormInput
+              label="Password"
+              required
+              placeholder="********"
+              value={formData.password}
+              onChange={(value) => handleChange("password", value)}
+              type={showPassword ? "text" : "password"}
+              InputRightElement={
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                   {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
-                </Button>
-              </Box>
-            </Box>
+                </TouchableOpacity>
+              }
+            />
 
             {formData?.error_message && (
-              <Text color="red" mt="3">
+              <Text color="red" mt="1">
                 {formData?.error_message}
               </Text>
             )}
 
             {formData?.captcha_url && (
               <Box py="3">
-                <Text mb="3">Tolong verifikasi captcha di bawah ini:</Text>
                 <Image
                   alt="captcha"
                   source={{ uri: formData.captcha_url }}
                   size="md"
+                  mb="3"
                   width="100%"
-                  borderRadius="xl"
+                  borderRadius="3xl"
                   resizeMode="contain"
                 />
-                <Input
-                  mt="3"
-                  bgColor="white"
-                  type="text"
-                  variant="filled"
-                  w="100%"
-                  fontSize="md"
-                  name="id"
+                <Text mb="3" color="white">
+                  Tolong verifikasi captcha di bawah ini:
+                </Text>
+                <FormInput
                   placeholder="Ketik kode captcha diatas"
                   value={formData.captcha_word}
-                  onChangeText={(value) => handleChange("captcha_word", value)}
+                  onChange={(value) => handleChange("captcha_word", value)}
                 />
               </Box>
             )}
+
             <Text onPress={handleRegister} color="white" my="1">
               Belum Punya Akun?{" "}
               <Text fontWeight="semibold" color="primary">
@@ -256,21 +230,26 @@ const Login = ({ navigation }) => {
               </Text>
             </Text>
 
-            <Button
-              my="3"
-              background="primary"
+            <TouchableOpacity
+              style={{
+                marginVertical: 12,
+                backgroundColor: "#24A2B7",
+                borderRadius: 12,
+                paddingVertical: 12,
+                alignItems: "center",
+                opacity: loading ? 0.7 : 1,
+              }}
               onPress={handleLogin}
-              isLoading={loading}
-              isLoadingText="Logging in"
-              borderRadius="lg"
+              disabled={loading}
+              activeOpacity={0.8}
             >
               <HStack alignItems="center" space="1">
-                <LoginIcon size={24} />
+                {loading ? <Spinner color="white" /> : <LoginIcon size={24} />}
                 <Text fontSize="16" color="white" fontWeight="medium">
-                  Login
+                  {loading ? "Loading..." : "Login"}
                 </Text>
               </HStack>
-            </Button>
+            </TouchableOpacity>
             <Center>
               <Text
                 fontWeight="medium"
@@ -282,10 +261,10 @@ const Login = ({ navigation }) => {
                 Skip Login
               </Text>
             </Center>
-          </FormControl>
-        </Box>
-      </ScrollView>
-    </Box>
+          </Box>
+        </ScrollView>
+      </Box>
+    </KeyboardAvoidingView>
   );
 };
 

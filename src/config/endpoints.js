@@ -56,7 +56,7 @@ export default {
     LIST: "/schedules",
     DETAIL: "/schedules/", //required schedule id
     WEEK: "/schedules?isOnWeekSchedule=true",
-    TODAY: "/schedules/today",
+    TODAY: "/schedules/today-live",
     SETLIST: "/setlist?is_active=true"
   },
   VERSIONS: {
@@ -81,5 +81,8 @@ export default {
     SCHEDULE: "/schedules/member",
     TOTAL_WATCH: "/users/total-watch-member",
     DETAIL_MEMBER: "/member"
+  },
+  NEWS: {
+    LIST: "/news"
   }
 };

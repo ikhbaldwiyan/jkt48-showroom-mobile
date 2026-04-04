@@ -1,32 +1,30 @@
+import { useNavigation } from "@react-navigation/native";
 import {
-  Actionsheet,
   Box,
   Button,
-  FormControl,
   HStack,
   Image,
-  Input,
   ScrollView,
   Spinner,
   Text,
   VStack,
   useToast,
 } from "native-base";
-import React, { useEffect, useState } from "react";
-import { IDCard, StarIcon, UserIcon } from "../../../assets/icon";
+import { useEffect, useState } from "react";
+import { Linking } from "react-native";
+import { StarIcon, UserIcon } from "../../../assets/icon";
 import CardGradient from "../../../components/atoms/CardGradient";
-import useAuthStore from "../../../store/authStore";
-import { useUser } from "../../../utils/hooks";
+import FormInput from "../../../components/atoms/FormInput";
+import ToastAlert from "../../../components/atoms/ToastAlert";
+import { Oshimen } from "../../../components/organisms";
 import {
   useProfile,
   useShowroomProfile,
   useUpdateProfile,
   useUpdateUserProfile,
 } from "../../../services/hooks/useProfile";
-import { useNavigation } from "@react-navigation/native";
-import { Oshimen } from "../../../components/organisms";
-import { Linking } from "react-native";
-import ToastAlert from "../../../components/atoms/ToastAlert";
+import useAuthStore from "../../../store/authStore";
+import { useUser } from "../../../utils/hooks";
 
 export const UserProfile = () => {
   const toast = useToast();
@@ -116,26 +114,14 @@ export const UserProfile = () => {
     <>
       <CardGradient halfCard>
         <ScrollView mt="3">
-          <FormControl>
-            <VStack space={3}>
-              <HStack space={2} alignItems="center">
-                <UserIcon size="14" />
-                <Box flex={1}>
-                  <Text color="gray.300" fontSize="14">
-                    Name
-                  </Text>
-                </Box>
-              </HStack>
-              <Input
-                bgColor="white"
-                variant="filled"
-                w="100%"
-                fontSize="md"
-                name="name"
-                placeholder="Enter your name"
-                value={formData.name}
-                onChangeText={(value) => handleChange("name", value)}
-              />
+          <VStack space={3}>
+            <FormInput
+              label="Name"
+              labelIcon={<UserIcon size="14" />}
+              placeholder="Enter your name"
+              value={formData.name}
+              onChange={(value) => handleChange("name", value)}
+            />
               <HStack space={2} alignItems="center">
                 <StarIcon color="white" size="14" />
                 <Box flex={1}>
@@ -214,7 +200,6 @@ export const UserProfile = () => {
                 </Text>
               </Button>
             </VStack>
-          </FormControl>
 
           <Oshimen isOpen={isOpen} setIsOpen={setIsOpen} />
         </ScrollView>

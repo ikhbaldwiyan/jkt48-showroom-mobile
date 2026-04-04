@@ -5,11 +5,11 @@ export const getScheduleList = (params) => {
 };
 
 export const getScheduleWeek = () => {
-  return apiUser.get(ENDPOINTS.SCHEDULE.WEEK);
+  return apiNest.get(ENDPOINTS.SCHEDULE.WEEK);
 };
 
 export const getScheduleDetail = (id) => {
-  return apiUser.get(ENDPOINTS.SCHEDULE.DETAIL + id);
+  return apiNest.get(ENDPOINTS.SCHEDULE.DETAIL + id);
 };
 
 export const getFilterSetlist = () => {

@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  HStack,
-  Image,
-  Text,
-  VStack,
-  Button,
-  PlayIcon,
-  ChevronRightIcon
-} from "native-base";
 import moment from "moment";
 import "moment/locale/id";
-import SkeletonSchedule from "../../atoms/Skeleteon";
-import { SCHEDULES } from "../../../services";
+import {
+  Box,
+  Button,
+  ChevronRightIcon,
+  HStack,
+  Image,
+  PlayIcon,
+  Text,
+  VStack
+} from "native-base";
+import { useEffect } from "react";
+import { Linking, TouchableOpacity } from "react-native";
 import {
   BirthdayIcon,
   Calendar,
@@ -21,35 +20,17 @@ import {
   TimesIcon,
   UsersIcon
 } from "../../../assets/icon";
-import { Linking, TouchableOpacity } from "react-native";
+import { useScheduleWeek, useTodaySchedule } from "../../../services/hooks/useSchedules";
+import SkeletonSchedule from "../../atoms/Skeleteon";
 import CountdownTimer from "../CountdownTimer";
-import { useTodaySchedule } from "../../../services/hooks/useSchedules";
 
 const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
-  const [schedules, setSchedules] = useState([]);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const { data } = useTodaySchedule();
+  const { data: schedules, refetch } = useScheduleWeek();
+  const { data: todayLive } = useTodaySchedule();
 
   useEffect(() => {
-    setPage(1);
-    fetchSchedules();
+    refetch();
   }, [refreshing]);
-
-  const fetchSchedules = async () => {
-    if (isLoading) return;
-    setIsLoading(true);
-    const { data } = await SCHEDULES.getScheduleWeek();
-    setSchedules(data);
-
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    if (page > 1) {
-      fetchSchedules(page);
-    }
-  }, [page]);
 
   const filteredSchedules = schedules?.filter((item) => {
     const isSameDay = moment(item.showDate).isSame(moment(), "day");
@@ -57,7 +38,7 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
   });
 
   return (
-    filteredSchedules.length > 0 && (
+    filteredSchedules?.length > 0 && (
       <Box>
         <HStack mb="3" alignItems="center" justifyContent="space-between">
           {isToday ? (
@@ -80,7 +61,7 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
             </>
           )}
         </HStack>
-        {schedules.length > 0
+        {schedules?.length > 0
           ? filteredSchedules?.map((item, idx) => (
               <TouchableOpacity
                 key={idx}
@@ -146,8 +127,8 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                     />
 
                     {isToday &&
-                      data?.idn?.is_live &&
-                      data?.idn?.slug === item.liveId && (
+                      todayLive?.is_live &&
+                      todayLive?.slug === item.liveId && (
                         <Box
                           p="2"
                           borderTopLeftRadius={4}
@@ -157,7 +138,7 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                         >
                           <HStack alignItems="center" space={1}>
                             <UsersIcon color="white" size="16" />
-                            <Text fontSize={13}>{data?.idn?.view_count}</Text>
+                            <Text fontSize={13}>{todayLive?.view_count}</Text>
                           </HStack>
                         </Box>
                       )}
@@ -181,8 +162,8 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                           showDate={item?.showDate}
                           targetDateTime={item.showTime}
                           isLive={
-                            data?.idn?.slug === item.liveId &&
-                            data?.idn?.is_live
+                            todayLive?.slug === item.liveId &&
+                            todayLive?.is_live
                           }
                         >
                           <Button

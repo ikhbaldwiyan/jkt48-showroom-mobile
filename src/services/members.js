@@ -1,8 +1,8 @@
 import { apiNest, ENDPOINTS } from "../config";
 
-export const getMemberProfile = (type, search) => {
+export const getMemberProfile = (type, search, team) => {
   return apiNest.get(
-    `${ENDPOINTS.MEMBERS.PROFILE}?type=${type}&search=${search}&is_active=true`
+    `${ENDPOINTS.MEMBERS.PROFILE}?type=${type}&search=${search}&is_active=true&team=${team}`
   );
 };
 

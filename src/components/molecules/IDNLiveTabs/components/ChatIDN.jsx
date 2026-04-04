@@ -7,7 +7,9 @@ import {
   Image,
   Text,
   View,
-  VStack
+  VStack,
+  ArrowUpIcon,
+  Button
 } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 import { RefreshControl } from "react-native";
@@ -22,6 +24,10 @@ const ChatIDN = () => {
   const { refreshing, onRefresh } = useRefresh();
   const { mode: theme } = useThemeStore();
   const [messages, setMessages] = useState([]);
+  const [bufferMessages, setBufferMessages] = useState([]);
+  const [isAutoScroll, setIsAutoScroll] = useState(true);
+  const isAutoScrollRef = useRef(true);
+  const flashListRef = useRef(null);
   const wsRef = useRef(null);
 
   const generateRandomUUID = () => {
@@ -109,18 +115,33 @@ const ChatIDN = () => {
                   timestamp: data.timestamp || Date.now()
                 };
 
-                setMessages((prevMessages) => {
-                  if (
-                    prevMessages.some(
-                      (msg) =>
-                        msg.user?.username === data?.user?.username &&
-                        msg.comment === data?.chat?.message
-                    )
-                  ) {
-                    return prevMessages; // Skip adding duplicate message
-                  }
-                  return [mappedMessage, ...prevMessages];
-                });
+                if (isAutoScrollRef.current) {
+                  setMessages((prevMessages) => {
+                    if (
+                      prevMessages.some(
+                        (msg) =>
+                          msg.user?.username === data?.user?.username &&
+                          msg.comment === data?.chat?.message
+                      )
+                    ) {
+                      return prevMessages; // Skip adding duplicate message
+                    }
+                    return [mappedMessage, ...prevMessages];
+                  });
+                } else {
+                  setBufferMessages((prevBuffer) => {
+                    if (
+                      prevBuffer.some(
+                        (msg) =>
+                          msg.user?.username === data?.user?.username &&
+                          msg.comment === data?.chat?.message
+                      )
+                    ) {
+                      return prevBuffer;
+                    }
+                    return [mappedMessage, ...prevBuffer];
+                  });
+                }
               }
             } catch (error) {
               console.error("Failed to parse message:", error);
@@ -160,9 +181,41 @@ const ChatIDN = () => {
     setGifts([]);
   }, [profile]);
 
+  const handleShowNewMessages = () => {
+    if (bufferMessages.length > 0) {
+      setMessages((prev) => [...bufferMessages, ...prev]);
+      setBufferMessages([]);
+    }
+    flashListRef.current?.scrollToOffset({ offset: 0, animated: true });
+    setIsAutoScroll(true);
+    isAutoScrollRef.current = true;
+  };
+
+  const handleScroll = (event) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    if (offsetY < 20) {
+      if (!isAutoScrollRef.current) {
+        setIsAutoScroll(true);
+        isAutoScrollRef.current = true;
+        if (bufferMessages.length > 0) {
+          setMessages((prev) => [...bufferMessages, ...prev]);
+          setBufferMessages([]);
+        }
+      }
+    } else {
+      if (isAutoScrollRef.current) {
+        setIsAutoScroll(false);
+        isAutoScrollRef.current = false;
+      }
+    }
+  };
+
   return (
     <CardGradient>
       <FlashList
+        ref={flashListRef}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         data={messages?.length > 0 ? messages?.slice(0, 45) : []}
         keyExtractor={(item, index) => index.toString()}
         estimatedItemSize={50}
@@ -218,6 +271,28 @@ const ChatIDN = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
+
+      {bufferMessages.length > 0 && (
+        <Button
+          position="absolute"
+          top="3"
+          alignSelf="center"
+          bg="blue.500"
+          borderRadius="full"
+          px="5"
+          py="1"
+          onPress={handleShowNewMessages}
+          _pressed={{ opacity: 0.8 }}
+          zIndex={10}
+        >
+          <HStack alignItems="center" space="2">
+            <ArrowUpIcon color="white" />
+            <Text color="white" fontWeight="semibold">
+              {bufferMessages.length} new comments
+            </Text>
+          </HStack>
+        </Button>
+      )}
     </CardGradient>
   );
 };

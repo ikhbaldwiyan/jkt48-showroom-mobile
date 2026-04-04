@@ -8,7 +8,7 @@ import { Wrench } from "../../../assets/icon";
 import { Box, HStack, Image, Text, useToast, VStack } from "native-base";
 import {
   ModalConfirmation,
-  ImagePreviewModal
+  ImagePreviewModal,
 } from "../../../components/atoms/Modal";
 import SenderChat from "./SenderChat";
 import useApiConfig from "../../../store/useApiConfig";
@@ -116,11 +116,11 @@ const ChatBubble = ({
           <Image
             borderRadius={isAdmin ? "xl" : "none"}
             style={{ width: 45, height: 45 }}
-            source={{
-              uri: isAdmin
-                ? "https://res.cloudinary.com/dkkagbzl4/image/upload/v1715448389/ioc8l1puv69qn7nzc2e9.png"
-                : avatar
-            }}
+            source={
+              isAdmin
+                ? require("../../../assets/image/logo.png")
+                : { uri: avatar }
+            }
             alt="avatar"
             shadow="5"
           />

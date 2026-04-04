@@ -6,7 +6,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { activityLog } from "../../utils/activityLog";
 import { formatName } from "../../utils/helpers";
 import { LiveIcon, RefreshIcon } from "../../assets/icon";
-import { usePipMode, useRefresh, useUser, useLandscape } from "../../utils/hooks";
+
 import trackAnalytics from "../../utils/trackAnalytics";
 import useLiveStreamStore from "../../store/liveStreamStore";
 import useThemeStore from "../../store/themeStore";
@@ -15,6 +15,21 @@ import Views from "../../components/atoms/Views";
 import MenuList from "./components/MenuList";
 import LandscapeLayout from "./components/LandscapeLayout";
 import PortraitLayout from "./components/PortraitLayout";
+import Orientation from "react-native-orientation-locker";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import {
+  usePipMode,
+  useRefresh,
+  useUser,
+  useLandscape,
+} from "../../utils/hooks";
+import {
+  useLiveInfo,
+  useRegisterUserRoom,
+  useStreamOptions,
+  useStreamUrl,
+} from "../../services/hooks/useShowroomLive";
 
 const LiveStream = () => {
   const route = useRoute();
@@ -23,15 +38,14 @@ const LiveStream = () => {
   const {
     url,
     profile,
-    liveInfo,
     setProfile,
-    getLiveInfo,
-    getStreamUrl,
-    getStreamOptions,
-    registerUserRoom,
+    setLiveInfo,
+    setUrl,
+    setStreamOptions,
     clearLiveStream,
-    clearUrl
+    clearUrl,
   } = useLiveStreamStore();
+
   const toast = useToast();
   const { user, session, userProfile } = useUser();
   const { refreshing, onRefresh } = useRefresh();
@@ -40,6 +54,17 @@ const LiveStream = () => {
   const { isPipMode } = usePipMode();
   const isLandscape = useLandscape();
 
+  const roomId = params?.item?.room_id ?? profile?.room_id;
+  const token = session?.cookie_login_id;
+
+  const { data: liveInfo } = useLiveInfo(roomId, token);
+  const { data: streamUrl, refetch: refetchStreamUrl } = useStreamUrl(
+    roomId,
+    token
+  );
+  const { data: streamOptions } = useStreamOptions(roomId, token);
+  const registerUserRoom = useRegisterUserRoom();
+  
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -62,17 +87,29 @@ const LiveStream = () => {
           <MenuList />
         </HStack>
       ),
-      headerShown: isPipMode || isFullScreen || isLandscape ? false : true
+      headerShown: isPipMode || isFullScreen || isLandscape ? false : true,
     });
-  }, [profile, liveInfo, refreshing, isFullScreen, mode, isPipMode, isLandscape]);
+  }, [
+    profile,
+    liveInfo,
+    refreshing,
+    isFullScreen,
+    mode,
+    isPipMode,
+    isLandscape,
+  ]);
 
   useEffect(() => {
     setProfile(params.item);
-    fetchLiveInfo();
+
+    if (params?.item?.streaming_url_list?.length > 0) {
+      setUrl(params?.item?.streaming_url_list[0]?.url);
+    }
 
     return () => {
       clearLiveStream();
       clearUrl();
+      Orientation.lockToPortrait();
     };
   }, []);
 
@@ -80,50 +117,62 @@ const LiveStream = () => {
     onRefresh();
     clearUrl();
 
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    try {
+      const streamRes = await refetchStreamUrl();
+
+      const currentUrl = streamRes?.data || streamUrl;
+      if (currentUrl) {
+        const separator = currentUrl.includes("?") ? "&" : "?";
+        setUrl(`${currentUrl}${separator}t=${Date.now()}`);
+      }
+    } catch (error) {
+      console.log("Error refreshing stream", error);
+    }
+
     trackAnalytics("refresh_button", {
-      username: user?.account_id ?? "Guest"
+      username: user?.account_id ?? "Guest",
     });
   };
 
-  async function fetchLiveInfo() {
-    await getLiveInfo(profile?.room_id, session?.cookie_login_id);
-  }
-
-  async function getUrl() {
-    await getStreamUrl(profile?.room_id, session?.cookie_login_id);
-    await getStreamOptions(profile?.room_id, session?.cookie_login_id);
-  }
+  useEffect(() => {
+    if (params?.item) setProfile(params.item);
+  }, [params]);
 
   useEffect(() => {
-    setTimeout(() => {
-      fetchLiveInfo();
-    }, 1000);
-
-    const interval = setInterval(() => {
-      fetchLiveInfo();
-    }, 2 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, [profile, refreshing]);
+    if (liveInfo) setLiveInfo(liveInfo);
+  }, [liveInfo]);
 
   useEffect(() => {
-    getUrl();
-  }, [profile, refreshing]);
+    if (streamUrl) setUrl(streamUrl);
+  }, [streamUrl]);
+
+  useEffect(() => {
+    if (streamOptions?.length > 0) setStreamOptions(streamOptions);
+  }, [streamOptions]);
+
+  useEffect(() => {
+    if (session && profile) {
+      registerUserRoom.mutate({ session, profile });
+    }
+  }, [session, profile]);
+
+  useEffect(() => {
+    return () => {
+      clearLiveStream();
+      clearUrl();
+    };
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle:
         profile?.room_url_key && profile?.room_url_key !== "officialJKT48"
           ? formatName(profile?.room_url_key, true)
-          : profile?.main_name?.replace("SHOWROOM", "")
+          : profile?.main_name?.replace("SHOWROOM", ""),
     });
   }, [profile]);
-
-  useEffect(() => {
-    if (session && profile) {
-      registerUserRoom(session, profile);
-    }
-  }, [profile, session]);
 
   useEffect(() => {
     const room_name = formatName(profile?.room_url_key);
@@ -133,12 +182,12 @@ const LiveStream = () => {
         logName: "Watch",
         userId: userProfile?._id,
         description: `Watch Live ${room_name} Room`,
-        liveId: profile?.live_id
+        liveId: profile?.live_id,
       });
 
       trackAnalytics("watch_showroom_live", {
         username: user?.account_id ?? "Guest",
-        room: profile?.room_url_key
+        room: profile?.room_url_key,
       });
     }
     LogBox.ignoreAllLogs(true);
@@ -160,7 +209,7 @@ const LiveStream = () => {
             </Box>
           );
         },
-        placement: "top-right"
+        placement: "top-right",
       });
     } else {
       toast.show({
@@ -174,13 +223,13 @@ const LiveStream = () => {
             </Box>
           );
         },
-        placement: "top-right"
+        placement: "top-right",
       });
     }
     navigation.replace("RoomDetail", {
       room: {
-        room_id: profile?.room_id
-      }
+        room_id: profile?.room_id,
+      },
     });
   };
 
@@ -190,46 +239,55 @@ const LiveStream = () => {
   };
 
   useEffect(() => {
-    StatusBar.setHidden(isFullScreen);
+    if (isFullScreen || isLandscape) {
+      StatusBar.setHidden(true);
+    } else {
+      StatusBar.setHidden(false);
+    }
 
     if (isFullScreen) {
       trackAnalytics("open_full_screen_showroom", {
         username: userProfile?.user_id ?? "Guest",
-        room: profile?.user?.name
+        room: profile?.user?.name,
       });
     }
 
     return () => {
       StatusBar.setHidden(false);
     };
-  }, [isFullScreen]);
+  }, [isFullScreen, isLandscape]);
 
   return (
     <Box flex="1" bg="secondary">
-      {isLandscape ? (
-        <LandscapeLayout
-          url={url}
-          isPipMode={isPipMode}
-          isFullScreen={isFullScreen}
-          profile={profile}
-          setIsFullScreen={setIsFullScreen}
-          handleEndLive={handleEndLive}
-          handleStreamError={handleStreamError}
-          navigation={navigation}
-          isLandscape={isLandscape}
-        />
-      ) : (
-        <PortraitLayout
-          url={url}
-          isPipMode={isPipMode}
-          isFullScreen={isFullScreen}
-          profile={profile}
-          setIsFullScreen={setIsFullScreen}
-          handleEndLive={handleEndLive}
-          handleStreamError={handleStreamError}
-          navigation={navigation}
-        />
-      )}
+      <SafeAreaView
+        style={{ flex: 1 }}
+        edges={isFullScreen || isLandscape ? [] : ["left", "right", "bottom"]}
+      >
+        {isLandscape ? (
+          <LandscapeLayout
+            url={url}
+            isPipMode={isPipMode}
+            isFullScreen={isFullScreen}
+            profile={profile}
+            setIsFullScreen={setIsFullScreen}
+            handleEndLive={handleEndLive}
+            handleStreamError={handleStreamError}
+            navigation={navigation}
+            isLandscape={isLandscape}
+          />
+        ) : (
+          <PortraitLayout
+            url={url}
+            isPipMode={isPipMode}
+            isFullScreen={isFullScreen}
+            profile={profile}
+            setIsFullScreen={setIsFullScreen}
+            handleEndLive={handleEndLive}
+            handleStreamError={handleStreamError}
+            navigation={navigation}
+          />
+        )}
+      </SafeAreaView>
     </Box>
   );
 };

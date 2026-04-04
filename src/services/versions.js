@@ -1,7 +1,7 @@
-import { apiUser, apiNest, ENDPOINTS } from "../config";
+import { apiAdmin, apiNest, ENDPOINTS } from "../config";
 
 export const getCurrentVersion = () => {
-  return apiUser.get(ENDPOINTS.VERSIONS.CURRENT_VERSION);
+  return apiAdmin.get(ENDPOINTS.VERSIONS.CURRENT_VERSION);
 };
 
 export const getChangeLogVersion = () => {
@@ -9,5 +9,5 @@ export const getChangeLogVersion = () => {
 }
 
 export const getChangeLogVersionDetail = (version) => {
-  return apiNest.get(ENDPOINTS.VERSIONS.CHANGE_LOG_DETAIL + "/" + version);
+  return apiAdmin.get(ENDPOINTS.VERSIONS.CHANGE_LOG_DETAIL + version);
 }

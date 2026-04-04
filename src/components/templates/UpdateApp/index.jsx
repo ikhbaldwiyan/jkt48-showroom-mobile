@@ -31,7 +31,7 @@ const UpdateApp = () => {
           }
         }
       } catch (error) {
-        console.error("Error fetching version:", error);
+        console.log("Error fetching version:", error);
       }
     };
 

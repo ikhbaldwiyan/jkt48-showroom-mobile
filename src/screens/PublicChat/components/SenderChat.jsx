@@ -19,7 +19,7 @@ const SenderChat = ({
       activeOpacity={isCanDelete ? 0.7 : 1}
       onLongPress={isCanDelete ? () => toggleConfirm() : null}
     >
-      <Box display="flex" alignItems="flex-end" right={0}>
+      <Box display="flex" alignItems="flex-end" right={0} mb="3">
         <HStack space="1.5" alignItems="flex-start">
           <VStack alignItems="flex-end" space={2}>
             <HStack space={2.5} alignItems="center">
@@ -44,11 +44,11 @@ const SenderChat = ({
           <Image
             borderRadius="xl"
             style={{ width: 45, height: 45 }}
-            source={{
-              uri: isAdmin
-                ? "https://res.cloudinary.com/dkkagbzl4/image/upload/v1715448389/ioc8l1puv69qn7nzc2e9.png"
-                : avatar
-            }}
+            source={
+              isAdmin
+                ? require("../../../assets/image/logo.png")
+                : { uri: avatar }
+            }
             alt="avatar"
             shadow="5"
           />

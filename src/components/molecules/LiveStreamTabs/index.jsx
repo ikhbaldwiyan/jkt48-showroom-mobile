@@ -77,7 +77,7 @@ const LiveStreamTabs = ({ isPremiumLive }) => {
               })}
             >
               <Text
-                color={useColorModeValue(color, "red")}
+                color={color}
                 fontWeight={index === i ? "bold" : "normal"}
               >
                 {route.title}

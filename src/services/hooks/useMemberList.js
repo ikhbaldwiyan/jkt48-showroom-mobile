@@ -29,11 +29,11 @@ export const useMemberList = ({ type = "regular", searchQuery = "" }) => {
   });
 };
 
-export const useMemberListShowroom = (category, search) => {
+export const useMemberListShowroom = (category, search, team = "") => {
   return useQuery({
-    queryKey: ["memberListShowroom", category, search],
+    queryKey: ["memberListShowroom", category, search, team],
     queryFn: async () => {
-      const response = await getRoomListMember(category, search);
+      const response = await getRoomListMember(category, search, team);
       return response?.data?.data;
     },
     retry: 0

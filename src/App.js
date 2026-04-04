@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { NativeBaseProvider } from "native-base";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { theme } from "./config";
 import Navigation from "./components/templates/Navigation";
 
@@ -11,19 +12,21 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import fetchApiConfig from "./utils/fetchApiConfig";
 import InternetStatusInfo from "./components/atoms/InternetStatus";
 
+const queryClient = new QueryClient();
+
 const App = () => {
   async function requestUserPermission() {
     PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
     );
     const authStatus = await messaging().requestPermission();
     const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     // Register background handler
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-      console.log("Message handled in the background!", remoteMessage);
+        console.log("Message handled in the background!", remoteMessage);
     });
   }
 
@@ -40,35 +43,36 @@ const App = () => {
 
   const routeNameRef = useRef();
   const navigationRef = useRef();
-  const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <NavigationContainer
-        ref={navigationRef}
-        onReady={() => {
-          routeNameRef.current = navigationRef.current.getCurrentRoute()?.name;
-        }}
-        onStateChange={async () => {
-          const previousRouteName = routeNameRef.current;
-          const currentRouteName =
-            navigationRef.current.getCurrentRoute()?.name;
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer
+          ref={navigationRef}
+          onReady={() => {
+            routeNameRef.current = navigationRef.current.getCurrentRoute()?.name;
+          }}
+          onStateChange={async () => {
+            const previousRouteName = routeNameRef.current;
+            const currentRouteName =
+              navigationRef.current.getCurrentRoute()?.name;
 
-          if (previousRouteName !== currentRouteName) {
-            await analytics().logScreenView({
-              screen_name: currentRouteName,
-              screen_class: currentRouteName
-            });
-          }
-          routeNameRef.current = currentRouteName;
-        }}
-      >
-        <NativeBaseProvider theme={theme}>
-          <InternetStatusInfo />
-          <Navigation />
-        </NativeBaseProvider>
-      </NavigationContainer>
-    </QueryClientProvider>
+            if (previousRouteName !== currentRouteName) {
+              await analytics().logScreenView({
+                screen_name: currentRouteName,
+                screen_class: currentRouteName
+              });
+            }
+            routeNameRef.current = currentRouteName;
+          }}
+        >
+          <NativeBaseProvider theme={theme}>
+            <InternetStatusInfo />
+            <Navigation />
+          </NativeBaseProvider>
+        </NavigationContainer>
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 };
 

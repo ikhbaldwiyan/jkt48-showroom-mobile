@@ -17,6 +17,7 @@ import {
   PUBLIC_CHAT_ROOM_KEY,
   NEST_SHOWROOM_API,
   DONATION_LINK,
+  SPAM_WORDS,
 } from "@env";
 
 const useApiConfig = create(
@@ -47,6 +48,7 @@ const useApiConfig = create(
       PUBLIC_CHAT_ROOM_ID,
       PUBLIC_CHAT_ROOM_KEY,
       NEST_SHOWROOM_API,
+      SPAM_WORDS,
 
       // Method to update the API configuration
       setApiConfig: (config) => set(config),

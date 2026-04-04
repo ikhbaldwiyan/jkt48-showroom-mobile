@@ -18,6 +18,7 @@ import {
   LiveIcon,
   Medal,
   MultiLiveIcon,
+  NewsIcon,
   TheaterIcon,
   ThropyIcon
 } from "../../../assets/icon";
@@ -37,11 +38,11 @@ const MenuHome = () => {
       name: "Theater",
       icon: <TheaterIcon size="24" color="white" />,
       screen: "Theater"
-    },
+    },  
     ...(IS_PUBLIC_CHAT_OPEN
       ? [
           {
-            name: "Public Chat",
+            name: "Chat",
             icon: <ChatIcon size="24" color="white" />,
             screen: "PublicChat"
           }
@@ -56,6 +57,11 @@ const MenuHome = () => {
           }
         ]
       : []),
+    {
+      name: "News",
+      icon: <NewsIcon size="24" color="white" />,
+      screen: "NewsList"
+    },
     {
       name: "Showroom",
       icon: <LiveIcon size="24" color="white" />,
@@ -104,7 +110,7 @@ const MenuHome = () => {
                   : navigate(item.screen)
               }
             >
-              <Box p="2.5" px="3" bg="primary" borderRadius={10}>
+              <Box p="2.5" minW="90px" px="3" bg="primary" borderRadius={10}>
                 <VStack space={1} justifyContent="center" alignItems="center">
                   {item.icon}
                   <Box mt="2" p="0.9" px="2" bg="blueLight" borderRadius={10}>

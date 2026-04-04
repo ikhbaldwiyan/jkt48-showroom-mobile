@@ -3,29 +3,40 @@ import React, {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState
+  useState,
 } from "react";
-import { Box, Button, HStack, IconButton, Input, Text } from "native-base";
+import {
+  Box,
+  Button,
+  CheckCircleIcon,
+  HStack,
+  IconButton,
+  Select,
+} from "native-base";
 import {
   CloseIcon,
-  Dashboard,
-  GraduateIcon,
-  SearchMember
+  FireIcon,
+  LoveIcon,
+  SearchMember,
+  StarIcon,
 } from "../../assets/icon";
 import Layout from "../../components/templates/Layout";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { useNavigation } from "@react-navigation/native";
 import debounce from "lodash/debounce";
+import FormInput from "../../components/atoms/FormInput";
 import MemberRoomList from "../../components/organisms/MemberRoomlist";
+import TabButton from "../../components/atoms/TabButton";
 
 const MemberList = () => {
-  const [activeTab, setActiveTab] = useState("regular");
+  const [activeTab, setActiveTab] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const { refreshing, onRefresh } = useRefresh();
   const { setOptions } = useNavigation();
   const [isSearch, setIsSearch] = useState(false);
   const inputRef = useRef(null);
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [category, setCategory] = useState("regular");
 
   const debouncedChangeHandler = useCallback(
     debounce((value) => {
@@ -44,22 +55,16 @@ const MemberList = () => {
       headerTitle: "Member List",
       headerRight: () =>
         isSearch ? (
-          <Input
+          <FormInput
             mt="1"
             mr="3"
             w="90%"
+            mb={0}
             autoFocus
             ref={inputRef}
-            bgColor="white"
-            variant="filled"
-            fontSize="sm"
-            name="id"
-            height="35px"
-            placeholderTextColor="secondary"
             placeholder="Cari member"
             value={searchQuery}
-            onChangeText={handleSearch}
-            borderRadius={6}
+            onChange={handleSearch}
             InputLeftElement={
               <Box ml="2">
                 <SearchMember />
@@ -71,9 +76,10 @@ const MemberList = () => {
                   handleSearch("");
                   setIsSearch(false);
                 }}
-                color="secondary"
+                variant="unstyled"
+                p="0"
               >
-                <CloseIcon />
+                <CloseIcon color="secondary" />
               </Button>
             }
           />
@@ -84,7 +90,7 @@ const MemberList = () => {
             mt="2"
             mr="4"
           />
-        )
+        ),
     });
   }, [searchQuery, isSearch]);
 
@@ -94,51 +100,79 @@ const MemberList = () => {
     }
   }, [isSearch]);
 
-  const TabButton = ({ type, currentType, label }) => (
-    <Button
-      onPress={() => setActiveTab(type)}
-      bg={currentType === type ? "blueLight" : "secondary"}
-      borderRadius="2xl"
-      variant={currentType === type ? "filled" : "outline"}
-      borderColor="primary"
-      size="md"
-      py="1.5"
-      flex={1}
-    >
-      <HStack alignItems="center" space={2}>
-        {type === "regular" && (
-          <Dashboard
-            size="18px"
-            color={currentType === type ? "#24A2B7" : "white"}
-          />
-        )}
-        {type === "trainee" && (
-          <GraduateIcon
-            size="16px"
-            color={currentType === type ? "#24A2B7" : "white"}
-          />
-        )}
-        <Text
-          fontWeight={currentType === type ? "extrabold" : "medium"}
-          color={currentType === type ? "primary" : "white"}
-        >
-          {label}
-        </Text>
-      </HStack>
-    </Button>
-  );
-
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
       <Box flex="1" mb="6">
         {!searchQuery && (
-          <HStack space={1.5} mb="2">
-            <TabButton label="Regular" type="regular" currentType={activeTab} />
-            <TabButton label="Trainee" type="trainee" currentType={activeTab} />
+          <HStack justifyContent="space-between" space={1.5} mb="2">
+            <Select
+              borderRadius="2xl"
+              selectedValue={category}
+              onValueChange={(value) => {
+                if (value === "trainee") {
+                  setCategory(value);
+                  setActiveTab("");
+                } else {
+                  setCategory(value);
+                }
+              }}
+              placeholder="Select Platform"
+              color="white"
+              minW={115}
+            >
+              <Select.Item
+                label="Regular"
+                value="regular"
+                endIcon={
+                  category === "regular" ? (
+                    <Box mt="1">
+                      <CheckCircleIcon size="4" color="primary" />
+                    </Box>
+                  ) : null
+                }
+              />
+              <Select.Item
+                label="Trainee"
+                value="trainee"
+                endIcon={
+                  category === "trainee" ? (
+                    <Box mt="1">
+                      <CheckCircleIcon size="4" color="primary" />
+                    </Box>
+                  ) : null
+                }
+              />
+            </Select>
+            {category === "regular" && (
+              <>
+                <TabButton
+                  label="Love"
+                  type="love"
+                  currentType={activeTab}
+                  onPress={() => setActiveTab("love")}
+                  customIcon={<LoveIcon color="#23A1B7" size={16} />}
+                />
+                <TabButton
+                  label="Dream"
+                  type="dream"
+                  currentType={activeTab}
+                  onPress={() => setActiveTab("dream")}
+                  customIcon={<StarIcon color="#23A1B7" size={16} />}
+                />
+                <TabButton
+                  label="Passion"
+                  type="passion"
+                  currentType={activeTab}
+                  onPress={() => setActiveTab("passion")}
+                  customIcon={<FireIcon color="#23A1B7" size={17} />}
+                />
+              </>
+            )}
           </HStack>
         )}
         <MemberRoomList
-          memberCategory={activeTab}
+          memberCategory={category}
+          team={activeTab}
           refreshing={refreshing}
           searchQuery={debouncedSearch}
         />

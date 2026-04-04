@@ -26,8 +26,9 @@ export const useScheduleDetail = (id) => {
     queryKey: ["scheduleDetail", id],
     queryFn: async () => {
       const response = await SCHEDULES.getScheduleDetail(id);
-      return response?.data
+      return response?.data?.data
     },
+    enabled: !!id
   });
 };
 
@@ -37,6 +38,16 @@ export const useFilterSetlist = () => {
     queryFn: async () => {
       const response = await SCHEDULES.getFilterSetlist();
       return response?.data?.data
+    },
+  });
+};
+
+export const useScheduleWeek = () => {
+  return useQuery({
+    queryKey: ["scheduleWeek"],
+    queryFn: async () => {
+      const response = await SCHEDULES.getScheduleWeek();
+      return response?.data?.data?.items
     },
   });
 };

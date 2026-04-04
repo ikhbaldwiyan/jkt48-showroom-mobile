@@ -9,6 +9,7 @@ import {
   KebabMenu,
 } from "../../../assets/icon";
 import useChangeLogStore from "../../../store/changeLogStore";
+import useAuthStore from "../../../store/authStore";
 import useApiConfig from "../../../store/useApiConfig";
 import { useNavigation } from "@react-navigation/native";
 
@@ -17,10 +18,11 @@ const MenuInfo = () => {
   const { DONATION_LINK } = useApiConfig();
   const [isOpen, setIsOpen] = useState(false);
   const navigation = useNavigation();
+  const session = useAuthStore((state) => state.session);
   const closeMenu = () => setIsOpen(false);
 
   const menu = [
-    {
+    session && {
       key: "edit-profile",
       title: "Edit Profile",
       icon: <EditProfile size={18} color="black" />,
@@ -40,7 +42,7 @@ const MenuInfo = () => {
       title: "Support Project",
       icon: <Donate size={18} color="black" />,
     },
-  ];
+  ].filter(Boolean);
 
   const handleMenu = (key) => {
     switch (key) {

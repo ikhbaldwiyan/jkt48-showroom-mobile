@@ -7,5 +7,7 @@ import * as LEADERBOARD from "./leaderboard";
 import * as CHAT from "./chat"
 import * as VERSION from "./versions"
 import * as MEMBERS from "./members"
+import * as NEWS from "./news"
 
-export { ROOMS, STREAM, AUTH, SCHEDULES, USER, LEADERBOARD, CHAT, VERSION, MEMBERS };
+export { ROOMS, STREAM, AUTH, SCHEDULES, USER, LEADERBOARD, CHAT, VERSION, MEMBERS, NEWS };
+

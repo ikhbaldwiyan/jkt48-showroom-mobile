@@ -8,11 +8,11 @@ import {
   Image,
   ScrollView,
   Text,
-  VStack
+  VStack,
 } from "native-base";
 import {
   useMemberProfile,
-  useUpdateOshimen
+  useUpdateOshimen,
 } from "../../../services/hooks/useMembers";
 import Loading from "../../../components/atoms/Loading";
 import { TouchableOpacity } from "react-native";
@@ -24,7 +24,8 @@ const Oshimen = ({ isOpen, setIsOpen, isRegister = false, setOshimen }) => {
   const { user } = useUser();
   const [type, setType] = useState("");
   const [selectedMember, setSelectedMember] = useState(null);
-  const { data: members, isLoading } = useMemberProfile(type, "");
+  const [team, setTeam] = useState("");
+  const { data: members, isLoading } = useMemberProfile(type, "", team);
   const updateOshimen = useUpdateOshimen();
   const queryClient = useQueryClient();
 
@@ -37,22 +38,25 @@ const Oshimen = ({ isOpen, setIsOpen, isRegister = false, setOshimen }) => {
       updateOshimen.mutate(
         {
           user_id: user?.account_id,
-          oshimen_id: selectedMember?._id
+          oshimen_id: selectedMember?._id,
         },
         {
           onSuccess: () => {
             setIsOpen(false);
             queryClient.invalidateQueries(["profile", user?.account_id]);
-            queryClient.invalidateQueries(["scheduleOshimen", selectedMember?._id]);
+            queryClient.invalidateQueries([
+              "scheduleOshimen",
+              selectedMember?._id,
+            ]);
           },
           onError: (error) => {
             console.log(error);
-          }
+          },
         }
       );
     } else {
-      setIsOpen(false)
-      setOshimen(selectedMember)
+      setIsOpen(false);
+      setOshimen(selectedMember);
     }
   };
 
@@ -68,23 +72,54 @@ const Oshimen = ({ isOpen, setIsOpen, isRegister = false, setOshimen }) => {
 
           <HStack mt="3" space={2}>
             <TabButton
-              type=""
-              currentType={type}
-              onPress={() => setType("")}
+              type={type === ""}
+              currentType={team === "" && type === ""}
+              onPress={() => {
+                setType("");
+                setTeam("");
+              }}
               label="All Member"
               background="blueGray.600"
             />
             <TabButton
-              type="regular"
-              currentType={type}
-              onPress={() => setType("regular")}
-              label="Regular"
+              type="love"
+              currentType={team}
+              onPress={() => {
+                setType("");
+                setTeam("love");
+              }}
+              label="Love"
+              background="blueGray.600"
+            />
+            <TabButton
+              type="dream"
+              currentType={team}
+              onPress={() => {
+                setType("");
+                setTeam("dream");
+              }}
+              label="Dream"
+              background="blueGray.600"
+            />
+          </HStack>
+          <HStack space={2} mt="2">
+            <TabButton
+              type="passion"
+              currentType={team}
+              onPress={() => {
+                setType("");
+                setTeam("passion");
+              }}
+              label="Passion"
               background="blueGray.600"
             />
             <TabButton
               type="trainee"
-              currentType={type}
-              onPress={() => setType("trainee")}
+              currentType={team}
+              onPress={() => {
+                setType("");
+                setTeam("trainee");
+              }}
               label="Trainee"
               background="blueGray.600"
             />
@@ -117,6 +152,7 @@ const Oshimen = ({ isOpen, setIsOpen, isRegister = false, setOshimen }) => {
                                 alt="Member"
                                 style={{ width: 70, height: 92 }}
                                 source={{ uri: member?.image }}
+                                fallbackSource={require("../../../assets/image/default.png")}
                                 rounded={isSelected ? "3xl" : "lg"}
                                 borderWidth={isSelected ? 4 : 0}
                                 borderColor={
@@ -148,7 +184,7 @@ const Oshimen = ({ isOpen, setIsOpen, isRegister = false, setOshimen }) => {
 
         <Box
           position="absolute"
-          bottom="0"
+          bottom="2"
           left="0"
           right="0"
           bg="blueGray.700"
@@ -164,11 +200,15 @@ const Oshimen = ({ isOpen, setIsOpen, isRegister = false, setOshimen }) => {
             isDisabled={!selectedMember}
             _disabled={{ bg: "gray.400", opacity: 0.5 }}
           >
-            <Text color="white" fontSize="md" fontWeight="semibold">
-              {selectedMember
-                ? `Pilih ${selectedMember?.stage_name}`
-                : "Klik foto member untuk memilih"}
-            </Text>
+            {updateOshimen.isLoading ? (
+              <Loading size={20} color="white" />
+            ) : (
+              <Text color="white" fontSize="md" fontWeight="semibold">
+                {selectedMember
+                  ? `Pilih ${selectedMember?.stage_name}`
+                  : "Klik foto member untuk memilih"}
+              </Text>
+            )}
           </Button>
         </Box>
       </Actionsheet.Content>

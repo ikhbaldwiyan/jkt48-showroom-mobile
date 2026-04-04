@@ -1,11 +1,11 @@
 import {
   Box,
   Icon,
-  Input,
-  useToast
+  useToast,
+  HStack
 } from "native-base";
 import React, { useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, TextInput } from "react-native";
 import { SendMessageIcon } from "../../../assets/icon";
 import Loading from "../../../components/atoms/Loading";
 import ToastAlert from "../../../components/atoms/ToastAlert";
@@ -20,13 +20,29 @@ const InputMessage = ({ setIsLoadingMore }) => {
   const toast = useToast();
   const { session } = useUser();
   const { logout } = useAuthStore();
-  const { PUBLIC_CHAT_ROOM_ID } = useApiConfig();
+  const { PUBLIC_CHAT_ROOM_ID, SPAM_WORDS } = useApiConfig();
   const navigation = useNavigation();
 
   const sendMessage = useSendMessage();
   const [message, setMessage] = useState("");
 
   const handleSendChat = () => {
+    const trimmedMessage = message.trim().toLowerCase();
+
+    if (trimmedMessage.length === 1 || SPAM_WORDS?.includes(trimmedMessage)) {
+      toast.show({
+        render: () => (
+          <ToastAlert
+            variant="left-accent"
+            status="warning"
+            title="Tolong jangan spam komentar ya wots"
+          />
+        ),
+        placement: "top",
+      });
+      return;
+    }
+
     sendMessage.mutate(
       {
         msg: message,
@@ -97,36 +113,42 @@ const InputMessage = ({ setIsLoadingMore }) => {
       bg="coolGray.700"
       p="4"
     >
-      <Input
-        py="2"
-        px="4"
-        borderRadius="full"
-        placeholder="Ketik pesan..."
+      <HStack
+        w="full"
         bg="secondary"
-        value={message}
-        onChangeText={(text) => setMessage(text)}
-        InputRightElement={
-          <TouchableOpacity onPress={handleSendChat} zIndex={999}>
-            <Box mr="4">
-              {sendMessage.isPending ? (
-                <Loading size={20} />
-              ) : (
-                <Icon as={<SendMessageIcon size={5} color="white" />} />
-              )}
-            </Box>
-          </TouchableOpacity>
-        }
-        _focus={{
-          borderColor: "primary",
-          backgroundColor: "secondary"
-        }}
-        _input={{
-          color: "white",
-          selectionColor: "primary",
-          cursorColor: "white",
-          paddingRight: 4
-        }}
-      />
+        borderRadius="full"
+        alignItems="center"
+        px="4"
+        py="1"
+        borderColor="white"
+        borderWidth={1}
+        mb="3"
+      >
+        <TextInput
+          placeholder="Ketik pesan..."
+          placeholderTextColor="gray"
+          style={{
+            flex: 1,
+            fontSize: 16,
+            color: "white",
+            textAlign: "left",
+            paddingVertical: 8,
+            borderColor: "white",
+          }}
+          value={message}
+          onChangeText={(text) => setMessage(text)}
+          selectionColor="#24A2B7"
+        />
+        <TouchableOpacity onPress={handleSendChat} zIndex={999}>
+          <Box ml="2">
+            {sendMessage.isLoading ? (
+              <Loading size={20} />
+            ) : (
+              <Icon as={<SendMessageIcon size={5} color="white" />} />
+            )}
+          </Box>
+        </TouchableOpacity>
+      </HStack>
     </Box>
   );
 };

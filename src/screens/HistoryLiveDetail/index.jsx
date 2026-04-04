@@ -22,8 +22,9 @@ import {
   PlayIcon,
   Spinner,
   Text,
-  VStack,
+  VStack
 } from "native-base";
+import YoutubePlayer from "react-native-youtube-iframe";
 import {
   Calendar,
   Dashboard,
@@ -37,13 +38,13 @@ import {
   TimesIcon,
 } from "../../assets/icon";
 import Loading from "../../components/atoms/Loading";
+import { ImagePreviewModal } from "../../components/atoms/Modal";
 import TabButton from "../../components/atoms/TabButton";
 import Layout from "../../components/templates/Layout";
-import Screenshot from "./components/Screenshot";
-import MenuHistoryLive from "./components/Menu";
-import YoutubePlayer from "react-native-youtube-iframe";
-import { useRefresh, useUser } from "../../utils/hooks";
 import useApiConfig from "../../store/useApiConfig";
+import { useRefresh, useUser } from "../../utils/hooks";
+import MenuHistoryLive from "./components/Menu";
+import Screenshot from "./components/Screenshot";
 
 const HistoryLiveDetail = ({ route }) => {
   const navigation = useNavigation();
@@ -53,6 +54,7 @@ const HistoryLiveDetail = ({ route }) => {
   const isShowroom = data?.type === "showroom";
   const images = data?.live_info?.screenshot?.list;
   const folder = data?.live_info?.screenshot?.folder;
+  const format = data?.live_info?.screenshot?.format;
   const liveSlug = isShowroom ? data?.live_id : data?.idn?.slug;
 
   const {
@@ -63,6 +65,12 @@ const HistoryLiveDetail = ({ route }) => {
   } = useHistoryDetail(data?.type, liveSlug);
   const replay = history?.youtube;
   const [type, setType] = useState("screenshot");
+  const [imagePreviewVisible, setImagePreviewVisible] = useState(false);
+  const [previewIndex, setPreviewIndex] = useState(0);
+
+  const fullImages = images?.map(
+    (img) => `https://img.crstlnz.my.id/${folder}/${img}.${format}`
+  );
 
   const { user } = useUser();
   const { IS_REPLAY_RELEASED, ADMIN_USERS } = useApiConfig();
@@ -127,19 +135,34 @@ const HistoryLiveDetail = ({ route }) => {
             customIcon={<PlayIcon size="sm" color="#24A2B7" />}
           />
         )}
-        {((isLoadingReplay && IS_REPLAY_RELEASED) || (isAdmin && isLoadingReplay)) && (
-           <Spinner color="white" />
-        )}
+        {((isLoadingReplay && IS_REPLAY_RELEASED) ||
+          (isAdmin && isLoadingReplay)) && <Spinner color="white" />}
+        <TabButton
+          type="images"
+          currentType={"image"}
+          onPress={() => {
+            setPreviewIndex(0);
+            setImagePreviewVisible(true);
+          }}
+          label="Show All Images"
+        />
       </HStack>
 
       {type === "screenshot" ? (
-        <Screenshot
-          thumbnail={data?.room_info?.img}
-          images={images}
-          folder={folder}
-          isShowroom={isShowroom}
-          room_name={data?.room_info?.fullname}
-        />
+        <VStack space={2}>
+          <Screenshot
+            thumbnail={data?.room_info?.img}
+            images={images}
+            folder={folder}
+            isShowroom={isShowroom}
+            room_name={data?.room_info?.fullname}
+            format={format}
+            onPressImage={(idx) => {
+              setPreviewIndex(idx);
+              setImagePreviewVisible(true);
+            }}
+          />
+        </VStack>
       ) : (
         <Box
           mt="3"
@@ -253,6 +276,12 @@ const HistoryLiveDetail = ({ route }) => {
           liveId={liveSlug}
         />
       </Box>
+      <ImagePreviewModal
+        isOpen={imagePreviewVisible}
+        onClose={() => setImagePreviewVisible(false)}
+        images={fullImages}
+        index={previewIndex}
+      />
     </Layout>
   );
 };

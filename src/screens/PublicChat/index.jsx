@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
 import moment from "moment";
-import { RefreshControl, Keyboard } from "react-native";
+import { RefreshControl, Keyboard, KeyboardAvoidingView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useRefresh } from "../../utils/hooks/useRefresh";
 import { useProfile } from "../../services/hooks/useProfile";
@@ -9,7 +9,7 @@ import { formatChatDate, formatViews } from "../../utils/helpers";
 import {
   useChatList,
   useOnlineUsers,
-  useRoomInfo
+  useRoomInfo,
 } from "../../services/hooks/usePublicChat";
 import useUser from "../../utils/hooks/useUser";
 import useAuthStore from "../../store/authStore";
@@ -26,12 +26,13 @@ import {
   Pressable,
   ScrollView,
   Text,
-  VStack
+  VStack,
 } from "native-base";
 import ChatBubble from "./components/ChatBubble";
 import InputMessage from "./components/InputMessage";
 import Loading from "../../components/atoms/Loading";
 import useApiConfig from "../../store/useApiConfig";
+import { useBehavior } from "../../utils/hooks/useBehaviour";
 
 const PublicChat = () => {
   const { user, session } = useUser();
@@ -40,7 +41,7 @@ const PublicChat = () => {
     PUBLIC_CHAT_ROOM_ID,
     PUBLIC_CHAT_ROOM_KEY,
     IS_SHOW_ONLINE_USERS,
-    IS_BANNER_CHAT_CLOSED
+    IS_BANNER_CHAT_CLOSED,
   } = useApiConfig();
 
   const scrollViewRef = useRef(null);
@@ -58,25 +59,26 @@ const PublicChat = () => {
 
   const { data, refetch } = useOnlineUsers(isShowOnline);
   const { data: roomInfo } = useRoomInfo({
-    room_key: PUBLIC_CHAT_ROOM_KEY
+    room_key: PUBLIC_CHAT_ROOM_KEY,
   });
   const {
     data: chatList,
     isLoading,
-    refetch: refetchChat
+    refetch: refetchChat,
   } = useChatList({
     room_id: PUBLIC_CHAT_ROOM_ID,
-    last_chat_id: lastChatId
+    last_chat_id: lastChatId,
   });
 
   const { refreshing, onRefresh } = useRefresh();
   const [isClose, setIsClose] = useState(IS_BANNER_CHAT_CLOSED);
   const [messages, setMessages] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
+  const behaviour = useBehavior();
 
   const allChat = [
     ...(Array.isArray(allLoadedChats) ? allLoadedChats : []),
-    ...messages
+    ...messages,
   ];
 
   useLayoutEffect(() => {
@@ -97,7 +99,7 @@ const PublicChat = () => {
             </HStack>
           )}
         </>
-      )
+      ),
     });
   }, [data, isClose]);
 
@@ -141,7 +143,7 @@ const PublicChat = () => {
             message: chat.s,
             avatar: chat.i,
             user_id: chat.u,
-            image: chat.m
+            image: chat.m,
           };
 
           if (chat?.s?.length > 1 || chat.m) {
@@ -222,136 +224,154 @@ const PublicChat = () => {
 
   useEffect(() => {
     const keyboardListener = Keyboard.addListener("keyboardDidShow", () => {
-      scrollViewRef.current?.scrollToEnd({ animated: false });
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: false });
+      }, 100);
     });
     return () => keyboardListener.remove();
   }, []);
 
   return (
     <>
-      <Box flex="1" bg="secondary">
-        {!isClose && roomInfo && (
-          <Box pt="1" p="3" pb="0">
-            <Alert borderRadius={8} w="100%" bg="#0EA5E9" mb="2">
-              <VStack space={2} w="100%">
-                <HStack
-                  space={1}
-                  alignItems="flex-start"
-                  justifyContent="space-between"
-                >
-                  <HStack space={2} flexShrink={1}>
-                    <Text fontWeight="500" fontSize="13" color="white">
-                      {roomInfo?.community_description}
-                    </Text>
+      <KeyboardAvoidingView
+        behavior={behaviour}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={160}
+      >
+        <Box flex="1" bg="secondary">
+          {!isClose && roomInfo && (
+            <Box pt="1" p="3" pb="0">
+              <Alert borderRadius={8} w="100%" bg="#0EA5E9" mb="2">
+                <VStack space={2} w="100%">
+                  <HStack
+                    space={1}
+                    alignItems="flex-start"
+                    justifyContent="space-between"
+                  >
+                    <HStack space={2} flexShrink={1}>
+                      <Text fontWeight="500" fontSize="13" color="white">
+                        {roomInfo?.community_description}
+                      </Text>
+                    </HStack>
+                    <IconButton
+                      variant="unstyled"
+                      _focus={{
+                        borderWidth: 0,
+                      }}
+                      icon={<CloseIcon size="4" />}
+                      _icon={{
+                        color: "coolGray.300",
+                      }}
+                      onPress={() => setIsClose(true)}
+                    />
                   </HStack>
-                  <IconButton
-                    variant="unstyled"
-                    _focus={{
-                      borderWidth: 0
-                    }}
-                    icon={<CloseIcon size="4" />}
-                    _icon={{
-                      color: "coolGray.300"
-                    }}
-                    onPress={() => setIsClose(true)}
-                  />
-                </HStack>
-              </VStack>
-            </Alert>
-          </Box>
-        )}
-
-        <ScrollView
-          p="3"
-          px="0"
-          ref={scrollViewRef}
-          contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start" }}
-          onContentSizeChange={() => {
-            if (!isLoadingMore) {
-              scrollViewRef.current?.scrollToEnd({ animated: false });
-            }
-          }}
-          onScroll={({ nativeEvent }) => {
-            if (nativeEvent.contentOffset.y <= 10) {
-              handleLoadNewChat();
-            }
-          }}
-          scrollEventThrottle={16}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-          }
-        >
-          {isLoading && isLoadingMore && (
-            <Box
-              mb="1"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Loading size={30} color="white" />
+                </VStack>
+              </Alert>
             </Box>
           )}
-          <VStack p="3" pb="8" space={4}>
-            {allChat?.length > 0 &&
-              (() => {
-                let lastDate = null;
-                return allChat.map((item, idx) => {
-                  const chatDate = moment.unix(item?.date).format("YYYY-MM-DD");
-                  const showDateBadge = chatDate !== lastDate;
-                  lastDate = chatDate;
 
-                  return (
-                    <React.Fragment key={item?.chat_id}>
-                      {showDateBadge && (
-                        <Center>
-                          <Box
-                            p="2"
-                            py="1"
-                            display="flex"
-                            borderRadius="md"
-                            justifyContent="center"
-                            alignItems="center"
-                            bg="coolGray.500"
-                          >
-                            <Text
-                              fontWeight="medium"
-                              fontSize="xs"
-                              color="gray.300"
+          <ScrollView
+            p="3"
+            px="0"
+            ref={scrollViewRef}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: "flex-start",
+            }}
+            onContentSizeChange={() => {
+              if (!isLoadingMore) {
+                setTimeout(() => {
+                  scrollViewRef.current?.scrollToEnd({ animated: false });
+                }, 100);
+              }
+            }}
+            onScroll={({ nativeEvent }) => {
+              if (nativeEvent.contentOffset.y <= 10) {
+                handleLoadNewChat();
+              }
+            }}
+            scrollEventThrottle={16}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+              />
+            }
+          >
+            {isLoading && isLoadingMore && (
+              <Box
+                mb="1"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Loading size={30} color="white" />
+              </Box>
+            )}
+            <VStack p="3" pb="6" space={1}>
+              {allChat?.length > 0 &&
+                (() => {
+                  let lastDate = null;
+                  return allChat.map((item, idx) => {
+                    const chatDate = moment
+                      .unix(item?.date)
+                      .format("YYYY-MM-DD");
+                    const showDateBadge = chatDate !== lastDate;
+                    lastDate = chatDate;
+
+                    return (
+                      <React.Fragment key={item?.chat_id}>
+                        {showDateBadge && (
+                          <Center>
+                            <Box
+                              p="2"
+                              py="1"
+                              mb="3"
+                              display="flex"
+                              borderRadius="md"
+                              justifyContent="center"
+                              alignItems="center"
+                              bg="coolGray.500"
                             >
-                              {formatChatDate(item?.date)}
-                            </Text>
-                          </Box>
-                        </Center>
-                      )}
-                      <ChatBubble
-                        userId={item?.user_id}
-                        avatar={item?.avatar}
-                        date={item?.date}
-                        username={item?.username}
-                        message={item?.message}
-                        isCanDelete={isAdmin}
-                        chatId={item?.chat_id}
-                        image={item?.image}
-                        refetchChat={refetchChat}
-                      />
-                    </React.Fragment>
-                  );
-                });
-              })()}
-          </VStack>
-          {isLoading && !isLoadingMore && (
-            <Box
-              display="flex"
-              flexGrow={1}
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Loading size={40} color="white" />
-            </Box>
-          )}
-        </ScrollView>
-      </Box>
-
+                              <Text
+                                fontWeight="medium"
+                                fontSize="xs"
+                                color="gray.300"
+                              >
+                                {formatChatDate(item?.date)}
+                              </Text>
+                            </Box>
+                          </Center>
+                        )}
+                        <ChatBubble
+                          userId={item?.user_id}
+                          avatar={item?.avatar}
+                          date={item?.date}
+                          username={item?.username}
+                          message={item?.message}
+                          isCanDelete={isAdmin}
+                          chatId={item?.chat_id}
+                          image={item?.image}
+                          refetchChat={refetchChat}
+                        />
+                      </React.Fragment>
+                    );
+                  });
+                })()}
+            </VStack>
+            {isLoading && !isLoadingMore && (
+              <Box
+                display="flex"
+                flexGrow={1}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Loading size={40} color="white" />
+              </Box>
+            )}
+          </ScrollView>
+        </Box>
+      </KeyboardAvoidingView>
       {isLogin ? (
         <InputMessage setIsLoadingMore={setIsLoadingMore} />
       ) : (
