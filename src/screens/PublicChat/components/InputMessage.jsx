@@ -20,13 +20,29 @@ const InputMessage = ({ setIsLoadingMore }) => {
   const toast = useToast();
   const { session } = useUser();
   const { logout } = useAuthStore();
-  const { PUBLIC_CHAT_ROOM_ID } = useApiConfig();
+  const { PUBLIC_CHAT_ROOM_ID, SPAM_WORDS } = useApiConfig();
   const navigation = useNavigation();
 
   const sendMessage = useSendMessage();
   const [message, setMessage] = useState("");
 
   const handleSendChat = () => {
+    const trimmedMessage = message.trim().toLowerCase();
+
+    if (trimmedMessage.length === 1 || SPAM_WORDS?.includes(trimmedMessage)) {
+      toast.show({
+        render: () => (
+          <ToastAlert
+            variant="left-accent"
+            status="warning"
+            title="Tolong jangan spam komentar ya wots"
+          />
+        ),
+        placement: "top",
+      });
+      return;
+    }
+
     sendMessage.mutate(
       {
         msg: message,

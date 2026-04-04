@@ -326,6 +326,7 @@ const PublicChat = () => {
                             <Box
                               p="2"
                               py="1"
+                              mb="3"
                               display="flex"
                               borderRadius="md"
                               justifyContent="center"
