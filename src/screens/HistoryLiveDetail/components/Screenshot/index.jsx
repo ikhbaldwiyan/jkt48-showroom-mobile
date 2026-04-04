@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Dimensions, ScrollView } from "react-native";
 import { Box, HStack, Image, Pressable } from "native-base";
 
+
 const { width: windowWidth } = Dimensions.get("window");
 
 const Screenshot = ({
@@ -12,11 +13,14 @@ const Screenshot = ({
   thumbnail,
   room_name,
   format,
+  onPressImage,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+
   const scrollRef = useRef(null);
   const slideWidth = windowWidth - 24;
   const landscape = isShowroom || room_name === "JKT48";
+
 
   const handleScroll = (event) => {
     const slide = Math.round(event.nativeEvent.contentOffset.x / slideWidth);
@@ -57,7 +61,7 @@ const Screenshot = ({
   }
 
   return (
-    <Box mt="3" height={landscape ? 200 : 412}>
+    <Box mt="3" height={landscape ? 220 : 412}>
       <ScrollView
         ref={scrollRef}
         horizontal
@@ -67,16 +71,20 @@ const Screenshot = ({
         scrollEventThrottle={16}
       >
         {images.map((img, idx) => (
-          <Image
+          <Pressable
             key={idx}
-            width={slideWidth}
-            height={landscape ? 200 : 412}
-            rounded="lg"
-            source={{
-              uri: `https://img.crstlnz.my.id/${folder}/${img}.${format}`,
-            }}
-            alt={`screenshot-${idx}`}
-          />
+            onPress={() => onPressImage(idx)}
+          >
+            <Image
+              width={slideWidth}
+              height={landscape ? 220 : 412}
+              rounded="lg"
+              source={{
+                uri: `https://img.crstlnz.my.id/${folder}/${img}.${format}`,
+              }}
+              alt={`screenshot-${idx}`}
+            />
+          </Pressable>
         ))}
       </ScrollView>
 
@@ -93,6 +101,7 @@ const Screenshot = ({
         ))}
       </HStack>
     </Box>
+
   );
 };
 

@@ -12,6 +12,7 @@ import {
   RecentLives,
   ScheduleHome,
   ScheduleOshimen,
+  News,
 } from "../../components/organisms";
 import Layout from "../../components/templates/Layout";
 import RatingApp from "../../components/templates/RatingApp";
@@ -63,7 +64,7 @@ const Home = ({ navigation }) => {
           <ShowroomLive refreshing={refreshing} />
           <IDNLIve refreshing={refreshing} />
           <RecentLives refreshing={refreshing} />
-          <ScheduleOshimen isHome />
+          <News />
           <ScheduleHome
             isToday
             refreshing={refreshing}

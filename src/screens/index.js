@@ -24,6 +24,9 @@ import MultiShowroom from "./MultiShowroom";
 import EditProfile from "./EditProfile";
 import MultiLiveAccess from "./MultiLiveAccess";
 import PublicChat from "./PublicChat";
+import NewsList from "./News/NewsList";
+import NewsDetail from "./News/NewsDetail";
+
 
 export {
   SplashScreen,
@@ -53,4 +56,7 @@ export {
   EditProfile,
   MultiLiveAccess,
   PublicChat,
+  NewsList,
+  NewsDetail,
 };
+
