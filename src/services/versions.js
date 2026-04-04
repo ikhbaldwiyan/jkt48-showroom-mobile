@@ -1,11 +1,11 @@
-import { apiAdmin, ENDPOINTS } from "../config";
+import { apiAdmin, apiNest, ENDPOINTS } from "../config";
 
 export const getCurrentVersion = () => {
   return apiAdmin.get(ENDPOINTS.VERSIONS.CURRENT_VERSION);
 };
 
 export const getChangeLogVersion = () => {
-  return apiAdmin.get(ENDPOINTS.VERSIONS.CHANGE_LOG);
+  return apiNest.get(ENDPOINTS.VERSIONS.CHANGE_LOG);
 }
 
 export const getChangeLogVersionDetail = (version) => {

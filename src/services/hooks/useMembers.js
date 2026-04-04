@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { MEMBERS } from "..";
 
-export const useMemberProfile = (category, search) => {
+export const useMemberProfile = (category, search, team) => {
   return useQuery({
-    queryKey: ["memberProfile", category, search],
+    queryKey: ["memberProfile", category, search, team],
     queryFn: async () => {
-      const response = await MEMBERS.getMemberProfile(category, search);
+      const response = await MEMBERS.getMemberProfile(category, search, team);
       return response?.data?.data;
     },
     retry: 0

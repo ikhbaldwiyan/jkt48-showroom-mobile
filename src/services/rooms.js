@@ -61,9 +61,13 @@ export const getHistoryLiveDetail = (id) => {
   );
 };
 
-export const getRoomListMember = (category, search) => {
+export const getRoomListMember = (category, search, team = "") => {
+  const encodedTeam = encodeURIComponent(team || "");
+  const encodedCategory = encodeURIComponent(category || "");
+  const encodedSearch = encodeURIComponent(search || "");
+
   return apiNest.get(
-    `${ENDPOINTS.ROOM.MEMBERS}?category=${category}&search=${search}`
+    `${ENDPOINTS.ROOM.MEMBERS}?team=${encodedTeam}&category=${encodedCategory}&search=${encodedSearch}`
   );
 };
 

@@ -19,7 +19,7 @@ const SenderChat = ({
       activeOpacity={isCanDelete ? 0.7 : 1}
       onLongPress={isCanDelete ? () => toggleConfirm() : null}
     >
-      <Box display="flex" alignItems="flex-end" right={0}>
+      <Box display="flex" alignItems="flex-end" right={0} mb="3">
         <HStack space="1.5" alignItems="flex-start">
           <VStack alignItems="flex-end" space={2}>
             <HStack space={2.5} alignItems="center">

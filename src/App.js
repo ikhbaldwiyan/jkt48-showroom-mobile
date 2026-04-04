@@ -12,19 +12,21 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import fetchApiConfig from "./utils/fetchApiConfig";
 import InternetStatusInfo from "./components/atoms/InternetStatus";
 
+const queryClient = new QueryClient();
+
 const App = () => {
   async function requestUserPermission() {
     PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
     );
     const authStatus = await messaging().requestPermission();
     const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     // Register background handler
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-      console.log("Message handled in the background!", remoteMessage);
+        console.log("Message handled in the background!", remoteMessage);
     });
   }
 
@@ -41,7 +43,6 @@ const App = () => {
 
   const routeNameRef = useRef();
   const navigationRef = useRef();
-  const queryClient = new QueryClient();
 
   return (
     <SafeAreaProvider>

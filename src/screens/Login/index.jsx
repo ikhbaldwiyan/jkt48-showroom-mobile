@@ -176,7 +176,7 @@ const Login = ({ navigation }) => {
             <FormInput
               label="ID Akun"
               required
-              placeholder="Ex: inzoid48"
+              placeholder="Masukin ID Showroom"
               value={formData.account_id}
               onChange={(value) => handleChange("account_id", value)}
             />
@@ -184,7 +184,7 @@ const Login = ({ navigation }) => {
             <FormInput
               label="Password"
               required
-              placeholder="Ex: abcabc123"
+              placeholder="********"
               value={formData.password}
               onChange={(value) => handleChange("password", value)}
               type={showPassword ? "text" : "password"}
