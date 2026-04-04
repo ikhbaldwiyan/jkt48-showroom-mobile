@@ -65,7 +65,6 @@ const Home = ({ navigation }) => {
           <IDNLIve refreshing={refreshing} />
           <RecentLives refreshing={refreshing} />
           <News />
-          <ScheduleOshimen isHome />
           <ScheduleHome
             isToday
             refreshing={refreshing}
