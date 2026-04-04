@@ -1,18 +1,29 @@
-import React, { useLayoutEffect } from "react";
-import { Box, Text, Divider, Spinner, VStack, HStack } from "native-base";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  Box,
+  Text,
+  Divider,
+  Spinner,
+  VStack,
+  HStack,
+  Image,
+} from "native-base";
 import { useRoute } from "@react-navigation/native";
 import { useNewsDetail } from "../../services/hooks/useNews";
 import Layout from "../../components/templates/Layout";
 import moment from "moment";
 import { getNewsCategory } from "../../utils/helpers";
 import HTMLView from "react-native-htmlview";
-import { StyleSheet, Image, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import ImagePreviewModal from "../../components/atoms/Modal/ImagePreviewModal";
 
 const NewsDetail = ({ navigation }) => {
   const route = useRoute();
   const { id } = route.params;
   const { data, isLoading } = useNewsDetail(id);
   const { width: windowWidth } = Dimensions.get("window");
+  const [imagePreviewModal, setImagePreviewModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -27,17 +38,23 @@ const NewsDetail = ({ navigation }) => {
     if (node.name === "img") {
       const { src } = node.attribs;
       return (
-        <Image
+        <TouchableOpacity
           key={index}
-          source={{ uri: src }}
-          style={{
-            width: windowWidth - 40,
-            height: 250,
-            marginVertical: 10,
-            borderRadius: 8,
+          onPress={() => {
+            setSelectedImage(src);
+            setImagePreviewModal(true);
           }}
-          resizeMode="contain"
-        />
+        >
+          <Image
+            source={{ uri: src }}
+            style={{
+              width: windowWidth - 40,
+              height: 200,
+            }}
+            borderRadius="lg"
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
       );
     }
 
@@ -46,7 +63,7 @@ const NewsDetail = ({ navigation }) => {
         <VStack
           key={index}
           borderWidth="0.5"
-          borderColor="gray.600"
+          borderColor="gray.300"
           my="2"
           width="100%"
         >
@@ -81,7 +98,8 @@ const NewsDetail = ({ navigation }) => {
           flex={colSpan}
           p="2"
           bg={bg}
-          borderRightWidth="0.5"
+          borderWidth="1"
+          borderRightWidth={1}
           borderColor="gray.600"
           justifyContent="center"
         >
@@ -115,16 +133,31 @@ const NewsDetail = ({ navigation }) => {
             {moment(data?.date).format("DD MMMM YYYY")}
           </Text>
         </HStack>
+        {data?.background_image && (
+          <Image
+            source={{ uri: data?.background_image }}
+            style={{
+              width: "100%",
+              height: 250,
+            }}
+            borderRadius="xl"
+            resizeMode="contain"
+          />
+        )}
         <Divider bg="gray.600" mb="4" />
         <Box px="1">
           <HTMLView
             value={htmlContent}
             stylesheet={htmlStyles}
-            addLineBreaks={false}
             renderNode={renderNode}
           />
         </Box>
       </VStack>
+      <ImagePreviewModal
+        isOpen={imagePreviewModal}
+        onClose={() => setImagePreviewModal(false)}
+        imageUri={selectedImage}
+      />
     </Layout>
   );
 };

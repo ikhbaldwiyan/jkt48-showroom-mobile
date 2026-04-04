@@ -72,7 +72,7 @@ const News = () => {
           );
         })}
       </VStack>
-      <Divider mt="4 " />
+      <Divider mt="4" />
     </Box>
   );
 };
