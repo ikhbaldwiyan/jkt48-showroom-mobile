@@ -47,6 +47,7 @@ const MemberList = () => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+    setActiveTab("")
     debouncedChangeHandler(query);
   };
 

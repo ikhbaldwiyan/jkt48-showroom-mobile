@@ -8,15 +8,14 @@ import {
   Text,
   VStack,
 } from "native-base";
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import TimeAgo from "react-native-timeago";
 import {
   GiftOutline,
-  IDNLiveIcon,
   TimesIcon,
-  UserIconOutline,
+  UserIconOutline
 } from "../../../assets/icon";
 import { useHistoryLive } from "../../../services/hooks/useHistoryLive";
 import {
@@ -90,27 +89,6 @@ const RecentLives = ({ refreshing }) => {
                           h="130"
                           borderRadius="md"
                         />
-                        <Box
-                          position="absolute"
-                          top={1.5}
-                          left={1.5}
-                          zIndex={99}
-                        >
-                          {log?.type === "showroom" ? (
-                            <Image
-                              size="sm"
-                              alt="showroom"
-                              source={{
-                                uri: "https://play-lh.googleusercontent.com/gf9vm7y3PgUGzGrt8pqJNtqb6x0AGzojrKlfntGvPyGQSjmPwAls35zZ-CXj_jryA8k",
-                              }}
-                              width="6"
-                              height="6"
-                              rounded="md"
-                            />
-                          ) : (
-                            <IDNLiveIcon />
-                          )}
-                        </Box>
                       </HStack>
                       <VStack space={1} mt="2">
                         <TouchableOpacity
@@ -118,7 +96,7 @@ const RecentLives = ({ refreshing }) => {
                           onPress={() =>
                             navigation.navigate("RoomDetail", {
                               room: {
-                                room_id: log.room_id
+                                room_id: log.room_id,
                               },
                             })
                           }

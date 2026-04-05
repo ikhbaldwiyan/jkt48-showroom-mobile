@@ -11,7 +11,6 @@ import {
   ShowroomLive,
   RecentLives,
   ScheduleHome,
-  ScheduleOshimen,
   News,
 } from "../../components/organisms";
 import Layout from "../../components/templates/Layout";

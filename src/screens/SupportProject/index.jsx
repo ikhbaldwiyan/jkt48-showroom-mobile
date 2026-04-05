@@ -152,7 +152,7 @@ const SupportProject = ({ navigation }) => {
           <Image
             my="3"
             width="100%"
-            height="81"
+            height="150"
             borderRadius="md"
             alt="Donation Image"
             source={{ uri: DONATION_IMG }}
