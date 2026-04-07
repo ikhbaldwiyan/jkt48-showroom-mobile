@@ -9,5 +9,5 @@ export const getChangeLogVersion = () => {
 }
 
 export const getChangeLogVersionDetail = (version) => {
-  return apiAdmin.get(ENDPOINTS.VERSIONS.CHANGE_LOG_DETAIL + version);
+  return apiNest.get(ENDPOINTS.VERSIONS.CHANGE_LOG_DETAIL + version);
 }

@@ -23,6 +23,8 @@ import { UserProfile } from "../../components/molecules/UserTabs/components";
 import { useTotalWatchMember } from "../../services/hooks/useMembers";
 import { useRefresh } from "../../utils/hooks";
 import BadgeUser from "./components/BadgeUser";
+import ChangeLog from "../../components/molecules/UserTabs/components/ChangeLog";
+import useChangeLogStore from "../../store/changeLogStore";
 
 const Profile = () => {
   const { profile, session, user } = useUser();
@@ -36,6 +38,7 @@ const Profile = () => {
   const isFocused = useIsFocused();
   const oshimen = userProfile?.oshimen;
   const { refreshing, onRefresh } = useRefresh();
+  const { showChangeLog, setCloseModal } = useChangeLogStore();
 
   useEffect(() => {
     if (session) {
@@ -77,13 +80,20 @@ const Profile = () => {
 
   if (!isLogin) {
     return (
-      <NoLogin
-        isLogin={isLogin}
-        navigation={navigation}
-        profile={profile}
-        userProfile={userProfile}
-        handleAbout={handleAbout}
-      />
+      <>
+        <NoLogin
+          isLogin={isLogin}
+          navigation={navigation}
+          profile={profile}
+          userProfile={userProfile}
+          handleAbout={handleAbout}
+        />
+        <ChangeLog
+          modal={showChangeLog}
+          toggleModal={() => setCloseModal()}
+          hideButton={true}
+        />
+      </>
     );
   }
 
@@ -244,6 +254,11 @@ const Profile = () => {
         </HStack>
         <Logout />
         <Oshimen isOpen={isOpen} setIsOpen={setIsOpen} />
+        <ChangeLog
+          modal={showChangeLog}
+          toggleModal={() => setCloseModal()}
+          hideButton={true}
+        />
       </Box>
     </Layout>
   );

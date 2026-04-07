@@ -14,8 +14,9 @@ import LinearGradient from "react-native-linear-gradient";
 import TimeAgo from "react-native-timeago";
 import {
   GiftOutline,
+  IDNLiveIcon,
   TimesIcon,
-  UserIconOutline
+  UserIconOutline,
 } from "../../../assets/icon";
 import { useHistoryLive } from "../../../services/hooks/useHistoryLive";
 import {
@@ -90,6 +91,20 @@ const RecentLives = ({ refreshing }) => {
                           borderRadius="md"
                         />
                       </HStack>
+                      <Box position="absolute" top={1.5} left={1.5} zIndex={99}>
+                        {log?.type === "showroom" ? (
+                          <Image
+                            size="sm"
+                            alt="showroom"
+                            source={require("../../../assets/image/showroom.png")}
+                            width="6"
+                            height="6"
+                            rounded="md"
+                          />
+                        ) : (
+                          <IDNLiveIcon />
+                        )}
+                      </Box>
                       <VStack space={1} mt="2">
                         <TouchableOpacity
                           activeOpacity={0.7}
