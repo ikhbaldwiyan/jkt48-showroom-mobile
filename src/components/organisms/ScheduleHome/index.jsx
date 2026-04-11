@@ -1,3 +1,4 @@
+import { FlashList } from "@shopify/flash-list";
 import moment from "moment";
 import "moment/locale/id";
 import {
@@ -8,7 +9,7 @@ import {
   Image,
   PlayIcon,
   Text,
-  VStack
+  VStack,
 } from "native-base";
 import { useEffect } from "react";
 import { Linking, TouchableOpacity } from "react-native";
@@ -20,9 +21,13 @@ import {
   TimesIcon,
   UsersIcon
 } from "../../../assets/icon";
-import { useScheduleWeek, useTodaySchedule } from "../../../services/hooks/useSchedules";
+import {
+  useScheduleWeek,
+  useTodaySchedule,
+} from "../../../services/hooks/useSchedules";
 import SkeletonSchedule from "../../atoms/Skeleteon";
 import CountdownTimer from "../CountdownTimer";
+import ScheduleCard from "../ScheduleCard";
 
 const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
   const { data: schedules, refetch } = useScheduleWeek();
@@ -47,7 +52,7 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
             </Text>
           ) : (
             <>
-              <Text color="white" fontSize="2xl" mb="1" fontWeight="semibold">
+              <Text color="white" fontSize="2xl" fontWeight="semibold">
                 Jadwal Theater
               </Text>
               <TouchableOpacity onPress={() => navigation.navigate("Theater")}>
@@ -61,138 +66,147 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
             </>
           )}
         </HStack>
-        {schedules?.length > 0
-          ? filteredSchedules?.map((item, idx) => (
-              <TouchableOpacity
-                key={idx}
-                activeOpacity={0.7}
-                onPress={() => navigation.navigate("ScheduleDetail", { item })}
-              >
-                <VStack space={2} mb="4">
-                  <Box p="2.5" bg="cyan.600" borderRadius={10}>
+        {schedules?.length > 0 && isToday ? (
+          filteredSchedules?.map((item, idx) => (
+            <TouchableOpacity
+              key={idx}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate("ScheduleDetail", { item })}
+            >
+              <VStack space={2} mb="4">
+                <Box p="2.5" bg="cyan.600" borderRadius={10}>
+                  <HStack space={2} alignItems="center">
+                    <TheaterIcon size="22" color="white" />
+                    <Text fontSize="md" fontWeight="bold">
+                      {item?.setlist?.name}
+                    </Text>
+                  </HStack>
+                </Box>
+                <Box p="2.5" bg="#865CD6" borderRadius={10}>
+                  <HStack space={4}>
                     <HStack space={2} alignItems="center">
-                      <TheaterIcon size="22" color="white" />
-                      <Text fontSize="md" fontWeight="bold">
-                        {item?.setlist?.name}
+                      <Calendar size={18} color="white" />
+                      <Text fontWeight="bold">
+                        {moment(item.showDate)
+                          .locale("id")
+                          .format("dddd, DD MMMM YYYY")}
+                      </Text>
+                    </HStack>
+                    <HStack alignItems="center" space={2}>
+                      <TimesIcon />
+                      <Text fontWeight="bold">{item?.showTime} WIB</Text>
+                    </HStack>
+                  </HStack>
+                </Box>
+                {item?.isBirthdayShow && (
+                  <Box background="cyan.700" p="2.5" borderRadius="lg">
+                    <HStack alignItems="center" space={2}>
+                      <BirthdayIcon size={18} />
+                      <Text fontWeight="bold">
+                        Birthday {item?.birthdayMember?.name}
                       </Text>
                     </HStack>
                   </Box>
-                  <Box p="2.5" bg="#865CD6" borderRadius={10}>
-                    <HStack space={4}>
-                      <HStack space={2} alignItems="center">
-                        <Calendar size={18} color="white" />
-                        <Text fontWeight="bold">
-                          {moment(item.showDate)
-                            .locale("id")
-                            .format("dddd, DD MMMM YYYY")}
-                        </Text>
-                      </HStack>
-                      <HStack alignItems="center" space={2}>
-                        <TimesIcon />
-                        <Text fontWeight="bold">{item?.showTime} WIB</Text>
-                      </HStack>
+                )}
+                {item?.isGraduationShow && (
+                  <Box background="cyan.700" p="2.5" borderRadius="lg">
+                    <HStack alignItems="center" space={2}>
+                      <GraduateIcon size={18} />
+                      <Text fontWeight="bold">
+                        Graduation {item?.graduateMember?.name}
+                      </Text>
                     </HStack>
                   </Box>
-                  {item?.isBirthdayShow && (
-                    <Box background="cyan.700" p="2.5" borderRadius="lg">
-                      <HStack alignItems="center" space={2}>
-                        <BirthdayIcon size={18} />
-                        <Text fontWeight="bold">
-                          Birthday {item?.birthdayMember?.name}
-                        </Text>
-                      </HStack>
-                    </Box>
-                  )}
-                  {item?.isGraduationShow && (
-                    <Box background="cyan.700" p="2.5" borderRadius="lg">
-                      <HStack alignItems="center" space={2}>
-                        <GraduateIcon size={18} />
-                        <Text fontWeight="bold">
-                          Graduation {item?.graduateMember?.name}
-                        </Text>
-                      </HStack>
-                    </Box>
-                  )}
-                  <Box mt="2">
-                    <Image
-                      width="100%"
-                      height={200}
-                      source={{ uri: item?.setlist?.image }}
-                      borderRadius="8"
-                      borderTopRightRadius={4}
-                      borderTopLeftRadius={4}
-                      borderBottomLeftRadius={0}
-                      borderBottomRightRadius={0}
-                      alt="Theater"
-                    />
+                )}
+                <Box mt="2">
+                  <Image
+                    width="100%"
+                    height={200}
+                    source={{ uri: item?.setlist?.image }}
+                    borderRadius="8"
+                    borderTopRightRadius={4}
+                    borderTopLeftRadius={4}
+                    borderBottomLeftRadius={0}
+                    borderBottomRightRadius={0}
+                    alt="Theater"
+                  />
 
-                    {isToday &&
-                      todayLive?.is_live &&
-                      todayLive?.slug === item.liveId && (
-                        <Box
-                          p="2"
-                          borderTopLeftRadius={4}
-                          borderBottomRightRadius={6}
-                          bg="red"
-                          position="absolute"
-                        >
-                          <HStack alignItems="center" space={1}>
-                            <UsersIcon color="white" size="16" />
-                            <Text fontSize={13}>{todayLive?.view_count}</Text>
-                          </HStack>
-                        </Box>
-                      )}
-                    {!isToday && (
+                  {isToday &&
+                    todayLive?.is_live &&
+                    todayLive?.slug === item.liveId && (
                       <Box
-                        p="3"
-                        borderTopRightRadius={0}
-                        borderTopLeftRadius={0}
-                        borderRadius="8"
-                        bg="blueGray.700"
+                        p="2"
+                        borderTopLeftRadius={4}
+                        borderBottomRightRadius={6}
+                        bg="red"
+                        position="absolute"
                       >
-                        <Text fontSize="14" fontWeight="medium">
-                          {item.setlist.description.slice(0, 200)}...
-                        </Text>
+                        <HStack alignItems="center" space={1}>
+                          <UsersIcon color="white" size="16" />
+                          <Text fontSize={13}>{todayLive?.view_count}</Text>
+                        </HStack>
                       </Box>
                     )}
+                  {!isToday && (
+                    <Box
+                      p="3"
+                      borderTopRightRadius={0}
+                      borderTopLeftRadius={0}
+                      borderRadius="8"
+                      bg="blueGray.700"
+                    >
+                      <Text fontSize="14" fontWeight="medium">
+                        {item.setlist.description.slice(0, 200)}...
+                      </Text>
+                    </Box>
+                  )}
 
-                    {isToday && (
-                      <Box>
-                        <CountdownTimer
-                          showDate={item?.showDate}
-                          targetDateTime={item.showTime}
-                          isLive={
-                            todayLive?.slug === item.liveId &&
-                            todayLive?.is_live
-                          }
+                  {isToday && (
+                    <Box>
+                      <CountdownTimer
+                        showDate={item?.showDate}
+                        targetDateTime={item.showTime}
+                        isLive={
+                          todayLive?.slug === item.liveId && todayLive?.is_live
+                        }
+                      >
+                        <Button
+                          borderTopRightRadius={0}
+                          borderTopLeftRadius={0}
+                          borderRadius="lg"
+                          variant="filled"
+                          bg="blueLight"
+                          onPress={() => Linking.openURL(item?.ticketShowroom)}
                         >
-                          <Button
-                            borderTopRightRadius={0}
-                            borderTopLeftRadius={0}
-                            borderRadius="lg"
-                            variant="filled"
-                            bg="blueLight"
-                            onPress={() =>
-                              Linking.openURL(item?.ticketShowroom)
-                            }
-                          >
-                            <HStack space={2} alignItems="center">
-                              <PlayIcon color="primary" />
-                              <Text color="primary" fontWeight="bold">
-                                Watch at IDN App
-                              </Text>
-                            </HStack>
-                          </Button>
-                        </CountdownTimer>
-                      </Box>
-                    )}
-                  </Box>
-                </VStack>
-              </TouchableOpacity>
-            ))
-          : [...Array(5)].map((_, idx) => (
-              <SkeletonSchedule isHome key={idx} />
-            ))}
+                          <HStack space={2} alignItems="center">
+                            <PlayIcon color="primary" />
+                            <Text color="primary" fontWeight="bold">
+                              Watch at IDN App
+                            </Text>
+                          </HStack>
+                        </Button>
+                      </CountdownTimer>
+                    </Box>
+                  )}
+                </Box>
+              </VStack>
+            </TouchableOpacity>
+          ))
+        ) : !isToday && filteredSchedules?.length > 0 ? (
+          <FlashList
+            data={filteredSchedules}
+            numColumns={2}
+            renderItem={({ item, index }) => (
+              <ScheduleCard item={item} index={index} />
+            )}
+            keyExtractor={(item, index) => `${item.id}-${index}`}
+            estimatedItemSize={50}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 20 }}
+          />
+        ) : (
+          [...Array(5)].map((_, idx) => <SkeletonSchedule isHome key={idx} />)
+        )}
       </Box>
     )
   );

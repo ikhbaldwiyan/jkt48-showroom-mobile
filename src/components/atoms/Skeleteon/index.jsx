@@ -11,15 +11,9 @@ const SkeletonSchedule = ({ id, isHome }) => {
       </VStack>
     </HStack>
   ) : (
-    <HStack key={id} w="100%" maxW="400" mt="4" space={8} rounded="md">
+    <HStack key={id} w="100%" maxW="400" mt="2" space={3} rounded="md">
       <Skeleton flex="2.5" h="130" rounded="md" startColor="coolGray.100" />
-      <VStack flex="3" space="4">
-        <Skeleton h="2" flex="1" rounded="md" />
-        <Skeleton.Text />
-        <HStack space="2" alignItems="center">
-          <Skeleton h="3" flex="3" rounded="full" />
-        </HStack>
-      </VStack>
+      <Skeleton flex="2.5" h="130" rounded="md" startColor="coolGray.100" />
     </HStack>
   );
 };

@@ -63,12 +63,12 @@ const Home = ({ navigation }) => {
           <ShowroomLive refreshing={refreshing} />
           <IDNLIve refreshing={refreshing} />
           <RecentLives refreshing={refreshing} />
-          <News />
           <ScheduleHome
             isToday
             refreshing={refreshing}
             navigation={navigation}
           />
+          <News />
           <ScheduleHome refreshing={refreshing} navigation={navigation} />
         </Box>
         <UpdateApp />

@@ -11,6 +11,7 @@ import ShowroomLiveCard from "./ShowroomLiveCard";
 import Oshimen from "./Oshimen";
 import ScheduleOshimen from "./ScheduleOshimen";
 import News from "./News";
+import ScheduleCard from "./ScheduleCard";
 
 export {
   RoomList,
@@ -26,4 +27,5 @@ export {
   Oshimen,
   ScheduleOshimen,
   News,
+  ScheduleCard,
 }
