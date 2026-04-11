@@ -12,7 +12,7 @@ import {
 } from "../../../assets/icon";
 import { useNavigation } from "@react-navigation/native";
 
-const getTeamBadge = (team) => {
+export const getTeamBadge = (team) => {
   switch (team) {
     case "Team Love":
       return {

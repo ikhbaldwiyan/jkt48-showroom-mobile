@@ -19,7 +19,7 @@ import {
   GraduateIcon,
   TheaterIcon,
   TimesIcon,
-  UsersIcon
+  UsersIcon,
 } from "../../../assets/icon";
 import {
   useScheduleWeek,
@@ -27,7 +27,7 @@ import {
 } from "../../../services/hooks/useSchedules";
 import SkeletonSchedule from "../../atoms/Skeleteon";
 import CountdownTimer from "../CountdownTimer";
-import ScheduleCard from "../ScheduleCard";
+import ScheduleCard, { getTeamBadge } from "../ScheduleCard";
 
 const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
   const { data: schedules, refetch } = useScheduleWeek();
@@ -124,12 +124,39 @@ const ScheduleHome = ({ refreshing, navigation, isToday = false }) => {
                     height={200}
                     source={{ uri: item?.setlist?.image }}
                     borderRadius="8"
-                    borderTopRightRadius={4}
-                    borderTopLeftRadius={4}
+                    borderTopRightRadius={8}
+                    borderTopLeftRadius={8}
                     borderBottomLeftRadius={0}
                     borderBottomRightRadius={0}
                     alt="Theater"
                   />
+
+                  {item?.setlist?.team &&
+                    moment(item?.showDate).isSameOrAfter("2026-04-01") && (
+                      <Box
+                        position="absolute"
+                        left={0}
+                        top={0}
+                        bg="blueLight"
+                        px="2"
+                        py="1"
+                        borderBottomRightRadius="8"
+                        borderTopLeftRadius="8"
+                        borderWidth={1}
+                        borderColor={getTeamBadge(item?.setlist?.team).color}
+                      >
+                        <HStack alignItems="center" space={1}>
+                          {getTeamBadge(item?.setlist?.team).icon}
+                          <Text
+                            color={getTeamBadge(item?.setlist?.team).color}
+                            fontSize={13}
+                            fontWeight="bold"
+                          >
+                            {item?.setlist?.team}
+                          </Text>
+                        </HStack>
+                      </Box>
+                    )}
 
                   {isToday &&
                     todayLive?.is_live &&
