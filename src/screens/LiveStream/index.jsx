@@ -54,7 +54,7 @@ const LiveStream = () => {
   const { isPipMode } = usePipMode();
   const isLandscape = useLandscape();
 
-  const roomId = params?.item?.room_id ?? profile?.room_id;
+  const roomId = profile?.room_id || params?.item?.room_id;
   const token = session?.cookie_login_id;
 
   const { data: liveInfo } = useLiveInfo(roomId, token);
@@ -139,6 +139,12 @@ const LiveStream = () => {
   useEffect(() => {
     if (params?.item) setProfile(params.item);
   }, [params]);
+
+  useEffect(() => {
+    if (profile?.room_id) {
+      clearUrl();
+    }
+  }, [profile?.room_id]);
 
   useEffect(() => {
     if (liveInfo) setLiveInfo(liveInfo);
