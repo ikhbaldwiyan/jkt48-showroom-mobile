@@ -13,6 +13,8 @@ import {
   ArrowUpIcon,
   ArrowDownIcon,
   Input,
+  Skeleton,
+  VStack,
 } from "native-base";
 import { RefreshControl, TextInput, KeyboardAvoidingView } from "react-native";
 import { STREAM } from "../../../../services";
@@ -53,9 +55,11 @@ export const Comment = () => {
   const { mode } = useThemeStore();
   const isLightMode = mode === "light";
   const { logout } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getComments() {
+      setIsLoading(true);
       try {
         const response = await STREAM.getStreamComments(
           roomId,
@@ -64,11 +68,26 @@ export const Comment = () => {
         setComments(response?.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
     getComments();
   }, [profile, refreshing]);
+
+  const SkeletonComment = () => (
+    <Box>
+      <HStack alignItems="center" p="2">
+        <Skeleton size="10" rounded="full" mr="3" />
+        <VStack space="2" flex="1">
+          <Skeleton h="3" w="60%" rounded="sm" />
+          <Skeleton h="3" w="90%" rounded="sm" />
+        </VStack>
+      </HStack>
+      <Divider mb="1" />
+    </Box>
+  );
 
   const formatCommentWebsocket = (msg) => {
     const comments = {
@@ -263,44 +282,54 @@ export const Comment = () => {
           ref={flashListRef}
           onScroll={handleScroll}
           scrollEventThrottle={16}
-          data={comments?.length > 0 ? comments?.slice(0, 45) : []}
+          data={
+            isLoading && comments.length === 0
+              ? Array.from({ length: 8 })
+              : comments?.length > 0
+              ? comments?.slice(0, 45)
+              : []
+          }
           keyExtractor={(item, index) => index.toString()}
           estimatedItemSize={50}
           renderItem={({ item }) =>
-            item.comment.length > 2 && (
-              <Box>
-                <HStack alignItems="center" p="2">
-                  <Image
-                    mr="3"
-                    alt={item.name}
-                    style={{ width: 40, height: 40 }}
-                    source={{
-                      uri:
-                        item?.avatar_url ??
-                        `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`,
-                    }}
-                  />
-                  <View flexShrink="1">
-                    <Text
-                      fontSize="md"
-                      fontWeight="semibold"
-                      color={
-                        item.user_id == user?.user_id
-                          ? mode === "dark"
+            isLoading && comments.length === 0 ? (
+              <SkeletonComment />
+            ) : (
+              item.comment.length > 2 && (
+                <Box>
+                  <HStack alignItems="center" p="2">
+                    <Image
+                      mr="3"
+                      alt={item.name}
+                      style={{ width: 40, height: 40 }}
+                      source={{
+                        uri:
+                          item?.avatar_url ??
+                          `https://static.showroom-live.com/image/avatar/${item.avatar_id}.png?v=95`,
+                      }}
+                    />
+                    <View flexShrink="1">
+                      <Text
+                        fontSize="md"
+                        fontWeight="semibold"
+                        color={
+                          item.user_id == user?.user_id
+                            ? mode === "dark"
+                              ? "white"
+                              : "secondary"
+                            : isLightMode
                             ? "white"
-                            : "secondary"
-                          : isLightMode
-                          ? "white"
-                          : "primary"
-                      }
-                    >
-                      {item.name}
-                    </Text>
-                    <Text mt="1">{item.comment}</Text>
-                  </View>
-                </HStack>
-                <Divider mb="1" />
-              </Box>
+                            : "primary"
+                        }
+                      >
+                        {item.name}
+                      </Text>
+                      <Text mt="1">{item.comment}</Text>
+                    </View>
+                  </HStack>
+                  <Divider mb="1" />
+                </Box>
+              )
             )
           }
           refreshControl={

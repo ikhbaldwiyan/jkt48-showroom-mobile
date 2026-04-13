@@ -6,32 +6,23 @@ import {
   Image,
   PlayIcon,
   Text,
-  View
+  View,
 } from "native-base";
-import { useEffect, useState } from "react";
 import { RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { LiveIcon, UserCheck } from "../../../../assets/icon";
-import { ROOMS } from "../../../../services";
 import { formatName } from "../../../../utils/helpers";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
 import useLiveStreamStore from "../../../../store/liveStreamStore";
 import useThemeStore from "../../../../store/themeStore";
 import CardGradient from "../../../atoms/CardGradient";
+import { useShowroomLive } from "../../../../services/hooks/useShowroomLive";
 
 export const Room = () => {
-  const [roomLives, setRoomLives] = useState([]);
   const { refreshing, onRefresh } = useRefresh();
   const { profile, setProfile } = useLiveStreamStore();
   const { mode } = useThemeStore();
-
-  useEffect(() => {
-    async function getRoomLive() {
-      const room = await ROOMS.getRoomLive();
-      setRoomLives(room?.data.data);
-    }
-    getRoomLive();
-  }, [refreshing]);
+  const { data: roomLives = [] } = useShowroomLive();
 
   const renderItem = ({ item }) => (
     <Box>
