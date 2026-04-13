@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { RefreshControl, TouchableOpacity } from "react-native";
-import { Center, HStack, Image, ScrollView, Text, VStack } from "native-base";
+import {
+  Box,
+  Center,
+  HStack,
+  Image,
+  ScrollView,
+  Skeleton,
+  Text,
+  VStack,
+} from "native-base";
 import { STREAM } from "../../../../services";
 import useIDNLiveStore from "../../../../store/idnLiveStore";
 import { useRefresh } from "../../../../utils/hooks/useRefresh";
@@ -17,14 +26,18 @@ export const PodiumIDN = () => {
   const { refreshing, onRefresh } = useRefresh();
   const { profile } = useIDNLiveStore();
   const displayedNames = new Set();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function getIDNPodiumList() {
+    setIsLoading(true);
     try {
       const response = await STREAM.getIDNLivePodium(profile?.slug);
       setPodium(response?.data?.activityLog?.watch?.reverse() || []);
       setViews(response?.data?.liveData?.users || 0);
     } catch (error) {
       console.error("Error fetching podium list:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -48,10 +61,16 @@ export const PodiumIDN = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <HStack justifyContent="center" alignItems="center" space={3}>
-          <Text fontWeight="medium">{views} Orang sedang menonton</Text>
-          <InfoPodium />
-        </HStack>
+        {isLoading ? (
+          <Box alignItems="center" justifyContent="center">
+            <Text>Loading user...</Text>
+          </Box>
+        ) : (
+          <HStack justifyContent="center" alignItems="center" space={3}>
+            <Text fontWeight="medium">{views} Orang sedang menonton</Text>
+            <InfoPodium />
+          </HStack>
+        )}
         <HStack
           mt="2"
           space={3}
@@ -59,39 +78,48 @@ export const PodiumIDN = () => {
           alignItems="center"
           justifyContent="center"
         >
-          {podium?.map((item, idx) => {
-            if (displayedNames.has(item.user.name)) {
-              return null;
-            }
-            displayedNames.add(item.user.name);
-            return (
-              <VStack my="4" key={idx} width="20%">
-                <TouchableOpacity
-                  activeOpacity={0.4}
-                  onPress={() => {
-                    setSelectedUser(item.user);
-                    trackAnalytics("podium_user_click", {
-                      name: item.user.name,
-                      user_id: item.user.user_id
-                    });
-                  }}
-                >
+          {isLoading && podium.length === 0
+            ? Array.from({ length: 10 }).map((_, idx) => (
+                <VStack my="4" key={`skeleton-${idx}`} width="20%">
                   <Center>
-                    <Image
-                      alt={item.user.name}
-                      style={{ width: 50, height: 50 }}
-                      source={{
-                        uri:
-                          item?.user?.avatar ??
-                          "https://static.showroom-live.com/image/avatar/1028686.png?v=100"
-                      }}
-                    />
-                    <BadgeUser user={item.user} />
+                    <Skeleton size="50px" rounded="full" />
+                    <Skeleton h="3" w="12" mt="2" rounded="sm" />
                   </Center>
-                </TouchableOpacity>
-              </VStack>
-            );
-          })}
+                </VStack>
+              ))
+            : podium?.map((item, idx) => {
+                if (displayedNames.has(item.user.name)) {
+                  return null;
+                }
+                displayedNames.add(item.user.name);
+                return (
+                  <VStack my="4" key={idx} width="20%">
+                    <TouchableOpacity
+                      activeOpacity={0.4}
+                      onPress={() => {
+                        setSelectedUser(item.user);
+                        trackAnalytics("podium_user_click", {
+                          name: item.user.name,
+                          user_id: item.user.user_id,
+                        });
+                      }}
+                    >
+                      <Center>
+                        <Image
+                          alt={item.user.name}
+                          style={{ width: 50, height: 50 }}
+                          source={{
+                            uri:
+                              item?.user?.avatar ??
+                              "https://static.showroom-live.com/image/avatar/1028686.png?v=100",
+                          }}
+                        />
+                        <BadgeUser user={item.user} />
+                      </Center>
+                    </TouchableOpacity>
+                  </VStack>
+                );
+              })}
         </HStack>
       </ScrollView>
       <UserModal

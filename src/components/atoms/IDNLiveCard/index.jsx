@@ -38,10 +38,8 @@ const IDNLiveCard = ({ data, isHome }) => {
         py="0.5"
         right="2"
         zIndex="99"
-        bg="rgba(0,0,0,0.2)"
         borderRadius="sm"
         position="absolute"
-        shadow={4}
       >
         <IDNLiveIcon />
       </Box>

@@ -9,7 +9,9 @@ import {
   View,
   VStack,
   ArrowUpIcon,
-  Button
+  Button,
+  Skeleton,
+  Box,
 } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 import { RefreshControl } from "react-native";
@@ -26,6 +28,7 @@ const ChatIDN = () => {
   const [messages, setMessages] = useState([]);
   const [bufferMessages, setBufferMessages] = useState([]);
   const [isAutoScroll, setIsAutoScroll] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const isAutoScrollRef = useRef(true);
   const flashListRef = useRef(null);
   const wsRef = useRef(null);
@@ -112,7 +115,7 @@ const ChatIDN = () => {
                 const mappedMessage = {
                   user: data?.user,
                   comment: data?.chat?.message,
-                  timestamp: data.timestamp || Date.now()
+                  timestamp: data.timestamp || Date.now(),
                 };
 
                 if (isAutoScrollRef.current) {
@@ -164,13 +167,19 @@ const ChatIDN = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     setupWebSocket();
+
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
 
     if (wsRef.current) {
       wsRef.current.close();
     }
 
     return () => {
+      clearTimeout(timeout);
       if (wsRef.current) {
         wsRef.current.close();
       }
@@ -210,48 +219,71 @@ const ChatIDN = () => {
     }
   };
 
+  const SkeletonChatIDN = () => (
+    <Box>
+      <HStack alignItems="center" space={1} p="2">
+        <Skeleton size="45px" rounded="lg" mr="1" />
+        <VStack space="2" flex="1">
+          <Skeleton h="3" w="40%" rounded="sm" />
+          <Skeleton h="3" w="80%" rounded="sm" />
+        </VStack>
+      </HStack>
+      <Divider mb="1" />
+    </Box>
+  );
+
   return (
     <CardGradient>
       <FlashList
         ref={flashListRef}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        data={messages?.length > 0 ? messages?.slice(0, 45) : []}
+        data={
+          isLoading && messages.length === 0
+            ? Array.from({ length: 10 })
+            : messages?.length > 0
+            ? messages?.slice(0, 45)
+            : []
+        }
         keyExtractor={(item, index) => index.toString()}
         estimatedItemSize={50}
-        renderItem={({ item, index }) => (
-          <>
-            <HStack alignItems="center" space={1} flexWrap="wrap">
-              <Image
-                borderRadius="lg"
-                alt={item?.user?.name}
-                style={{ width: 45, height: 45 }}
-                source={{ uri: item?.user?.avatar_url }}
-              />
-              <View flex={1} pt={index === 0 ? "0" : "2"} p="2">
-                <Text
-                  fontSize="md"
-                  fontWeight="bold"
-                  color={getTextColor(item?.user?.color_code, theme)}
-                  flexShrink={1}
-                  flexWrap="wrap"
-                >
-                  {item?.user?.name ?? "User"}
-                </Text>
-                <Text mt="0.5" flexShrink={1} flexWrap="wrap">
-                  {item?.comment}
-                </Text>
-              </View>
-            </HStack>
-            <Divider mb="1" />
-          </>
-        )}
+        renderItem={({ item, index }) =>
+          isLoading && messages.length === 0 ? (
+            <SkeletonChatIDN />
+          ) : (
+            <>
+              <HStack alignItems="center" space={1} flexWrap="wrap">
+                <Image
+                  borderRadius="lg"
+                  alt={item?.user?.name}
+                  style={{ width: 45, height: 45 }}
+                  source={{ uri: item?.user?.avatar_url }}
+                />
+                <View flex={1} pt={index === 0 ? "0" : "2"} p="2">
+                  <Text
+                    fontSize="md"
+                    fontWeight="bold"
+                    color={getTextColor(item?.user?.color_code, theme)}
+                    flexShrink={1}
+                    flexWrap="wrap"
+                  >
+                    {item?.user?.name ?? "User"}
+                  </Text>
+                  <Text mt="0.5" flexShrink={1} flexWrap="wrap">
+                    {item?.comment}
+                  </Text>
+                </View>
+              </HStack>
+              <Divider mb="1" />
+            </>
+          )
+        }
         ListEmptyComponent={() =>
-          !url ? (
+          !isLoading && !url ? (
             <Center p="10">
               <Loading color="white" />
             </Center>
-          ) : !profile?.chat_room_id ? (
+          ) : !isLoading && !profile?.chat_room_id ? (
             <Center p="10">
               <VStack
                 flex={1}
