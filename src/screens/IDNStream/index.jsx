@@ -30,11 +30,12 @@ const IDNStream = () => {
   const { refreshing, onRefresh } = useRefresh();
   const { isPipMode } = usePipMode();
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const isOfficial = profile?.user?.name === "JKT48";
-  const customHeight = isOfficial ? 200 : 400;
 
   const { profile, setProfile, clearLiveStream, url, setUrl, clearUrl } =
     useIDNLiveStore();
+
+  const isOfficial = profile?.user?.username === "jkt48-official";
+  const customHeight = isOfficial ? 220 : 400;
 
   const {
     data: liveDetail,
