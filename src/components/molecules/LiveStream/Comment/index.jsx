@@ -79,10 +79,10 @@ export const Comment = () => {
   const SkeletonComment = () => (
     <Box>
       <HStack alignItems="center" p="2">
-        <Skeleton size="10" rounded="full" mr="3" />
+        <Skeleton backgroundColor="gray.400" size="10" rounded="full" mr="3" />
         <VStack space="2" flex="1">
-          <Skeleton h="3" w="60%" rounded="sm" />
-          <Skeleton h="3" w="90%" rounded="sm" />
+          <Skeleton backgroundColor="gray.400" h="3" w="60%" rounded="sm" />
+          <Skeleton backgroundColor="gray.400" h="3" w="90%" rounded="sm" />
         </VStack>
       </HStack>
       <Divider mb="1" />
