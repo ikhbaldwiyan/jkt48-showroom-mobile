@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const useChangeLogStore = create(
   persist(
     (set) => ({
-      showChangeLog: true,
+      showChangeLog: false,
       setCloseModal: () =>
         set({
           showChangeLog: false
