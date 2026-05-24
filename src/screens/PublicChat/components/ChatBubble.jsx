@@ -30,7 +30,7 @@ const ChatBubble = ({
   const adminUserIds = ADMIN_USERS?.split(",").map(Number);
   const isAdmin = adminUserIds.includes(userId);
   const isSender = userId == parseInt(user?.user_id);
-  const isOwner = user?.user_id === 4751328;
+  const isOwner = user?.user_id === "4751328";
 
   const deleteMessage = useDeleteMessage();
   const toast = useToast();
