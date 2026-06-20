@@ -16,7 +16,7 @@ export const useReplayDetail = (id) => {
     queryKey: ["replay-detail", id],
     queryFn: async () => {
       const response = await REPLAY.getReplayDetail(id);
-      return response?.data?.data;
+      return response?.data;
     },
     enabled: !!id,
   });

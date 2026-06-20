@@ -28,7 +28,8 @@ import {
   PublicChat,
   NewsList,
   NewsDetail,
-  ReplayList
+  ReplayList,
+  ReplayDetail
 } from "../screens";
 
 export const tabRoutes = [
@@ -193,6 +194,11 @@ export const stackRoutes = [
   {
     name: "ReplayList",
     component: ReplayList,
+    options: { headerShown: true }
+  },
+  {
+    name: "ReplayDetail",
+    component: ReplayDetail,
     options: { headerShown: true }
   },
 ];

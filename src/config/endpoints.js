@@ -86,6 +86,7 @@ export default {
     LIST: "/news"
   },
   REPLAY: {
-    LIST: "/replay/data/videos.json"
+    LIST: "/replay/data/videos.json",
+    DETAIL: (id) => `/replay/data/srt/${id}.srt`
   }
 };

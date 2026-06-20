@@ -5,6 +5,6 @@ export const getReplays = () => {
 };
 
 export const getReplayDetail = (id) => {
-  return apiReplay.get(`${ENDPOINTS.REPLAY.LIST}/${id}`);
+  return apiReplay.get(ENDPOINTS.REPLAY.DETAIL(id));
 };
 

@@ -57,43 +57,48 @@ const ReplayList = ({ refreshing }) => {
   };
 
   const renderItem = ({ item }) => (
-    <Box mb="4">
-      <VStack space={1.5}>
-        <Image
-          source={{
-            uri: `https://img.youtube.com/vi/${
-              item.youtube_id ?? item?.id
-            }/mqdefault.jpg`,
-          }}
-          fallbackSource={{
-            uri: "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg",
-          }}
-          alt="image"
-          width="100%"
-          height={200}
-          borderRadius="md"
-          resizeMode="cover"
-        />
-        <Text fontSize="md" fontWeight="semibold" color="white" mt="1">
-          {item?.title?.replace("WIB", "").replace("LIVE IDN ", "")}
-        </Text>
-        <HStack alignItems="center" space={1.5}>
-          <Calendar size={14} color="#d4d4d8" />
-          <Text fontSize={13} color="gray.300">
-            {item?.title?.includes("|")
-              ? item?.title?.split(" - ")?.pop()?.split(" | ")?.[0]?.trim()
-              : moment(item.date).format("DD MMM YYYY")}
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => navigation.navigate("ReplayDetail", { item })}
+    >
+      <Box mb="4">
+        <VStack space={1.5}>
+          <Image
+            source={{
+              uri: `https://img.youtube.com/vi/${
+                item.youtube_id ?? item?.id
+              }/mqdefault.jpg`,
+            }}
+            fallbackSource={{
+              uri: "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg",
+            }}
+            alt="image"
+            width="100%"
+            height={200}
+            borderRadius="md"
+            resizeMode="cover"
+          />
+          <Text fontSize="md" fontWeight="semibold" color="white" mt="1">
+            {item?.title?.replace("WIB", "").replace("LIVE IDN ", "")}
           </Text>
-          <Text color="gray.300">-</Text>
-          <TimesIcon size={14} color="#d4d4d8" />
-          <Text fontSize={13} color="gray.300">
-            {item?.title?.includes("|")
-              ? item?.title?.split(" | ")?.[1]?.trim()
-              : moment(item.added_at).format("HH:mm")}
-          </Text>
-        </HStack>
-      </VStack>
-    </Box>
+          <HStack alignItems="center" space={1.5}>
+            <Calendar size={14} color="#d4d4d8" />
+            <Text fontSize={13} color="gray.300">
+              {item?.title?.includes("|")
+                ? item?.title?.split(" - ")?.pop()?.split(" | ")?.[0]?.trim()
+                : moment(item.date).format("DD MMM YYYY")}
+            </Text>
+            <Text color="gray.300">-</Text>
+            <TimesIcon size={14} color="#d4d4d8" />
+            <Text fontSize={13} color="gray.300">
+              {item?.title?.includes("|")
+                ? item?.title?.split(" | ")?.[1]?.trim()
+                : moment(item.added_at).format("HH:mm")}
+            </Text>
+          </HStack>
+        </VStack>
+      </Box>
+    </TouchableOpacity>
   );
 
   return (
