@@ -20,6 +20,7 @@ import SupportApp from "../../components/templates/SupportApp";
 import MaintenanceInfo from "../../components/templates/MaintenanceInfo";
 import MenuHome from "./components/MenuHome";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ReplayCard from "../Replay/components/ReplayCard";
 
 const Home = ({ navigation }) => {
   const { refreshing, onRefresh } = useRefresh();
@@ -63,6 +64,7 @@ const Home = ({ navigation }) => {
           <ShowroomLive refreshing={refreshing} />
           <IDNLIve refreshing={refreshing} />
           <RecentLives refreshing={refreshing} />
+          <ReplayCard refreshing={refreshing} />
           <ScheduleHome
             isToday
             refreshing={refreshing}

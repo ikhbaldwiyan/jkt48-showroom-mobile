@@ -84,5 +84,8 @@ export default {
   },
   NEWS: {
     LIST: "/news"
+  },
+  REPLAY: {
+    LIST: "/replay/data/videos.json"
   }
 };

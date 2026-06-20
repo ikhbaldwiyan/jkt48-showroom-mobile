@@ -26,7 +26,7 @@ import MultiLiveAccess from "./MultiLiveAccess";
 import PublicChat from "./PublicChat";
 import NewsList from "./News/NewsList";
 import NewsDetail from "./News/NewsDetail";
-
+import ReplayList from "./Replay";
 
 export {
   SplashScreen,
@@ -58,5 +58,5 @@ export {
   PublicChat,
   NewsList,
   NewsDetail,
+  ReplayList,
 };
-
