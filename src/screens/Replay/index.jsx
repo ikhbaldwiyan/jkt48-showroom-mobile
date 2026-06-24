@@ -29,7 +29,7 @@ const ReplayList = ({ refreshing }) => {
   const [search, setSearch] = useState("");
   const inputRef = useRef(null);
   const itemsPerPage = 10;
-  const { data, refetch, isRefetching } = useReplaylist(1);
+  const { data, refetch, isRefetching } = useReplaylist();
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
@@ -194,7 +194,7 @@ const ReplayList = ({ refreshing }) => {
         <Box flex={1} mt="1">
           <FlashList
             data={paginatedData}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item) => item?.youtube_id}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
             estimatedItemSize={300}

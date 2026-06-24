@@ -18,7 +18,7 @@ import { useAppStateChange } from "../../../utils/hooks";
 
 const ReplayCard = ({ refreshing }) => {
   const navigation = useNavigation();
-  const { data, refetch } = useReplaylist(1);
+  const { data, refetch } = useReplaylist();
 
   useFocusEffect(
     useCallback(() => {
