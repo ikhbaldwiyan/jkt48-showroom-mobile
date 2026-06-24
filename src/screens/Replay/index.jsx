@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Box,
   HStack,
@@ -8,38 +8,95 @@ import {
   Button,
   ChevronLeftIcon,
   ChevronRightIcon,
+  IconButton,
+  CloseIcon,
+  SearchIcon,
 } from "native-base";
 import Layout from "../../components/templates/Layout";
 import TabButton from "../../components/atoms/TabButton";
 import { useReplaylist } from "../../services/hooks/useReplay";
-import { Calendar, TimesIcon } from "../../assets/icon";
+import { Calendar, SearchMember, TimesIcon } from "../../assets/icon";
 import moment from "moment";
 import { RefreshControl, TouchableOpacity } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useNavigation } from "@react-navigation/native";
+import FormInput from "../../components/atoms/FormInput";
 
 const ReplayList = ({ refreshing }) => {
   const [type, setType] = useState("all");
   const [page, setPage] = useState(1);
+  const [isSearch, setIsSearch] = useState(false);
+  const [search, setSearch] = useState("");
+  const inputRef = useRef(null);
   const itemsPerPage = 10;
   const { data, refetch, isRefetching } = useReplaylist(1);
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Replay Live",
+      headerTitle: isSearch ? "" : "Replay Live",
+      headerRight: () =>
+        isSearch ? (
+          <FormInput
+            mt="1"
+            w="100%"
+            mb={0}
+            mr="3"
+            ref={inputRef}
+            placeholder="Cari member..."
+            value={search}
+            onChange={(val) => {
+              setSearch(val);
+              setPage(1);
+            }}
+            InputLeftElement={
+              <Box mx="1">
+                <SearchMember size={20} />
+              </Box>
+            }
+            InputRightElement={
+              <Button
+                onPress={() => {
+                  search.length > 0 && setSearch("");
+                  setIsSearch(false);
+                }}
+                variant="unstyled"
+                p="0"
+              >
+                <CloseIcon color="secondary" />
+              </Button>
+            }
+          />
+        ) : (
+          <IconButton
+            icon={<SearchIcon color="white" size={25} />}
+            onPress={() => setIsSearch(true)}
+            mt="1"
+          />
+        ),
     });
-  }, [navigation]);
+  }, [isSearch, search]);
+
+  useEffect(() => {
+    if (isSearch) {
+      const timeout = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [isSearch]);
 
   const filteredData = data?.filter((item) => {
-    if (type === "all") return true;
-    if (type === "idn") return item?.title?.toLowerCase()?.includes("idn");
-    if (type === "showroom")
-      return (
-        item?.title?.toLowerCase()?.includes("showroom") ||
-        !item?.title?.toLowerCase()?.includes("idn")
-      );
-    return true;
+    const titleLower = item?.title?.toLowerCase() ?? "";
+    const matchesType =
+      type === "all" ||
+      (type === "idn" && titleLower.includes("idn")) ||
+      (type === "showroom" &&
+        (titleLower.includes("showroom") || !titleLower.includes("idn")));
+
+    const matchesSearch = !search || titleLower.includes(search.toLowerCase());
+
+    return matchesType && matchesSearch;
   });
 
   const totalPages = Math.ceil((filteredData?.length || 0) / itemsPerPage) || 1;
@@ -104,7 +161,7 @@ const ReplayList = ({ refreshing }) => {
   return (
     <Layout title="Replay Live" onRefresh={refetch} refreshing={isRefetching}>
       <Box pb="4" flex={1}>
-        <HStack space={3} mb="4" mt="2">
+        <HStack space={3} mb="4">
           <TabButton
             onPress={() => {
               setType("all");
@@ -134,7 +191,7 @@ const ReplayList = ({ refreshing }) => {
           />
         </HStack>
 
-        <Box flex={1}>
+        <Box flex={1} mt="1">
           <FlashList
             data={paginatedData}
             keyExtractor={(item, index) => index.toString()}

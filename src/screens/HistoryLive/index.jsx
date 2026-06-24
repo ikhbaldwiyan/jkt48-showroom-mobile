@@ -19,11 +19,11 @@ import {
   Divider,
   HStack,
   Image,
-  Input,
   Text,
   VStack,
   Spinner,
   IconButton,
+  SearchIcon,
 } from "native-base";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
@@ -58,7 +58,7 @@ const HistoryLive = () => {
 
   useLayoutEffect(() => {
     setOptions({
-      headerTitle: "History Live",
+      headerTitle: isSearch ? "" : "History Live",
       headerRight: () =>
         isSearch ? (
           <FormInput
@@ -91,10 +91,9 @@ const HistoryLive = () => {
           />
         ) : (
           <IconButton
-            icon={<SearchMember color="white" size={25} />}
+            icon={<SearchIcon color="white" size={25} />}
             onPress={() => setIsSearch(true)}
             mt="2"
-            mr="4"
           />
         ),
     });

@@ -14,6 +14,7 @@ import {
   Button,
   IconButton,
   CloseIcon,
+  SearchIcon,
 } from "native-base";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import YoutubeIframe from "react-native-youtube-iframe";
@@ -22,7 +23,7 @@ import Layout from "../../components/templates/Layout";
 import { useReplayDetail } from "../../services/hooks/useReplay";
 import { parseSRT } from "../../utils/srtParser";
 import FormInput from "../../components/atoms/FormInput";
-import { SearchMember } from "../../assets/icon";
+import { ChatIcon } from "../../assets/icon";
 import { formatViews } from "../../utils/helpers";
 
 const getUsernameColor = (username) => {
@@ -55,7 +56,7 @@ const ReplayDetail = () => {
   const headerTitle = useMemo(() => {
     if (!item?.title) return "Replay Live";
     let formatted = item?.title?.includes("|")
-      ? item?.title?.split(" - ")?.slice(0, -1)?.join(" - ")?.trim()
+      ? item?.title?.split(" - ")?.slice(0, -1)?.join(" - ")?.trim()?.replace("JKT48", "")
       : item?.title;
     return `Replay ${formatted
       .replace("LIVE IDN ", "")
@@ -66,6 +67,15 @@ const ReplayDetail = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const inputRef = useRef(null);
 
+  useEffect(() => {
+    if (isSearch) {
+      const timeout = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [isSearch]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: isSearch ? "" : headerTitle,
@@ -73,7 +83,6 @@ const ReplayDetail = () => {
         isSearch ? (
           <FormInput
             mt="1"
-            mr="3"
             w="250"
             mb={0}
             autoFocus
@@ -96,17 +105,15 @@ const ReplayDetail = () => {
           />
         ) : (
           <IconButton
-            icon={<SearchMember color="white" size={25} />}
+            icon={<SearchIcon color="white" size={25} />}
             onPress={() => setIsSearch(true)}
-            mt="2"
-            mr="2"
+            mt="1"
           />
         ),
     });
   }, [navigation, headerTitle, isSearch, searchQuery]);
 
   const { data: srtData, isLoading } = useReplayDetail(videoId);
-
   const [parsedChat, setParsedChat] = useState([]);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -251,9 +258,9 @@ const ReplayDetail = () => {
         >
           <HStack justifyContent="space-between" alignItems="center" mb="4">
             <HStack alignItems="center" space={2}>
-              <Box w={2} h={2} borderRadius="full" bg="red" />
+              <ChatIcon size={20} color="white" />
               <Text color="gray.100" fontWeight="bold" fontSize="sm">
-                CHAT REPLAY
+                CHAT LIST
               </Text>
             </HStack>
             <Text color="gray.500" fontSize="xs" fontWeight="medium">
@@ -296,7 +303,7 @@ const ReplayDetail = () => {
                     <Text color="gray.200" textAlign="center">
                       {(isLoading || playing)
                         ? "Loading replay chat..."
-                        : "Play video untuk replay chat"}
+                        : "Play video untuk lihat replay chat"}
                     </Text>
                   </Box>
                 )}

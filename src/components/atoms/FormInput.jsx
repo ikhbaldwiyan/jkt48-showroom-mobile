@@ -1,8 +1,8 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { HStack, Text, Box } from "native-base";
 import { TextInput, StyleSheet } from "react-native";
 
-const FormInput = ({
+const FormInput = forwardRef(({
   label,
   labelIcon,
   required,
@@ -15,7 +15,7 @@ const FormInput = ({
   InputLeftElement,
   InputRightElement,
   ...props
-}) => {
+}, ref) => {
   return (
     <Box mb="4" {...props}>
       {label && (
@@ -37,6 +37,7 @@ const FormInput = ({
       >
         {InputLeftElement && <Box mr="2">{InputLeftElement}</Box>}
         <TextInput
+          ref={ref}
           placeholder={placeholder}
           placeholderTextColor="#A3A3A3"
           style={styles.input}
@@ -56,7 +57,7 @@ const FormInput = ({
       )}
     </Box>
   );
-};
+});
 
 const styles = StyleSheet.create({
   input: {

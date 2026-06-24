@@ -46,8 +46,8 @@ export const tabRoutes = [
     component: MultiLive,
   },
   {
-    name: "History",
-    component: HistoryLive,
+    name: "Replay",
+    component: ReplayList,
   },
   {
     name: "Profile",
@@ -199,6 +199,11 @@ export const stackRoutes = [
   {
     name: "ReplayDetail",
     component: ReplayDetail,
+    options: { headerShown: true }
+  },
+  {
+    name: "History",
+    component: HistoryLive,
     options: { headerShown: true }
   },
 ];

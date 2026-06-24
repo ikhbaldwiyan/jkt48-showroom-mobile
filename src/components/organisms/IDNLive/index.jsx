@@ -30,7 +30,7 @@ const IDNLive = ({ refreshing }) => {
           <Text color="white" fontSize="2xl" fontWeight="semibold">
             IDN Live
           </Text>
-          {rooms.length > 2 && (
+          {rooms?.length > 2 && (
             <TouchableOpacity onPress={() => navigate("IDNLives")}>
               <HStack alignItems="center" mb="1" space={1.5}>
                 <Text fontSize="sm" color="gray.400">

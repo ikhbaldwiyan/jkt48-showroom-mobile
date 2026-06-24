@@ -4,7 +4,7 @@ import { theme } from "../../../config/theme";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
-import { Box, Text, VStack } from "native-base";
+import { Box, PlayIcon, Text, VStack } from "native-base";
 import { StatusBar, TouchableOpacity } from "react-native";
 import { tabRoutes, stackRoutes } from "../../../config/routes";
 import { useLandscape } from "../../../utils/hooks";
@@ -53,9 +53,9 @@ const Navigation = () => {
         active: <UserIcon color="#24A2B7" size={22} />,
         inactive: <UserIconOutline />
       },
-      History: {
-        active: <HistoryFill color="#24A2B7" size={22} />,
-        inactive: <HistoryOutline />
+      Replay: {
+        active: <PlayIcon color="#24A2B7" size={22} />,
+        inactive: <PlayIcon size={22} color="white" />
       },
       Leaderboard: {
         active: <ThropyIcon color="#24A2B7" size={23} />,
