@@ -1,30 +1,17 @@
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { Box, HStack, Text, VStack } from "native-base";
 import React, {
-  useState,
   useEffect,
-  useRef,
   useLayoutEffect,
   useMemo,
+  useRef,
+  useState,
 } from "react";
-import {
-  Box,
-  HStack,
-  Text,
-  VStack,
-  Skeleton,
-  Button,
-  IconButton,
-  CloseIcon,
-  SearchIcon,
-} from "native-base";
-import { useRoute, useNavigation } from "@react-navigation/native";
-import YoutubeIframe from "react-native-youtube-iframe";
-import { FlashList } from "@shopify/flash-list";
-import Layout from "../../components/templates/Layout";
+import WebView from "react-native-webview";
+import Loading from "../../components/atoms/Loading";
 import { useReplayDetail } from "../../services/hooks/useReplay";
 import { parseSRT } from "../../utils/srtParser";
-import FormInput from "../../components/atoms/FormInput";
-import { ChatIcon } from "../../assets/icon";
-import { formatViews } from "../../utils/helpers";
+import { JKT48_SHOWROOM_WEB } from "@env";
 
 const getUsernameColor = (username) => {
   const colors = [
@@ -49,14 +36,18 @@ const getUsernameColor = (username) => {
 const ReplayDetail = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { item } = route.params || {};
-
+  const { item } = route?.params || {};
   const videoId = item?.youtube_id ?? item?.id;
 
   const headerTitle = useMemo(() => {
     if (!item?.title) return "Replay Live";
     let formatted = item?.title?.includes("|")
-      ? item?.title?.split(" - ")?.slice(0, -1)?.join(" - ")?.trim()?.replace("JKT48", "")
+      ? item?.title
+          ?.split(" - ")
+          ?.slice(0, -1)
+          ?.join(" - ")
+          ?.trim()
+          ?.replace("JKT48", "")
       : item?.title;
     return `Replay ${formatted
       .replace("LIVE IDN ", "")
@@ -79,37 +70,6 @@ const ReplayDetail = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: isSearch ? "" : headerTitle,
-      headerRight: () =>
-        isSearch ? (
-          <FormInput
-            mt="1"
-            w="250"
-            mb={0}
-            autoFocus
-            ref={inputRef}
-            placeholder="Cari chat..."
-            value={searchQuery}
-            onChange={setSearchQuery}
-            InputRightElement={
-              <Button
-                onPress={() => {
-                  searchQuery.length > 0 && setSearchQuery("");
-                  setIsSearch(false);
-                }}
-                variant="unstyled"
-                p="0"
-              >
-                <CloseIcon color="secondary" />
-              </Button>
-            }
-          />
-        ) : (
-          <IconButton
-            icon={<SearchIcon color="white" size={25} />}
-            onPress={() => setIsSearch(true)}
-            mt="1"
-          />
-        ),
     });
   }, [navigation, headerTitle, isSearch, searchQuery]);
 
@@ -217,107 +177,29 @@ const ReplayDetail = () => {
   };
 
   return (
-    <Layout isScrollView={false}>
-      <Box flex={1} bg="secondary">
-        {videoId ? (
-          <Box width="100%" bg="secondary" borderRadius="md" zIndex={10}>
-            <YoutubeIframe
-              ref={playerRef}
-              height={220}
-              play={playing}
-              videoId={videoId}
-              onChangeState={(event) => {
-                if (event === "playing") {
-                  setPlaying(true);
-                } else if (event === "paused" || event === "ended") {
-                  setPlaying(false);
-                }
-              }}
-            />
-          </Box>
-        ) : (
-          <Box
-            width="100%"
-            height={220}
-            bg="black"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Text color="white">Video Not Available</Text>
-          </Box>
-        )}
-
+    <Box bg="secondary" flex={1}>
+      {isLoading ? (
         <Box
-          flex={1}
-          p="4"
-          bg="black"
-          mb="10"
-          borderRadius="lg"
-          borderWidth={1}
-          borderColor="gray.800"
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          justifyContent="center"
+          alignItems="center"
+          bg="secondary"
         >
-          <HStack justifyContent="space-between" alignItems="center" mb="4">
-            <HStack alignItems="center" space={2}>
-              <ChatIcon size={20} color="white" />
-              <Text color="gray.100" fontWeight="bold" fontSize="sm">
-                CHAT LIST
-              </Text>
-            </HStack>
-            <Text color="gray.500" fontSize="xs" fontWeight="medium">
-              {formatViews(parsedChat.length)} MESSAGES
-            </Text>
-          </HStack>
-
-          {isLoading ? (
-            <VStack space={3} mt="2">
-              <Skeleton
-                h="4"
-                w="80%"
-                rounded="md"
-                bg="gray.700"
-                startColor="gray.700"
-              />
-              <Skeleton
-                h="4"
-                w="60%"
-                rounded="md"
-                bg="gray.700"
-                startColor="gray.700"
-              />
-              <Skeleton
-                h="4"
-                w="90%"
-                rounded="md"
-                bg="gray.700"
-                startColor="gray.700"
-              />
-            </VStack>
-          ) : (
-            <Box flex={1}>
-              <FlashList
-                ref={listRef}
-                data={visibleMessages}
-                keyExtractor={(item) => item.id}
-                ListEmptyComponent={() => (
-                  <Box mt={20} justifyContent="center" alignItems="center">
-                    <Text color="gray.200" textAlign="center">
-                      {(isLoading || playing)
-                        ? "Loading replay chat..."
-                        : "Play video untuk lihat replay chat"}
-                    </Text>
-                  </Box>
-                )}
-                renderItem={renderChatItem}
-                estimatedItemSize={50}
-                showsVerticalScrollIndicator={false}
-                onScroll={handleScroll}
-                scrollEventThrottle={16}
-              />
-            </Box>
-          )}
+          <Loading color="white" />
         </Box>
-      </Box>
-    </Layout>
+      ) : videoId ? (
+        <WebView
+          source={{
+            uri: `${JKT48_SHOWROOM_WEB}/replay/${item?.name?.toLowerCase()}/${videoId}?view_type=android`,
+          }}
+          style={{ flex: 1, backgroundColor: "#282C34" }}
+        />
+      ) : null}
+    </Box>
   );
 };
 
