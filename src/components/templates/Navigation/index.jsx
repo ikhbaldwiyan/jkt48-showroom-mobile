@@ -17,12 +17,11 @@ import {
   TheaterIconOutline,
   UserIcon,
   ChevronBack,
-  HistoryFill,
-  HistoryOutline,
   UserIconOutline,
   ThropyIcon,
   ThropyIconOutline,
-  LiveIcon
+  LiveIcon,
+  PlayOutlineIcon
 } from "../../../assets/icon";
 
 const Navigation = () => {
@@ -55,7 +54,7 @@ const Navigation = () => {
       },
       Replay: {
         active: <PlayIcon color="#24A2B7" size={22} />,
-        inactive: <PlayIcon size={22} color="white" />
+        inactive: <PlayOutlineIcon size={22} color="white" />
       },
       Leaderboard: {
         active: <ThropyIcon color="#24A2B7" size={23} />,

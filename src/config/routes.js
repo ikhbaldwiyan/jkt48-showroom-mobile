@@ -192,11 +192,6 @@ export const stackRoutes = [
     options: { headerShown: true }
   },
   {
-    name: "ReplayList",
-    component: ReplayList,
-    options: { headerShown: true }
-  },
-  {
     name: "ReplayDetail",
     component: ReplayDetail,
     options: { headerShown: true }

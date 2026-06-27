@@ -39,7 +39,7 @@ const ReplayCard = ({ refreshing }) => {
           <Text fontSize="2xl" mb="3" fontWeight="semibold">
             Replay Live
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("ReplayList")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Replay")}>
             <HStack alignItems="center" mb="1" space={1.5}>
               <Text fontSize="sm" color="gray.400">
                 Lihat semua
