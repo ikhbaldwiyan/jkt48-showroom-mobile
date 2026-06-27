@@ -8,6 +8,7 @@ import * as CHAT from "./chat"
 import * as VERSION from "./versions"
 import * as MEMBERS from "./members"
 import * as NEWS from "./news"
+import * as REPLAY from "./replay"
 
-export { ROOMS, STREAM, AUTH, SCHEDULES, USER, LEADERBOARD, CHAT, VERSION, MEMBERS, NEWS };
+export { ROOMS, STREAM, AUTH, SCHEDULES, USER, LEADERBOARD, CHAT, VERSION, MEMBERS, NEWS, REPLAY };
 

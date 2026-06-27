@@ -7,7 +7,7 @@ import Header from "../Header";
 import { Box, ScrollView, useToast } from "native-base";
 import FloatingNotif from "../../atoms/FloatingNotif";
 
-const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
+const Layout = ({ children, isHeader, refreshing, onRefresh, isScrollView = true }) => {
   const toast = useToast();
   const { navigate } = useNavigation();
 
@@ -81,16 +81,22 @@ const Layout = ({ children, isHeader, refreshing, onRefresh }) => {
   return (
     <>
       {isHeader && <Header />}
-      <ScrollView
-        flex="1"
-        p="3"
-        bg="secondary"
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <Box>{children}</Box>
-      </ScrollView>
+      {isScrollView ? (
+        <ScrollView
+          flex="1"
+          p="3"
+          bg="secondary"
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          <Box>{children}</Box>
+        </ScrollView>
+      ) : (
+        <Box flex="1" p="3" bg="secondary">
+          {children}
+        </Box>
+      )}
     </>
   );
 };

@@ -27,7 +27,9 @@ import {
   MultiLiveAccess,
   PublicChat,
   NewsList,
-  NewsDetail
+  NewsDetail,
+  ReplayList,
+  ReplayDetail
 } from "../screens";
 
 export const tabRoutes = [
@@ -44,8 +46,8 @@ export const tabRoutes = [
     component: MultiLive,
   },
   {
-    name: "History",
-    component: HistoryLive,
+    name: "Replay",
+    component: ReplayList,
   },
   {
     name: "Profile",
@@ -187,6 +189,16 @@ export const stackRoutes = [
   {
     name: "NewsDetail",
     component: NewsDetail,
+    options: { headerShown: true }
+  },
+  {
+    name: "ReplayDetail",
+    component: ReplayDetail,
+    options: { headerShown: true }
+  },
+  {
+    name: "History",
+    component: HistoryLive,
     options: { headerShown: true }
   },
 ];

@@ -11,6 +11,7 @@ import {
   CheckCircleIcon,
   HStack,
   IconButton,
+  SearchIcon,
   Select,
 } from "native-base";
 import {
@@ -86,7 +87,7 @@ const MemberList = () => {
           />
         ) : (
           <IconButton
-            icon={<SearchMember color="white" size={25} />}
+            icon={<SearchIcon color="white" size={25} />}
             onPress={() => setIsSearch(true)}
             mt="2"
             mr="4"

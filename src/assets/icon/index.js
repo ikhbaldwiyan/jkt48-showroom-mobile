@@ -79,6 +79,7 @@ import GiftOutline from "./GiftOutline";
 import LoveIcon from "./LoveIcon";
 import FireIcon from "./FireIcon";
 import NewsIcon from "./NewsIcon";
+import PlayOutlineIcon from './PlayOutlineIcon'
 
 export {
   LogoIcon,
@@ -162,4 +163,5 @@ export {
   LoveIcon,
   FireIcon,
   NewsIcon,
+  PlayOutlineIcon,
 };

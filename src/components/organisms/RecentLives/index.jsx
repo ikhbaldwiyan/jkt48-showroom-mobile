@@ -51,7 +51,7 @@ const RecentLives = ({ refreshing }) => {
             Live Terakhir
           </Text>
           <TouchableOpacity
-            onPress={() => navigation.replace("Main", { screen: "History" })}
+            onPress={() => navigation.navigate("History")}
           >
             <HStack alignItems="center" mb="1" space={1.5}>
               <Text fontSize="sm" color="gray.400">
@@ -91,20 +91,6 @@ const RecentLives = ({ refreshing }) => {
                           borderRadius="md"
                         />
                       </HStack>
-                      <Box position="absolute" top={1.5} left={1.5} zIndex={99}>
-                        {log?.type === "showroom" ? (
-                          <Image
-                            size="sm"
-                            alt="showroom"
-                            source={require("../../../assets/image/showroom.png")}
-                            width="6"
-                            height="6"
-                            rounded="md"
-                          />
-                        ) : (
-                          <IDNLiveIcon />
-                        )}
-                      </Box>
                       <VStack space={1} mt="2">
                         <TouchableOpacity
                           activeOpacity={0.7}

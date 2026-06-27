@@ -9,7 +9,8 @@ import {
   apiPodium,
   apiRoomList,
   apiPublicChat,
-  apiNest
+  apiNest,
+  apiReplay,
 } from "./interceptors";
 
 export {
@@ -23,5 +24,6 @@ export {
   apiPodium,
   apiRoomList,
   apiPublicChat,
-  apiNest
+  apiNest,
+  apiReplay
 };
