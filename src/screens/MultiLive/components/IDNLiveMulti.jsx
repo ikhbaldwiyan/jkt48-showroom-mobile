@@ -1,6 +1,6 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { useIDNLive } from "../../../services/hooks/useIDNLive";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useAppStateChange } from "../../../utils/hooks";
 import useAuthStore from "../../../store/authStore";
 import { hasMultiRoomAccess } from "../../../utils/helpers";
@@ -15,7 +15,8 @@ import { useProfile } from "../../../services/hooks/useProfile";
 const IDNLiveMulti = ({
   refreshing,
   handleOpenMultiRoom,
-  isMultiLiveScreen
+  isMultiLiveScreen,
+  searchQuery = ""
 }) => {
   const { data: rooms = [], refetch, isSuccess } = useIDNLive();
   const { user } = useAuthStore();
@@ -33,8 +34,18 @@ const IDNLiveMulti = ({
 
   useAppStateChange(refetch);
 
+  const filteredRooms = useMemo(() => {
+    if (!searchQuery.trim()) return rooms;
+    const query = searchQuery.toLowerCase();
+    return rooms.filter((item) => {
+      const name = item?.user?.name?.toLowerCase() || "";
+      const title = item?.title?.toLowerCase() || "";
+      return name.includes(query) || title.includes(query);
+    });
+  }, [rooms, searchQuery]);
+
   const renderItem = ({ item, index }) => {
-    const isLastRow = index >= rooms.length - (rooms.length % 2 === 0 ? 2 : 1);
+    const isLastRow = index >= filteredRooms.length - (filteredRooms.length % 2 === 0 ? 2 : 1);
 
     return (
       <Box
@@ -57,14 +68,14 @@ const IDNLiveMulti = ({
 
         <HStack space={2} justifyContent="center" alignItems="center">
           <LiveIcon size={18} />
-          <Text>{rooms?.length} Member Live</Text>
+          <Text>{filteredRooms?.length} Member Live</Text>
         </HStack>
       </HStack>
 
       {isMultiLiveScreen ? (
-        rooms.length > 0 ? (
+        filteredRooms.length > 0 ? (
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {rooms?.map((item, idx) => (
+            {filteredRooms?.map((item, idx) => (
               <Box key={idx} mr="2">
                 <IDNLiveCard data={item} isHome />
               </Box>
@@ -78,7 +89,7 @@ const IDNLiveMulti = ({
       ) : (
         <FlashList
           numColumns={2}
-          data={rooms}
+          data={filteredRooms}
           renderItem={renderItem}
           keyExtractor={(item) => item?.user?.name}
           ListEmptyComponent={

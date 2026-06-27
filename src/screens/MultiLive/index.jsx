@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { useRefresh } from "../../utils/hooks";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useIDNLive } from "../../services/hooks/useIDNLive";
@@ -12,8 +12,8 @@ import Layout from "../../components/templates/Layout";
 import ShowroomMulti from "./components/ShowroomMulti";
 import IDNLiveMulti from "./components/IDNLiveMulti";
 import ModalInfoMulti from "./components/ModalInfoMulti";
-import { Info, RefreshIcon } from "../../assets/icon";
-import { TouchableOpacity } from "react-native";
+import { Info, SearchMember, CloseIcon } from "../../assets/icon";
+import { TouchableOpacity, TextInput, StyleSheet } from "react-native";
 import { Box, HStack, Text } from "native-base";
 import { HistoryLive } from "../../components/organisms";
 import useApiConfig from "../../store/useApiConfig";
@@ -30,6 +30,9 @@ const MultiLive = ({ navigation }) => {
 
   const { refreshing, onRefresh } = useRefresh();
   const [infoModal, setInfoModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef(null);
 
   const handleOpenMultiRoom = (type) => {
     trackAnalytics("open_multi_room", {
@@ -38,23 +41,60 @@ const MultiLive = ({ navigation }) => {
     navigate(type === "showroom" ? "MultiShowroom" : "MultiIDN");
   };
 
+  const toggleSearch = () => {
+    if (isSearchOpen) {
+      setSearchQuery("");
+      setIsSearchOpen(false);
+    } else {
+      setIsSearchOpen(true);
+      setTimeout(() => searchInputRef.current?.focus(), 100);
+    }
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity activeOpacity={0.7} onPress={onRefresh}>
-          <HStack
-            mr={isMultiLiveScreen ? "0" : "4"}
-            space={2}
-            justifyContent="center"
-            alignItems="center"
+        <HStack
+          mr={isMultiLiveScreen ? "0" : "4"}
+          space={2}
+          alignItems="center"
+        >
+          {isSearchOpen && (
+            <HStack
+              alignItems="center"
+              bg="gray.700"
+              borderRadius="full"
+              px="3"
+              py="1"
+              space={2}
+            >
+              <SearchMember size={14} color="#9ca3af" />
+              <TextInput
+                ref={searchInputRef}
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                placeholder="Cari member..."
+                placeholderTextColor="#9ca3af"
+                style={styles.searchInput}
+                autoFocus
+              />
+            </HStack>
+          )}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={toggleSearch}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <RefreshIcon />
-            <Text>Refresh</Text>
-          </HStack>
-        </TouchableOpacity>
+            {isSearchOpen ? (
+              <CloseIcon size={18} color="#ffff" />
+            ) : (
+              <SearchMember size={24} color="white" />
+            )}
+          </TouchableOpacity>
+        </HStack>
       )
     });
-  }, [refreshing]);
+  }, [refreshing, isSearchOpen, searchQuery]);
 
   return (
     <Layout refreshing={refreshing} onRefresh={onRefresh}>
@@ -80,11 +120,13 @@ const MultiLive = ({ navigation }) => {
             refreshing={refreshing}
             isMultiLiveScreen={isMultiLiveScreen}
             handleOpenMultiRoom={() => handleOpenMultiRoom("idn")}
+            searchQuery={searchQuery}
           />
           <ShowroomMulti
             refreshing={refreshing}
             isMultiLiveScreen={isMultiLiveScreen}
             handleOpenMultiRoom={() => handleOpenMultiRoom("showroom")}
+            searchQuery={searchQuery}
           />
         </>
       ) : (
@@ -93,11 +135,13 @@ const MultiLive = ({ navigation }) => {
             refreshing={refreshing}
             isMultiLiveScreen={isMultiLiveScreen}
             handleOpenMultiRoom={() => handleOpenMultiRoom("showroom")}
+            searchQuery={searchQuery}
           />
           <IDNLiveMulti
             refreshing={refreshing}
             isMultiLiveScreen={isMultiLiveScreen}
             handleOpenMultiRoom={() => handleOpenMultiRoom("idn")}
+            searchQuery={searchQuery}
           />
         </>
       )}
@@ -109,5 +153,14 @@ const MultiLive = ({ navigation }) => {
     </Layout>
   );
 };
+
+const styles = StyleSheet.create({
+  searchInput: {
+    color: "white",
+    fontSize: 14,
+    minWidth: 120,
+    paddingVertical: 2,
+  },
+});
 
 export default MultiLive;
