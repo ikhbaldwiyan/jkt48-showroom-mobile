@@ -1,26 +1,33 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { FlashList } from "@shopify/flash-list";
+import moment from "moment";
 import {
   Box,
-  HStack,
-  Image,
-  Text,
-  VStack,
   Button,
   ChevronLeftIcon,
   ChevronRightIcon,
-  IconButton,
-  CloseIcon,
+  HStack,
+  Image,
   SearchIcon,
+  Text,
+  VStack,
 } from "native-base";
-import Layout from "../../components/templates/Layout";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  RefreshControl,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import {
+  Calendar,
+  CloseIcon,
+  SearchMember,
+  TimesIcon,
+} from "../../assets/icon";
 import TabButton from "../../components/atoms/TabButton";
+import Layout from "../../components/templates/Layout";
 import { useReplaylist } from "../../services/hooks/useReplay";
-import { Calendar, SearchMember, TimesIcon } from "../../assets/icon";
-import moment from "moment";
-import { RefreshControl, TouchableOpacity } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { useNavigation } from "@react-navigation/native";
-import FormInput from "../../components/atoms/FormInput";
 
 const ReplayList = ({ refreshing }) => {
   const [type, setType] = useState("all");
@@ -34,46 +41,49 @@ const ReplayList = ({ refreshing }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: isSearch ? "" : "Replay Live",
-      headerRight: () =>
-        isSearch ? (
-          <FormInput
-            mt="1"
-            w="100%"
-            mb={0}
-            mr="3"
-            ref={inputRef}
-            placeholder="Cari member..."
-            value={search}
-            onChange={(val) => {
-              setSearch(val);
-              setPage(1);
-            }}
-            InputLeftElement={
-              <Box mx="1">
-                <SearchMember size={20} />
-              </Box>
-            }
-            InputRightElement={
-              <Button
-                onPress={() => {
-                  search.length > 0 && setSearch("");
-                  setIsSearch(false);
+      headerTitle: "Replay Live",
+      headerRight: () => (
+        <HStack mr={4} space={2} alignItems="center">
+          {isSearch && (
+            <HStack
+              alignItems="center"
+              bg="gray.700"
+              borderRadius="lg"
+              px="3"
+              py="1"
+              space={2}
+            >
+              <SearchMember size={15} color="#9ca3af" />
+              <TextInput
+                ref={inputRef}
+                value={search}
+                onChangeText={(val) => {
+                  setSearch(val);
+                  setPage(1);
                 }}
-                variant="unstyled"
-                p="0"
-              >
-                <CloseIcon color="secondary" />
-              </Button>
-            }
-          />
-        ) : (
-          <IconButton
-            icon={<SearchIcon color="white" size={25} />}
-            onPress={() => setIsSearch(true)}
-            mt="1"
-          />
-        ),
+                placeholder="Cari member..."
+                placeholderTextColor="#9ca3af"
+                style={styles.searchInput}
+                autoFocus
+              />
+            </HStack>
+          )}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              setIsSearch(!isSearch);
+              setSearch("");
+            }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            {isSearch ? (
+              <CloseIcon size={20} color="#ffff" />
+            ) : (
+              <SearchIcon size={25} color="white" />
+            )}
+          </TouchableOpacity>
+        </HStack>
+      ),
     });
   }, [isSearch, search]);
 
@@ -260,3 +270,12 @@ const ReplayList = ({ refreshing }) => {
 };
 
 export default ReplayList;
+
+const styles = StyleSheet.create({
+  searchInput: {
+    color: "white",
+    fontSize: 14,
+    minWidth: 120,
+    paddingVertical: 2,
+  },
+});
