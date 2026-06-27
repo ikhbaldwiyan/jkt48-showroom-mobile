@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useShowroomLive } from "../../../services/hooks/useShowroomLive";
 import useAuthStore from "../../../store/authStore";
@@ -13,7 +13,8 @@ import { useProfile } from "../../../services/hooks/useProfile";
 const ShowroomMulti = ({
   refreshing,
   handleOpenMultiRoom,
-  isMultiLiveScreen
+  isMultiLiveScreen,
+  searchQuery = ""
 }) => {
   const { user } = useAuthStore();
   const { data: profile } = useProfile(user?.account_id);
@@ -31,6 +32,15 @@ const ShowroomMulti = ({
 
   useAppStateChange(refetch);
 
+  const filteredData = useMemo(() => {
+    if (!searchQuery.trim() || !data) return data;
+    const query = searchQuery.toLowerCase();
+    return data.filter((item) => {
+      const name = item?.room_url_key?.toLowerCase() || "";
+      return name.includes(query);
+    });
+  }, [data, searchQuery]);
+
   return (
     <View>
       <HStack mb="4" alignItems="center" justifyContent="space-between">
@@ -39,11 +49,11 @@ const ShowroomMulti = ({
         </Text>
         <HStack space={2} justifyContent="center" alignItems="center">
           <LiveIcon size={18} />
-          <Text fontSize="sm">{data?.length} Member Live</Text>
+          <Text fontSize="sm">{filteredData?.length ?? 0} Member Live</Text>
         </HStack>
       </HStack>
       <ShowroomLiveCard
-        rooms={data}
+        rooms={filteredData}
         isLiveStream={!isMultiLiveScreen}
         isLoading={isLoading}
       />
